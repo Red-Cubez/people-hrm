@@ -1,5 +1,8 @@
 <?php
 
+namespace Tests\Unit;
+
+use Tests\TestCase;
 use People\Models\Employee;
 use People\Models\Project;
 use People\Models\Resource;

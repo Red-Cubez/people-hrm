@@ -14,3 +14,38 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+/**
+ * Add New Task
+ */
+Route::post('/task', function (Request $request) {
+
+    $validator = Validator::make($request->all(), [
+        'name' => 'required|max:255',
+    ]);
+
+    if ($validator->fails()) {
+        return redirect('/')
+            ->withInput()
+            ->withErrors($validator);
+    }
+
+    $task = new People\Models\Task;
+    $task->name = $request->name;
+    $task->save();
+
+    return redirect('/');
+});
+
+/**
+ * Delete Task
+ */
+Route::delete('/task/{task}', function (People\Models\Task $task) {
+
+    $task->delete();
+
+    return redirect('/');
+});
+
+

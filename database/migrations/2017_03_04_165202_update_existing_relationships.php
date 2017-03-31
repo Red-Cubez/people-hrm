@@ -16,6 +16,18 @@ class UpdateDatabaseRelationships extends Migration {
 			$table->foreign('company_id')->references('id')->on('companies');
 		});
 
+		Schema::table('clients', function (Blueprint $table) {
+
+			$table->integer('company_id')->unsigned();
+			$table->foreign('company_id')->references('id')->on('companies');
+		});
+
+		Schema::table('client_projects', function (Blueprint $table) {
+
+			$table->integer('client_id')->unsigned();
+			$table->foreign('client_id')->references('id')->on('clients');
+		});
+
 		Schema::table('resources', function (Blueprint $table) {
 			$table->integer('project_id')->unsigned();
 			$table->foreign('project_id')->references('id')->on('projects');
@@ -25,18 +37,6 @@ class UpdateDatabaseRelationships extends Migration {
 
 			$table->integer('employee_id')->unsigned();
 			$table->foreign('employee_id')->references('id')->on('employees');
-		});
-
-		Schema::table('client_projects', function (Blueprint $table) {
-
-			$table->integer('client_id')->unsigned();
-			$table->foreign('client_id')->references('id')->on('clients');
-		});
-
-		Schema::table('clients', function (Blueprint $table) {
-
-			$table->integer('company_id')->unsigned();
-			$table->foreign('company_id')->references('id')->on('companies');
 		});
 
 		Schema::table('addresses', function (Blueprint $table) {

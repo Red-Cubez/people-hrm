@@ -1,6 +1,8 @@
 <html>
 <head>
     <title>People - @yield('title')</title>
+    <meta name="description" content="@yield('metaDescription')">
+    <meta name="keywords" content="@yield('metaKeywords')">
 </head>
 <body>
 <header class="row">

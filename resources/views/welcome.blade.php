@@ -1,4 +1,4 @@
-{{--<!DOCTYPE html>--}}
+
 {{--<html lang="{{ config('app.locale') }}">--}}
     {{--<head>--}}
         {{--<meta charset="utf-8">--}}
@@ -68,6 +68,8 @@
 
 
 @extends('layouts.master')
+@section('title', 'welcome page')
+@section('metaDescription', 'meta description welcome page')
 
             {{--<div class="content">--}}
                 @section('content')

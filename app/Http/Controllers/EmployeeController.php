@@ -14,7 +14,11 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        //
+        $employees = Employee::orderBy('created_at', 'asc')->get();
+
+        return view('employees.index', [
+            'employees' => $employees
+        ]);
     }
 
     /**
@@ -24,7 +28,7 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -35,7 +39,30 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect('/')
+                ->withInput()
+                ->withErrors($validator);
+        }
+
+
+
+        //TODO Get company properly
+        $company = Company::Get(1);
+
+
+
+
+        $employee = new Employee();
+        $employee->name = $request->name;
+        $employee->company = $company;
+        $employee->save();
+
+        return redirect('/');
     }
 
     /**
@@ -80,6 +107,8 @@ class EmployeeController extends Controller
      */
     public function destroy(Employee $employee)
     {
-        //
+      //  Task::findOrFail($id)->delete();
+    $employee->delete();
+        return redirect('/');
     }
 }

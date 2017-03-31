@@ -1,0 +1,1 @@
+<div id="copyright">	© Copyright @ {{date("Y")}} People - RedCubez</div>

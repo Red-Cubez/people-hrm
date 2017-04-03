@@ -28,7 +28,7 @@ class UpdateExistingRelationships extends Migration {
 			$table->foreign('client_id')->references('id')->on('clients');
 		});
 
-		Schema::table('resources', function (Blueprint $table) {
+		Schema::table('project_resources', function (Blueprint $table) {
 			$table->integer('project_id')->unsigned();
 			$table->foreign('project_id')->references('id')->on('projects');
 
@@ -59,7 +59,7 @@ class UpdateExistingRelationships extends Migration {
 			$table->dropForeign('company_id');
 		});
 
-		Schema::table('resources', function (Blueprint $table) {
+		Schema::table('project_resources', function (Blueprint $table) {
 			$table->dropForeign('project_id');
 			$table->dropForeign('client_Project_id');
 			$table->dropForeign('employee_id');

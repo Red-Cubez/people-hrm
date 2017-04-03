@@ -4,7 +4,7 @@ namespace People\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Resource extends Model {
+class ProjectResource extends Model {
 	public function employee() {
 		return $this->hasOne('People\Models\Employee');
 	}

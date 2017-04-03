@@ -6,15 +6,16 @@
         <!-- Display Validation Errors -->
         @include('common.errors')
 
-        <!-- New Task Form -->
-        <form action="{{ url('task') }}" method="POST" class="form-horizontal">
+        <!-- New Employee Form -->
+        <form action="{{url('employees') }}" method="POST" class="form-horizontal">
             {{ csrf_field() }}
-            <!-- Task Name -->
+            <!-- Employee Name -->
             <div class="form-group">
-                <label for="task" class="col-sm-3 control-label">Task</label>
+                <label for="employee" class="col-sm-3 control-label">Employee</label>
 
                 <div class="col-sm-6">
-                    <input type="text" name="name" id="task-name" class="form-control">
+                    <input type="text" name="firstName" id="employee-firstName" class="form-control">
+                    <input type="text" name="lastName" id="employee-lastName" class="form-control">
                 </div>
             </div>
 
@@ -22,13 +23,12 @@
             <div class="form-group">
                 <div class="col-sm-offset-3 col-sm-6">
                     <button type="submit" class="btn btn-default">
-                        <i class="fa fa-plus"></i> Add Task
+                        <i class="fa fa-plus"></i> Add Employee
                     </button>
                 </div>
             </div>
         </form>
     </div>
-
         <!-- Current Employees -->
     @if (count($employees) > 0)
         <div class="panel panel-default">
@@ -47,16 +47,17 @@
 
                     <!-- Table Body -->
                     <tbody>
-                        @foreach ($employees as $eomployee)
+                        @foreach ($employees as $employee)
                             <tr>
                                 <!-- Employee Name -->
                                 <td class="table-text">
-                                    <div>{{ $employee->name }}</div>
+                                    <div>{{ $employee->firstName }}</div>
+                                    <div>{{ $employee->lastName }}</div>
                                 </td>
 
                                 <!-- Delete Button -->
                                 <td>
-                                    <form action="{{ url('task/'.$employee->id) }}" method="POST">
+                                    <form action="{{ url('employees/'.$employee->id) }}" method="POST">
                                         {{ csrf_field() }}
                                         {{ method_field('DELETE') }}
                                         <input type="hidden" name="_method" value="DELETE">

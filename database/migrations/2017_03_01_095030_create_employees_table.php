@@ -16,11 +16,11 @@ class CreateEmployeesTable extends Migration {
 
 			$table->string('firstName');
 			$table->string('lastName');
-			$table->date('hireDate');
-			$table->date('terminationDate');
-			$table->string('jobTitle');
-			$table->decimal('annualSalary', 15, 2);
-			$table->decimal('hourlyRate', 15, 2);
+			$table->date('hireDate')->nullable();
+			$table->date('terminationDate')->nullable();
+			$table->string('jobTitle')->nullable();
+			$table->decimal('annualSalary', 15, 2)->nullable();
+			$table->decimal('hourlyRate', 15, 2)->nullable();
 		});
 	}
 

@@ -15,11 +15,11 @@ class CreateResourcesTable extends Migration
         Schema::create('resources', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-            $table->date('startDate');
-            $table->date('endDate');
-            $table->string('title');
-            $table->decimal('hourlyBillingRate', 15,2);
-            $table->integer('hoursPerWeek');
+            $table->date('startDate')->nullable();
+            $table->date('endDate')->nullable();
+            $table->string('title')->nullable();
+            $table->decimal('hourlyBillingRate', 15,2)->nullable();
+            $table->integer('hoursPerWeek')->nullable();
         });
     }
 

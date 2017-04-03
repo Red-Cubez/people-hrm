@@ -78,8 +78,8 @@
                 </div>
 
                 <div class="links">
-                    <a href="https://laravel.com/docs">Employees</a>
-                    <a href="https://laracasts.com">Companies</a>
-                    <a href="https://laravel-news.com">Projects</a>
+                    <a href="/employees">Employees</a>
+                    <a href="/companies">Companies</a>
+                    <a href="/projects">Projects</a>
                 </div>
                     @endsection

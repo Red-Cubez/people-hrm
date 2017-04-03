@@ -16,12 +16,12 @@ class CreateProjectsTable extends Migration
             $table->increments('id');
             $table->timestamps();
             $table->string('name');
-            $table->date('expectedStartDate');
-            $table->date('expectedEndDate');
-            $table->date('actualStartDate');
-            $table->date('actualEndDate');
-            $table->decimal('budget', 20, 2);
-            $table->decimal('cost', 20, 2);
+            $table->date('expectedStartDate')->nullable();
+            $table->date('expectedEndDate')->nullable();
+            $table->date('actualStartDate')->nullable();
+            $table->date('actualEndDate')->nullable();
+            $table->decimal('budget', 20, 2)->nullable();
+            $table->decimal('cost', 20, 2)->nullable();
 
         });
     }

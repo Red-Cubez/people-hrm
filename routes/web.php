@@ -56,3 +56,4 @@ Route::get('/home', 'HomeController@index');
 
 Route::resource('employees', 'EmployeeController');
 Route::resource('clients', 'ClientController');
+Route::resource('clientprojects', 'ClientProjectController');

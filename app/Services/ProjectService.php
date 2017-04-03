@@ -31,8 +31,6 @@ class ProjectService {
 		foreach ($project->resources() as $resource) {
 			$totalCost = $totalCost + $resource->employee->HourlyRate;
 		}
-
-		dd(count($project->resources()));
 		return $totalCost;
 	}
 

@@ -3,6 +3,7 @@
 namespace People\Http\Controllers;
 
 use People\Models\ProjectResource;
+use People\Models\Employee;
 use People\Models\ClientProject;
 use People\Models\Client;
 use Illuminate\Http\Request;
@@ -16,11 +17,17 @@ class ProjectResourceController extends Controller
      */
     public function index()
     {
-        //TODO only get projects for a particular client
-        $projectResources = ProjectResource::orderBy('created_at', 'asc')->get();
+        //TODO need to perform eagar loaging in this context
+        //TODO only get project resources for a particular client
+        $currentProjectResources = ProjectResource::orderBy('created_at', 'asc')->get();
+
+        //TODO get resources based on availibility
+        $availableEmployees = Employee::orderBy('created_at', 'asc')->get();
+
 
         return view('projectResources.index', [
-            'projectResources' => $projectResources
+            'projectResources' => $currentProjectResources,
+            'availableEmployees' => $availableEmployees
         ]);
     }
 
@@ -43,15 +50,14 @@ class ProjectResourceController extends Controller
     public function store(Request $request)
     {
         $projectResource = new ProjectResource();
-        $projectResource->name = $request->name;
+        //TODO get the relative project id
+        $projectResource->client_project_id = 1;
 
-        //TODO These properties need to be set from fields
-        //TODO this value needs to come from the correct client
-        $client = Client::find(1);
-//        dd($client);
-        $projectResource->client_id = $client->id;
+        $projectResource->employee_id = $request->employee_id;
+
+        //TODO set other properties as well for the resource
         $projectResource->save();
-
+//
         return redirect('/projectresources');
     }
 
@@ -92,12 +98,12 @@ class ProjectResourceController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \People\Models\ProjectResource  $projectResource
+     * @param  \People\Models\ProjectResource  $projectresource
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ProjectResource $projectResource)
+    public function destroy(ProjectResource $projectresource)
     {
-        $projectResource->delete();
-        return redirect('/projectResources');
+        $projectresource->delete();
+        return redirect('/projectresources');
     }
 }

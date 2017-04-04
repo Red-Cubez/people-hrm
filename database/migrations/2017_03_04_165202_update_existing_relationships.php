@@ -29,11 +29,11 @@ class UpdateExistingRelationships extends Migration {
 		});
 
 		Schema::table('project_resources', function (Blueprint $table) {
-			$table->integer('project_id')->unsigned();
+			$table->integer('project_id')->unsigned()->nullable();
 			$table->foreign('project_id')->references('id')->on('projects');
 
-			$table->integer('client_Project_id')->unsigned();
-			$table->foreign('client_Project_id')->references('id')->on('client_projects');
+			$table->integer('client_project_id')->unsigned()->nullable();
+			$table->foreign('client_project_id')->references('id')->on('client_projects');
 
 			$table->integer('employee_id')->unsigned();
 			$table->foreign('employee_id')->references('id')->on('employees');
@@ -41,10 +41,10 @@ class UpdateExistingRelationships extends Migration {
 
 		Schema::table('addresses', function (Blueprint $table) {
 
-			$table->integer('company_id')->unsigned();
+			$table->integer('company_id')->unsigned()->nullable();
 			$table->foreign('company_id')->references('id')->on('companies');
 
-			$table->integer('client_id')->unsigned();
+			$table->integer('client_id')->unsigned()->nullable();
 			$table->foreign('client_id')->references('id')->on('clients');
 		});
 	}

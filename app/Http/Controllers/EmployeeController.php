@@ -118,8 +118,7 @@ class EmployeeController extends Controller
      */
     public function destroy(Employee $employee)
     {
-      //  Task::findOrFail($id)->delete();
-    $employee->delete();
+        $employee->delete();
         return redirect('/employees');
     }
 }

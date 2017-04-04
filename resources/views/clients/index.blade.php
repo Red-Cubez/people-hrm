@@ -45,11 +45,9 @@
                     <tbody>
                         @foreach ($clients as $client)
                             <tr>
-                                <!-- client Name -->
                                 <td class="table-text">
                                     <div>{{ $client->name }}</div>
                                 </td>
-                                <!-- Delete Button -->
                                 <td>
                                     <form action="{{ url('clients/'.$client->id) }}" method="POST">
                                         {{ csrf_field() }}

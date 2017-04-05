@@ -66,24 +66,24 @@
                 <table class="table table-striped task-table">
                     <!-- Table Headings -->
                     <thead>
-                    
-                        <th>&nbsp;</th>
+                        <th>Name </th>
+                        <th>Contact Number  </th>
+                        <th>Contact Email   </th>
+                        <th>Contact Person  </th>
+                        <th>Operations      </th>
                     </thead>
                     <!-- Table Body -->
                     <tbody>
                         @foreach ($clients as $client)
                             <tr>
 
-                               
-                            <td class="table-text">
-                            <div><strong>Name:</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $client->name }}</div>
-                            <div><strong>Contact Number:&nbsp;</strong> {{ $client->contactNumber }}</div>
-                            <div><strong>Contact Email:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>  {{ $client->contactEmail }}</div>
-                            <div><strong>Contact Person:&nbsp;&nbsp;</strong> {{ $client->contactPerson }}</div>
-                            </td>
+                            <td class="table-text"><div>{{ $client->name }}</div></td>
+                            <td class="table-text"><div>{{ $client->contactNumber }}</div></td>
+                            <td class="table-text"><div>{{ $client->contactEmail }}</div></td>
+                            <td class="table-text"><div>{{ $client->contactPerson }}</div></td>
                                 
-                                <td>
-                                    <form action="{{ url('clients/'.$client->id) }}" method="POST">
+                            <td>
+                                        <form action="{{ url('clients/'.$client->id) }}" method="POST">
                                         {{ csrf_field() }}
                                         {{ method_field('DELETE') }}
                                         <input type="hidden" name="_method" value="DELETE">

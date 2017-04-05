@@ -67,10 +67,10 @@
                     <!-- Table Headings -->
                     <thead>
                         <th>Name </th>
-                        <th>Contact Number  </th>
-                        <th>Contact Email   </th>
-                        <th>Contact Person  </th>
-                        <th>Operations      </th>
+                        <th>Contact Number</th>
+                        <th>Contact Email</th>
+                        <th>Contact Person</th>
+                        <th>Operations</th>
                     </thead>
                     <!-- Table Body -->
                     <tbody>

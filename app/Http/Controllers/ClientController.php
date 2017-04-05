@@ -42,6 +42,9 @@ class ClientController extends Controller
     {
         $client = new Client();
         $client->name = $request->name;
+        $client->contactNumber = $request->contactNumber;
+        $client->contactEmail = $request->contactEmail;
+        $client->contactPerson = $request->contactPerson;
 
         //TODO These properties need to be set from fields
 

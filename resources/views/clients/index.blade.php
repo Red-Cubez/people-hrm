@@ -14,7 +14,7 @@
                 <label for="name" class="col-sm-3 control-label">Name</label>
 
                 <div class="col-sm-6">
-                    <input type="text" name="name" id="name" class="form-control">
+                    <input type="text" name="name" id="name" class="form-control" placeholder="Enter Name">
 
                 </div>
             </div>
@@ -23,7 +23,7 @@
                 <label for="contactNumber" class="col-sm-3 control-label">Contact Number</label>
 
                 <div class="col-sm-6">
-                    <input type="Number" name="contactNumber" id="contactNumber" class="form-control">
+                    <input type="Number" name="contactNumber" id="contactNumber" class="form-control" placeholder="Enter Contact Number">
                     
                 </div>
             </div>
@@ -32,7 +32,7 @@
                 <label for="contactEmail" class="col-sm-3 control-label">Contact Email</label>
 
                 <div class="col-sm-6">
-                    <input type="Email" name="contactEmail" id="contactEmail" class="form-control">
+                    <input type="Email" name="contactEmail" id="contactEmail" class="form-control" placeholder="Enter Contact Email">
                     
                 </div>
             </div>
@@ -41,7 +41,7 @@
                 <label for="contactPerson" class="col-sm-3 control-label">Contact Person</label>
 
                 <div class="col-sm-6">
-                    <input type="text" name="contactPerson" id="contactPerson" class="form-control">
+                    <input type="text" name="contactPerson" id="contactPerson" class="form-control" placeholder="Enter Contact Person">
                     
                 </div>
             </div>
@@ -88,7 +88,16 @@
                                         {{ method_field('DELETE') }}
                                         <input type="hidden" name="_method" value="DELETE">
                                         <button type="submit" class="btn btn-danger">
-                                            <i class="fa fa-trash"></i> Delete
+                                            <i class="fa fa-trash"> Delete</i>
+                                        </button>
+                                    </form>
+
+                                        <form action="{{ url('clients/'.$client->id) }}" method="POST">
+                                        {{ csrf_field() }}
+                                        {{ method_field('GET') }}
+                                        
+                                        <button type="submit" class="btn btn-danger">
+                                            <i class="fa fa-trash"> Update</i>
                                         </button>
                                     </form>
                                 </td>

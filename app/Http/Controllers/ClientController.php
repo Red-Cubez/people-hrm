@@ -65,9 +65,8 @@ class ClientController extends Controller
      */
     public function show(Client $client)
     {
-        //
+        return view('clients/clientEditForm',[ 'client' =>$client ]);
     }
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -88,7 +87,14 @@ class ClientController extends Controller
      */
     public function update(Request $request, Client $client)
     {
-        //
+        
+       $client->name = $request->name;
+       $client->contactNumber = $request->contactNumber;
+       $client->contactEmail = $request->contactEmail;
+       $client->contactPerson = $request->contactPerson;
+
+       $client->save();
+       return redirect ('/index');
     }
 
     /**
@@ -97,6 +103,8 @@ class ClientController extends Controller
      * @param  \People\Models\Client  $client
      * @return \Illuminate\Http\Response
      */
+
+
     public function destroy(Client $client)
     {
         $client->delete();

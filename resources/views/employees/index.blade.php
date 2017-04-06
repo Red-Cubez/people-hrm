@@ -14,8 +14,15 @@
                 <label for="employee" class="col-sm-3 control-label">Employee</label>
 
                 <div class="col-sm-6">
-                    <input type="text" name="firstName" id="employee-firstName" class="form-control">
-                    <input type="text" name="lastName" id="employee-lastName" class="form-control">
+                    <input type="text" name="firstName" id="employee-firstName" class="form-control" placeholder="First Name">
+                    <input type="text" name="lastName" id="employee-lastName" class="form-control" placeholder="Last Name">
+                    <input type="text" name="hireDate" id="employee-hireDate" class="form-control" placeholder="Hire Date">
+                    <input type="text" name="terminationDate" id="employee-terminationDate" class="form-control" placeholder="Termination Date">
+                    <input type="text" name="jobTitle" id="employee-jobTitle" class="form-control" placeholder="Job Title">
+                    <input type="text" name="annualSalary" id="employee-annualSalary" class="form-control" placeholder="Annual Salary">
+                    <input type="text" name="hourlyRate" id="employee-hourlyRate" class="form-control" placeholder="Hourly Rate">
+
+
                 </div>
             </div>
 
@@ -33,6 +40,7 @@
     @if (count($employees) > 0)
         <div class="panel panel-default">
             <div class="panel-heading">
+             {{-- display all current employees --}}
                 Current Employees
             </div>
 
@@ -51,16 +59,24 @@
                             <tr>
                                 <!-- Employee Name -->
                                 <td class="table-text">
-                                    <div>{{ $employee->firstName }}</div>
-                                    <div>{{ $employee->lastName }}</div>
+                                    <div><b>First Name:</b><i> {{ $employee->firstName }}</div>
+                                    <div><b>Last Name  :</b>{{ $employee->lastName }}</div>
+                                    <div><b>Job Title  :</b>{{ $employee->jobTitle }}</div>
+
                                 </td>
 
                                 <!-- Delete Button -->
                                 <td>
+                                 <form action="{{ url('employees/'.$employee->id) }}" method="GET">
+                                        {{ csrf_field() }}
+                                        {{ method_field('GET') }}
+                                        <button type="submit" class="btn btn-danger">
+                                            <i class="fa fa-trash"></i> EDIT
+                                        </button>
+                                    </form>
                                     <form action="{{ url('employees/'.$employee->id) }}" method="POST">
                                         {{ csrf_field() }}
                                         {{ method_field('DELETE') }}
-                                        <input type="hidden" name="_method" value="DELETE">
                                         <button type="submit" class="btn btn-danger">
                                             <i class="fa fa-trash"></i> Delete
                                         </button>

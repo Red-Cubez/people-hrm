@@ -1,24 +1,12 @@
-@extends('layouts.app')
-
-@section('content')
-
-    <div class="panel-body">
-        <!-- Display Validation Errors -->
-        @include('common.errors')
-
-        <!-- New clientProject Form -->
-        <form action="{{url('clientprojects') }}" method="POST" class="form-horizontal">
-            {{ csrf_field() }}
-            <!-- Project Name -->
-            <div class="form-group">
-                <label for="clientProject" class="col-sm-3 control-label">Project</label>
+ <div class="form-group">
+                <label for="companyproject" class="col-sm-3 control-label">Project</label>
 
                 <div class="col-sm-6">
                     <input type="text" name="name" id="name" class="form-control">
                 </div>
             </div>
 
-            <!-- Add clientProject Button -->
+            <!-- Add companyproject Button -->
             <div class="form-group">
                 <div class="col-sm-offset-3 col-sm-6">
                     <button type="submit" class="btn btn-default">
@@ -28,8 +16,8 @@
             </div>
         </form>
     </div>
-        <!-- Current clientProjects -->
-    @if (count($clientProjects) > 0)
+        <!-- Current companyprojects -->
+    @if (count($companyprojects) > 0)
         <div class="panel panel-default">
             <div class="panel-heading">
                 Current Projects
@@ -43,15 +31,15 @@
                     </thead>
                     <!-- Table Body -->
                     <tbody>
-                        @foreach ($clientProjects as $clientProject)
+                        @foreach ($companyprojects as $companyproject)
                             <tr>
-                                <!-- clientProject Name -->
+                                <!-- companyproject Name -->
                                 <td class="table-text">
-                                    <div>{{ $clientProject->name }}</div>
+                                    <div>{{ $companyproject->name }}</div>
                                 </td>
                                 <!-- Delete Button -->
                                 <td>
-                                    <form action="{{ url('companyprojects/'.$clientProject->id) }}" method="POST">
+                                    <form action="{{ url('companyprojects/'.$companyproject->id) }}" method="POST">
                                         {{ csrf_field() }}
                                         {{ method_field('DELETE') }}
                                         <input type="hidden" name="_method" value="DELETE">
@@ -67,4 +55,3 @@
             </div>
 
     @endif
-@endsection

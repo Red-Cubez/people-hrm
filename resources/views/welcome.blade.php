@@ -80,6 +80,6 @@
                 <div class="links">
                     <a href="/employees">Employees</a>
                     <a href="/companies">Companies</a>
-                    <a href="/projects">Projects</a>
+                    <a href="/companyprojects">Projects</a>
                 </div>
                     @endsection

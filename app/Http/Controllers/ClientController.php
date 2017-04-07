@@ -17,9 +17,7 @@ class ClientController extends Controller
     {
         $clients = Client::orderBy('created_at', 'asc')->get();
 
-        return view('clients.index', [
-            'clients' => $clients
-        ]);
+        return view('clients.index', ['clients' => $clients]);
     }
 
     /**

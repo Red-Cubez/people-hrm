@@ -77,8 +77,8 @@ class EmployeeController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show(Employee $employee) {
-		dd($employee);
-
+		return view('employees/update',
+			['employee' => $employee]);
 	}
 
 	/**
@@ -88,7 +88,7 @@ class EmployeeController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function edit(Employee $employee) {
-		//
+
 	}
 
 	/**
@@ -99,7 +99,16 @@ class EmployeeController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function update(Request $request, Employee $employee) {
-		//
+
+		$employee->firstName = $request->firstName;
+		$employee->lastName = $request->lastName;
+		$employee->hireDate = $request->hireDate;
+		$employee->terminationDate = $request->terminationDate;
+		$employee->jobTitle = $request->jobTitle;
+		$employee->annualSalary = $request->annualSalary;
+		$employee->hourlyRate = $request->hourlyRate;
+		$employee->save();
+		return redirect('/employees');
 	}
 
 	/**

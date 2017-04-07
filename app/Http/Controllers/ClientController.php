@@ -94,7 +94,7 @@ class ClientController extends Controller
        $client->contactPerson = $request->contactPerson;
 
        $client->save();
-       return redirect ('/index');
+       return redirect ('/clients');
     }
 
     /**

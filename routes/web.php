@@ -56,3 +56,4 @@ Route::resource('clients', 'ClientController');
 Route::resource('clientprojects', 'ClientProjectController');
 Route::resource('companyprojects', 'CompanyProjectController');
 Route::resource('projectresources', 'ProjectResourceController');
+

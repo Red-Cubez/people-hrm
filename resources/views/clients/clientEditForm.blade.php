@@ -11,7 +11,7 @@
           method="POST">
       {{ csrf_field() }}
       {{ method_field('PUT') }}
-      <!-- Employee Name -->
+      <!-- Client Name -->
       @include('clients/clientForm')
     </form>
   </div>

@@ -18,9 +18,7 @@ class ClientProjectController extends Controller
         //TODO only get projects for a particular client
         $clientProjects = ClientProject::orderBy('created_at', 'asc')->get();
 
-        return view('clientProjects.index', [
-            'clientProjects' => $clientProjects
-        ]);
+        return view('clientprojects.index', ['clientProjects' => $clientProjects ]);
     }
 
     /**
@@ -41,17 +39,24 @@ class ClientProjectController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request);
         $clientProject = new ClientProject();
         $clientProject->name = $request->name;
-
+        $clientProject->expectedStartDate = $request->expectedStartDate;
+        $clientProject->expectedEndDate = $request->expectedEndDate;
+        $clientProject->actualStartDate = $request->actualStartDate;
+        $clientProject->actualEndDate = $request->actualEndDate;
+        $clientProject->budget = $request->budget;
+        $clientProject->cost = $request->cost;
         //TODO These properties need to be set from fields
         //TODO this value needs to come from the correct client
-        $client = Client::find(1);
-//        dd($client);
-        $clientProject->client_id = $client->id;
+    //    $client = Client::find('$clientid');
+         // dd($client->id);
+        $clientProject->client_id = $request->clientid;
         $clientProject->save();
 
-        return redirect('/clientprojects');
+//dd($clientProject);
+        return redirect('/clients/'.$clientProject->client_id.'/clientprojects');
     }
 
     /**
@@ -62,8 +67,9 @@ class ClientProjectController extends Controller
      */
     public function show(ClientProject $clientProject)
     {
-        //
+      // return view('clientprojects.index',[ 'clientProject' =>$clientProject ]);
     }
+    
 
     /**
      * Show the form for editing the specified resource.
@@ -85,18 +91,31 @@ class ClientProjectController extends Controller
      */
     public function update(Request $request, ClientProject $clientProject)
     {
-        //
+        
+    
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \People\Models\ClientProject  $clientProject
+     * @param  \People\Models\ClientProject  $clientproject
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ClientProject $clientProject)
+    public function destroy(ClientProject $clientproject)
     {
-        $clientProject->delete();
-        return redirect('/clientprojects');
+        // dd($clientproject);
+        $clientid = $clientproject->client_id;
+        $clientproject->delete();
+        return redirect('/clients/'.$clientid.'/clientprojects');
+    }
+
+
+ public function manageProject($clientid)
+    {
+        $clientProjects = ClientProject::where('client_id', $clientid)->orderBy('created_at', 'asc')->get();
+        return view('clientprojects.index', 
+            ['clientProjects' => $clientProjects,
+            'clientid' => $clientid
+             ]);
     }
 }

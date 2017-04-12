@@ -43,6 +43,7 @@ class ClientController extends Controller
         $client->contactNumber = $request->contactNumber;
         $client->contactEmail = $request->contactEmail;
         $client->contactPerson = $request->contactPerson;
+        
 
         //TODO These properties need to be set from fields
 
@@ -90,6 +91,7 @@ class ClientController extends Controller
        $client->contactNumber = $request->contactNumber;
        $client->contactEmail = $request->contactEmail;
        $client->contactPerson = $request->contactPerson;
+       
 
        $client->save();
        return redirect ('/clients');

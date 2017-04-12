@@ -6,9 +6,7 @@
         <!-- Display Validation Errors -->
         @include('common.errors')
 
-         <form action="{{ url('clients/'.$client->id)}}"
-          class="form-horizontal"
-          method="POST">
+         <form action="{{ url('clients/'.$client->id)}}" class="form-horizontal" method="POST">
       {{ csrf_field() }}
       {{ method_field('PUT') }}
       <!-- Client Name -->

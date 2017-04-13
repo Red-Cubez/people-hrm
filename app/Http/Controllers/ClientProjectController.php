@@ -38,8 +38,9 @@ class ClientProjectController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        // dd($request);
+    {    
+        // dd($clientProject);
+        
         $clientProject = new ClientProject();
         $clientProject->name = $request->name;
         $clientProject->expectedStartDate = $request->expectedStartDate;
@@ -50,12 +51,12 @@ class ClientProjectController extends Controller
         $clientProject->cost = $request->cost;
         //TODO These properties need to be set from fields
         //TODO this value needs to come from the correct client
-    //    $client = Client::find('$clientid');
-         // dd($client->id);
+        
+         
         $clientProject->client_id = $request->clientid;
         $clientProject->save();
-
-//dd($clientProject);
+        
+      
         return redirect('/clients/'.$clientProject->client_id.'/clientprojects');
     }
 
@@ -65,9 +66,14 @@ class ClientProjectController extends Controller
      * @param  \People\Models\ClientProject  $clientProject
      * @return \Illuminate\Http\Response
      */
-    public function show(ClientProject $clientProject)
+    public function show(ClientProject $clientproject)
     {
-      // return view('clientprojects.index',[ 'clientProject' =>$clientProject ]);
+        // dd($clientproject);
+
+        // dd('crashed');
+
+
+       return view('clientProjects/clientProjectEditForm',[ 'clientProject' =>$clientproject]);
     }
     
 
@@ -89,10 +95,22 @@ class ClientProjectController extends Controller
      * @param  \People\Models\ClientProject  $clientProject
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ClientProject $clientProject)
-    {
+    public function update(Request $request, ClientProject $clientproject)
+    {    // dd($clientProject);
+       
+       $clientproject->name = $request->name;
+       $clientproject->expectedStartDate = $request->expectedStartDate;
+       $clientproject->expectedEndDate = $request->expectedEndDate;
+       $clientproject->actualStartDate = $request->actualStartDate;
+       $clientproject->actualEndDate = $request->actualStartDate;
+       $clientproject->budget = $request->budget;
+       $clientproject->cost = $request->cost;
+       $clientid = $clientproject->client_id;
+       $clientproject->save();
+
+       return redirect ('/clients/'.$clientid.'/clientprojects');
         
-    
+        
     }
 
     /**
@@ -103,19 +121,19 @@ class ClientProjectController extends Controller
      */
     public function destroy(ClientProject $clientproject)
     {
-        // dd($clientproject);
+        //dd($clientproject);
         $clientid = $clientproject->client_id;
         $clientproject->delete();
         return redirect('/clients/'.$clientid.'/clientprojects');
     }
 
 
- public function manageProject($clientid)
+    public function manageProject($clientid)
     {
         $clientProjects = ClientProject::where('client_id', $clientid)->orderBy('created_at', 'asc')->get();
         return view('clientprojects.index', 
             ['clientProjects' => $clientProjects,
             'clientid' => $clientid
-             ]);
+            ]);
     }
 }

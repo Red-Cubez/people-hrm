@@ -9,65 +9,13 @@
         <!-- New clientProject Form -->
         <form action="{{url('clientprojects') }}" method="POST" class="form-horizontal">
             {{ csrf_field() }}
-            <!-- Project Name -->
-            <input type="hidden" name="clientid" value="{{$clientid}}">
-                <div class="form-group">
-                <label for="clientProject" class="col-sm-3 control-label">Name</label>
-                <div class="col-sm-6">
-                    <input type="text" name="name" id="name" class="form-control" >
-                </div>
-            </div>
-            <div class="form-group">
-            <label for="clientProject" class="col-sm-3 control-label">Expected Start Date</label>
 
-                <div class="col-sm-6">
-                    <input type="date" name="expectedStartDate" id="expectedStartDate" class="form-control">
-                </div>
-                </div>
-                <div class="form-group">
-            <label for="clientProject" class="col-sm-3 control-label">Expected End Date</label>
+           <div class="form-group" >
+           <input type="hidden" name="clientid" value="{{$clientid}}">
+           </div>
+            @include('clientProjects/clientProjectForm')
 
-                <div class="col-sm-6">
-                    <input type="date" name="expectedEndDate" id="expectedEndDate" class="form-control">
-                </div>
-                </div>
-                <div class="form-group">
-            <label for="clientProject" class="col-sm-3 control-label">Actual Start Date</label>
-
-                <div class="col-sm-6">
-                    <input type="date" name="actualStartDate" id="actualStartDate" class="form-control">
-                </div>
-                </div>
-                <div class="form-group">
-            <label for="clientProject" class="col-sm-3 control-label">Actual End Date</label>
-
-                <div class="col-sm-6">
-                    <input type="date" name="actualEndDate" id="actualEndDate" class="form-control">
-                </div>
-                </div>
-                <div class="form-group">
-            <label for="clientProject" class="col-sm-3 control-label">Budget</label>
-
-                <div class="col-sm-6">
-                    <input type="number" name="budget" id="budget" class="form-control">
-                </div>
-                </div>
-                <div class="form-group">
-            <label for="clientProject" class="col-sm-3 control-label">Cost</label>
-
-                <div class="col-sm-6">
-                    <input type="number" name="cost" id="cost" class="form-control">
-                </div>
-                </div>
-            <!-- Add clientProject Button -->
-            <div class="form-group">
-                <div class="col-sm-offset-3 col-sm-6">
-                    <button type="submit" class="btn btn-default">
-                        <i class="fa fa-plus"> Add Project </i>
-                    </button>
-                </div>
-            </div>
-        </form>
+           </form>
     </div>
         <!-- Current clientProjects -->
     @if (count($clientProjects) > 0)
@@ -125,6 +73,15 @@
                                         <button type="submit" class="btn btn-danger">
                                             <i class="fa fa-trash"> Delete </i>
                                         </button>
+                                    </form>
+                                     
+                                     <form action="{{ url('clientprojects/'.$clientProject->id) }}" method="POST">
+                                        {{ csrf_field() }}
+                                        {{ method_field('GET') }}
+                                        
+                                        <button type="submit" class="btn btn-danger">
+                                           <i class="fa fa-trash"> Update</i> 
+                                          </button>
                                     </form>
                                 </td>
                             </tr>

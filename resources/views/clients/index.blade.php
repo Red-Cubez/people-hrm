@@ -56,7 +56,7 @@
                             </button>
                         </form>
 
-                        <form action="{{ url('/clients/'.$client->id .'/clientprojects') }}" method="POST">
+                        <form action="{{ url('/clients/'.$client->id.'/clientprojects') }}" method="POST">
                             {{ csrf_field() }}
                             {{ method_field('GET') }}
                             

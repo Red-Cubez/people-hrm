@@ -1,7 +1,6 @@
-    <?php
-
-    namespace People\Http\Controllers;
-
+<?php
+namespace People\Http\Controllers;
+    
     use People\Models\ClientProject;
     use People\Models\Client;
     use Illuminate\Http\Request;
@@ -50,11 +49,11 @@
             //TODO These properties need to be set from fields
             //TODO this value needs to come from the correct client Project
             
-             
+
             $clientProject->client_id = $request->clientid;
             $clientProject->save();
             
-          
+
             return redirect('/clients/'.$clientProject->client_id.'/clientprojects');
         }
 
@@ -66,9 +65,9 @@
          */
         public function show(ClientProject $clientproject)
         {
-           return view('clientProjects/clientProjectEditForm',[ 'clientProject' =>$clientproject]);
-        }
-        
+         return view('clientProjects/clientProjectEditForm',[ 'clientProject' =>$clientproject]);
+     }
+
 
         /**
          * Show the form for editing the specified resource.
@@ -90,20 +89,20 @@
          */
         public function update(Request $request, ClientProject $clientproject)
         {  
-           $clientproject->name = $request->name;
-           $clientproject->expectedStartDate = $request->expectedStartDate;
-           $clientproject->expectedEndDate = $request->expectedEndDate;
-           $clientproject->actualStartDate = $request->actualStartDate;
-           $clientproject->actualEndDate = $request->actualStartDate;
-           $clientproject->budget = $request->budget;
-           $clientproject->cost = $request->cost;
-           $clientid = $clientproject->client_id;
-           $clientproject->save();
+         $clientproject->name = $request->name;
+         $clientproject->expectedStartDate = $request->expectedStartDate;
+         $clientproject->expectedEndDate = $request->expectedEndDate;
+         $clientproject->actualStartDate = $request->actualStartDate;
+         $clientproject->actualEndDate = $request->actualStartDate;
+         $clientproject->budget = $request->budget;
+         $clientproject->cost = $request->cost;
+         $clientid = $clientproject->client_id;
+         $clientproject->save();
 
-           return redirect ('/clients/'.$clientid.'/clientprojects');
-            
-            
-        }
+         return redirect ('/clients/'.$clientid.'/clientprojects');
+
+
+     }
 
         /**
          * Remove the specified resource from storage.

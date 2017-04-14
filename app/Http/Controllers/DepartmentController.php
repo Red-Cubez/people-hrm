@@ -79,7 +79,7 @@ class DepartmentController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function update(Request $request, Department $department) {
-
+         
 		$department->name = $request->name
 		$department->save();
 		return redirect('/departments');

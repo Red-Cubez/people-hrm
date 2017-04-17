@@ -4,7 +4,6 @@
     <!-- Display Validation Errors -->
     @include('common.errors')
     <!-- New Department Form -->
-    <!-- New Department Form -->
     <form action="{{url('departments') }}"
         method="POST"
         class="form-horizontal">

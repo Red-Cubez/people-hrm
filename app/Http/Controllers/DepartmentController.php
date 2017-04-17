@@ -15,7 +15,7 @@ class DepartmentController extends Controller {
 	public function index() {
 		$departments = Department::orderBy('created_at', 'asc')->get();
 
-		return view('department.index', ['departments' => $departments]);
+		return view('departments.index', ['departments' => $departments]);
 	}
 
 	/**
@@ -57,7 +57,7 @@ class DepartmentController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show(Department $department) {
-		return view('department/update',
+		return view('departments/update',
 			['department' => $department]);
 	}
 
@@ -80,7 +80,8 @@ class DepartmentController extends Controller {
 	 */
 	public function update(Request $request, Department $department) {
          
-		$department->name = $request->name
+		$department->name = $request->name;
+		
 		$department->save();
 		return redirect('/departments');
 	}

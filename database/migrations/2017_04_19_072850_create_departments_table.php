@@ -15,10 +15,10 @@ class CreateDepartmentsTable extends Migration
     {
         Schema::create('departments', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('name')->nullable();
+            $table->integer('company_id')->unsigned();
+            $table->foreign('company_id')->references('id')->on('companies');
             $table->timestamps();
-
-            $table->string('name');
-           
         });
     }
 
@@ -29,6 +29,6 @@ class CreateDepartmentsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('departments');
     }
 }

@@ -37,14 +37,13 @@ class DepartmentController extends Controller {
 	public function store(Request $request) {
 
 
-		//TODO Get company properly
-		
-		$company = Company::find(1);
-
 		$department = new Department();
 		$department->name = $request->name;
-	
-		$department->save();
+		
+		$company = Company::find(1);
+        $department->company_id = $company->id;
+        $department->save();
+		
 		
 
 		return redirect('/departments');

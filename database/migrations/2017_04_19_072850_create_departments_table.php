@@ -1,9 +1,10 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateClientsTable extends Migration
+class CreateDepartmentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,13 +13,12 @@ class CreateClientsTable extends Migration
      */
     public function up()
     {
-        Schema::create('clients', function (Blueprint $table) {
+        Schema::create('departments', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('name')->nullable();
+            $table->integer('company_id')->unsigned();
+            $table->foreign('company_id')->references('id')->on('companies');
             $table->timestamps();
-            $table->string('name');
-            $table->string('contactNumber')->nullable();
-            $table->string('contactEmail')->nullable();
-            $table->string('contactPerson')->nullable();            
         });
     }
 
@@ -29,7 +29,6 @@ class CreateClientsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('clients');
-        
+        Schema::dropIfExists('departments');
     }
 }

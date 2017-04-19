@@ -5,6 +5,7 @@ namespace People\Http\Controllers;
 use People\Models\Client;
 use People\Models\Company;
 use Illuminate\Http\Request;
+use People\Models\ClientProject;
 
 class ClientController extends Controller
 {
@@ -106,8 +107,15 @@ class ClientController extends Controller
 
 
     public function destroy(Client $client)
-    {
-        $client->delete();
+    {   
+        $clientProjects = ClientProject::where('client_id',$client->id)->orderBy('created_at', 'asc')->get(); 
+
+        foreach ($clientProjects as $clientProject)
+        { 
+         $clientProject -> delete();
+        }
+        
+        $client->delete ();
         return redirect('/clients');
 
     }

@@ -40,8 +40,8 @@ class CompanyController extends Controller {
 		$company = new Company();
 		$company->name = $request->name;
 		$company->save();
-		// dd($company);
 		return redirect('/companies');
+
 	}
 
 	/**
@@ -72,9 +72,8 @@ class CompanyController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function update(Request $request, Company $company) {
-		
+         
 		$company->name = $request->name;
-		// dd($company);
 		$company->save();
 		return redirect('/companies');
 	}

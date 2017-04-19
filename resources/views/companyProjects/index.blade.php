@@ -14,8 +14,12 @@
 
             @include('projectForm/projectForm')
 
+
+
          </form>
 
+
+         @include('projectForm/showProjects')
 
     </div>
 @endsection

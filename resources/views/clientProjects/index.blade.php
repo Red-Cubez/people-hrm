@@ -63,7 +63,7 @@
                                     <td class="table-text">
                                         <div>{{ $clientProject->cost }}</div>
                                     </td>
-                                   
+
                                     <!-- Delete Button -->
                                     <td>
                                         <form action="{{ url('clientprojects/'.$clientProject->id) }}" method="POST">
@@ -74,13 +74,13 @@
                                                 <i class="fa fa-trash"> Delete </i>
                                             </button>
                                         </form>
-                                         
+
                                          <form action="{{ url('clientprojects/'.$clientProject->id) }}" method="POST">
                                             {{ csrf_field() }}
                                             {{ method_field('GET') }}
-                                            
+
                                             <button type="submit" class="btn btn-danger">
-                                               <i class="fa fa-trash"> Update</i> 
+                                               <i class="fa fa-trash"> Update</i>
                                               </button>
                                         </form>
                                     </td>

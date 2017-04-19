@@ -11,50 +11,52 @@
 		|
 		 */
 
-Route::get('/', function () {
-	return view('welcome');
-});
+		Route::get('/', function () {
+			return view('welcome');
+		});
 
-/**
- * Add New Task
- */
-Route::post('/task', function (Request $request) {
+		/**
+		 * Add New Task
+		 */
+		Route::post('/task', function (Request $request) {
 
-	$validator = Validator::make($request->all(), [
-		'name' => 'required|max:255',
-	]);
+			$validator = Validator::make($request->all(), [
+				'name' => 'required|max:255',
+				]);
 
-	if ($validator->fails()) {
-		return redirect('/')
-			->withInput()
-			->withErrors($validator);
-	}
+			if ($validator->fails()) {
+				return redirect('/')
+				->withInput()
+				->withErrors($validator);
+			}
 
-	$task = new People\Models\Task;
-	$task->name = $request->name;
-	$task->save();
+			$task = new People\Models\Task;
+			$task->name = $request->name;
+			$task->save();
 
-	return redirect('/');
-});
+			return redirect('/');
+		});
 
-/**
- * Delete Task
- */
-Route::delete('/task/{task}', function (People\Models\Task $task) {
+		/**
+		 * Delete Task
+		 */
+		Route::delete('/task/{task}', function (People\Models\Task $task) {
 
-	$task->delete();
+			$task->delete();
 
-	return redirect('/');
-});
+			return redirect('/');
+		});
 
-Auth::routes();
+		Auth::routes();
 
-Route::get('/home', 'HomeController@index');
+		Route::get('/home', 'HomeController@index');
 
-Route::resource('employees', 'EmployeeController');
-Route::resource('clients', 'ClientController');
-Route::resource('clientprojects', 'ClientProjectController');
-Route::resource('companyprojects', 'CompanyProjectController');
-Route::resource('projectresources', 'ProjectResourceController');
+		Route::resource('employees', 'EmployeeController');
+		Route::resource('clients', 'ClientController');
+		Route::resource('clientprojects', 'ClientProjectController');
+		Route::resource('companyprojects', 'CompanyProjectController');
+		Route::resource('projectresources', 'ProjectResourceController');
+	    
+	    Route::get('/clients/{clientid}/clientprojects', 'ClientProjectController@manageProject'); 
 
-Route::get('/clients/{clientid}/clientprojects', 'ClientProjectController@manageProject');
+	    Route::resource('departments', 'DepartmentController');

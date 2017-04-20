@@ -43,7 +43,6 @@ class CompanyProjectController extends Controller {
 		$companyProject->cost = $request->cost;
 		//TODO These properties need to be set from fields
 		//TODO this value needs to come from the correct client Project
-
 		$companyProject->company_id = 1;
 		$companyProject->save();
 

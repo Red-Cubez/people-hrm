@@ -3,7 +3,7 @@
 namespace People\Http\Controllers;
 
 use Illuminate\Http\Request;
-use People\Models\Company;
+use People\Models\Project;
 
 class CompanyProjectController extends Controller {
 	/**
@@ -12,7 +12,7 @@ class CompanyProjectController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index() {
-		$companyprojects = Company::orderBy('created_at', 'asc')->get();
+		$companyprojects = Project::orderBy('created_at', 'asc')->get();
 		return view('companyProjects/index', ['companyprojects' => $companyprojects]);
 	}
 
@@ -33,6 +33,21 @@ class CompanyProjectController extends Controller {
 	 */
 	public function store(Request $request) {
 		//
+		$companyProject = new Project();
+		$companyProject->name = $request->name;
+		$companyProject->expectedStartDate = $request->expectedStartDate;
+		$companyProject->expectedEndDate = $request->expectedEndDate;
+		$companyProject->actualStartDate = $request->actualStartDate;
+		$companyProject->actualEndDate = $request->actualEndDate;
+		$companyProject->budget = $request->budget;
+		$companyProject->cost = $request->cost;
+		//TODO These properties need to be set from fields
+		//TODO this value needs to come from the correct client Project
+
+		$companyProject->company_id = 1;
+		$companyProject->save();
+
+		return redirect('companyprojects');
 	}
 
 	/**
@@ -41,8 +56,9 @@ class CompanyProjectController extends Controller {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function show($id) {
-		//
+	public function show(Project $companyproject) {
+
+		return view('companyProjects/editProjectForm', ['companyproject' => $companyproject]);
 	}
 
 	/**
@@ -62,8 +78,17 @@ class CompanyProjectController extends Controller {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(Request $request, $id) {
+	public function update(Request $request, Project $companyproject) {
 		//
+		$companyproject->name = $request->name;
+		$companyproject->expectedStartDate = $request->expectedStartDate;
+		$companyproject->expectedEndDate = $request->expectedEndDate;
+		$companyproject->actualStartDate = $request->actualStartDate;
+		$companyproject->actualEndDate = $request->actualEndDate;
+		$companyproject->budget = $request->budget;
+		$companyproject->cost = $request->cost;
+		$companyproject->save();
+		return redirect('/companyprojects');
 	}
 
 	/**
@@ -72,7 +97,7 @@ class CompanyProjectController extends Controller {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function destroy(Company $companyproject) {
+	public function destroy(Project $companyproject) {
 		//
 		$companyproject->delete();
 		return redirect('/companyprojects');

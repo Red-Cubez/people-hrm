@@ -44,8 +44,6 @@ class DepartmentController extends Controller {
         $department->company_id = $company->id;
         $department->save();
 		
-		
-
 		return redirect('/departments');
 	}
 

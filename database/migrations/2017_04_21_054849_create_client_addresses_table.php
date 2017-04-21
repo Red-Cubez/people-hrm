@@ -19,15 +19,15 @@ class CreateClientAddressesTable extends Migration {
 			$table->string('stateProvince')->nullable();
 			$table->string('city')->nullable();
 			$table->integer('client_id')->unsigned();
-			$table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
+			$table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade')->onUpdate('cascade');
 
 		});
 	}
 
 	/**s
-		         * Reverse the migrations.
-		         *
-		         * @return void
+		                 * Reverse the migrations.
+		                 *
+		                 * @return void
 	*/
 	public function down() {
 		Schema::dropIfExists('client_address');

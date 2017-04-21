@@ -112,9 +112,9 @@ class ClientController extends Controller {
 		$client->address->stateProvince = $request->stateProvince;
 		$client->address->city = $request->city;
 		$client->address->streetLine1 = $request->streetLine1;
-		$client->address->client_id = $client->id;
+		//$client->address->client_id = $client->id;
 		$client->address->save();
-		$client->save();
+		//	$client->save();
 
 		return redirect('/clients');
 	}

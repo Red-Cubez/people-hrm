@@ -3,7 +3,7 @@
 
                 <div class="col-sm-6">
                     <input type="text" name="name" id="name" class="form-control" @if(isset($client)) value="{{$client->name}}"
-                    @else placeholder="Enter Name" @endif required >
+                    @else placeholder="Enter Name" @endif  required>
 
                 </div>
             </div>
@@ -13,7 +13,7 @@
 
                 <div class="col-sm-6">
                     <input type="Number" name="contactNumber" id="contactNumber" class="form-control" @if(isset($client))
-                    value="{{$client->contactNumber}}" @else placeholder="Enter Contact Number" @endif required >
+                    value="{{$client->contactNumber}}" @else placeholder="Enter Contact Number" @endif  >
 
                 </div>
             </div>
@@ -23,7 +23,7 @@
 
                 <div class="col-sm-6">
                     <input type="Email" name="contactEmail" id="contactEmail" class="form-control" @if(isset($client))
-                    value="{{$client->contactEmail}}" @else placeholder="Enter contact Email" @endif required >
+                    value="{{$client->contactEmail}}" @else placeholder="Enter contact Email" @endif  >
 
                 </div>
             </div>
@@ -33,7 +33,7 @@
 
                 <div class="col-sm-6">
                     <input type="text" name="contactPerson" id="contactPerson" class="form-control" @if(isset($client))
-                    value="{{$client->contactPerson}}" @else placeholder="Enter Contact Person" @endif required >
+                    value="{{$client->contactPerson}}" @else placeholder="Enter Contact Person" @endif  >
 
                 </div>
             </div>

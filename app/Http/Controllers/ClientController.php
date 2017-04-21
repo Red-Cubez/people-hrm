@@ -51,18 +51,16 @@ class ClientController extends Controller {
 		$clientAddress->country = $request->country;
 		$clientAddress->stateProvince = $request->stateProvince;
 		$clientAddress->city = $request->city;
-
 		//TODO These properties need to be set from fields
-
 		$company = Company::find(1);
 		//dd($company);
 		$client->company_id = $company->id;
 		$client->save();
 		$clientAddress->client_id = $client->id;
 		//$clientid = Client::where('id', '=', 1)->get();
-		//$clientAddress->client_id = $clientid->id;
-		$clientAddress->save();
+		//$clientAddress->client_id = $clientid->id;DD\
 
+		$clientAddress->save();
 		return redirect('/clients');
 	}
 
@@ -74,6 +72,7 @@ class ClientController extends Controller {
 	 */
 	public function show(Client $client) {
 		return view('clients/clientEditForm', ['client' => $client]);
+
 	}
 	/**
 	 * Show the form for editing the specified resource.
@@ -93,13 +92,30 @@ class ClientController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function update(Request $request, Client $client) {
-
+		//
+		//$clientAddress = ClientAddress::where('client_id', '=', $client->id)->get();
+		//dd($clientAddress);
 		$client->name = $request->name;
 		$client->contactNumber = $request->contactNumber;
 		$client->contactEmail = $request->contactEmail;
 		$client->contactPerson = $request->contactPerson;
+		if (!isset($client->address)) {
+			$clientAddress = new ClientAddress();
+			$clientAddress->client_id = $client->id;
+			$client->address = new $clientAddress;
 
+		}
+
+		$client->address->streetLine1 = $request->streetLine1;
+		$client->address->streetLine2 = $request->streetLine2;
+		$client->address->country = $request->country;
+		$client->address->stateProvince = $request->stateProvince;
+		$client->address->city = $request->city;
+		$client->address->streetLine1 = $request->streetLine1;
+		$client->address->client_id = $client->id;
+		$client->address->save();
 		$client->save();
+
 		return redirect('/clients');
 	}
 

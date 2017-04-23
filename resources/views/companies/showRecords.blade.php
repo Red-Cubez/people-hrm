@@ -11,6 +11,12 @@
     <!-- Table Headings -->
     <thead>
      <th>Name</th>
+     <th>Street Line 1</th>
+     <th>Street Line 2</th>
+      <th>Country</th>
+     <th>State / Province</th>
+     <th>City</th>
+
      <th>Operations</th>
      </thead>
      <!-- Table Body -->
@@ -19,6 +25,23 @@
        <tr>
          <!-- Companies Names -->
          <td class="table-text">{{$company->name}}</td>
+
+         @if(isset($company->address))
+
+
+         <td class="table-text">{{ $company->address->streetLine1 }}</td>
+         <td class="table-text">{{$company->address->streetLine2}}</td>
+         <td class="table-text">{{$company->address->country}}</td>
+         <td class="table-text">{{$company->address->stateProvince}}</td>
+         <td class="table-text">{{$company->address->city}}</td>
+         @else
+         <td class="table-text"></td>
+         <td class="table-text"></td>
+         <td class="table-text"></td>
+         <td class="table-text"></td>
+         <td class="table-text"></td>
+         @endif
+
          <!-- Update Button -->
          <td>
            <form action="{{url('companies/'.$company->id) }}" method="POST">
@@ -41,8 +64,10 @@
          </td>
        </tr>
        @endforeach
+
      </tbody>
    </table>
+
  </div>
 </div>
 @endif

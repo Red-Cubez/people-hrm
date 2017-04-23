@@ -3,7 +3,8 @@
             <div class="col-sm-6">
                 <input type="text" name="streetLine1" id="streetLine1" class="form-control" @if(isset($client->address) )
                  value="{{$client->address->streetLine1 }}" @elseif(isset($client) )
-                 value="{{$client->streetLine1 }}" @else placeholder="Enter Street Line 1" @endif >
+                     value="{{$client->streetLine1 }}" @elseif(isset($company->address) )
+                     value="{{$company->address->streetLine1 }}" @else placeholder="Enter Street Line 1" @endif >
             </div>
  </div>
  <div class="form-group">
@@ -11,7 +12,8 @@
             <div class="col-sm-6">
                 <input type="text" name="streetLine2" id="streetLine2" class="form-control" @if(isset($client->address))
                  value="{{$client->address->streetLine2}}"  @elseif(isset($client) )
-                 value="{{$client->streetLine2 }}" @else placeholder="Enter Street Line 2" @endif >
+                 value="{{$client->streetLine2 }}" @elseif(isset($company->address) )
+                     value="{{$company->address->streetLine2 }}" @else placeholder="Enter Street Line 2" @endif >
             </div>
  </div>
   <div class="form-group">
@@ -19,7 +21,8 @@
             <div class="col-sm-6">
                 <input type="text" name="country" id="country" class="form-control" @if(isset($client->address))
                  value="{{$client->address->country}}"  @elseif(isset($client) )
-                 value="{{$client->country }}" @else placeholder="Enter Country" @endif  >
+                 value="{{$client->country }}" @elseif(isset($company->address) )
+                     value="{{$company->address->country }}" @else placeholder="Enter Country" @endif  >
             </div>
  </div>
  <div class="form-group">
@@ -27,7 +30,8 @@
             <div class="col-sm-6">
                 <input type="text" name="stateProvince" id="stateProvince" class="form-control" @if(isset($client->address))
                  value="{{$client->address->stateProvince}}"  @elseif(isset($client) )
-                 value="{{$client->stateProvince }}" @else placeholder="State / Province" @endif >
+                 value="{{$client->stateProvince }}" @elseif(isset($company->address) )
+                     value="{{$company->address->stateProvince }}" @else placeholder="State / Province" @endif >
             </div>
  </div>
 
@@ -36,7 +40,8 @@
             <div class="col-sm-6">
                 <input type="text" name="city" id="city" class="form-control" @if(isset($client->address))`
                  value="{{$client->address->city}}"  @elseif(isset($client) )
-                 value="{{$client->city }}" @else placeholder="City" @endif >
+                 value="{{$client->city }}" @elseif(isset($company->address) )
+                     value="{{$company->address->city }}" @else placeholder="City" @endif >
             </div>
  </div>
 

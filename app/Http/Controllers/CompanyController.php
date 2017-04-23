@@ -82,11 +82,11 @@ class CompanyController extends Controller {
 	public function update(Request $request, Company $company) {
 
 		$company->name = $request->name;
-		if (!isset($comapny->address)) {
+
+		if (!isset($company->address)) {
 			$companyaddress = new CompanyAddress();
 			$companyaddress->company_id = $company->id;
 			$company->address = new $companyaddress;
-
 		}
 		$company->address->streetLine1 = $request->streetLine1;
 		$company->address->streetLine2 = $request->streetLine2;
@@ -94,7 +94,9 @@ class CompanyController extends Controller {
 		$company->address->stateProvince = $request->stateProvince;
 		$company->address->city = $request->city;
 		$company->address->streetLine1 = $request->streetLine1;
+		$company->save();
 		$company->address->save();
+
 		return redirect('/companies');
 	}
 

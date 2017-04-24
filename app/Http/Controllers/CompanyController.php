@@ -39,15 +39,15 @@ class CompanyController extends Controller {
 		$company = new Company();
 		$companyaddress = new CompanyAddress();
 		$company->name = $request->name;
+		$company->save();
+
 		$companyaddress->streetLine1 = $request->streetLine1;
 		$companyaddress->streetLine2 = $request->streetLine2;
 		$companyaddress->country = $request->country;
 		$companyaddress->stateProvince = $request->stateProvince;
 		$companyaddress->city = $request->city;
-		$company->save();
 		$companyaddress->company_id = $company->id;
 		$companyaddress->save();
-
 		return redirect('/companies');
 
 	}
@@ -107,6 +107,7 @@ class CompanyController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function destroy(Company $company) {
+		//TODO: HG - check for company dependencies before deleting a company
 		$company->delete();
 		return redirect('/companies');
 	}

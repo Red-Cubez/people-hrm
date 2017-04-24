@@ -74,7 +74,7 @@
                             {{ method_field('GET') }}
 
                             <button type="submit" class="btn btn-danger">
-                                <i class="fa fa-trash"> Update</i>
+                                <i class="fa fa-trash"> Edit</i>
                             </button>
                         </form>
 

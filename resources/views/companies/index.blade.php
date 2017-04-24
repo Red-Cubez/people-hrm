@@ -7,8 +7,10 @@
   <form action="{{url('companies') }}" method="POST" class="form-horizontal">
    {{ csrf_field() }}
    @include('companies/companyForm')
+
  </form>
 </div>
+
 @include('companies/showRecords');
 @endsection
 

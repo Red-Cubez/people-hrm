@@ -22,5 +22,9 @@ class AppServiceProvider extends ServiceProvider {
 	public function register() {
 		$this->app->bind(
 			'People\Services\Interfaces\ICompanyService', 'People\Services\CompanyService');
+
+		$this->app->bind(
+			'People\Services\Interfaces\IClientService', 'People\Services\ClientService');
+
 	}
 }

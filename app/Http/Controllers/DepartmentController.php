@@ -5,6 +5,7 @@ namespace People\Http\Controllers;
 use Illuminate\Http\Request;
 use People\Models\Company;
 use People\Models\Department;
+use People\Models\Employee;
 
 class DepartmentController extends Controller {
 	/**

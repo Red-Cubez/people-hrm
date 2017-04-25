@@ -5,6 +5,7 @@ namespace People\Http\Controllers;
 use Illuminate\Http\Request;
 use People\Models\Company;
 use People\Models\Employee;
+use People\Models\Department;
 
 class EmployeeController extends Controller {
 	/**
@@ -14,8 +15,9 @@ class EmployeeController extends Controller {
 	 */
 	public function index() {
 		$employees = Employee::orderBy('created_at', 'asc')->get();
+		$departments = Department::orderBy('created_at', 'asc')->get();
 
-		return view('employees.index', ['employees' => $employees]);
+		return view('employees.index', ['employees' => $employees,'departments'=>$departments]);
 	}
 
 	/**
@@ -35,6 +37,8 @@ class EmployeeController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(Request $request) {
+
+		//dd($request);
 //        $validator = Validator::make($request->all(), [
 		//            'name' => 'required|max:255',
 		//        ]);
@@ -64,9 +68,19 @@ class EmployeeController extends Controller {
 		// $employee->jobTitle = $request->jobTitle;
 		// $employee->annualSalary = 100000;
 		// $employee->hourlyRate = 41;
+        //$employee->company = $company;
+		if (count($request->departmentList) > 0) {
+			foreach ($request->departmentList as $employeeDepartmentId) {
+				$employeeDepartment  = Department::find($employeeDepartmentId);
+				// dd($employeeDepartmentId);
+				$employee->departments()->save($employeeDepartment);
 
-		//$employee->company = $company;
-
+				// $employeeDepartment = new EmployeeDepartment();
+				// $employeeDepartment->department_id = $employeeDepartment;
+				// $employeeDepartment->employee_id = $employee->id;
+				// $employeeDepartment->save();
+			}
+		} 		
 		return redirect('/employees');
 	}
 
@@ -77,8 +91,11 @@ class EmployeeController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show(Employee $employee) {
+
+		$departments = Department::orderBy('created_at', 'asc')->get();
 		return view('employees/update',
-			['employee' => $employee]);
+			['employee' => $employee,
+			'departments'=>$departments]);
 	}
 
 	/**
@@ -108,6 +125,7 @@ class EmployeeController extends Controller {
 		$employee->annualSalary = $request->annualSalary;
 		$employee->hourlyRate = $request->hourlyRate;
 		$employee->save();
+
 		return redirect('/employees');
 	}
 

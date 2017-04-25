@@ -61,3 +61,4 @@
 
 	    Route::resource('departments', 'DepartmentController');
 	    Route::resource('companies', 'CompanyController');
+	    

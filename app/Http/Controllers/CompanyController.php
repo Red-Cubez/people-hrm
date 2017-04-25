@@ -4,16 +4,25 @@ namespace People\Http\Controllers;
 
 use Illuminate\Http\Request;
 use People\Models\Company;
-use People\Models\CompanyAddress;
+use People\Services\CompanyService;
+use People\Services\Interfaces\ICompanyService;
 
 class CompanyController extends Controller {
+
+	public $CompanyService;
+
+	public function __construct(ICompanyService $companyService) {
+
+		$this->CompanyService = $companyService;
+	}
+
 	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index() {
-		$companies = Company::orderBy('created_at', 'asc')->get();
+		$companies = $this->CompanyService->getAllCompanies();
 
 		return view('companies.index', ['companies' => $companies]);
 	}
@@ -35,19 +44,8 @@ class CompanyController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(Request $request) {
+		$this->CompanyService->createCompany($request);
 
-		$company = new Company();
-		$companyaddress = new CompanyAddress();
-		$company->name = $request->name;
-		$company->save();
-
-		$companyaddress->streetLine1 = $request->streetLine1;
-		$companyaddress->streetLine2 = $request->streetLine2;
-		$companyaddress->country = $request->country;
-		$companyaddress->stateProvince = $request->stateProvince;
-		$companyaddress->city = $request->city;
-		$companyaddress->company_id = $company->id;
-		$companyaddress->save();
 		return redirect('/companies');
 
 	}
@@ -80,22 +78,7 @@ class CompanyController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function update(Request $request, Company $company) {
-
-		$company->name = $request->name;
-
-		if (!isset($company->address)) {
-			$companyaddress = new CompanyAddress();
-			$companyaddress->company_id = $company->id;
-			$company->address = new $companyaddress;
-		}
-		$company->address->streetLine1 = $request->streetLine1;
-		$company->address->streetLine2 = $request->streetLine2;
-		$company->address->country = $request->country;
-		$company->address->stateProvince = $request->stateProvince;
-		$company->address->city = $request->city;
-		$company->address->streetLine1 = $request->streetLine1;
-		$company->save();
-		$company->address->save();
+		$this->CompanyService->updateCompany($request, $company);
 
 		return redirect('/companies');
 	}
@@ -108,7 +91,8 @@ class CompanyController extends Controller {
 	 */
 	public function destroy(Company $company) {
 		//TODO: HG - check for company dependencies before deleting a company
-		$company->delete();
+		$this->CompanyService->deleteCompany($company);
+
 		return redirect('/companies');
 	}
 }

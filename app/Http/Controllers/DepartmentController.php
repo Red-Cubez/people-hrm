@@ -22,7 +22,7 @@ class DepartmentController extends Controller {
 
 	public function index() {
 
-		$departments = $this->DepartmentService->getAllDepartment();
+		$departments = $this->DepartmentService->getAllDepartments();
 
 		return view('departments.index', ['departments' => $departments]);
 	}

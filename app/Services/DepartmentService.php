@@ -17,7 +17,7 @@ class DepartmentService implements IDepartmentService {
 		$department->save();
 	}
 
-	public function getAllDepartment() {
+	public function getAllDepartments() {
 		$departments = Department::orderBy('created_at', 'asc')->get();
 		return $departments;
 	}
@@ -25,7 +25,6 @@ class DepartmentService implements IDepartmentService {
 	public function updateDepartment($updateRequest, $department) {
 
 		$department->name = $updateRequest->name;
-
 		$department->save();
 	}
 

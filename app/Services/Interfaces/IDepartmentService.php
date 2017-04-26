@@ -7,6 +7,6 @@ interface IDepartmentService {
 	public function createDepartment($createRequest);
 	public function deleteDepartment($department);
 	public function updateDepartment($updateRequest, $department);
-	public function getAllDepartment();
+	public function getAllDepartments();
 
 }

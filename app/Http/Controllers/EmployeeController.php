@@ -14,6 +14,7 @@ class EmployeeController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index() {
+
 		$employees = Employee::orderBy('created_at', 'asc')->get();
 		$departments = Department::orderBy('created_at', 'asc')->get();
 
@@ -92,10 +93,20 @@ class EmployeeController extends Controller {
 	 */
 	public function show(Employee $employee) {
 
+		$employeeDepartmentIds = [];
+		foreach ($employee->departments as $department) 
+		{
+			
+			array_push($employeeDepartmentIds, $department->id);
+		}
+
 		$departments = Department::orderBy('created_at', 'asc')->get();
+		// dd($departments);
 		return view('employees/update',
 			['employee' => $employee,
-			'departments'=>$departments]);
+			'departments'=>$departments,
+			'employeeDepartmentIds' => $employeeDepartmentIds,
+			]);
 	}
 
 	/**
@@ -115,8 +126,11 @@ class EmployeeController extends Controller {
 	 * @param  \People\Models\Employee  $employee
 	 * @return \Illuminate\Http\Response
 	 */
+	
 	public function update(Request $request, Employee $employee) {
 
+       
+        
 		$employee->firstName = $request->firstName;
 		$employee->lastName = $request->lastName;
 		$employee->hireDate = $request->hireDate;
@@ -124,7 +138,17 @@ class EmployeeController extends Controller {
 		$employee->jobTitle = $request->jobTitle;
 		$employee->annualSalary = $request->annualSalary;
 		$employee->hourlyRate = $request->hourlyRate;
+
 		$employee->save();
+		$employee->departments()->detach();
+		if (count($request->departmentList) > 0) 
+		{
+			 foreach ($request->departmentList as $employeeDepartmentId) 
+			 {
+				$employeeDepartment  = Department::find($employeeDepartmentId);
+                $employee->departments()->save($employeeDepartment);
+			 }
+		}
 
 		return redirect('/employees');
 	}
@@ -136,6 +160,8 @@ class EmployeeController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function destroy(Employee $employee) {
+		
+		$employee->departments()->detach();
 		$employee->delete();
 		return redirect('/employees');
 	}

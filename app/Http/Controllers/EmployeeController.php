@@ -5,17 +5,29 @@ namespace People\Http\Controllers;
 use Illuminate\Http\Request;
 use People\Models\Company;
 use People\Models\Employee;
+use People\Models\Department;
+use People\Services\EmployeeService;
+use People\Services\Interfaces\IEmployeeService;
+
 
 class EmployeeController extends Controller {
+
+	public $EmployeeService;
+
+	public function __construct(IEmployeeService $employeeService) {
+
+		$this->EmployeeService = $employeeService;
+	}
 	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index() {
-		$employees = Employee::orderBy('created_at', 'asc')->get();
 
-		return view('employees.index', ['employees' => $employees]);
+		list($employees,$departments) = $this->EmployeeService->getAllEmployees();
+
+		return view('employees.index', ['employees' => $employees,'departments'=>$departments]);
 	}
 
 	/**
@@ -35,38 +47,11 @@ class EmployeeController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(Request $request) {
-//        $validator = Validator::make($request->all(), [
-		//            'name' => 'required|max:255',
-		//        ]);
-		//
-		//        if ($validator->fails()) {
-		//            return redirect('/')
-		//                ->withInput()
-		//                ->withErrors($validator);
-		//        }
+
+			$this->EmployeeService->createEmployee($request);
 
 		//TODO Get company properly
-		//        User::find(1);
-		$company = Company::find(1);
-
-		$employee = new Employee();
-		$employee->firstName = $request->firstName;
-		$employee->lastName = $request->lastName;
-		$employee->hireDate = $request->hireDate;
-		$employee->terminationDate = $request->terminationDate;
-		$employee->jobTitle = $request->jobTitle;
-		$employee->annualSalary = $request->annualSalary;
-		$employee->hourlyRate = $request->hourlyRate;
-		$employee->save();
-		//TODO These properties need to be set from fields
-		// $employee->hireDate = date("Ymd");
-		// $employee->terminationDate = date("Ymd");
-		// $employee->jobTitle = $request->jobTitle;
-		// $employee->annualSalary = 100000;
-		// $employee->hourlyRate = 41;
-
-		//$employee->company = $company;
-
+		
 		return redirect('/employees');
 	}
 
@@ -77,8 +62,13 @@ class EmployeeController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show(Employee $employee) {
+
+		list($employee,$departments,$employeeDepartmentIds) = $this->EmployeeService->showEmployee($employee);
 		return view('employees/update',
-			['employee' => $employee]);
+			['employee' => $employee,
+			'departments'=>$departments,
+			'employeeDepartmentIds' => $employeeDepartmentIds,
+			]);
 	}
 
 	/**
@@ -98,16 +88,11 @@ class EmployeeController extends Controller {
 	 * @param  \People\Models\Employee  $employee
 	 * @return \Illuminate\Http\Response
 	 */
+	
 	public function update(Request $request, Employee $employee) {
 
-		$employee->firstName = $request->firstName;
-		$employee->lastName = $request->lastName;
-		$employee->hireDate = $request->hireDate;
-		$employee->terminationDate = $request->terminationDate;
-		$employee->jobTitle = $request->jobTitle;
-		$employee->annualSalary = $request->annualSalary;
-		$employee->hourlyRate = $request->hourlyRate;
-		$employee->save();
+       $this->EmployeeService->updateEmployee($request,$employee);
+        
 		return redirect('/employees');
 	}
 
@@ -118,7 +103,9 @@ class EmployeeController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function destroy(Employee $employee) {
-		$employee->delete();
+		$this->EmployeeService->deleteEmployee($employee);
+
+		
 		return redirect('/employees');
 	}
 }

@@ -4,16 +4,25 @@ namespace People\Http\Controllers;
 
 use Illuminate\Http\Request;
 use People\Models\Company;
-
+use People\Services\CompanyService;
+use People\Services\Interfaces\ICompanyService;
 
 class CompanyController extends Controller {
+
+	public $CompanyService;
+
+	public function __construct(ICompanyService $companyService) {
+
+		$this->CompanyService = $companyService;
+	}
+
 	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index() {
-		$companies = Company::orderBy('created_at', 'asc')->get();
+		$companies = $this->CompanyService->getAllCompanies();
 
 		return view('companies.index', ['companies' => $companies]);
 	}
@@ -35,11 +44,8 @@ class CompanyController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(Request $request) {
+		$this->CompanyService->createCompany($request);
 
-
-		$company = new Company();
-		$company->name = $request->name;
-		$company->save();
 		return redirect('/companies');
 
 	}
@@ -51,7 +57,7 @@ class CompanyController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show(Company $company) {
-		return view('companies/update',['company' => $company]);
+		return view('companies/update', ['company' => $company]);
 	}
 
 	/**
@@ -72,9 +78,8 @@ class CompanyController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function update(Request $request, Company $company) {
-         
-		$company->name = $request->name;
-		$company->save();
+		$this->CompanyService->updateCompany($request, $company);
+
 		return redirect('/companies');
 	}
 
@@ -85,7 +90,9 @@ class CompanyController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function destroy(Company $company) {
-		$company->delete();
+		//TODO: HG - check for company dependencies before deleting a company
+		$this->CompanyService->deleteCompany($company);
+
 		return redirect('/companies');
 	}
 }

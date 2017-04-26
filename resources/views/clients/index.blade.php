@@ -26,7 +26,14 @@
                 <th>Contact Number</th>
                 <th>Contact Email</th>
                 <th>Contact Person</th>
+                <th>Street Line 1</th>
+                <th>Street Line 2</th>
+                <th>Country</th>
+                <th>State / Province</th>
+                <th>City</th>
+
                 <th>Operations</th>
+
 
             </thead>
             <!-- Table Body -->
@@ -37,6 +44,21 @@
                     <td class="table-text"><div>{{ $client->contactNumber }}</div></td>
                     <td class="table-text"><div>{{ $client->contactEmail }}</div></td>
                     <td class="table-text"><div>{{ $client->contactPerson }}</div></td>
+                    @if(isset($client->address))
+                    <td class="table-text"><div>{{ $client->address->streetLine1 }}</div></td>
+                    <td class="table-text"><div>{{ $client->address->streetLine2 }}</div></td>
+                    <td class="table-text"><div>{{ $client->address->country }}</div></td>
+                    <td class="table-text"><div>{{ $client->address->stateProvince }}</div></td>
+                    <td class="table-text"><div>{{ $client->address->city }}</div></td>
+                    @else
+                     <td class="table-text"></div></td>
+                    <td class="table-text"><div></div></td>
+                    <td class="table-text"><div></div></td>
+                    <td class="table-text"><div></div></td>
+                    <td class="table-text"><div></div></td>
+                    @endif
+
+
                     <td>
                         <form action="{{ url('clients/'.$client->id) }}" method="POST">
                             {{ csrf_field() }}
@@ -50,23 +72,23 @@
                         <form action="{{ url('clients/'.$client->id) }}" method="POST">
                             {{ csrf_field() }}
                             {{ method_field('GET') }}
-                            
+
                             <button type="submit" class="btn btn-danger">
-                                <i class="fa fa-trash"> Update</i>
+                                <i class="fa fa-trash"> Edit</i>
                             </button>
                         </form>
 
                         <form action="{{ url('/clients/'.$client->id.'/clientprojects') }}" method="POST">
                             {{ csrf_field() }}
                             {{ method_field('GET') }}
-                            
-                            
+
+
                             <button type="submit" class="btn btn-danger">
                                 <i class="fa fa-trash"> Manage Projects</i>
-                            </button>  
+                            </button>
                         </form>
-                        
-                        
+
+
                     </td>
                 </tr>
                 @endforeach

@@ -11,6 +11,7 @@
       {{ method_field('PUT') }}
       <!-- Company Names -->
       @include('companies/companyForm')
+
     </form>
   </div>
   @endsection

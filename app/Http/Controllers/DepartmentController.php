@@ -3,9 +3,9 @@
 namespace People\Http\Controllers;
 
 use Illuminate\Http\Request;
-use People\Models\Company;
 use People\Models\Department;
-use People\Models\Employee;
+use People\Services\DepartmentService;
+use People\Services\Interfaces\IDepartmentService;
 
 class DepartmentController extends Controller {
 	/**
@@ -13,8 +13,16 @@ class DepartmentController extends Controller {
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
+	public $DepartmentService;
+
+	public function __construct(IDepartmentService $departmentService) {
+
+		$this->DepartmentService = $departmentService;
+	}
+
 	public function index() {
-		$departments = Department::orderBy('created_at', 'asc')->get();
+
+		$departments = $this->DepartmentService->getAllDepartments();
 
 		return view('departments.index', ['departments' => $departments]);
 	}
@@ -36,15 +44,8 @@ class DepartmentController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(Request $request) {
+		$this->DepartmentService->createDepartment($request);
 
-
-		$department = new Department();
-		$department->name = $request->name;
-		
-		$company = Company::find(1);
-        $department->company_id = $company->id;
-        $department->save();
-		
 		return redirect('/departments');
 	}
 
@@ -77,10 +78,8 @@ class DepartmentController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function update(Request $request, Department $department) {
-         
-		$department->name = $request->name;
-		
-		$department->save();
+
+		$this->DepartmentService->updateDepartment($request, $department);
 		return redirect('/departments');
 	}
 
@@ -91,7 +90,8 @@ class DepartmentController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function destroy(Department $department) {
-		$department->delete();
+		$this->DepartmentService->deleteDepartment($department);
+
 		return redirect('/departments');
 	}
 }

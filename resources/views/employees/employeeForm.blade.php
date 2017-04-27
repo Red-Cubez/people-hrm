@@ -41,16 +41,17 @@
             <input type="number" name="hourlyRate" id="employee-hourlyRate" class="form-control" @if(isset($employee)) value="{{ $employee->hourlyRate }}" @else placeholder="Hourly Rate" @endif>
         </div>
     </div>
+    @include('address/addressForm');
     <div class="form-group">
      <label for="name" class="col-sm-3 control-label">Select Department</label>
      <div class="col-sm-6">
         @if (count($departments) > 0)
         <select class="form-control" name="departmentList[]" multiple="multiple" id="departmentList">
            @foreach ($departments as $department)
-           <option  value="{{$department->id}}" 
+           <option  value="{{$department->id}}"
                     id="department_{{$department->name}}"
                     @if(isset($employeeDepartmentIds) && in_array($department->id, $employeeDepartmentIds)) selected="selected" @endif   >{{ $department->name}} </option>
-           @endforeach  
+           @endforeach
         </select>
      </div>
         @endif

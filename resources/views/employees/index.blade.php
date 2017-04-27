@@ -27,12 +27,20 @@
                 <th>First Name </th>
                 <th>Last Name</th>
                 <th>Job Tttle</th>
+                <th>Street Line 1</th>
+                <th>Street Line 2</th>
+                <th>Country</th>
+                <th>State / Provice</th>
+                <th>City</th>
+
+
                 <th>Operation</th>
                 </thead>
             <!-- Table Body -->
              <tbody>
                 @foreach ($employees as $employee)
                 <tr>
+
                     <!-- Employee Name -->
                     <td class="table-text">
                         <div> {{ $employee->firstName }}</div> </td>
@@ -40,7 +48,22 @@
                         <div> {{ $employee->lastName }}</div> </td>
                     <td class="table-text">
                         <div> {{ $employee->jobTitle }}</div> </td>
-                    
+
+                    @if(isset($employee->address))
+
+                         <td class="table-text">{{ $employee->address->streetLine1 }}</td>
+                         <td class="table-text">{{$employee->address->streetLine2}}</td>
+                         <td class="table-text">{{$employee->address->country}}</td>
+                         <td class="table-text">{{$employee->address->stateProvince}}</td>
+                         <td class="table-text">{{$employee->address->city}}</td>
+                     @else
+                         <td class="table-text"></td>
+                         <td class="table-text"></td>
+                         <td class="table-text"></td>
+                         <td class="table-text"></td>
+                         <td class="table-text"></td>
+                    @endif
+
                     <!-- Delete Button -->
                     <td>
                         <form action="{{ url('employees/'.$employee->id) }}" method="POST">

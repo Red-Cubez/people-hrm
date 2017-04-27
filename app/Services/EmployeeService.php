@@ -1,34 +1,48 @@
 <?php
 
 namespace People\Services;
-use People\Models\Employee;
 use People\Models\Department;
-use People\Models\Company;
+use People\Models\Employee;
+use People\Models\EmployeeAddress;
 use People\Services\Interfaces\IEmployeeService;
 
 class EmployeeService implements IEmployeeService {
 
-	public function getAllEmployees()
-	{
+	public function getAllEmployees() {
 
 		$employees = Employee::orderBy('created_at', 'asc')->get();
 		$departments = Department::orderBy('created_at', 'asc')->get();
-	 	 return array($employees,$departments);
-	 	}
+		return array($employees, $departments);
+	}
 
-	public function deleteEmployee($employee)
-	{
-	 	$employee->departments()->detach();
+	public function deleteEmployee($employee) {
+		$employee->departments()->detach();
 		$employee->delete();
 	}
-  	public function createOrUpdateEmployee($request,$employee)
-  	{
-       
-       if(!isset($employee))
-       {
-       	$employee = new Employee();
-       }
-  	    $employee->firstName = $request->firstName;
+
+	public function createOrUpdateEmployeeAddress($request, $employeeAddress, $employeeId) {
+
+		if (!isset($employeeAddress)) {
+			$employeeAddress = new EmployeeAddress();
+
+		}
+
+		$employeeAddress->streetLine1 = $request->streetLine1;
+		$employeeAddress->streetLine2 = $request->streetLine2;
+		$employeeAddress->country = $request->country;
+		$employeeAddress->stateProvince = $request->stateProvince;
+		$employeeAddress->city = $request->city;
+		$employeeAddress->employee_id = $employeeId;
+		$employeeAddress->save();
+
+	}
+
+	public function createOrUpdateEmployee($request, $employee) {
+
+		// if (!isset($employee)) {
+		// 	$employee = new Employee();
+		// }
+		$employee->firstName = $request->firstName;
 		$employee->lastName = $request->lastName;
 		$employee->hireDate = $request->hireDate;
 		$employee->terminationDate = $request->terminationDate;
@@ -36,47 +50,40 @@ class EmployeeService implements IEmployeeService {
 		$employee->annualSalary = $request->annualSalary;
 		$employee->hourlyRate = $request->hourlyRate;
 		$employee->save();
-	
-		
+		$this->createOrUpdateEmployeeAddress($request, $employee->address, $employee->id);
+
 		if (count($request->departmentList) > 0) {
-				$employee->departments()->detach();
+			$employee->departments()->detach();
 			foreach ($request->departmentList as $employeeDepartmentId) {
-				$employeeDepartment  = Department::find($employeeDepartmentId);
+				$employeeDepartment = Department::find($employeeDepartmentId);
 
 				$employee->departments()->save($employeeDepartment);
 
-		
 			}
-		} 		
+		}
 
-  	}
-
-    public function createEmployee($request)
-    {
-        $this->createOrUpdateEmployee($request,null);
-  
-
-    	}
-	public function updateEmployee($request,$employee)
-   	 {  
-   	 
-        $this->createOrUpdateEmployee($request,$employee);
-		
 	}
-	public function showEmployee($employee)
-   	 {
 
-	     $employeeDepartmentIds = [];
-		foreach ($employee->departments as $department) 
-		{
-			
+	public function createEmployee($request) {
+		$employee = new Employee();
+		$this->createOrUpdateEmployee($request, $employee);
+
+	}
+	public function updateEmployee($request, $employee) {
+
+		$this->createOrUpdateEmployee($request, $employee);
+
+	}
+	public function showEmployee($employee) {
+
+		$employeeDepartmentIds = [];
+		foreach ($employee->departments as $department) {
+
 			array_push($employeeDepartmentIds, $department->id);
 		}
 
 		$departments = Department::orderBy('created_at', 'asc')->get();
-		return array($employee,$departments,$employeeDepartmentIds);
+		return array($employee, $departments, $employeeDepartmentIds);
 	}
-
-
 
 }

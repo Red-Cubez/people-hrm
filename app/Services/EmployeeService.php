@@ -21,14 +21,12 @@ class EmployeeService implements IEmployeeService {
 	 	$employee->departments()->detach();
 		$employee->delete();
 	}
-  	public function createOrUpdateEmployee($request,$employee,$updateRequest)
+  	public function createOrUpdateEmployee($request,$employee)
   	{
        
        if(!isset($employee))
        {
-       	$company = Company::find(1);
-
-		$employee = new Employee();
+       	$employee = new Employee();
        }
   	    $employee->firstName = $request->firstName;
 		$employee->lastName = $request->lastName;
@@ -38,15 +36,15 @@ class EmployeeService implements IEmployeeService {
 		$employee->annualSalary = $request->annualSalary;
 		$employee->hourlyRate = $request->hourlyRate;
 		$employee->save();
-		if(isset($updateRequest))
-		{
-		$employee->departments()->detach();
-	    }
+	
+		
 		if (count($request->departmentList) > 0) {
+				$employee->departments()->detach();
 			foreach ($request->departmentList as $employeeDepartmentId) {
 				$employeeDepartment  = Department::find($employeeDepartmentId);
 
 				$employee->departments()->save($employeeDepartment);
+
 		
 			}
 		} 		
@@ -55,14 +53,14 @@ class EmployeeService implements IEmployeeService {
 
     public function createEmployee($request)
     {
-        $this->createOrUpdateEmployee($request,null,null);
+        $this->createOrUpdateEmployee($request,null);
   
 
     	}
 	public function updateEmployee($request,$employee)
    	 {  
-   	 	$updateRequest=1;
-        $this->createOrUpdateEmployee($request,$employee,$updateRequest);
+   	 
+        $this->createOrUpdateEmployee($request,$employee);
 		
 	}
 	public function showEmployee($employee)

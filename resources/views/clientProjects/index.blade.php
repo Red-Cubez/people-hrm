@@ -18,5 +18,7 @@
                </form>
         </div>
             <!-- Current clientProjects -->
+       @if(isset($clientprojects))
        @include('clientProjects/showProjects')
+       @endif
     @endsection

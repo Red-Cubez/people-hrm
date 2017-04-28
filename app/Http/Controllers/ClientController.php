@@ -3,7 +3,6 @@
 namespace People\Http\Controllers;
 use Illuminate\Http\Request;
 use People\Models\Client;
-use People\Models\ClientProject;
 use People\Services\ClientService;
 use People\Services\Interfaces\IClientService;
 
@@ -55,9 +54,8 @@ class ClientController extends Controller {
 	 */
 	public function show(Client $client) {
 		// dd('this is it');
-		$clientProjects = ClientProject::where('client_id', $client->id)
-			->orderBy('created_at', 'asc')
-			->get();
+
+		$clientProjects = $this->ClientService->getClientProjects($client);
 
 		return view('clients/showClient',
 			['client' => $client,
@@ -72,6 +70,7 @@ class ClientController extends Controller {
 	 */
 	public function edit(Client $client) {
 		//
+		return view('clients/clientEditForm', ['client' => $client]);
 	}
 
 	/**
@@ -87,7 +86,7 @@ class ClientController extends Controller {
 		//dd($clientAddress);
 		$this->ClientService->updateClient($request, $client);
 
-		return redirect('/clients');
+		return redirect('/clients/' . $client->id);
 	}
 
 	/**

@@ -1,0 +1,13 @@
+<?php
+
+namespace People\Services\Interfaces;
+
+interface IClientProjectService {
+
+	public function createClientProject($request);
+	public function deleteClientProject($clientproject);
+	public function updateClientProject($request, $clientproject);
+	public function getClientProjects();
+	public function manageClientProjects($clientid);
+
+}

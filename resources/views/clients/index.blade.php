@@ -81,18 +81,6 @@
                         </form>
 
 
-
-                        <form action="{{ url('/clients/'.$client->id.'/clientprojects') }}" method="POST">
-                            {{ csrf_field() }}
-                            {{ method_field('GET') }}
-
-
-                            <button type="submit" class="btn btn-danger">
-                                <i class="fa fa-trash"> Manage Projects</i>
-                            </button>
-                        </form>
-
-
                     </td>
                 </tr>
                 @endforeach

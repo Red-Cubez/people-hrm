@@ -9,7 +9,7 @@
         <label for="clientProject" class="col-sm-3 control-label">Expected Start Date</label>
 
         <div class="col-sm-6">
-            <input type="date" name="expectedStartDate" id="expectedStartDate" class="form-control" 
+            <input type="date" name="expectedStartDate" id="expectedStartDate" class="form-control"
             @if(isset($clientProject)) value="{{$clientProject->expectedStartDate}}" @else placeholder="Enter expected Start Date" @endif>
         </div>
     </div>

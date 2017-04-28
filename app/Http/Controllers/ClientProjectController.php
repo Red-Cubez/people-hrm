@@ -4,6 +4,8 @@ namespace People\Http\Controllers;
 use Illuminate\Http\Request;
 use People\Models\Client;
 use People\Models\ClientProject;
+use People\Services\ClientProjectService;
+use People\Services\Interfaces\IClientProjectService;
 
 class ClientProjectController extends Controller {
 	/**
@@ -11,9 +13,17 @@ class ClientProjectController extends Controller {
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
+
+	public $ClientProjectService;
+
+	public function __construct(IClientProjectService $clientprojectService) {
+
+		$this->ClientProjectService = $clientprojectService;
+	}
+
 	public function index() {
 		//TODO only get projects for a particular client
-		$clientProjects = ClientProject::orderBy('created_at', 'asc')->get();
+		$clientProjects = $this->ClientProjectService->getClientProjects();
 
 		return view('clientprojects.index', ['clientProjects' => $clientProjects]);
 	}
@@ -34,21 +44,12 @@ class ClientProjectController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(Request $request) {
-		$clientProject = new ClientProject();
-		$clientProject->name = $request->name;
-		$clientProject->expectedStartDate = $request->expectedStartDate;
-		$clientProject->expectedEndDate = $request->expectedEndDate;
-		$clientProject->actualStartDate = $request->actualStartDate;
-		$clientProject->actualEndDate = $request->actualEndDate;
-		$clientProject->budget = $request->budget;
-		$clientProject->cost = $request->cost;
+
+		$clientProject = $this->ClientProjectService->createClientProject($request);
 		//TODO These properties need to be set from fields
 		//TODO this value needs to come from the correct client Project
 
-		$clientProject->client_id = $request->clientid;
-		$clientProject->save();
-
-		return redirect('/clients/' . $clientProject->client_id . '/clientprojects');
+		return redirect('/clients/' . $clientProject->client_id);
 	}
 
 	/**
@@ -79,17 +80,10 @@ class ClientProjectController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function update(Request $request, ClientProject $clientproject) {
-		$clientproject->name = $request->name;
-		$clientproject->expectedStartDate = $request->expectedStartDate;
-		$clientproject->expectedEndDate = $request->expectedEndDate;
-		$clientproject->actualStartDate = $request->actualStartDate;
-		$clientproject->actualEndDate = $request->actualStartDate;
-		$clientproject->budget = $request->budget;
-		$clientproject->cost = $request->cost;
-		$clientid = $clientproject->client_id;
-		$clientproject->save();
 
-		return redirect('/clients/' . $clientid . '/clientprojects');
+		$clientid = $this->ClientProjectService->updateClientProject($request, $clientproject);
+
+		return redirect('/clients/' . $clientproject->client_id);
 
 	}
 
@@ -100,13 +94,14 @@ class ClientProjectController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function destroy(ClientProject $clientproject) {
-		$clientid = $clientproject->client_id;
-		$clientproject->delete();
-		return redirect('/clients/' . $clientid . '/clientprojects');
+		$clientid = $this->ClientProjectService->deleteClientProject($clientproject);
+
+		return redirect('/clients/' . $clientid);
 	}
 
 	public function manageProject($clientid) {
-		$clientProjects = ClientProject::where('client_id', $clientid)->orderBy('created_at', 'asc')->get();
+		$clientProjects = $this->ClientProjectService->manageClientProjects($clientid);
+
 		return view('clientprojects.index',
 			['clientProjects' => $clientProjects,
 				'clientid' => $clientid,

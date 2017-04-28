@@ -14,6 +14,14 @@ class ClientService implements IClientService {
 		return $clients;
 	}
 
+	public function getClientProjects($client) {
+		$clientProjects = ClientProject::where('client_id', $client->id)
+			->orderBy('created_at', 'asc')
+			->get();
+
+		return $clientProjects;
+	}
+
 	public function deleteClient($client) {
 		$clientProjects = ClientProject::where('client_id', $client->id)->orderBy('created_at', 'asc')->get();
 

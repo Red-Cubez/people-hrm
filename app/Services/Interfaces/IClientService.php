@@ -8,5 +8,6 @@ interface IClientService {
 	public function deleteClient($client);
 	public function updateClient($request, $client);
 	public function getAllClients();
+	public function getClientProjects($client);
 
 }

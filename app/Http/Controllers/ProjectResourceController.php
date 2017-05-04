@@ -62,19 +62,20 @@ class ProjectResourceController extends Controller
             
       
         
-        if(!isset($request->projectResource))
+        if(!isset($request->projectResourceId))
         {
 
          $projectResource = new ProjectResource();
          
         }
 
-        / if(isset($request->projectResource))
-        // {
-        //  dd($request->projectResource);
-        //  $projectResource = $request->projectResource;
+        if(isset($request->projectResourceId))
+        {
+         //dd($request->projectResource);
+            $projectResource =projectResource::find($request->projectResourceId);
+             
          
-         }
+        }
        //  //TODO get the relative project id
        // // $projectResource->client_project_id = 1;
        
@@ -91,19 +92,20 @@ class ProjectResourceController extends Controller
             $projectResource->hourlyBillingRate = $request->hourlyBillingRate;
             $projectResource->hoursPerWeek = $request->hoursPerWeek;
              $projectResource->save();
+
             return redirect('/clientprojects/'.$request->clientProjectid.'/projectresources');
            }
        //  //TODO set other properties as well for the resource
            
         
-      else if(isset($request->employee_id))
+       else if(isset($request->employee_id))
           { 
-        //dd($request->employee_id);
 
            $projectResource->employee_id = $request->employee_id;
            $projectResource->client_project_id=$request->clientProjectid;
        //  //TODO set other properties as well for the resource
            $projectResource->save();
+
            return redirect('/clientprojects/'.$request->clientProjectid.'/projectresources');
           }
     }
@@ -179,6 +181,8 @@ class ProjectResourceController extends Controller
     
  public function updateressources($projectResourceid)
     { 
+        dd('this is the method');
+        // dd($projectResourceid);
         // dd($projectResource);
         //TODO get resources based on availibility
        $Resource = ProjectResource::where('id',$projectResourceid)->orderBy('created_at', 'asc')->get();

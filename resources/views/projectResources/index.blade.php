@@ -29,7 +29,7 @@
 
 
 
-@if (count($projectResources) > 0)
+@if (count($projectResources) )
 <div class="panel panel-default">
     <div class="panel-heading">
         Current Resources
@@ -47,33 +47,23 @@
                 <tr>
                     <!-- clientProject Name -->
                     <td class="table-text">
-                        @if(isset($projectResource->employee->firstName))
+                        @if(isset($projectResource->employee))
                         <div>{{ $projectResource->employee->firstName}}  {{$projectResource->employee->lastName}}</div>
-
                         @elseif (isset($projectResource->title))  
                         <div>{{ $projectResource->title}}</div>
                         @endif
                     </td>
-                    <!-- Delete Button -->
                     <td>
-
                         <form action="{{ url('projectresources/'.$projectResource->id.'/updateResource') }}" method="POST">
                             {{ csrf_field() }}
-                            {{ method_field('GET') }}
-
-                          
-                            
-                            <button type="submit" class="btn btn-danger">
-                             <input type="hidden" name="projectResourceId" value="{{$projectResource->id}}">
-                             
+                            {{ method_field('GET') }}              
+                            <button type="submit" class="btn">
                                 <i class="fa fa-trash"> EDIT </i>
-
                             </button>
                         </form>
                         <form action="{{ url('projectresources/'.$projectResource->id) }}" method="POST">
                             {{ csrf_field() }}
                             {{ method_field('DELETE') }}
-                            <input type="hidden" name="_method" value="DELETE">
                             <button type="submit" class="btn btn-danger">
                                 <i class="fa fa-trash"> Delete </i>
                             </button>

@@ -64,7 +64,7 @@
          <button type="submit" class="btn btn-danger">
          @if(isset($projectresources))
              <i class="fa fa-trash"> Update </i>
-              <input type="hidden" name="projectResource" value="{{ $projectresources}}" class="form-control">
+              <input type="hidden" name="projectResourceId" value="{{ $projectresources[0]->id}}" class="form-control">
 
           @else   
            <i class="fa fa-trash"> Add </i>

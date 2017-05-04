@@ -61,4 +61,9 @@
 
 	    Route::resource('departments', 'DepartmentController');
 	    Route::resource('companies', 'CompanyController');
+        	     
+
+	    Route::get('/clientprojects/{clientProjectid}/projectresources', 'ProjectResourceController@manageressources');
+
+	    Route::get('/projectresources/{projectResourceid}/updateResource', 'ProjectResourceController@updateressources');
 	    

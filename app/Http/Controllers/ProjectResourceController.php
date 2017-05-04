@@ -17,18 +17,23 @@ class ProjectResourceController extends Controller
      */
     public function index()
     {
-        //TODO need to perform eagar loaging in this context
-        //TODO only get project resources for a particular client
-        $currentProjectResources = ProjectResource::orderBy('created_at', 'asc')->get();
 
-        //TODO get resources based on availibility
-        $availableEmployees = Employee::orderBy('created_at', 'asc')->get();
+     
+
+      
+
+        // //TODO need to perform eagar loaging in this context
+        // //TODO only get project resources for a particular client
+        // $currentProjectResources = ProjectResource::orderBy('created_at', 'asc')->get();
+
+        // //TODO get resources based on availibility
+        // $availableEmployees = Employee::orderBy('created_at', 'asc')->get();
 
 
-        return view('projectResources.index', [
-            'projectResources' => $currentProjectResources,
-            'availableEmployees' => $availableEmployees
-        ]);
+        // return view('projectResources.index', [
+        //     'projectResources' => $currentProjectResources,
+        //     'availableEmployees' => $availableEmployees
+        // ]);
     }
 
     /**
@@ -49,27 +54,90 @@ class ProjectResourceController extends Controller
      */
     public function store(Request $request)
     {
-        $projectResource = new ProjectResource();
-        //TODO get the relative project id
-        $projectResource->client_project_id = 1;
+        // dd($request->clientProjectid);
+       // dd($request->clientProjectid);
+      
+        
 
-        $projectResource->employee_id = $request->employee_id;
+            
+      
+        
+        if(!isset($request->projectResource))
+        {
 
-        //TODO set other properties as well for the resource
-        $projectResource->save();
-//
-        return redirect('/projectresources');
+         $projectResource = new ProjectResource();
+         
+        }
+
+        / if(isset($request->projectResource))
+        // {
+        //  dd($request->projectResource);
+        //  $projectResource = $request->projectResource;
+         
+         }
+       //  //TODO get the relative project id
+       // // $projectResource->client_project_id = 1;
+       
+        if(isset($request->title))
+           {
+    
+            $projectResource->title = $request->title;
+            $projectResource->client_project_id = $request->clientProjectid;
+
+            $projectResource->expectedStartDate = $request->expectedStartDate;
+            $projectResource->expectedEndDate = $request->expectedEndDate;
+            $projectResource->actualStartDate = $request->actualStartDate;
+            $projectResource->actualEndDate = $request->actualEndDate;
+            $projectResource->hourlyBillingRate = $request->hourlyBillingRate;
+            $projectResource->hoursPerWeek = $request->hoursPerWeek;
+             $projectResource->save();
+            return redirect('/clientprojects/'.$request->clientProjectid.'/projectresources');
+           }
+       //  //TODO set other properties as well for the resource
+           
+        
+      else if(isset($request->employee_id))
+          { 
+        //dd($request->employee_id);
+
+           $projectResource->employee_id = $request->employee_id;
+           $projectResource->client_project_id=$request->clientProjectid;
+       //  //TODO set other properties as well for the resource
+           $projectResource->save();
+           return redirect('/clientprojects/'.$request->clientProjectid.'/projectresources');
+          }
     }
 
+
+ public function manageressources($clientProjectid)
+    { 
+        
+        //TODO get resources based on availibility
+       
+        $currentProjectResources = ProjectResource::where('client_project_id',$clientProjectid)->orderBy('created_at', 'asc')->get();
+      // dd( $currenProjectResources);
+        $availableEmployees = Employee::orderBy('created_at', 'asc')->get();
+
+        
+
+        return view('projectResources.index', [
+            'projectResources' => $currentProjectResources,
+            'availableEmployees' => $availableEmployees,
+            'clientProjectid'=> $clientProjectid
+                    ]);
+
+
+    }
     /**
      * Display the specified resource.
      *
      * @param  \People\Models\ClientProject  $clientProject
      * @return \Illuminate\Http\Response
      */
-    public function show(ClientProject $clientProject)
+    public function show(ProjectResource $projectresource)
     {
-        //
+        //dd('show method');
+        //dd($projectresource);
     }
 
     /**
@@ -90,9 +158,9 @@ class ProjectResourceController extends Controller
      * @param  \People\Models\ClientProject  $clientProject
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ClientProject $clientProject)
+    public function update(Request $request, ProjectResource $projectresource)
     {
-        //
+        dd("$projectresource");
     }
 
     /**
@@ -103,7 +171,41 @@ class ProjectResourceController extends Controller
      */
     public function destroy(ProjectResource $projectresource)
     {
+        //dd($projectresource);
         $projectresource->delete();
-        return redirect('/projectresources');
+        return redirect('/clientprojects/'.$projectresource->client_project_id.'/projectresources');
     }
+
+    
+ public function updateressources($projectResourceid)
+    { 
+        // dd($projectResource);
+        //TODO get resources based on availibility
+       $Resource = ProjectResource::where('id',$projectResourceid)->orderBy('created_at', 'asc')->get();
+        // $currentProjectResources = ProjectResource::where('client_project_id',$clientProjectid)->orderBy('created_at', 'asc')->get();
+         //dd( $projectResource);
+
+         // $availableEmployees = Employee::orderBy('created_at', 'asc')->get();
+
+        
+         return view('projectResources.updateResource',[
+            'projectresources'=>$Resource
+
+            ]);
+
+
+       // return view('projectResources.index', [
+       // 'projectResources' => $currentProjectResources,
+       //      'availableEmployees' => $availableEmployees,
+       //    'clientProjectid'=> $clientProjectid
+       //             ]);
+
+    
+    }
+
+
+
+
+
 }
+

@@ -17,18 +17,7 @@ class ProjectResourceController extends Controller
      */
     public function index()
     {
-        //TODO need to perform eagar loaging in this context
-        //TODO only get project resources for a particular client
-        $currentProjectResources = ProjectResource::orderBy('created_at', 'asc')->get();
-
-        //TODO get resources based on availibility
-        $availableEmployees = Employee::orderBy('created_at', 'asc')->get();
-
-
-        return view('projectResources.index', [
-            'projectResources' => $currentProjectResources,
-            'availableEmployees' => $availableEmployees
-        ]);
+      //
     }
 
     /**
@@ -49,25 +38,84 @@ class ProjectResourceController extends Controller
      */
     public function store(Request $request)
     {
-        $projectResource = new ProjectResource();
-        //TODO get the relative project id
-        $projectResource->client_project_id = 1;
+      
+        if(!isset($request->projectResourceId))
+        {
 
-        $projectResource->employee_id = $request->employee_id;
+         $projectResource = new ProjectResource();
+         
+        }
 
-        //TODO set other properties as well for the resource
-        $projectResource->save();
-//
-        return redirect('/projectresources');
+        if(isset($request->projectResourceId))
+        {
+      
+            $projectResource =projectResource::find($request->projectResourceId);
+             
+        }
+       //  //TODO get the relative project id
+       
+       if(!isset($request->employee_id))
+          {
+            
+            $projectResource->title = $request->title;
+            $projectResource->client_project_id = $request->clientProjectid;
+            $projectResource->expectedStartDate = $request->expectedStartDate;
+            $projectResource->expectedEndDate = $request->expectedEndDate;
+            $projectResource->actualStartDate = $request->actualStartDate;
+            $projectResource->actualEndDate = $request->actualEndDate;
+            $projectResource->hourlyBillingRate = $request->hourlyBillingRate;
+            $projectResource->hoursPerWeek = $request->hoursPerWeek;
+
+             $projectResource->save();
+
+            return redirect('/clientprojects/'.$request->clientProjectid.'/projectresources');
+           }
+       //  //TODO set other properties as well for the resource
+           
+       else if(isset($request->employee_id))
+          {  
+            $projectResource->title = $request->title;
+            $projectResource->expectedStartDate = $request->expectedStartDate;
+            $projectResource->expectedEndDate = $request->expectedEndDate;
+            $projectResource->actualStartDate = $request->actualStartDate;
+            $projectResource->actualEndDate = $request->actualEndDate;
+            $projectResource->hourlyBillingRate = $request->hourlyBillingRate;
+            $projectResource->hoursPerWeek = $request->hoursPerWeek;
+            $projectResource->employee_id = $request->employee_id;
+            $projectResource->client_project_id=$request->clientProjectid;
+           //TODO set other properties as well for the resource
+          
+           $projectResource->save();
+
+           return redirect('/clientprojects/'.$request->clientProjectid.'/projectresources');
+          }
     }
 
+
+ public function manageressources($clientProjectid)
+    { 
+        
+        //TODO get resources based on availibility
+       
+           $currentProjectResources = ProjectResource::where('client_project_id',$clientProjectid)->orderBy('created_at', 'asc')
+           ->get();
+      
+           $availableEmployees = Employee::orderBy('created_at', 'asc')->get();
+
+          return view('projectResources.index', [
+            'projectResources' => $currentProjectResources,
+            'availableEmployees' => $availableEmployees,
+            'clientProjectid'=> $clientProjectid
+             ]);
+
+    }
     /**
      * Display the specified resource.
      *
      * @param  \People\Models\ClientProject  $clientProject
      * @return \Illuminate\Http\Response
      */
-    public function show(ClientProject $clientProject)
+    public function show(ProjectResource $projectresource)
     {
         //
     }
@@ -78,7 +126,7 @@ class ProjectResourceController extends Controller
      * @param  \People\Models\ClientProject  $clientProject
      * @return \Illuminate\Http\Response
      */
-    public function edit(ClientProject $clientProject)
+    public function edit(ProjectResource $projectresource)
     {
         //
     }
@@ -90,9 +138,9 @@ class ProjectResourceController extends Controller
      * @param  \People\Models\ClientProject  $clientProject
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ClientProject $clientProject)
+    public function update(Request $request, ProjectResource $projectresource)
     {
-        //
+    
     }
 
     /**
@@ -103,7 +151,23 @@ class ProjectResourceController extends Controller
      */
     public function destroy(ProjectResource $projectresource)
     {
+    
         $projectresource->delete();
-        return redirect('/projectresources');
+        return redirect('/clientprojects/'.$projectresource->client_project_id.'/projectresources');
     }
+
+    
+ public function updateressources($projectResourceid)
+    { 
+        
+        //TODO get resources based on availibility
+       $Resource = ProjectResource::where('id',$projectResourceid)->orderBy('created_at', 'asc')->get();
+        
+         return view('projectResources.updateResource',[
+            'projectresources'=>$Resource
+
+            ]);
+    }
+
 }
+

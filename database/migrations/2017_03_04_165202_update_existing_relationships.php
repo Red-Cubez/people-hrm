@@ -37,6 +37,7 @@ class UpdateExistingRelationships extends Migration {
 
 			$table->integer('employee_id')->unsigned();
 			$table->foreign('employee_id')->references('id')->on('employees');
+		
 		});
 
 		Schema::table('addresses', function (Blueprint $table) {

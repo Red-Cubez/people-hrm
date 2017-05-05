@@ -1,9 +1,10 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProjectResourcesTable extends Migration
+class CreateCompanyProjectsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,18 +13,18 @@ class CreateProjectResourcesTable extends Migration
      */
     public function up()
     {
-        Schema::create('project_resources', function (Blueprint $table) {
+        Schema::create('company_projects', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
+            $table->string('name');
             $table->date('expectedStartDate')->nullable();
             $table->date('expectedEndDate')->nullable();
             $table->date('actualStartDate')->nullable();
             $table->date('actualEndDate')->nullable();
-            $table->string('title')->nullable();
-            $table->decimal('hourlyBillingRate', 15,2)->nullable();
-            $table->integer('hoursPerWeek')->nullable();
-            
-            
+            $table->decimal('budget', 20, 2)->nullable();
+            $table->decimal('cost', 20, 2)->nullable();
+            $table->integer('company_id')->unsigned();
+            $table->foreign('company_id')->references('id')->on('companies');
         });
     }
 
@@ -34,6 +35,6 @@ class CreateProjectResourcesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('project_resources');
+        Schema::dropIfExists('company_projects');
     }
 }

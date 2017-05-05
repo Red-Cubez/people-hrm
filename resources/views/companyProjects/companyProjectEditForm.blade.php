@@ -1,6 +1,7 @@
+@extends('layouts.app')
 
-  @extends('layouts.app')
-  @section('content')
+@section('content')
+
   <div class="panel-body">
     <!-- Display Validation Errors -->
     @include('common.errors')
@@ -8,8 +9,8 @@
   <form action="{{url('companyprojects/'.$companyproject->id)}}" method="POST" class="form-horizontal">
        {{ csrf_field() }}
        {{ method_field('PUT') }}
-      <!-- Employee Name -->
-      @include('project/projectForm')
+      <!-- Company Project Name -->
+      @include('companyProjects/companyProjectForm')
 </form>
   </div>
   @endsection

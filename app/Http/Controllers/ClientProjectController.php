@@ -59,6 +59,7 @@ class ClientProjectController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show(ClientProject $clientproject) {
+		
 		return view('clientProjects/clientProjectEditForm', ['clientProject' => $clientproject]);
 	}
 

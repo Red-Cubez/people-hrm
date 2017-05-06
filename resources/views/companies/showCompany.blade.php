@@ -9,63 +9,42 @@
         <label for="name" class="control-label">Name : </label>
 
 
-            {{$client->name}}
+            {{$company->name}}
 
     </div>
-    <div>
-        <label for="contactNumber" class="control-label">Contact Number : </label>
-
-            {{$client->contactNumber}}
-
-    </div>
-
-    <div>
-        <label for="contactEmail" class="control-label">Contact Email : </label>
-
-            {{$client->contactEmail}}
-
-    </div>
-
-    <div>
-        <label for="contactPerson" class="control-label">Contact Person : </label>
-
-              {{$client->contactPerson}}
-
-    </div>
-
     <div>
         <label for="contactPerson" class="control-label">Street Line 1 : </label>
 
-            {{$client->address->streetLine1 }}
+            {{$company->address->streetLine1 }}
 
     </div>
     <div>
         <label for="contactPerson" class="control-label">Street Line 2 : </label>
 
-            {{$client->address->streetLine2 }}
+            {{$company->address->streetLine2 }}
 
     </div>
     <div>
         <label for="contactPerson" class="control-label">Country: </label>
 
-            {{$client->address->country }}
+            {{$company->address->country }}
 
     </div>
     <div>
         <label for="contactPerson" class="control-label">State / Province : </label>
 
-             {{$client->address->stateProvince }}
+             {{$company->address->stateProvince }}
 
     </div>
 
     <div>
         <label for="contactPerson" class="control-label">City</label>
 
-            {{$client->address->city }}
+            {{$company->address->city }}
 
     </div>
 
-    <form action="{{ url('clients/'.$client->id.'/edit') }}" method="POST">
+    <form action="{{ url('companies/'.$company->id.'/edit') }}" method="POST">
                             {{ csrf_field() }}
                             {{ method_field('GET') }}
 
@@ -74,7 +53,7 @@
                             </button>
     </form>
 
-    <form action="{{ url('/clients/'.$client->id.'/clientprojects') }}" method="POST">
+    <form action="{{ url('/companies/'.$company->id.'/companyprojects') }}" method="POST">
                             {{ csrf_field() }}
                             {{ method_field('GET') }}
 
@@ -85,6 +64,6 @@
                         </form>
                         
 </div>
-    @include('clientProjects/showProjects')
+    @include('companyProjects/showProjects')
 
 @endsection

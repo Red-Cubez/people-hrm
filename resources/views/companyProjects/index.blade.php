@@ -3,19 +3,22 @@
     <div class="panel-body">
         <!-- Display Validation Errors -->
         @include('common.errors')
-        <!-- New clientProject Form -->
+        <!-- New company Project Form -->
         <form action="{{url('companyprojects') }}" method="POST" class="form-horizontal">
             {{ csrf_field() }}
+              <div class="form-group" >
+               <input type="hidden" name="companyid" value="{{$companyid}}">
+               </div>
             <!-- Project Name -->
-
-            @include('project/projectForm')
-
-
-
+            @include('companyProjects/companyProjectForm')
          </form>
 
-
-         @include('project/showProjects')
+            @include('project/showProjects')
 
     </div>
+
+      <!-- Current company Projects -->
+       @if(isset($companyprojects))
+       @include('companyProjects/showProjects')
+       @endif
 @endsection

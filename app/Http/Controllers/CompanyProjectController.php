@@ -25,6 +25,10 @@ class CompanyProjectController extends Controller {
 		//
 	}
 
+	public function showCompanyProject($companyId) {
+
+		dd($company);
+	}
 	/**
 	 * Store a newly created resource in storage.
 	 *

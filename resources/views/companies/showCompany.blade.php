@@ -6,6 +6,7 @@
 <div class="panel-body">
     @include('common.errors')
     <div>
+
         <label for="name" class="control-label">Name : </label>
 
 
@@ -53,7 +54,7 @@
                             </button>
     </form>
 
-    <form action="{{ url('/companies/'.$company->id.'/companyprojects') }}" method="POST">
+    <form action="{{ url('/companies/'.$company->id.'/companyproject') }}" method="POST">
                             {{ csrf_field() }}
                             {{ method_field('GET') }}
 
@@ -62,8 +63,8 @@
                                 <i class="fa fa-trash"> Add New Project</i>
                             </button>
                         </form>
-                        
+
 </div>
-    @include('companyProjects/showProjects')
+{{--     @include('companyProjects/showProjects') --}}
 
 @endsection

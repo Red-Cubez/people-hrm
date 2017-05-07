@@ -63,7 +63,7 @@
                               <i class="fa fa-trash"> Update</i>
                               </button>
                             </form>
-                                     
+
                           <form action="{{ url('companyprojects/'.$companyProject->id.'/projectresources') }}" method="POST">
                              {{ csrf_field() }}
                              {{ method_field('GET') }}

@@ -64,14 +64,14 @@
                               </button>
                             </form>
 
-                          <form action="{{ url('companyprojects/'.$companyProject->id.'/projectresources') }}" method="POST">
+                          <!-- <form action="{{ url('companyprojects/'.$companyProject->id.'/projectresources') }}" method="POST">
                              {{ csrf_field() }}
                              {{ method_field('GET') }}
 
                               <button type="submit" class="btn btn-danger">
                               <i class="fa fa-trash"> Manage Resource</i>
                               </button>
-                           </form>
+                           </form> -->
                                     </td>
                                 </tr>
                             @endforeach

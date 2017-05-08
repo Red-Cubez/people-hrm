@@ -54,13 +54,13 @@
                             </button>
     </form>
 
-    <form action="{{ url('/companies/'.$company->id.'/companyproject') }}" method="POST">
+    <form action="{{ url('/companies/'.$company->id.'/companyprojects') }}" method="POST">
                             {{ csrf_field() }}
                             {{ method_field('GET') }}
 
 
                             <button type="submit" class="btn btn-danger">
-                                <i class="fa fa-trash"> Add New Project</i>
+                                <i class="fa fa-trash"> Add New Projects</i>
                             </button>
                         </form>
 

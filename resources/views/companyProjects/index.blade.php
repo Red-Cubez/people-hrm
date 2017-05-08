@@ -18,7 +18,7 @@
     </div>
 
       <!-- Current company Projects -->
-       @if(isset($companyprojects))
+      <!--  @if(isset($companyprojects))
        @include('companyProjects/showProjects')
-       @endif
+       @endif -->
 @endsection

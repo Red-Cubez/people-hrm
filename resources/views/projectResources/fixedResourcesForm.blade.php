@@ -6,6 +6,7 @@
      <label class="col-sm-3 control-label">Title</label>
     <div class="col-sm-6">
      @if(!isset($projectresources))
+     
      <input type="hidden" name="clientProjectid" value="{{ $clientProjectid }}" class="form-control">
      @elseif(isset($projectresources))
      <input type="hidden" name="clientProjectid" value="{{ $projectresources[0]->client_project_id}}" class="form-control">

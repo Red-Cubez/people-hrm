@@ -3,6 +3,7 @@
 namespace People\Services;
 use People\Models\Company;
 use People\Models\CompanyAddress;
+use People\Models\CompanyProject;
 use People\Services\Interfaces\ICompanyService;
 
 class CompanyService implements ICompanyService {
@@ -22,7 +23,10 @@ class CompanyService implements ICompanyService {
 		$companyAddress->save();
 	}
 	public function getCompanyAddressAndCompanyProjects($company) {
+		
 		$companyAddress = $company->address;
+		//$companyProjects=CompanyProject::orderBy('created_at')->where('company_id',$company->id)->get();
+	
 		return array($company, $companyAddress);
 
 	}

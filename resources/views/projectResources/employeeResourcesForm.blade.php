@@ -27,10 +27,15 @@
           </tbody>
         </table>
     </div>
-
+        @if(isset($clientProjectid))
            <input type="hidden" name="clientProjectid" value="{{ $clientProjectid }}">
-              @include('projectResources/fixedResourcesForm') 
+             
+        @elseif(isset($companyProjectId)) 
+           <input type="hidden" name="companyProjectId" value="{{ $companyProjectId }}">
 
+        @endif  
+
+         @include('projectResources/fixedResourcesForm') 
   </form>
   </div>    
    @endif

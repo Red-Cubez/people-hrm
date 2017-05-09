@@ -53,15 +53,16 @@ class CompanyController extends Controller {
 	 * Dsisplay the specified resource.
 	 *
 	 * @param  \People\Models\Company $company
-	 * @return \Illuminate\Http\Response
+	 * @return \Illuminate\Http\Responseo
 	 */
 	public function show(Company $company) {
 		//below query is nothing,its just to use companyaddress model in this controller.will be handled soon
 		list($company, $CompanyAddress) = $this->CompanyService->getCompanyAddressAndCompanyProjects($company);
-
+      
 		//	$companyAddress = CompanyAddress::orderBy('created_at', 'asc')->where('company_id', '$company')->get();
 		///dd($companyAddress[]);
-		return view('companies/showCompany', ['company' => $company],
+		return view('companies/showCompany', 
+			['company' => $company],
 			['CompanyAddress' => $CompanyAddress]
 
 		);

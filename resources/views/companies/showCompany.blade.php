@@ -2,7 +2,6 @@
 @extends('layouts.app')
 
 @section('content')
-
 <div class="panel-body">
     @include('common.errors')
     <div>
@@ -65,6 +64,6 @@
                         </form>
 
 </div>
-{{--     @include('companyProjects/showProjects') --}}
+     @include('companyProjects/showProjects') 
 
 @endsection

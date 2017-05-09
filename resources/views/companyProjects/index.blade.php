@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('content')
+
     <div class="panel-body">
         <!-- Display Validation Errors -->
         @include('common.errors')
@@ -13,12 +14,8 @@
             @include('companyProjects/companyProjectForm')
          </form>
 
-            @include('project/showProjects')
-
+        
     </div>
 
-      <!-- Current company Projects -->
-      <!--  @if(isset($companyprojects))
-       @include('companyProjects/showProjects')
-       @endif -->
+    
 @endsection

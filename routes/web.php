@@ -56,6 +56,8 @@ Route::resource('clients', 'ClientController');
 Route::resource('clientprojects', 'ClientProjectController');
 Route::resource('companyprojects', 'CompanyProjectController');
 Route::resource('projectresources', 'ProjectResourceController');
+Route::resource('companyprojectresources', 'CompanyProjectResourceController');
+
 
 Route::get('/clients/{clientid}/clientprojects', 'ClientProjectController@manageProject');
 

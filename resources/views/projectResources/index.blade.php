@@ -26,8 +26,8 @@
     <!-- Display Validation Errors -->
       @include('common.errors')
     <!-- New clientProject Form -->
-    <form action="{{url('projectresources') }}" method="POST" class="form-horizontal">
-        {{ csrf_field() }}
+    <!-- <form action="{{url('projectresources') }}" method="POST" class="form-horizontal">
+        {{ csrf_field() }} -->
         <!-- Resource Name -->
         @if (count($projectResources)>0 )
         <div class="panel panel-default">
@@ -61,15 +61,20 @@
                             <td>
                                 <form action=" {{ url('projectresources/'.$projectResource->id.'/updateResource') }}"
                                  method="POST">
+
                                     {{ csrf_field() }}
-                                    {{ method_field('GET') }}              
+                                    {{ method_field('GET') }}
+                                                
                                     <button type="submit" class="btn">
+
                                         <i class="fa fa-trash"> EDIT </i>
                                     </button>
                                 </form>
                                 <form action="{{ url('projectresources/'.$projectResource->id) }}" method="POST">
                                     {{ csrf_field() }}
                                     {{ method_field('DELETE') }}
+                                                 
+                                    
                                     <button type="submit" class="btn btn-danger">
                                         <i class="fa fa-trash"> Delete </i>
                                     </button>

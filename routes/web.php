@@ -69,3 +69,6 @@ Route::get('/clientprojects/{clientProjectid}/projectresources', 'ProjectResourc
 Route::get('/projectresources/{projectResourceid}/updateResource', 'ProjectResourceController@updateressources');
 
 Route::get('/companies/{companyid}/companyprojects', 'CompanyProjectController@manageProject');
+
+
+

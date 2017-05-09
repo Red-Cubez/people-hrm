@@ -38,7 +38,59 @@ class CompanyProjectResourceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        //dd($request->employee_id);
+         
+        if (!isset($request->projectResourceId)) {
+
+            $CompanyProjectResource = new CompanyProjectResource();
+
+        }
+
+        if (isset($request->projectResourceId)) {
+
+            $CompanyProjectResource = CompanyProjectResource::find($request->projectResourceId);
+
+        }
+        //  //TODO get the relative project id
+
+        // if ( (isset($request->employee_id)) || (isset($request->title))) {
+        if ( isset($request->projectResourceId)) {
+            //dd("update");
+           ;
+            $CompanyProjectResource->title = $request->title;
+           // $CompanyProjectResource->company_project_id = $request->companyProjectId;
+            $CompanyProjectResource->expectedStartDate = $request->expectedStartDate;
+            $CompanyProjectResource->expectedEndDate = $request->expectedEndDate;
+            $CompanyProjectResource->actualStartDate = $request->actualStartDate;
+            $CompanyProjectResource->actualEndDate = $request->actualEndDate;
+            $CompanyProjectResource->hourlyBillingRate = $request->hourlyBillingRate;
+            $CompanyProjectResource->hoursPerWeek = $request->hoursPerWeek;
+
+            $CompanyProjectResource->save();
+           // dd($request);
+            return redirect('/companyprojectresources/' . $request->companyProjectId );
+        }
+        //  //TODO set other properties as well for the resource
+
+         elseif (!isset($request->projectResourceId)) {
+           // dd("save");
+            $CompanyProjectResource->title = $request->title;
+            $CompanyProjectResource->expectedStartDate = $request->expectedStartDate;
+            $CompanyProjectResource->expectedEndDate = $request->expectedEndDate;
+            $CompanyProjectResource->actualStartDate = $request->actualStartDate;
+            $CompanyProjectResource->actualEndDate = $request->actualEndDate;
+            $CompanyProjectResource->hourlyBillingRate = $request->hourlyBillingRate;
+            $CompanyProjectResource->hoursPerWeek = $request->hoursPerWeek;
+            $CompanyProjectResource->employee_id = $request->employee_id;
+            $CompanyProjectResource->company_project_id = $request->companyProjectId;
+            //TODO set other properties as well for the resource
+
+            $CompanyProjectResource->save();
+
+            return redirect('/companyprojectresources/' . $request->companyProjectId );
+        }
+    
     }
 
     /**
@@ -51,6 +103,7 @@ class CompanyProjectResourceController extends Controller
     {
         $currentProjectResources = CompanyProjectResource::where('company_project_id', $companyProjectId)->orderBy('created_at', 'asc')
             ->get();
+          //  dd($currentProjectResources);
       //  dd($currentProjectResources);
 
         $availableEmployees = Employee::orderBy('created_at', 'asc')->get();
@@ -69,9 +122,16 @@ class CompanyProjectResourceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($companyProjectId)
     {
-        //
+        
+        $Resource = CompanyProjectResource::where('id', $companyProjectId)->orderBy('created_at', 'asc')->get();
+
+        return view('CompanyProjectResources.updateResource', [
+            'projectresources' => $Resource
+            ]);
+
+        
     }
 
     /**
@@ -92,8 +152,11 @@ class CompanyProjectResourceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
+    public function destroy(CompanyProjectResource $companyprojectresource,Request $request)
+    {    
+        $companyprojectresource->delete();
+        //dd($request);
+        return redirect('/companyprojectresources/'.$request->companyProjectId);
     }
+    
 }

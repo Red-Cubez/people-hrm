@@ -48,10 +48,10 @@ class ProjectResourceController extends Controller {
 		}
 		//  //TODO get the relative project id
 
-		if (!isset($request->employee_id)) {
+		if ( isset($request->projectResourceId)) {
 
 			$projectResource->title = $request->title;
-			$projectResource->client_project_id = $request->clientProjectid;
+			//$projectResource->client_project_id = $request->clientProjectid;
 			$projectResource->expectedStartDate = $request->expectedStartDate;
 			$projectResource->expectedEndDate = $request->expectedEndDate;
 			$projectResource->actualStartDate = $request->actualStartDate;
@@ -60,12 +60,12 @@ class ProjectResourceController extends Controller {
 			$projectResource->hoursPerWeek = $request->hoursPerWeek;
 
 			$projectResource->save();
-
+		
 			return redirect('/clientprojects/' . $request->clientProjectid . '/projectresources');
 		}
 		//  //TODO set other properties as well for the resource
 
-		else if (isset($request->employee_id)) {
+		  elseif (!isset($request->projectResourceId)) {
 			$projectResource->title = $request->title;
 			$projectResource->expectedStartDate = $request->expectedStartDate;
 			$projectResource->expectedEndDate = $request->expectedEndDate;
@@ -148,7 +148,7 @@ class ProjectResourceController extends Controller {
 		$Resource = ProjectResource::where('id', $projectResourceid)->orderBy('created_at', 'asc')->get();
 
 		return view('projectResources.updateResource', [
-			'projectresources' => $Resource,
+			'projectresources' => $Resource
 
 		]);
 	}

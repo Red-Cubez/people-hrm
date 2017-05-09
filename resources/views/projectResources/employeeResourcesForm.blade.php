@@ -1,6 +1,12 @@
- <form action="{{ url('projectresources/') }}" method="POST" class="form-horizontal">
+@if(isset($clientProjectid))
+   <form action="{{ url('projectresources/') }}" method="POST" class="form-horizontal">
    {{ csrf_field() }}
    {{ method_field('POST') }}
+@elseif(isset($companyProjectId))
+   <form action="{{ url('companyprojectresources/') }}" method="POST" class="form-horizontal">
+   {{ csrf_field() }}
+   {{ method_field('POST') }}
+@endif   
 
    @if (count($availableEmployees) > 0)
     <div class="panel panel-default">

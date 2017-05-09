@@ -49,6 +49,8 @@ class CompanyService implements ICompanyService {
 	}
 
 	public function deleteCompany($company) {
+		// $company->CompanyProjectResource()->detach();
+		// $company->CompanyProject()->detach();
 		$company->delete();
 	}
 

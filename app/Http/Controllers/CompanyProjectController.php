@@ -3,9 +3,8 @@
 namespace People\Http\Controllers;
 
 use Illuminate\Http\Request;
-use People\Models\Project;
-use People\Models\Company;
 use People\Models\CompanyProject;
+use People\Services\Interfaces\ICompanyProjectService;
 
 class CompanyProjectController extends Controller {
 	/**
@@ -13,10 +12,22 @@ class CompanyProjectController extends Controller {
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
+
+	public $CompanyProjectService;
+
+	public function __construct(ICompanyProjectService $companyProjectService) {
+
+		$this->CompanyProjectService = $companyProjectService;
+	}
+
 	public function index() {
-		$companyprojects = CompanyProject::orderBy('created_at', 'asc')->get();
-		return view('companyprojects.index', ['companyprojects' => $companyprojects]);
-		//dd($companyprojects);
+
+		$companyprojects = $this->CompanyProjectService->getAllCompanyProjects();
+
+		return view('companyprojects.index', [
+			'companyprojects' => $companyprojects,
+		]);
+
 	}
 
 	/**
@@ -28,10 +39,6 @@ class CompanyProjectController extends Controller {
 		//
 	}
 
-	public function showCompanyProject($companyId) {
-
-		// dd($company);
-	}
 	/**
 	 * Store a newly created resource in storage.
 	 *
@@ -39,22 +46,10 @@ class CompanyProjectController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(Request $request) {
-		//
-		$companyProject = new CompanyProject();
-		$companyProject->name = $request->name;
-		$companyProject->expectedStartDate = $request->expectedStartDate;
-		$companyProject->expectedEndDate = $request->expectedEndDate;
-		$companyProject->actualStartDate = $request->actualStartDate;
-		$companyProject->actualEndDate = $request->actualEndDate;
-		$companyProject->budget = $request->budget;
-		$companyProject->cost = $request->cost;
-		//TODO These properties need to be set from fields
-		//TODO this value needs to come from the correct client Project
-		// dd($request);
-		$companyProject->company_id = $request->companyid;
-		$companyProject->save();
 
-		return redirect('/companies/'.$request->companyid);
+		$this->CompanyProjectService->saveCompanyProject($request);
+
+		return redirect('/companies/' . $request->companyid);
 	}
 
 	/**
@@ -87,16 +82,9 @@ class CompanyProjectController extends Controller {
 	 */
 	public function update(Request $request, CompanyProject $companyproject) {
 		//
-		$companyproject->name = $request->name;
-		$companyproject->expectedStartDate = $request->expectedStartDate;
-		$companyproject->expectedEndDate = $request->expectedEndDate;
-		$companyproject->actualStartDate = $request->actualStartDate;
-		$companyproject->actualEndDate = $request->actualEndDate;
-		$companyproject->budget = $request->budget;
-		$companyproject->cost = $request->cost;
-		$companyproject->save();
-		//dd($companyproject);
-		return redirect('/companies/'.$companyproject->company_id);
+		$this->CompanyProjectService->updateCompanyProject($request, $companyproject);
+
+		return redirect('/companies/' . $companyproject->company_id);
 	}
 
 	/**
@@ -106,24 +94,17 @@ class CompanyProjectController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function destroy(CompanyProject $companyproject) {
-		//
-		// dd($companyproject);
-		$companyproject->delete();
-		return redirect('/companies/'.$companyproject->company_id);
+
+		$this->CompanyProjectService->deleteCompanyProject($companyproject);
+
+		return redirect('/companies/' . $companyproject->company_id);
 	}
 
-    public function manageProject($companyid) {
-    	
+	public function manageProject($companyid) {
 
-		$companyProjects = CompanyProject::where('company_id', $companyid)->orderBy('created_at', 'asc')->get();
-	  //dd($companyProjects);
-		
-		return view('companyprojects.index',['companyProjects' => $companyProjects,'companyid' => $companyid,]);
+		$companyProjects = $this->CompanyProjectService->manageProject($companyid);
+
+		return view('companyprojects.index', ['companyProjects' => $companyProjects, 'companyid' => $companyid]);
 	}
-
-
-
-
 
 }
-

@@ -1,14 +1,37 @@
+
+
+@if(isset($clientProjectid))
 <form action="{{ url('projectresources/') }}" method="POST" class="form-horizontal">
  {{ csrf_field() }}
  {{ method_field('POST') }}
+
+@elseif(isset($companyProjectId))
+
+  <form action="{{ url('companyprojectresources/') }}" method="POST" class="form-horizontal">
+ {{ csrf_field() }}
+ {{ method_field('POST') }}
+
+@endif 
+
  
     <div class="form-group">
      <label class="col-sm-3 control-label">Title</label>
     <div class="col-sm-6">
      @if(!isset($projectresources))
-     <input type="hidden" name="clientProjectid" value="{{ $clientProjectid }}" class="form-control">
+        @if(isset($clientProjectid))
+          <input type="hidden" name="clientProjectid" value="{{ $clientProjectid }}" class="form-control">
+        @elseif(isset($companyProjectId))
+          <input type="hidden" name="companyProjectId" value="{{ $companyProjectId }}" class="form-control">
+        @endif
+
+
      @elseif(isset($projectresources))
-     <input type="hidden" name="clientProjectid" value="{{ $projectresources[0]->client_project_id}}" class="form-control">
+        @if(isset($clientProjectid))
+          <input type="hidden" name="clientProjectid" value="{{ $projectresources[0]->client_project_id}}" class="form-control">
+        @elseif(isset($companyProjectId))
+          <input type="hidden" name="companyProjectId" value="{{ $projectresources[0]->company_project_id}}" class="form-control">
+        @endif
+
      @endif
      <input type="text" name="title" id="title" class="form-control" @if(isset($projectresources[0]->title)) value="{{$projectresources[0]->title}}" @else placeholder="Enter title"@endif class="form-control" @if(!isset($availableEmployee->firstName)) required @endif>
      </div>
@@ -68,6 +91,8 @@
      @if(isset($projectresources))
       <i class="fa fa-trash"> Update </i>
       <input type="hidden" name="projectResourceId" value="{{ $projectresources[0]->id}}" class="form-control">
+       <input type="hidden" name="companyProjectId" value="{{ $projectresources[0]->company_project_id}}" class="form-control">
+        <input type="hidden" name="clientProjectid" value="{{ $projectresources[0]->client_project_id}}">  
      @else
       <i class="fa fa-trash"> Add  </i>
      </button>

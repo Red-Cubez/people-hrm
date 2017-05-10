@@ -50,11 +50,11 @@ class CompanyProjectController extends Controller {
 		$companyProject->cost = $request->cost;
 		//TODO These properties need to be set from fields
 		//TODO this value needs to come from the correct client Project
-		//dd($request);
+		// dd($request);
 		$companyProject->company_id = $request->companyid;
 		$companyProject->save();
 
-		return redirect('/companyprojects');
+		return redirect('/companies/'.$request->companyid);
 	}
 
 	/**
@@ -65,7 +65,7 @@ class CompanyProjectController extends Controller {
 	 */
 	public function show(CompanyProject $companyproject) {
 
-		return view('companyProjects/editProjectForm', ['companyproject' => $companyproject]);
+		return view('companyProjects/companyProjectEditForm', ['companyproject' => $companyproject]);
 	}
 
 	/**
@@ -95,7 +95,8 @@ class CompanyProjectController extends Controller {
 		$companyproject->budget = $request->budget;
 		$companyproject->cost = $request->cost;
 		$companyproject->save();
-		return redirect('/companyprojects');
+		//dd($companyproject);
+		return redirect('/companies/'.$companyproject->company_id);
 	}
 
 	/**
@@ -106,15 +107,16 @@ class CompanyProjectController extends Controller {
 	 */
 	public function destroy(CompanyProject $companyproject) {
 		//
+		// dd($companyproject);
 		$companyproject->delete();
-		return redirect('/companyprojects');
+		return redirect('/companies/'.$companyproject->company_id);
 	}
 
     public function manageProject($companyid) {
     	
 
 		$companyProjects = CompanyProject::where('company_id', $companyid)->orderBy('created_at', 'asc')->get();
-	  // dd($companyProjects);
+	  //dd($companyProjects);
 		
 		return view('companyprojects.index',['companyProjects' => $companyProjects,'companyid' => $companyid,]);
 	}

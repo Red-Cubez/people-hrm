@@ -12,7 +12,7 @@
   <div class="collapse" id="employees">
     <div class="well">
        @include('projectResources/employeeResourcesForm')
-    </div>
+    </div>\
   </div>
 
   <div class="collapse" id="fixedResources">
@@ -26,7 +26,7 @@
     <!-- Display Validation Errors -->
       @include('common.errors')
     <!-- New clientProject Form -->
-    <!-- <form action="{{url('projectresources') }}" method="POST" class="form-horizontal">
+   <!--  <form action="{{url('projectresources') }}" method="POST" class="form-horizontal">
         {{ csrf_field() }} -->
         <!-- Resource Name -->
         @if (count($projectResources)>0 )
@@ -59,22 +59,18 @@
                             </td>
 
                             <td>
-                                <form action=" {{ url('projectresources/'.$projectResource->id.'/updateResource') }}"
+                                <form action=" {{ url('companyprojectresources/'.$projectResource->id.'/edit') }}"
                                  method="POST">
-
                                     {{ csrf_field() }}
-                                    {{ method_field('GET') }}
-                                                
+                                    {{ method_field('GET') }}              
                                     <button type="submit" class="btn">
-
                                         <i class="fa fa-trash"> EDIT </i>
                                     </button>
                                 </form>
-                                <form action="{{ url('projectresources/'.$projectResource->id) }}" method="POST">
+                                <form action="{{ url('companyprojectresources/'.$projectResource->id) }}" method="POST">
                                     {{ csrf_field() }}
                                     {{ method_field('DELETE') }}
-                                                 
-                                    
+                                    <input type="hidden" name="companyProjectId" value="{{$projectResource->company_project_id}}">
                                     <button type="submit" class="btn btn-danger">
                                         <i class="fa fa-trash"> Delete </i>
                                     </button>

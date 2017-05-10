@@ -56,6 +56,8 @@ Route::resource('clients', 'ClientController');
 Route::resource('clientprojects', 'ClientProjectController');
 Route::resource('companyprojects', 'CompanyProjectController');
 Route::resource('projectresources', 'ProjectResourceController');
+Route::resource('companyprojectresources', 'CompanyProjectResourceController');
+
 
 Route::get('/clients/{clientid}/clientprojects', 'ClientProjectController@manageProject');
 
@@ -67,3 +69,6 @@ Route::get('/clientprojects/{clientProjectid}/projectresources', 'ProjectResourc
 Route::get('/projectresources/{projectResourceid}/updateResource', 'ProjectResourceController@updateressources');
 
 Route::get('/companies/{companyid}/companyprojects', 'CompanyProjectController@manageProject');
+
+
+

@@ -22,13 +22,13 @@ class CompanyProjectResourceService implements ICompanyProjectResourceService {
 
 		if (!isset($request->projectResourceId)) {
 
-			$CompanyProjectResource = new CompanyProjectResource();
+			$companyProjectResource = new CompanyProjectResource();
 
 		}
 
 		if (isset($request->projectResourceId)) {
 
-			$CompanyProjectResource = CompanyProjectResource::find($request->projectResourceId);
+			$companyProjectResource = CompanyProjectResource::find($request->projectResourceId);
 
 		}
 		//  //TODO get the relative project id
@@ -36,33 +36,33 @@ class CompanyProjectResourceService implements ICompanyProjectResourceService {
 		if (isset($request->projectResourceId)) {
 			//update
 			;
-			$CompanyProjectResource->title = $request->title;
-			$CompanyProjectResource->expectedStartDate = $request->expectedStartDate;
-			$CompanyProjectResource->expectedEndDate = $request->expectedEndDate;
-			$CompanyProjectResource->actualStartDate = $request->actualStartDate;
-			$CompanyProjectResource->actualEndDate = $request->actualEndDate;
-			$CompanyProjectResource->hourlyBillingRate = $request->hourlyBillingRate;
-			$CompanyProjectResource->hoursPerWeek = $request->hoursPerWeek;
+			$companyProjectResource->title = $request->title;
+			$companyProjectResource->expectedStartDate = $request->expectedStartDate;
+			$companyProjectResource->expectedEndDate = $request->expectedEndDate;
+			$companyProjectResource->actualStartDate = $request->actualStartDate;
+			$companyProjectResource->actualEndDate = $request->actualEndDate;
+			$companyProjectResource->hourlyBillingRate = $request->hourlyBillingRate;
+			$companyProjectResource->hoursPerWeek = $request->hoursPerWeek;
 
-			$CompanyProjectResource->save();
+			$companyProjectResource->save();
 
 		}
 		//  //TODO set other properties as well for the resource
 
 		elseif (!isset($request->projectResourceId)) {
 			//save
-			$CompanyProjectResource->title = $request->title;
-			$CompanyProjectResource->expectedStartDate = $request->expectedStartDate;
-			$CompanyProjectResource->expectedEndDate = $request->expectedEndDate;
-			$CompanyProjectResource->actualStartDate = $request->actualStartDate;
-			$CompanyProjectResource->actualEndDate = $request->actualEndDate;
-			$CompanyProjectResource->hourlyBillingRate = $request->hourlyBillingRate;
-			$CompanyProjectResource->hoursPerWeek = $request->hoursPerWeek;
-			$CompanyProjectResource->employee_id = $request->employee_id;
-			$CompanyProjectResource->company_project_id = $request->companyProjectId;
+			$companyProjectResource->title = $request->title;
+			$companyProjectResource->expectedStartDate = $request->expectedStartDate;
+			$companyProjectResource->expectedEndDate = $request->expectedEndDate;
+			$companyProjectResource->actualStartDate = $request->actualStartDate;
+			$companyProjectResource->actualEndDate = $request->actualEndDate;
+			$companyProjectResource->hourlyBillingRate = $request->hourlyBillingRate;
+			$companyProjectResource->hoursPerWeek = $request->hoursPerWeek;
+			$companyProjectResource->employee_id = $request->employee_id;
+			$companyProjectResource->company_project_id = $request->companyProjectId;
 			//TODO set other properties as well for the resource
 
-			$CompanyProjectResource->save();
+			$companyProjectResources->save();
 
 		}
 
@@ -70,8 +70,8 @@ class CompanyProjectResourceService implements ICompanyProjectResourceService {
 
 	public function showEditForm($companyProjectId) {
 
-		$Resource = CompanyProjectResource::where('id', $companyProjectId)->orderBy('created_at', 'asc')->get();
-		return $Resource;
+		$resource = CompanyProjectResource::where('id', $companyProjectId)->orderBy('created_at', 'asc')->get();
+		return $resource;
 	}
 
 	public function deleteCompanyProjectResource($companyprojectresource) {

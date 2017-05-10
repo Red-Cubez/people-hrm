@@ -74,10 +74,10 @@ class CompanyProjectResourceController extends Controller {
 	 */
 	public function edit($companyProjectId) {
 
-		$Resource = $this->CompanyProjectResourceService->showEditForm($companyProjectId);
+		$resource = $this->CompanyProjectResourceService->showEditForm($companyProjectId);
 
 		return view('CompanyProjectResources.updateResource', [
-			'projectresources' => $Resource,
+			'projectresources' => $resource,
 		]);
 
 	}

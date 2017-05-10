@@ -6,6 +6,7 @@
 <div class="panel-body">
     @include('common.errors')
     <div>
+
         <label for="name" class="control-label">Name : </label>
 
 
@@ -59,11 +60,11 @@
 
 
                             <button type="submit" class="btn btn-danger">
-                                <i class="fa fa-trash"> Add New Project</i>
+                                <i class="fa fa-trash"> Add New Projects</i>
                             </button>
                         </form>
-                        
+
 </div>
-    @include('companyProjects/showProjects')
+{{--     @include('companyProjects/showProjects') --}}
 
 @endsection

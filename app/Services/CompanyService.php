@@ -21,6 +21,11 @@ class CompanyService implements ICompanyService {
 		$companyAddress->company_id = $companyId;
 		$companyAddress->save();
 	}
+	public function getCompanyAddressAndCompanyProjects($company) {
+		$companyAddress = $company->address;
+		return array($company, $companyAddress);
+
+	}
 
 	public function createCompany($request) {
 

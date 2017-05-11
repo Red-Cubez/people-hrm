@@ -10,10 +10,9 @@
       {{ csrf_field() }}
       {{ method_field('POST') }}
       <!-- Company Names -->
-    
+
       @include('projectResources/fixedResourcesForm')
 
     </form>
      </div>
      @endsection
-  

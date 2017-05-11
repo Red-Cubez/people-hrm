@@ -50,10 +50,20 @@
 
         <label for="name" class="control-label">Departments : </label>
 
-
-            {{$departments[1]->name}}
+             @foreach ($departments as $department)
+                    {{-- {{$department->name}} --}}
+                    {{ "|" }}
+              @endforeach
 
     </div>
+
+
+        <label for="name" class="control-label">Hours Worked : </label>
+
+
+            {{$sumOfTotalHoursWorked}}
+
+
 
       <form action="{{ url('employees/'.$employee->id.'/edit') }}" method="POST">
                             {{ csrf_field() }}
@@ -62,5 +72,17 @@
                                 <i class="fa fa-trash">EDIT</i>
                             </button>
       </form>
+
+      <div>
+
+      Employee is
+      @if(!isset($isWorkingOverTime))
+      Not
+      @endif Working Over Time.
+
+      </div>
+
+      @include('employees/showEmployeeClientProjectsForm')
+      @include('employees/showEmployeeCompanyProjectsForm')
 
 @endsection

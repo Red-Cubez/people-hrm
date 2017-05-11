@@ -62,7 +62,7 @@ class CompanyProjectResourceService implements ICompanyProjectResourceService {
 			$companyProjectResource->company_project_id = $request->companyProjectId;
 			//TODO set other properties as well for the resource
 
-			$companyProjectResources->save();
+			$companyProjectResource->save();
 
 		}
 

@@ -1,9 +1,12 @@
 <?php
 
 namespace People\Services;
+use People\Models\ClientProject;
+use People\Models\CompanyProjectResource;
 use People\Models\Department;
 use People\Models\Employee;
 use People\Models\EmployeeAddress;
+use People\Models\ProjectResource;
 use People\Services\Interfaces\IEmployeeService;
 
 class EmployeeService implements IEmployeeService {
@@ -84,7 +87,41 @@ class EmployeeService implements IEmployeeService {
 		}
 
 		$departments = Department::orderBy('created_at', 'asc')->get();
-		return array($employee, $departments, $employeeDepartmentIds);
+
+		$totalHoursOnClientProjects = 0;
+		$clientProjectResources = ProjectResource::where('employee_id', $employee->id)->get();
+
+		$employeeClientProjectIds = [];
+		$employeeClientProjects = [];
+		foreach ($clientProjectResources as $clientProjectResource) {
+
+			$totalHoursOnClientProjects = $totalHoursOnClientProjects + $clientProjectResource->hoursPerWeek;
+
+			$employeeClientProjectIds[] = $clientProjectResource->client_project_id;
+
+		}
+
+		$totalHoursOnCompanyProjects = 0;
+		$companyProjectResources = CompanyProjectResource::where('employee_id', $employee->id)->get();
+
+		foreach ($companyProjectResources as $companyProjectResource) {
+
+			$totalHoursOnCompanyProjects = $totalHoursOnCompanyProjects + $companyProjectResource->hoursPerWeek;
+		}
+
+		$sumOfTotalHoursWorked = $totalHoursOnClientProjects + $totalHoursOnCompanyProjects;
+		if ($sumOfTotalHoursWorked > 40) {
+			$isWorkingOverTime = 1;
+		} else {
+			$isWorkingOverTime = NULL;
+		}
+
+		foreach ($employeeClientProjectIds as $employeeClientProjectId) {
+			$employeeClientProjects[] = ClientProject::where('id', $employeeClientProjectId)->get();
+		}
+		//dd($employeeClientProjects);
+		return array($employee, $departments, $employeeDepartmentIds, $sumOfTotalHoursWorked, $isWorkingOverTime, $employeeClientProjects);
+
 	}
 
 }

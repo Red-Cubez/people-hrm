@@ -3,9 +3,7 @@
 namespace People\Http\Controllers;
 
 use Illuminate\Http\Request;
-use People\Models\Department;
 use People\Models\Employee;
-use People\Models\ProjectResource;
 use People\Services\EmployeeService;
 use People\Services\Interfaces\IEmployeeService;
 
@@ -62,27 +60,16 @@ class EmployeeController extends Controller {
 	 */
 	public function show(Employee $employee) {
 
-		$employeeDepartmentIds = [];
-		foreach ($employee->departments as $department) {
+		list($employee, $departments, $employeeDepartmentIds, $sumOfTotalHoursWorked, $isWorkingOverTime, $employeeClientProjects) = $this->EmployeeService->showEmployee($employee);
 
-			array_push($employeeDepartmentIds, $department->id);
-		}
-
-		$totalHours = 0;
-		$departments = Department::orderBy('created_at', 'asc')->get();
-		$workingOn = ProjectResource::where('employee_id', 2)->get();
-		dd($workingOn[0]);
-		for ($i = 0; $i < 2; $i++) {
-
-			$hoursWorked = $workingOn[$i]->hoursPerWeek;
-			$totalHours = $hoursWorked + $totalHours;
-		}
-
-		dd($totalHours);
 		return view('employees/showEmployeeForm',
 			['employee' => $employee,
 				'departments' => $departments,
 				'employeeDepartmentIds' => $employeeDepartmentIds,
+				'sumOfTotalHoursWorked' => $sumOfTotalHoursWorked,
+				'isWorkingOverTime' => $isWorkingOverTime,
+				'employeeClientProjects' => $employeeClientProjects,
+
 			]);
 
 		// list($employee, $departments, $employeeDepartmentIds) = $this->EmployeeService->showEmployee($employee);

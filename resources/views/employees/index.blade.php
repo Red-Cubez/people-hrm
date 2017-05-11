@@ -66,13 +66,20 @@
 
                     <!-- Delete Button -->
                     <td>
-                        <form action="{{ url('employees/'.$employee->id) }}" method="POST">
+                          <form action="{{ url('employees/'.$employee->id) }}" method="POST">
+                            {{ csrf_field() }}
+                            {{ method_field('GET') }}
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fa fa-trash">View</i>
+                            </button>
+                        </form>
+                      {{--   <form action="{{ url('employees/'.$employee->id) }}" method="POST">
                             {{ csrf_field() }}
                             {{ method_field('GET') }}
                             <button type="submit" class="btn btn-danger">
                                 <i class="fa fa-trash">EDIT</i>
                             </button>
-                        </form>
+                        </form> --}}
                         <form action="{{ url('employees/'.$employee->id) }}" method="POST">
                             {{ csrf_field() }}
                             {{ method_field('DELETE') }}

@@ -13,6 +13,26 @@
 
     </div>
     <div>
+
+        <label for="normalHoursPerWeek" class="control-label">Normal Hours / Week : </label>
+
+
+            {{$company->normaHoursPerWeek}}
+
+    </div>
+    <div>
+
+        <label for="applyOverTimeRule" class="control-label">Over Time Rule : </label>
+
+
+            @if(($company->applyOverTimeRule)==1)
+            Yes
+            @elseif(($company->applyOverTimeRule==0))
+            No
+            @endif
+
+    </div>
+    <div>
         <label for="contactPerson" class="control-label">Street Line 1 : </label>
 
             {{$company->address->streetLine1 }}
@@ -64,6 +84,6 @@
                         </form>
 
 </div>
-     @include('companyProjects/showProjects') 
+     @include('companyProjects/showProjects')
 
 @endsection

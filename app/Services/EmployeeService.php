@@ -48,6 +48,7 @@ class EmployeeService implements IEmployeeService {
 		$employee->terminationDate = $request->terminationDate;
 		$employee->jobTitle = $request->jobTitle;
 		$employee->annualSalary = $request->annualSalary;
+		$employee->overTimeRate = $request->overTimeRate;
 		$employee->hourlyRate = $request->hourlyRate;
 		$employee->save();
 		$this->createOrUpdateEmployeeAddress($request, $employee->address, $employee->id);

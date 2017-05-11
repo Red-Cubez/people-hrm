@@ -43,6 +43,7 @@ class CompanyController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(Request $request) {
+		//dd($request);
 		$this->CompanyService->createCompany($request);
 
 		return redirect('/companies');
@@ -58,10 +59,10 @@ class CompanyController extends Controller {
 	public function show(Company $company) {
 		//below query is nothing,its just to use companyaddress model in this controller.will be handled soon
 		list($company, $CompanyAddress) = $this->CompanyService->getCompanyAddressAndCompanyProjects($company);
-      
+
 		//	$companyAddress = CompanyAddress::orderBy('created_at', 'asc')->where('company_id', '$company')->get();
 		///dd($companyAddress[]);
-		return view('companies/showCompany', 
+		return view('companies/showCompany',
 			['company' => $company],
 			['CompanyAddress' => $CompanyAddress]
 

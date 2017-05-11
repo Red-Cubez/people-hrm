@@ -35,10 +35,17 @@
             <input type="number" name="annualSalary" id="employee-annualSalary" class="form-control" @if(isset($employee)) value="{{ $employee->annualSalary }}" @else placeholder="Annual Salary" @endif>
         </div>
     </div>
+
     <div class="form-group">
         <label for="name" class="col-sm-3 control-label">Hourly Rate</label>
         <div class="col-sm-6">
             <input type="number" name="hourlyRate" id="employee-hourlyRate" class="form-control" @if(isset($employee)) value="{{ $employee->hourlyRate }}" @else placeholder="Hourly Rate" @endif>
+        </div>
+    </div>
+     <div class="form-group">
+        <label for="Over time rate" class="col-sm-3 control-label">Over Time Rate</label>
+        <div class="col-sm-6">
+            <input type="number" step="any" name="overTimeRate" id="employee-overTimeRate" class="form-control" @if(isset($employee)) value="{{ $employee->overTimeRate }}" @else placeholder="Over Time Rate" @endif>
         </div>
     </div>
     @include('address/addressForm');

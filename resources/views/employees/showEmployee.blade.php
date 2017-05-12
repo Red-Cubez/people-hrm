@@ -82,7 +82,7 @@
 
       </div>
 
-      @include('employees/showEmployeeClientProjectsForm')
-      @include('employees/showEmployeeCompanyProjectsForm')
-
+     {{--  @include('employees/showEmployeeClientProjects')
+      @include('employees/showEmployeeCompanyProjects')
+ --}}
 @endsection

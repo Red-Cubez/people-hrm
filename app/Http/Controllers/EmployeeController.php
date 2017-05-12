@@ -60,24 +60,33 @@ class EmployeeController extends Controller {
 	 */
 	public function show(Employee $employee) {
 
-		list($employee, $departments, $employeeDepartmentIds, $sumOfTotalHoursWorked, $isWorkingOverTime, $employeeClientProjects) = $this->EmployeeService->showEmployee($employee);
+		// list($employee, $departments, $employeeDepartmentIds, $sumOfTotalHoursWorked, $isWorkingOverTime, $employeeClientProjects,
+		// 	$employeeCompanyProjects, $clientNames, $companyNames) = $this->EmployeeService->showEmployee($employee);
 
-		return view('employees/showEmployeeForm',
-			['employee' => $employee,
+		//return view('employees/showEmployee');
+		// ['employee' => $employee,
+		// 	'departments' => $departments,
+		// 	'employeeDepartmentIds' => $employeeDepartmentIds,
+		// 	'sumOfTotalHoursWorked' => $sumOfTotalHoursWorked,
+		// 	'isWorkingOverTime' => $isWorkingOverTime,
+		// 	'employeeClientProjects' => $employeeClientProjects,
+		// 	'employeeCompanyProjects' => $employeeCompanyProjects,
+		// 	'clientNames' => $clientNames,
+		// 	'companyNames' => $companyNames,
+
+		//]);
+
+		// TODO Get all available departments from Department Service;
+		//$departments = Department::orderBy('created_at', 'asc')->get();
+
+		$employeeModel = $this->EmployeeService->showEmployee($employee);
+
+		return view('employees/showEmployee',
+			['employeeModel' => $employeeModel,
+				// 'employee' => $employee, //
 				'departments' => $departments,
-				'employeeDepartmentIds' => $employeeDepartmentIds,
-				'sumOfTotalHoursWorked' => $sumOfTotalHoursWorked,
-				'isWorkingOverTime' => $isWorkingOverTime,
-				'employeeClientProjects' => $employeeClientProjects,
-
 			]);
 
-		// list($employee, $departments, $employeeDepartmentIds) = $this->EmployeeService->showEmployee($employee);
-		// return view('employees/update',
-		// 	['employee' => $employee,
-		// 		'departments' => $departments,
-		// 		'employeeDepartmentIds' => $employeeDepartmentIds,
-		// 	]);
 	}
 
 	/**

@@ -7,6 +7,7 @@ use People\Models\Department;
 use People\Models\Employee;
 use People\Models\EmployeeAddress;
 use People\Models\ProjectResource;
+use People\PresentationModels\Employee\EmployeeModel;
 use People\Services\Interfaces\IEmployeeService;
 
 class EmployeeService implements IEmployeeService {
@@ -78,49 +79,127 @@ class EmployeeService implements IEmployeeService {
 		$this->createOrUpdateEmployee($request, $employee);
 
 	}
+
+	private function getHoursEngagedOnProjects($employeeId) {
+		$hoursEngaged;
+		$clientProjectResources = ProjectResource::where('employee_id', $employeeId)->get();
+		$clientProjectResources = CompanyProjectResource::where('employee_id', $employeeId)->get();
+		// foreach ($variable as $key => $value) {
+		// 	# code...
+		// }
+
+	}
+
 	public function showEmployee($employee) {
 
-		$employeeDepartmentIds = [];
+		$employeeModel = new EmployeeModel();
+
+		$employeeModel->employeeDepartmentIds = [];
 		foreach ($employee->departments as $department) {
 
-			array_push($employeeDepartmentIds, $department->id);
+			array_push($employeeModel->employeeDepartmentIds, $department->id);
 		}
-
-		$departments = Department::orderBy('created_at', 'asc')->get();
 
 		$totalHoursOnClientProjects = 0;
 		$clientProjectResources = ProjectResource::where('employee_id', $employee->id)->get();
+		$clientProjectResources = CompanyProjectResource::where('employee_id', $employee->id)->get();
 
-		$employeeClientProjectIds = [];
-		$employeeClientProjects = [];
 		foreach ($clientProjectResources as $clientProjectResource) {
+			$projectModel = new EmployeeProjectModel();
+
+			$projectModel->clientName = $clientProjectResource->clientProject->client->name;
+			$projectModel->projectId = $clientProjectResource->clientProject->id;
 
 			$totalHoursOnClientProjects = $totalHoursOnClientProjects + $clientProjectResource->hoursPerWeek;
 
-			$employeeClientProjectIds[] = $clientProjectResource->client_project_id;
+			array_push($employeeModel->clientProjects, $projectModel);
+		}
+		$employeeModel->totalHoursOnClientProjects = $totalHoursOnClientProjects;
+//TODO same thing for Company projects
+		// // foreach ($clientProjectResources as $clientProjectResource) {
+		// // 			$projectModel = new EmployeeProjectModel();
+
+// // 			$projectModel->clientName = $clientProjectResource->clientProject->client->name;
+		// // 			$projectModel->projectId = $clientProjectResource->clientProject->id;
+
+// // 			array_push($employeeModel->clientProjects, $projectModel);
+
+// 		}
+
+// 		$employeeClientProjectIds = [];
+		// 		$employeeClientProjects = [];
+		// 		$employeeCompanyProjectIds = [];
+		// 		$employeeCompanyProjects = [];
+		// 		$clientNames = [];
+		// 		$companyNames = [];
+		// //
+		// 		$employeeModels = [];
+
+		//dd($clientProjectResources[0]->clientProject;
+
+		foreach ($clientProjectResources as $clientProjectResource) {
+			$employeeModel = new EmployeeModel();
+			$employeeModel->clientName = $clientProjectResource->clientProject->client->name;
+			$employeeModel->clientId = $clientProjectResource->clientProject->client->id;
+
+			array_push($employeeModels, $employeeModel);
+
+			// 	// dd($clientProjectResource->clientProject->client);
+
+			$totalHoursOnClientProjects = $totalHoursOnClientProjects + $clientProjectResource->hoursPerWeek;
+
+			// 	// $employeeClientProjectIds[] = $clientProjectResource->client_project_id;
 
 		}
+		//dd($totalHoursOnClientProjects);
+		//dd($employeeModels);
+		//dd($employeeModels);
 
 		$totalHoursOnCompanyProjects = 0;
 		$companyProjectResources = CompanyProjectResource::where('employee_id', $employee->id)->get();
 
 		foreach ($companyProjectResources as $companyProjectResource) {
 
+			$companyProjectResource->companyProject = $companyProjectResource->companyproject->company->name;
+			$companyProjectResource->companyId = $companyProjectResource->companyproject->company->name;
+			array_push($employeeModels, $employeeModel);
 			$totalHoursOnCompanyProjects = $totalHoursOnCompanyProjects + $companyProjectResource->hoursPerWeek;
-		}
 
-		$sumOfTotalHoursWorked = $totalHoursOnClientProjects + $totalHoursOnCompanyProjects;
-		if ($sumOfTotalHoursWorked > 40) {
-			$isWorkingOverTime = 1;
-		} else {
-			$isWorkingOverTime = NULL;
 		}
+		$employeeModel->totalHoursOnCompanyProjects = $totalHoursOnCompanyProjects;
+		// $totalHoursWorked = $totalHoursOnClientProjects + $totalHoursOnCompanyProjects;
 
-		foreach ($employeeClientProjectIds as $employeeClientProjectId) {
-			$employeeClientProjects[] = ClientProject::where('id', $employeeClientProjectId)->get();
-		}
-		//dd($employeeClientProjects);
-		return array($employee, $departments, $employeeDepartmentIds, $sumOfTotalHoursWorked, $isWorkingOverTime, $employeeClientProjects);
+		// array_push($employeeModels, $sumOfTotalHoursWorked);
+		// dd($employeeModels);
+
+		// if ($sumOfTotalHoursWorked > 40) {
+		// 	$isWorkingOverTime = 1;
+		// } else {
+		// 	$isWorkingOverTime = NULL;
+		// }
+
+		// foreach ($employeeClientProjectIds as $employeeClientProjectId) {
+		// 	$employeeClientProjects[] = ClientProject::where('id', $employeeClientProjectId)->get();
+
+		// }
+
+		// foreach ($employeeCompanyProjectIds as $employeeCompanyProjectId) {
+		// 	$employeeCompanyProjects[] = CompanyProject::where('id', $employeeCompanyProjectId)->get();
+		// }
+
+		// foreach ($employeeClientProjects as $employeeClientProject) {
+
+		// 	$clientNames[] = Client::where('id', $employeeClientProject[0]->client_id)->get();
+		// }
+
+		// foreach ($employeeClientProjects as $employeeClientProject) {
+
+		// 	$companyNames[] = Company::where('id', $employeeClientProject[0]->company_id)->get();
+		// }
+
+		return $employeeModel;
+		// return array($employee, $departments, $employeeDepartmentIds, $sumOfTotalHoursWorked, $isWorkingOverTime,
+		// 	$employeeClientProjects, $employeeCompanyProjects, $clientNames, $companyNames);
 
 	}
 

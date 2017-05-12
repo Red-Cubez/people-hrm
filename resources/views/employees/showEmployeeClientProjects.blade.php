@@ -8,15 +8,10 @@
                     <table class="table table-striped task-table">
                         <!-- Table Headings -->
                         <thead>
-                            <th>Name </th>
-                            <th>Expected Start Date</th>
-                            <th>Expected End Date</th>
-                            <th>Actual Start Date</th>
-                            <th>Actual End Date</th>
-                            <th>Budget</th>
-                            <th>Cost</th>
-                            <th>Operations</th>
-
+                            <th>Project Name </th>
+                            <th>Client Name</th>
+                            <th>Start Date</th>
+                            <th>Hours Per Week</th>
                         </thead>
                         <!-- Table Body -->
                         <tbody>
@@ -27,22 +22,13 @@
                                         <div>{{ $employeeClientProject[0]->name }}</div>
                                     </td>
                                      <td class="table-text">
-                                        <div>{{ $employeeClientProject[0]->expectedStartDate }}</div>
+                                        <div>{{ "client name"}}</div>
                                     </td>
                                      <td class="table-text">
-                                        <div>{{ $employeeClientProject[0]->expectedEndDate }}</div>
-                                    </td>
-                                    <td class="table-text">
                                         <div>{{ $employeeClientProject[0]->actualStartDate }}</div>
                                     </td>
                                     <td class="table-text">
-                                        <div>{{ $employeeClientProject[0]->actualEndDate }}</div>
-                                    </td>
-                                    <td class="table-text">
-                                        <div>{{ $employeeClientProject[0]->budget}}</div>
-                                    </td>
-                                    <td class="table-text">
-                                        <div>{{ $employeeClientProject[0]->cost }}</div>
+                                        <div>{{ $employeeClientProject[0]->hoursPerWeek }}</div>
                                     </td>
 
 
@@ -51,5 +37,6 @@
                         </tbody>
                     </table>
                 </div>
-        @endif}
-}
+        @endif
+
+

@@ -194,8 +194,6 @@ class EmployeeService implements IEmployeeService {
 				$employeeModel->companyProjects[] = new EmployeeProjectModel;
 			}
 
-			// dd($employeeModel->companyProjects);
-
 			array_push($employeeModel->companyProjects, $projectModel);
 		}
 		$employeeModel->totalHoursOnCompanyProjects = $totalHoursOnCompanyProjects;

@@ -3,7 +3,7 @@
                     <h3>Client Projects</h3>
                 </div>
                 <div class="panel-body">
-@if (isset($employeeModel->clientProjects))
+@if (!is_null($employeeModel->clientProjects))
 
                     <table class="table table-striped task-table">
                         <!-- Table Headings -->

@@ -137,7 +137,7 @@ class EmployeeService implements IEmployeeService {
 		$employeeModel->city = $employee->address->city;
 
 		$clientProjectResources = ProjectResource::where('employee_id', $employee->id)->get();
-		// dd($clientProjectResources);
+
 		foreach ($clientProjectResources as $clientProjectResource) {
 			$projectModel = new EmployeeProjectModel();
 

@@ -5,8 +5,6 @@ namespace People\PresentationModels\Employee;
 class EmployeeModel {
 
 	public function __construct() {
-		// $this->companyProjects[] = new EmployeeProjectModel;
-		// $this->clientProjects[] = new EmployeeProjectModel;
 	}
 
 	public $employeeId;

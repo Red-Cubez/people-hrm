@@ -12,7 +12,6 @@ class CompanyService implements ICompanyService {
 		if (!isset($companyAddress)) {
 			$companyAddress = new CompanyAddress();
 		}
-
 		$companyAddress->streetLine1 = $userRequest->streetLine1;
 		$companyAddress->streetLine2 = $userRequest->streetLine2;
 		$companyAddress->country = $userRequest->country;
@@ -24,8 +23,6 @@ class CompanyService implements ICompanyService {
 	public function getCompanyAddressAndCompanyProjects($company) {
 
 		$companyAddress = $company->address;
-		//$companyProjects=CompanyProject::orderBy('created_at')->where('company_id',$company->id)->get();
-
 		return array($company, $companyAddress);
 
 	}
@@ -61,8 +58,6 @@ class CompanyService implements ICompanyService {
 	}
 
 	public function deleteCompany($company) {
-		// $company->CompanyProjectResource()->detach();
-		// $company->CompanyProject()->detach();
 		$company->delete();
 	}
 

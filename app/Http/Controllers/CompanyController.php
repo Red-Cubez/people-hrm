@@ -43,7 +43,7 @@ class CompanyController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(Request $request) {
-		//dd($request);
+
 		$this->CompanyService->createCompany($request);
 
 		return redirect('/companies');

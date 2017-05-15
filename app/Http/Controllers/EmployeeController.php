@@ -5,15 +5,17 @@ namespace People\Http\Controllers;
 use Illuminate\Http\Request;
 use People\Models\Employee;
 use People\Services\EmployeeService;
+use People\Services\Interfaces\IDepartmentService;
 use People\Services\Interfaces\IEmployeeService;
 
 class EmployeeController extends Controller {
 
 	public $EmployeeService;
 
-	public function __construct(IEmployeeService $employeeService) {
+	public function __construct(IEmployeeService $employeeService, IDepartmentService $departmentService) {
 
 		$this->EmployeeService = $employeeService;
+		$this->DepartmentService = $departmentService;
 	}
 	/**
 	 * Display a listing of the resource.
@@ -23,7 +25,7 @@ class EmployeeController extends Controller {
 	public function index() {
 
 		$employees = $this->EmployeeService->getAllEmployees();
-		$departments = $this->EmployeeService->getAllDepartments();
+		$departments = $this->DepartmentService->getAllDepartments();
 
 		return view('employees.index', ['employees' => $employees, 'departments' => $departments]);
 	}

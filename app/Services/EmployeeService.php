@@ -16,8 +16,8 @@ class EmployeeService implements IEmployeeService {
 	public function getAllEmployees() {
 
 		$employees = Employee::orderBy('created_at', 'asc')->get();
-		$departments = Department::orderBy('created_at', 'asc')->get();
-		return array($employees, $departments);
+
+		return $employees;
 	}
 
 	public function deleteEmployee($employee) {
@@ -44,9 +44,6 @@ class EmployeeService implements IEmployeeService {
 
 	public function createOrUpdateEmployee($request, $employee) {
 
-		// if (!isset($employee)) {
-		// 	$employee = new Employee();
-		// }
 		$employee->firstName = $request->firstName;
 		$employee->lastName = $request->lastName;
 		$employee->hireDate = $request->hireDate;
@@ -55,7 +52,9 @@ class EmployeeService implements IEmployeeService {
 		$employee->annualSalary = $request->annualSalary;
 		$employee->overTimeRate = $request->overTimeRate;
 		$employee->hourlyRate = $request->hourlyRate;
+
 		$employee->save();
+
 		$this->createOrUpdateEmployeeAddress($request, $employee->address, $employee->id);
 
 		if (count($request->departmentList) > 0) {
@@ -81,26 +80,18 @@ class EmployeeService implements IEmployeeService {
 
 	}
 
-	private function getHoursEngagedOnProjects($employeeId) {
-		$hoursEngaged;
-		$clientProjectResources = ProjectResource::where('employee_id', $employeeId)->get();
-		$clientProjectResources = CompanyProjectResource::where('employee_id', $employeeId)->get();
-		// foreach ($variable as $key => $value) {
-		// 	# code...
-		// }
-
+	public function getAllDepartments() {
+		$departments = Department::orderBy('created_at', 'asc')->get();
+		return $departments;
 	}
-
 	public function editEmployee($employee) {
 		$editEmployeeModel = new EditEmployeeModel();
 
 		$editEmployeeModel->employeeDepartmentIds = [];
-		// foreach ($editEmployeeModel->departments as $department) {
+		foreach ($employee->departments as $department) {
 
-		// 	array_push($editEmployeeModel->employeeDepartmentIds, $department->id);
-		// }
-
-		//$employee = Employee::where('id', $editRequest->id)->get();
+			array_push($editEmployeeModel->employeeDepartmentIds, $department->id);
+		}
 
 		$editEmployeeModel->employeeId = $employee->id;
 		$editEmployeeModel->firstName = $employee->firstName;
@@ -121,20 +112,18 @@ class EmployeeService implements IEmployeeService {
 		return $editEmployeeModel;
 	}
 
-	public function showEmployee($employee) {
+	public function viewEmployee($employee) {
 
 		$employeeModel = new EmployeeModel();
 
 		$employeeModel->employeeDepartmentIds = [];
 		foreach ($employee->departments as $department) {
 
-			array_push($employeeModel->employeeDepartmentIds, $department->id);
+			array_push($employeeModel->employeeDepartmentIds, $department->name);
 		}
 
 		$totalHoursOnClientProjects = 0;
 		$totalHoursOnCompanyProjects = 0;
-		$clientProjectResources = ProjectResource::where('employee_id', $employee->id)->get();
-		$companyProjectResources = CompanyProjectResource::where('employee_id', $employee->id)->get();
 
 		$employeeModel->employeeId = $employee->id;
 		$employeeModel->firstName = $employee->firstName;
@@ -142,7 +131,13 @@ class EmployeeService implements IEmployeeService {
 		$employeeModel->hireDate = $employee->hireDate;
 		$employeeModel->overTimeRate = $employee->OvertimeRate;
 		$employeeModel->streetLine1 = $employee->address->streetLine1;
+		$employeeModel->streetLine2 = $employee->address->streetLine2;
+		$employeeModel->country = $employee->address->country;
+		$employeeModel->stateProvince = $employee->address->stateProvince;
+		$employeeModel->city = $employee->address->city;
 
+		$clientProjectResources = ProjectResource::where('employee_id', $employee->id)->get();
+		// dd($clientProjectResources);
 		foreach ($clientProjectResources as $clientProjectResource) {
 			$projectModel = new EmployeeProjectModel();
 
@@ -151,15 +146,28 @@ class EmployeeService implements IEmployeeService {
 			$projectModel->projectName = $clientProjectResource->clientProject->name;
 			$projectModel->clientId = $clientProjectResource->clientProject->client_id;
 			$projectModel->projectStartDate = $clientProjectResource->startDate;
+			$projectModel->projectEndDate = $clientProjectResource->endDate;
 			$projectModel->hoursPerWeek = $clientProjectResource->hoursPerWeek;
 
-			$totalHoursOnClientProjects = $totalHoursOnClientProjects + $clientProjectResource->hoursPerWeek;
+			$currentDate = date("Y-m-d");
+			$projectEndDate = $projectModel->projectEndDate;
+			if ($currentDate > $projectEndDate) {
+				$projectModel->isActive = False;
+			} elseif ($currentDate <= $projectEndDate) {
 
+				$projectModel->isActive = True;
+				$totalHoursOnClientProjects = $totalHoursOnClientProjects + $clientProjectResource->hoursPerWeek;
+			}
+
+			if (is_null($employeeModel->clientProjects)) {
+				$employeeModel->clientProjects[] = new EmployeeProjectModel;
+			}
 			array_push($employeeModel->clientProjects, $projectModel);
 		}
 
 		$employeeModel->totalHoursOnClientProjects = $totalHoursOnClientProjects;
 
+		$companyProjectResources = CompanyProjectResource::where('employee_id', $employee->id)->get();
 		foreach ($companyProjectResources as $companyProjectResource) {
 			$projectModel = new EmployeeProjectModel();
 
@@ -167,14 +175,29 @@ class EmployeeService implements IEmployeeService {
 			$projectModel->projectId = $companyProjectResource->companyProject->id;
 			$projectModel->projectName = $companyProjectResource->companyProject->name;
 			$projectModel->clientId = $companyProjectResource->companyProject->company_id;
-			$projectModel->projectStartDate = $companyProjectResource->startDate;
+			$projectModel->projectStartDate = $companyProjectResource->actualStartDate;
+			$projectModel->projectEndDate = $companyProjectResource->actualEndDate;
 			$projectModel->hoursPerWeek = $companyProjectResource->hoursPerWeek;
 
-			$totalHoursOnCompanyProjects = $totalHoursOnCompanyProjects + $companyProjectResource->hoursPerWeek;
+			$currentDate = date("Y-m-d");
+			$projectEndDate = $projectModel->projectEndDate;
+			if ($currentDate > $projectEndDate) {
+				$projectModel->isActive = False;
+
+			} elseif ($currentDate <= $projectEndDate) {
+
+				$projectModel->isActive = True;
+				$totalHoursOnCompanyProjects = $totalHoursOnCompanyProjects + $companyProjectResource->hoursPerWeek;
+			}
+
+			if (is_null($employeeModel->companyProjects)) {
+				$employeeModel->companyProjects[] = new EmployeeProjectModel;
+			}
+
+			// dd($employeeModel->companyProjects);
 
 			array_push($employeeModel->companyProjects, $projectModel);
 		}
-
 		$employeeModel->totalHoursOnCompanyProjects = $totalHoursOnCompanyProjects;
 
 		if (($totalHoursOnCompanyProjects) + ($totalHoursOnClientProjects) > 40) {
@@ -182,9 +205,7 @@ class EmployeeService implements IEmployeeService {
 		} else {
 			$employeeModel->isWorkingOverTime = NULL;
 		}
-
 		return $employeeModel;
-
 	}
 
 }

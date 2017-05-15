@@ -40,9 +40,41 @@
     <div>
 
         <label for="name" class="control-label">streetLine1 : </label>
-
-
             {{$employeeModel->streetLine1}}
+    </div>
+      <div>
+
+        <label for="name" class="control-label">streetLine2 : </label>
+
+
+            {{$employeeModel->streetLine2}}
+
+    </div>
+
+    <div>
+
+        <label for="name" class="control-label">country : </label>
+
+
+            {{$employeeModel->country}}
+
+    </div>
+
+    <div>
+
+        <label for="name" class="control-label">state / Province : </label>
+
+
+            {{$employeeModel->stateProvince}}
+
+    </div>
+
+     <div>
+
+        <label for="name" class="control-label">city : </label>
+
+
+            {{$employeeModel->city}}
 
     </div>
 
@@ -50,11 +82,11 @@
 
         <label for="name" class="control-label">Departments : </label>
 
-            {{--  @foreach ($departments as $department)
-                    {{$department->name}}
+             @foreach ($employeeModel->employeeDepartmentIds as $departmentName)
+                    {{$departmentName}}
                     {{ "|" }}
               @endforeach
- --}}
+
     </div>
 
 

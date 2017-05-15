@@ -1,3 +1,4 @@
+
     <div class="form-group">
         <label for="name" class="col-sm-3 control-label">First Name</label>
         <div class="col-sm-6">
@@ -51,17 +52,17 @@
         @include('address/addressForm');
     <div class="form-group">
      <label for="name" class="col-sm-3 control-label">Select Department</label>
-     {{-- <div class="col-sm-6">
+     <div class="col-sm-6">
         @if (count($departments) > 0)
         <select class="form-control" name="departmentList[]" multiple="multiple" id="departmentList">
            @foreach ($departments as $department)
            <option  value="{{$department->id}}"
                     id="department_{{$department->name}}"
-                    @if(isset($employeeDepartmentIds) && in_array($department->id, $employeeDepartmentIds)) selected="selected" @endif   >{{ $department->name}} </option>
+                    @if(isset($editEmployeeModel->employeeDepartmentIds) && in_array($department->id, $editEmployeeModel->employeeDepartmentIds)) selected="selected" @endif   >{{ $department->name}} </option>
            @endforeach
         </select>
-     </div> --}}
-       {{--  @endif --}}
+     </div>
+        @endif
     </div>
     <div class="form-group">
         <div class="col-sm-offset-3 col-sm-6">

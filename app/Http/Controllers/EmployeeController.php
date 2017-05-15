@@ -22,7 +22,8 @@ class EmployeeController extends Controller {
 	 */
 	public function index() {
 
-		list($employees, $departments) = $this->EmployeeService->getAllEmployees();
+		$employees = $this->EmployeeService->getAllEmployees();
+		$departments = $this->EmployeeService->getAllDepartments();
 
 		return view('employees.index', ['employees' => $employees, 'departments' => $departments]);
 	}
@@ -60,31 +61,11 @@ class EmployeeController extends Controller {
 	 */
 	public function show(Employee $employee) {
 
-		// list($employee, $departments, $employeeDepartmentIds, $sumOfTotalHoursWorked, $isWorkingOverTime, $employeeClientProjects,
-		// 	$employeeCompanyProjects, $clientNames, $companyNames) = $this->EmployeeService->showEmployee($employee);
-
-		//return view('employees/showEmployee');
-		// ['employee' => $employee,
-		// 	'departments' => $departments,
-		// 	'employeeDepartmentIds' => $employeeDepartmentIds,
-		// 	'sumOfTotalHoursWorked' => $sumOfTotalHoursWorked,
-		// 	'isWorkingOverTime' => $isWorkingOverTime,
-		// 	'employeeClientProjects' => $employeeClientProjects,
-		// 	'employeeCompanyProjects' => $employeeCompanyProjects,
-		// 	'clientNames' => $clientNames,
-		// 	'companyNames' => $companyNames,
-
-		//]);
-
-		// TODO Get all available departments from Department Service;
-		//$departments = Department::orderBy('created_at', 'asc')->get();
-
-		$employeeModel = $this->EmployeeService->showEmployee($employee);
-		//dd($employeeModel);
+		$employeeModel = $this->EmployeeService->viewEmployee($employee);
+		$departments = $this->EmployeeService->getAllDepartments();
 		return view('employees/showEmployee',
 			['employeeModel' => $employeeModel,
-				// 'employee' => $employee, //
-				//'departments' => $departments,
+				'departments' => $departments,
 			]);
 
 	}
@@ -98,11 +79,10 @@ class EmployeeController extends Controller {
 	public function edit(Employee $employee) {
 
 		$editEmployeeModel = $this->EmployeeService->editEmployee($employee);
-
+		$departments = $this->EmployeeService->getAllDepartments();
 		return view('employees/update',
 			['editEmployeeModel' => $editEmployeeModel,
-				//'departments' => $departments,
-				//'employeeDepartmentIds' => $employeeDepartmentIds,
+				'departments' => $departments,
 			]);
 
 	}

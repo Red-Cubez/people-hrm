@@ -3,7 +3,6 @@
 namespace People\Services;
 use People\Models\Company;
 use People\Models\CompanyAddress;
-use People\Models\CompanyProject;
 use People\Services\Interfaces\ICompanyService;
 
 class CompanyService implements ICompanyService {
@@ -13,7 +12,6 @@ class CompanyService implements ICompanyService {
 		if (!isset($companyAddress)) {
 			$companyAddress = new CompanyAddress();
 		}
-
 		$companyAddress->streetLine1 = $userRequest->streetLine1;
 		$companyAddress->streetLine2 = $userRequest->streetLine2;
 		$companyAddress->country = $userRequest->country;
@@ -23,10 +21,8 @@ class CompanyService implements ICompanyService {
 		$companyAddress->save();
 	}
 	public function getCompanyAddressAndCompanyProjects($company) {
-		
+
 		$companyAddress = $company->address;
-		//$companyProjects=CompanyProject::orderBy('created_at')->where('company_id',$company->id)->get();
-	
 		return array($company, $companyAddress);
 
 	}
@@ -35,6 +31,12 @@ class CompanyService implements ICompanyService {
 
 		$company = new Company();
 		$company->name = $request->name;
+		$company->normaHoursPerWeek = $request->normalHoursPerWeek;
+		$company->applyOverTimeRule = $request->applyOverTimeRule;
+		if ($request->applyOverTimeRule == NULL) {
+			$company->applyOverTimeRule = 0;
+
+		}
 		$company->save();
 
 		$this->createOrUpdateCompanyAddress($request, null, $company->id);
@@ -42,6 +44,13 @@ class CompanyService implements ICompanyService {
 	}
 	public function updateCompany($updateRequest, $company) {
 		$company->name = $updateRequest->name;
+		$company->normaHoursPerWeek = $updateRequest->normalHoursPerWeek;
+		$company->applyOverTimeRule = $updateRequest->applyOverTimeRule;
+
+		if ($updateRequest->applyOverTimeRule == NULL) {
+			$company->applyOverTimeRule = 0;
+
+		}
 
 		$this->createOrUpdateCompanyAddress($updateRequest, $company->address, $company->id);
 
@@ -49,8 +58,6 @@ class CompanyService implements ICompanyService {
 	}
 
 	public function deleteCompany($company) {
-		// $company->CompanyProjectResource()->detach();
-		// $company->CompanyProject()->detach();
 		$company->delete();
 	}
 

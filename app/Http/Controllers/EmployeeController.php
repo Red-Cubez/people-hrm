@@ -3,20 +3,19 @@
 namespace People\Http\Controllers;
 
 use Illuminate\Http\Request;
-use People\Models\Company;
 use People\Models\Employee;
-use People\Models\Department;
 use People\Services\EmployeeService;
+use People\Services\Interfaces\IDepartmentService;
 use People\Services\Interfaces\IEmployeeService;
-
 
 class EmployeeController extends Controller {
 
 	public $EmployeeService;
 
-	public function __construct(IEmployeeService $employeeService) {
+	public function __construct(IEmployeeService $employeeService, IDepartmentService $departmentService) {
 
 		$this->EmployeeService = $employeeService;
+		$this->DepartmentService = $departmentService;
 	}
 	/**
 	 * Display a listing of the resource.
@@ -25,9 +24,10 @@ class EmployeeController extends Controller {
 	 */
 	public function index() {
 
-		list($employees,$departments) = $this->EmployeeService->getAllEmployees();
+		$employees = $this->EmployeeService->getAllEmployees();
+		$departments = $this->DepartmentService->getAllDepartments();
 
-		return view('employees.index', ['employees' => $employees,'departments'=>$departments]);
+		return view('employees.index', ['employees' => $employees, 'departments' => $departments]);
 	}
 
 	/**
@@ -48,10 +48,10 @@ class EmployeeController extends Controller {
 	 */
 	public function store(Request $request) {
 
-			$this->EmployeeService->createEmployee($request);
+		$this->EmployeeService->createEmployee($request);
 
 		//TODO Get company properly
-		
+
 		return redirect('/employees');
 	}
 
@@ -63,12 +63,13 @@ class EmployeeController extends Controller {
 	 */
 	public function show(Employee $employee) {
 
-		list($employee,$departments,$employeeDepartmentIds) = $this->EmployeeService->showEmployee($employee);
-		return view('employees/update',
-			['employee' => $employee,
-			'departments'=>$departments,
-			'employeeDepartmentIds' => $employeeDepartmentIds,
+		$employeeModel = $this->EmployeeService->viewEmployee($employee);
+		$departments = $this->EmployeeService->getAllDepartments();
+		return view('employees/showEmployee',
+			['employeeModel' => $employeeModel,
+				'departments' => $departments,
 			]);
+
 	}
 
 	/**
@@ -79,6 +80,13 @@ class EmployeeController extends Controller {
 	 */
 	public function edit(Employee $employee) {
 
+		$editEmployeeModel = $this->EmployeeService->editEmployee($employee);
+		$departments = $this->EmployeeService->getAllDepartments();
+		return view('employees/update',
+			['editEmployeeModel' => $editEmployeeModel,
+				'departments' => $departments,
+			]);
+
 	}
 
 	/**
@@ -88,11 +96,11 @@ class EmployeeController extends Controller {
 	 * @param  \People\Models\Employee  $employee
 	 * @return \Illuminate\Http\Response
 	 */
-	
+
 	public function update(Request $request, Employee $employee) {
 
-       $this->EmployeeService->updateEmployee($request,$employee);
-        
+		$this->EmployeeService->updateEmployee($request, $employee);
+
 		return redirect('/employees');
 	}
 
@@ -105,7 +113,6 @@ class EmployeeController extends Controller {
 	public function destroy(Employee $employee) {
 		$this->EmployeeService->deleteEmployee($employee);
 
-		
 		return redirect('/employees');
 	}
 }

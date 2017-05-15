@@ -4,7 +4,7 @@
     <!-- Display Validation Errors -->
     @include('common.errors')
     <!-- New Employee Form -->
-    <form action="{{ url('employees/'.$employee->id)}}"
+    <form action="{{ url('employees/'.$editEmployeeModel->employeeId)}}"
       class="form-horizontal"
       method="POST">
       {{ csrf_field() }}

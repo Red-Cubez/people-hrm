@@ -1,5 +1,4 @@
 
-
 @if(isset($clientProjectid))
 <form action="{{ url('projectresources/') }}" method="POST" class="form-horizontal">
  {{ csrf_field() }}
@@ -11,9 +10,9 @@
  {{ csrf_field() }}
  {{ method_field('POST') }}
 
-@endif 
+@endif
 
- 
+
     <div class="form-group">
      <label class="col-sm-3 control-label">Title</label>
     <div class="col-sm-6">
@@ -39,48 +38,48 @@
 
     <div class="form-group">
      <label class="col-sm-3 control-label">Expected Start date</label>
-     <div class="col-sm-6">       
-     <input type="date" name="expectedStartDate" id="expectedStartDate" class="form-control" class="form-control" 
+     <div class="col-sm-6">
+     <input type="date" name="expectedStartDate" id="expectedStartDate" class="form-control" class="form-control"
       @if(isset($projectresources)) value="{{$projectresources[0]->expectedStartDate}}" @endif>
      </div>
      </div>
 
      <div class="form-group">
      <label class="col-sm-3 control-label">Expected End date</label>
-     <div class="col-sm-6">   
-     <input type="date" name="expectedEndDate" id="expectedEndDate" class="form-control" class="form-control" 
+     <div class="col-sm-6">
+     <input type="date" name="expectedEndDate" id="expectedEndDate" class="form-control" class="form-control"
      @if(isset($projectresources)) value="{{$projectresources[0]->expectedEndDate}}" @endif>
      </div>
      </div>
 
     <div class="form-group">
      <label class="col-sm-3 control-label">Actual Start date</label>
-     <div class="col-sm-6">   
-     <input type="date" name="actualStartDate" id="actualStartDate" class="form-control" class="form-control" 
+     <div class="col-sm-6">
+     <input type="date" name="actualStartDate" id="actualStartDate" class="form-control" class="form-control"
      @if(isset($projectresources)) value="{{$projectresources[0]->actualStartDate}}" @endif>
      </div>
      </div>
 
      <div class="form-group">
      <label class="col-sm-3 control-label">Actual End date</label>
-     <div class="col-sm-6">   
-     <input type="date" name="actualEndDate" id="title" class="actualEndDate" class="form-control" 
+     <div class="col-sm-6">
+     <input type="date" name="actualEndDate" id="title" class="actualEndDate" class="form-control"
      @if(isset($projectresources)) value="{{$projectresources[0]->actualEndDate}}" @endif>
      </div>
      </div>
 
      <div class="form-group">
      <label class="col-sm-3 control-label">Hourly billing Rate</label>
-     <div class="col-sm-6">   
-     <input type="Number" name="hourlyBillingRate" id="hourlyBillingRate" class="form-control" class="form-control" 
+     <div class="col-sm-6">
+     <input type="Number" name="hourlyBillingRate" id="hourlyBillingRate" class="form-control" class="form-control"
      @if(isset($projectresources)) value="{{$projectresources[0]->hourlyBillingRate}}" @endif>
      </div>
      </div>
 
      <div class="form-group">
      <label class="col-sm-3 control-label">Hours Per week</label>
-     <div class="col-sm-6">   
-     <input type="Number" name="hoursPerWeek" id="hoursPerWeek" class="form-control" class="form-control" 
+     <div class="col-sm-6">
+     <input type="Number" name="hoursPerWeek" id="hoursPerWeek" class="form-control" class="form-control"
      @if(isset($projectresources)) value="{{$projectresources[0]->hoursPerWeek}}" @endif>
      </div>
      </div>
@@ -92,7 +91,7 @@
       <i class="fa fa-trash"> Update </i>
       <input type="hidden" name="projectResourceId" value="{{ $projectresources[0]->id}}" class="form-control">
        <input type="hidden" name="companyProjectId" value="{{ $projectresources[0]->company_project_id}}" class="form-control">
-        <input type="hidden" name="clientProjectid" value="{{ $projectresources[0]->client_project_id}}">  
+        <input type="hidden" name="clientProjectid" value="{{ $projectresources[0]->client_project_id}}">
      @else
       <i class="fa fa-trash"> Add  </i>
      </button>
@@ -100,4 +99,4 @@
      </div>
      </div>
 
-</form>  
+</form>

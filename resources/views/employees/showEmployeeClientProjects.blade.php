@@ -1,5 +1,5 @@
 
- @if (count($employeeClientProjects) > 0)
+ @if (count($employeeModel->clientProjects) > 0)
               <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3>Client Projects</h3>
@@ -15,20 +15,20 @@
                         </thead>
                         <!-- Table Body -->
                         <tbody>
-                            @foreach ($employeeClientProjects as $employeeClientProject)
+                            @foreach ($employeeModel->clientProjects as $clientProject)
                                 <tr>
                                     <!-- clientProject Name -->
                                     <td class="table-text">
-                                        <div>{{ $employeeClientProject[0]->name }}</div>
+                                        <div>{{ $clientProject->projectName }}</div>
                                     </td>
                                      <td class="table-text">
-                                        <div>{{ "client name"}}</div>
+                                        <div>{{ $clientProject->clientName}}</div>
                                     </td>
                                      <td class="table-text">
-                                        <div>{{ $employeeClientProject[0]->actualStartDate }}</div>
+                                        <div>{{ $clientProject->projectStartDate }}</div>
                                     </td>
                                     <td class="table-text">
-                                        <div>{{ $employeeClientProject[0]->hoursPerWeek }}</div>
+                                        <div>{{ $clientProject->hoursPerWeek }}</div>
                                     </td>
 
 
@@ -38,5 +38,6 @@
                     </table>
                 </div>
         @endif
+
 
 

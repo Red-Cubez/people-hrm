@@ -9,7 +9,7 @@
         <label for="name" class="control-label">Name : </label>
 
 
-            {{$employee->firstName}}
+            {{$employeeModel->firstName}}
 
     </div>
     <div>
@@ -17,7 +17,7 @@
         <label for="name" class="control-label">Last Name : </label>
 
 
-            {{$employee->lastName}}
+            {{$employeeModel->lastName}}
 
     </div>
     <div>
@@ -25,7 +25,7 @@
         <label for="name" class="control-label">Hire Date : </label>
 
 
-            {{$employee->hireDate}}
+            {{$employeeModel->hireDate}}
 
     </div>
 
@@ -34,7 +34,7 @@
         <label for="name" class="control-label">Overtime Rate : </label>
 
 
-            {{$employee->overTimeRate}}
+            {{$employeeModel->overTimeRate}}
 
     </div>
     <div>
@@ -42,7 +42,7 @@
         <label for="name" class="control-label">streetLine1 : </label>
 
 
-            {{$employee->address->streetLine1}}
+            {{$employeeModel->streetLine1}}
 
     </div>
 
@@ -50,22 +50,22 @@
 
         <label for="name" class="control-label">Departments : </label>
 
-             @foreach ($departments as $department)
-                    {{-- {{$department->name}} --}}
+            {{--  @foreach ($departments as $department)
+                    {{$department->name}}
                     {{ "|" }}
               @endforeach
-
+ --}}
     </div>
 
 
         <label for="name" class="control-label">Hours Worked : </label>
 
 
-            {{$sumOfTotalHoursWorked}}
+             {{$employeeModel->totalHoursWorked()}}
 
 
 
-      <form action="{{ url('employees/'.$employee->id.'/edit') }}" method="POST">
+      <form action="{{ url('employees/'.$employeeModel->employeeId.'/edit') }}" method="POST">
                             {{ csrf_field() }}
                             {{ method_field('GET') }}
                             <button type="submit" class="btn btn-danger">
@@ -76,13 +76,14 @@
       <div>
 
       Employee is
-      @if(!isset($isWorkingOverTime))
-      Not
-      @endif Working Over Time.
+        @if(!isset($employeeModel->isWorkingOverTime))
+            Not
+        @endif
+      Working Over Time.
 
       </div>
 
-     {{--  @include('employees/showEmployeeClientProjects')
+      @include('employees/showEmployeeClientProjects')
       @include('employees/showEmployeeCompanyProjects')
- --}}
+
 @endsection

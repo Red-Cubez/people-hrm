@@ -80,11 +80,11 @@ class EmployeeController extends Controller {
 		//$departments = Department::orderBy('created_at', 'asc')->get();
 
 		$employeeModel = $this->EmployeeService->showEmployee($employee);
-
+		//dd($employeeModel);
 		return view('employees/showEmployee',
 			['employeeModel' => $employeeModel,
 				// 'employee' => $employee, //
-				'departments' => $departments,
+				//'departments' => $departments,
 			]);
 
 	}
@@ -97,11 +97,12 @@ class EmployeeController extends Controller {
 	 */
 	public function edit(Employee $employee) {
 
-		list($employee, $departments, $employeeDepartmentIds) = $this->EmployeeService->showEmployee($employee);
+		$editEmployeeModel = $this->EmployeeService->editEmployee($employee);
+
 		return view('employees/update',
-			['employee' => $employee,
-				'departments' => $departments,
-				'employeeDepartmentIds' => $employeeDepartmentIds,
+			['editEmployeeModel' => $editEmployeeModel,
+				//'departments' => $departments,
+				//'employeeDepartmentIds' => $employeeDepartmentIds,
 			]);
 
 	}

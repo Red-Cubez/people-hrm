@@ -8,5 +8,6 @@ interface IEmployeeService {
 	public function deleteEmployee($employee);
 	public function getAllEmployees();
 	public function showEmployee($employee);
+	public function EditEmployee($employee);
 
 }

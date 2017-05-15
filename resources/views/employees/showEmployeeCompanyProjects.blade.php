@@ -1,6 +1,6 @@
 
- @if (count($employeeCompanyProjects) > 0)
-              <div class="panel panel-default">
+ @if (($employeeModel->companyProjects))
+            <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3>Company Projects</h3>
                 </div>
@@ -16,20 +16,20 @@
                         </thead>
                         <!-- Table Body -->
                         <tbody>
-                            @foreach ($employeeModel->employeeCompanyProjects as $employeeClientProject )
+                            @foreach ($employeeModel->companyProjects as $companyProject )
                                 <tr>
                                     <!-- Project Name -->
                                     <td class="table-text">
-                                        <div>{{ $employeeClientProject[0]->name }}</div>
+                                        <div>{{ $companyProject->projectName }}</div>
                                     </td>
                                      <td class="table-text">
-                                        <div>{{ "company name" }}</div>
+                                        <div>{{ $companyProject->companyName}}</div>
                                     </td>
                                      <td class="table-text">
-                                        <div>{{ $employeeClientProject[0]->actualStartDate }}</div>
+                                        <div>{{ $companyProject->projectStartDate }}</div>
                                     </td>
                                     <td class="table-text">
-                                        <div>{{ $employeeClientProject[0]->hoursPerWeek }}</div>
+                                        <div>{{ $companyProject->hoursPerWeek }}</div>
                                     </td>
 
                                 </tr>
@@ -37,5 +37,6 @@
                         </tbody>
                     </table>
                 </div>
-        @endif
+  @endif
+
 

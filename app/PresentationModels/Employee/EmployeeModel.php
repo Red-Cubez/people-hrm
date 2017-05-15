@@ -10,6 +10,13 @@ class EmployeeModel {
 	}
 
 	public $employeeId;
+	public $firstName;
+	public $lastName;
+	public $hireDate;
+	public $overTimeRate;
+	public $streetLine1;
+	public $isWorkingOverTime;
+
 	public $companyName;
 	public $companyId;
 	public $employeeDepartmentIds;
@@ -18,8 +25,7 @@ class EmployeeModel {
 	public $totalHoursOnCompanyProjects;
 	public $totalHoursOnClientProjects;
 
-
-	public function totalHoursWorked {
-		return $totalHoursOnCompanyProjects + $totalHoursOnClientProjects;
+	public function totalHoursWorked() {
+		return ($this->totalHoursOnCompanyProjects) + ($this->totalHoursOnClientProjects);
 	}
 }

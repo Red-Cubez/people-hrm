@@ -159,10 +159,11 @@ class EmployeeService implements IEmployeeService {
 				$totalHoursOnClientProjects = $totalHoursOnClientProjects + $clientProjectResource->hoursPerWeek;
 			}
 
-			if (is_null($employeeModel->clientProjects)) {
+			if (is_null($employeeModel->clientProjects)&& (($projectModel->isActive)==True)) {
 				$employeeModel->clientProjects[] = new EmployeeProjectModel;
+                array_push($employeeModel->clientProjects, $projectModel);
 			}
-			array_push($employeeModel->clientProjects, $projectModel);
+
 		}
 
 		$employeeModel->totalHoursOnClientProjects = $totalHoursOnClientProjects;
@@ -190,11 +191,12 @@ class EmployeeService implements IEmployeeService {
 				$totalHoursOnCompanyProjects = $totalHoursOnCompanyProjects + $companyProjectResource->hoursPerWeek;
 			}
 
-			if (is_null($employeeModel->companyProjects)) {
+			if (is_null($employeeModel->companyProjects)&&(($projectModel->isActive)==True)) {
 				$employeeModel->companyProjects[] = new EmployeeProjectModel;
+                array_push($employeeModel->companyProjects, $projectModel);
 			}
 
-			array_push($employeeModel->companyProjects, $projectModel);
+
 		}
 		$employeeModel->totalHoursOnCompanyProjects = $totalHoursOnCompanyProjects;
 

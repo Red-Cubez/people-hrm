@@ -1,9 +1,9 @@
-<div class="panel panel-default">
+ <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3>Client Projects</h3>
                 </div>
                 <div class="panel-body">
-@if (!is_null($employeeModel->clientProjects))
+  @if (!is_null($employeeModel->clientProjects))
 
                     <table class="table table-striped task-table">
                         <!-- Table Headings -->
@@ -17,7 +17,7 @@
                         <!-- Table Body -->
                         <tbody>
                             @foreach ($employeeModel->clientProjects as $clientProject)
-                              @if($clientProject->isActive)
+
                                 <tr>
                                     <!-- clientProject Name -->
                                     <td class="table-text">
@@ -39,7 +39,7 @@
 
 
                                 </tr>
-                                @endif
+
                             @endforeach
                         </tbody>
                     </table>

@@ -69,9 +69,7 @@ class EmployeeController extends Controller {
 			['employeeModel' => $employeeModel,
 				'departments' => $departments,
 			]);
-
 	}
-
 	/**
 	 * Show the form for editing the specified resource.
 	 *

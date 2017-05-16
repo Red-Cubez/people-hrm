@@ -2,51 +2,51 @@
     <div class="form-group">
         <label for="name" class="col-sm-3 control-label">First Name</label>
         <div class="col-sm-6">
-            <input type="text" name="firstName" id="employee-firstName" class="form-control" @if(isset($editEmployeeModel->firstName)) value="{{ $editEmployeeModel->firstName }}" @else placeholder="First Name" @endif required >
+            <input type="text" name="firstName" id="employee-firstName" class="form-control" @if(isset($editEmployeeModel->employeeProfile->firstName)) value="{{ $editEmployeeModel->employeeProfile->firstName }}" @else placeholder="First Name" @endif required >
         </div>
     </div>
     <div class="form-group">
         <label for="name" class="col-sm-3 control-label">Last Name</label>
         <div class="col-sm-6">
-            <input type="text" name="lastName"  id="employee-lastName" class="form-control" @if(isset($editEmployeeModel->lastName)) value="{{ $editEmployeeModel->lastName }}" @else placeholder="Last Name" @endif  required>
+            <input type="text" name="lastName"  id="employee-lastName" class="form-control" @if(isset($editEmployeeModel->employeeProfile->lastName)) value="{{ $editEmployeeModel->employeeProfile->lastName }}" @else placeholder="Last Name" @endif  required>
         </div>
     </div>
     <div class="form-group">
         <label for="name" class="col-sm-3 control-label">Hire Date</label>
         <div class="col-sm-6">
-            <input type="date" name="hireDate" id="employee-hireDate" class="form-control" @if(isset($editEmployeeModel->hireDate)) value="{{ $editEmployeeModel->hireDate }}" @else placeholder="Hire Date" @endif>
+            <input type="date" name="hireDate" id="employee-hireDate" class="form-control" @if(isset($editEmployeeModel->employeeProfile->hireDate)) value="{{ $editEmployeeModel->employeeProfile->hireDate }}" @else placeholder="Hire Date" @endif>
         </div>
     </div>
     <div class="form-group">
         <label for="name" class="col-sm-3 control-label">Termination Date</label>
         <div class="col-sm-6">
-            <input type="date" name="terminationDate" id="employee-terminationDate" class="form-control" @if(isset($editEmployeeModel->terminationDate)) value="{{ $editEmployeeModel->terminationDate }}" @else placeholder="Termination Date" @endif>
+            <input type="date" name="terminationDate" id="employee-terminationDate" class="form-control" @if(isset($editEmployeeModel->employeeProfile->terminationDate)) value="{{ $editEmployeeModel->employeeProfile->terminationDate }}" @else placeholder="Termination Date" @endif>
         </div>
     </div>
     <div class="form-group">
         <label for="name" class="col-sm-3 control-label">Job Title</label>
         <div class="col-sm-6">
 
-            <input type="text" name="jobTitle" id="employee-jobTitle" class="form-control" @if(isset($editEmployeeModel->jobTitle)) value="{{ $editEmployeeModel->jobTitle }}" @else placeholder="Job Title" @endif>
+            <input type="text" name="jobTitle" id="employee-jobTitle" class="form-control" @if(isset($editEmployeeModel->employeeProfile->jobTitle)) value="{{ $editEmployeeModel->employeeProfile->jobTitle }}" @else placeholder="Job Title" @endif>
         </div>
     </div>
     <div class="form-group">
         <label for="name" class="col-sm-3 control-label">Annual Salary</label>
         <div class="col-sm-6">
-            <input type="number" name="annualSalary" id="employee-annualSalary" class="form-control" @if(isset($employeeModel->annualSalary)) value="{{ $employeeModel->annualSalary }}" @else placeholder="Annual Salary" @endif>
+            <input type="number" name="annualSalary" id="employee-annualSalary" class="form-control" @if(isset($employeeModel->employeeProfile->annualSalary)) value="{{ $employeeModel->employeeProfile->annualSalary }}" @else placeholder="Annual Salary" @endif>
         </div>
     </div>
 
     <div class="form-group">
         <label for="name" class="col-sm-3 control-label">Hourly Rate</label>
         <div class="col-sm-6">
-            <input type="number" name="hourlyRate" id="employee-hourlyRate" class="form-control" @if(isset($editEmployeeModel->hourlyRate)) value="{{ $editEmployeeModel->hourlyRate }}" @else placeholder="Hourly Rate" @endif>
+            <input type="number" name="hourlyRate" id="employee-hourlyRate" class="form-control" @if(isset($editEmployeeModel->employeeProfile->hourlyRate)) value="{{ $editEmployeeModel->employeeProfile->hourlyRate }}" @else placeholder="Hourly Rate" @endif>
         </div>
     </div>
      <div class="form-group">
         <label for="Over time rate" class="col-sm-3 control-label">Over Time Rate</label>
         <div class="col-sm-6">
-            <input type="number" step="any" name="overTimeRate" id="employee-overTimeRate" class="form-control" @if(isset($editEmployeeModel->overTime)) value="{{ $editEmployeeModel->overTimeRate }}" @else placeholder="Over Time Rate" @endif>
+            <input type="number" step="any" name="overTimeRate" id="employee-overTimeRate" class="form-control" @if(isset($editEmployeeModel->employeeProfile->overTime)) value="{{ $editEmployeeModel->employeeProfile->overTimeRate }}" @else placeholder="Over Time Rate" @endif>
         </div>
     </div>
         @include('address/addressForm');

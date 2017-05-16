@@ -2,211 +2,197 @@
 
 namespace People\Services;
 
-use People\Models\CompanyProjectResource;
 use People\Models\Department;
 use People\Models\Employee;
 use People\Models\EmployeeAddress;
-use People\Models\ProjectResource;
 use People\PresentationModels\EditEmployee\EditEmployeeModel;
+use People\PresentationModels\EmployeeProfileModel;
 use People\PresentationModels\Employee\EmployeeModel;
 use People\PresentationModels\Employee\EmployeeProjectModel;
 use People\Services\Interfaces\ICompanyProjectResourceService;
-use People\Services\Interfaces\IProjectResourceService;
 use People\Services\Interfaces\IEmployeeService;
+use People\Services\Interfaces\IProjectResourceService;
 
-class EmployeeService implements IEmployeeService
-{
-    public $CompanyProjectResourceService;
-    public $ClientProjectResourceService;
+class EmployeeService implements IEmployeeService {
+	public $CompanyProjectResourceService;
+	public $ClientProjectResourceService;
 
-    public function __construct(ICompanyProjectResourceService $companyProjectResourceService,IProjectResourceService $clientProjectResourceService) {
+	public function __construct(ICompanyProjectResourceService $companyProjectResourceService, IProjectResourceService $clientProjectResourceService) {
 
-        $this->CompanyProjectResourceService = $companyProjectResourceService;
-        $this->ClientProjectResourceService = $clientProjectResourceService;
-    }
+		$this->CompanyProjectResourceService = $companyProjectResourceService;
+		$this->ClientProjectResourceService = $clientProjectResourceService;
+	}
 
-    public function getAllEmployees()
-    {
+	public function getAllEmployees() {
 
-        $employees = Employee::orderBy('created_at', 'asc')->get();
+		$employees = Employee::orderBy('created_at', 'asc')->get();
 
-        return $employees;
-    }
+		return $employees;
+	}
 
-    public function deleteEmployee($employee)
-    {
-        $employee->departments()->detach();
-        $employee->delete();
-    }
+	public function deleteEmployee($employee) {
+		$employee->departments()->detach();
+		$employee->delete();
+	}
 
-    public function createEmployee($request)
-    {
-        $employee = new Employee();
-        $this->createOrUpdateEmployee($request, $employee);
+	public function createEmployee($request) {
+		$employee = new Employee();
+		$this->createOrUpdateEmployee($request, $employee);
 
-    }
+	}
 
-    public function createOrUpdateEmployee($request, $employee)
-    {
+	public function createOrUpdateEmployee($request, $employee) {
 
-        $employee->firstName = $request->firstName;
-        $employee->lastName = $request->lastName;
-        $employee->hireDate = $request->hireDate;
-        $employee->terminationDate = $request->terminationDate;
-        $employee->jobTitle = $request->jobTitle;
-        $employee->annualSalary = $request->annualSalary;
-        $employee->overTimeRate = $request->overTimeRate;
-        $employee->hourlyRate = $request->hourlyRate;
+		$employee->firstName = $request->firstName;
+		$employee->lastName = $request->lastName;
+		$employee->hireDate = $request->hireDate;
+		$employee->terminationDate = $request->terminationDate;
+		$employee->jobTitle = $request->jobTitle;
+		$employee->annualSalary = $request->annualSalary;
+		$employee->overTimeRate = $request->overTimeRate;
+		$employee->hourlyRate = $request->hourlyRate;
 
-        $employee->save();
+		$employee->save();
 
-        $this->createOrUpdateEmployeeAddress($request, $employee->address, $employee->id);
+		$this->createOrUpdateEmployeeAddress($request, $employee->address, $employee->id);
 
-        if (count($request->departmentList) > 0) {
-            $employee->departments()->detach();
-            foreach ($request->departmentList as $employeeDepartmentId) {
-                $employeeDepartment = Department::find($employeeDepartmentId);
+		if (count($request->departmentList) > 0) {
+			$employee->departments()->detach();
+			foreach ($request->departmentList as $employeeDepartmentId) {
+				$employeeDepartment = Department::find($employeeDepartmentId);
 
-                $employee->departments()->save($employeeDepartment);
+				$employee->departments()->save($employeeDepartment);
+			}
+		}
+	}
 
-            }
-        }
+	public function createOrUpdateEmployeeAddress($request, $employeeAddress, $employeeId) {
 
-    }
+		if (!isset($employeeAddress)) {
+			$employeeAddress = new EmployeeAddress();
+		}
+		$employeeAddress->streetLine1 = $request->streetLine1;
+		$employeeAddress->streetLine2 = $request->streetLine2;
+		$employeeAddress->country = $request->country;
+		$employeeAddress->stateProvince = $request->stateProvince;
+		$employeeAddress->city = $request->city;
+		$employeeAddress->employee_id = $employeeId;
+		$employeeAddress->save();
+	}
 
-    public function createOrUpdateEmployeeAddress($request, $employeeAddress, $employeeId)
-    {
+	public function updateEmployee($request, $employee) {
+		$this->createOrUpdateEmployee($request, $employee);
+	}
 
-        if (!isset($employeeAddress)) {
-            $employeeAddress = new EmployeeAddress();
+	public function getAllDepartments() {
+		$departments = Department::orderBy('created_at', 'asc')->get();
+		return $departments;
+	}
 
-        }
-        $employeeAddress->streetLine1 = $request->streetLine1;
-        $employeeAddress->streetLine2 = $request->streetLine2;
-        $employeeAddress->country = $request->country;
-        $employeeAddress->stateProvince = $request->stateProvince;
-        $employeeAddress->city = $request->city;
-        $employeeAddress->employee_id = $employeeId;
-        $employeeAddress->save();
-    }
+	public function editEmployee($employee) {
+		$editEmployeeModel = new EditEmployeeModel();
 
-    public function updateEmployee($request, $employee)
-    {
-        $this->createOrUpdateEmployee($request, $employee);
-    }
+		$editEmployeeModel->employeeDepartmentIds = [];
+		foreach ($employee->departments as $department) {
 
-    public function getAllDepartments()
-    {
-        $departments = Department::orderBy('created_at', 'asc')->get();
-        return $departments;
-    }
+			array_push($editEmployeeModel->employeeDepartmentIds, $department->id);
+		}
 
-    public function editEmployee($employee)
-    {
-        $editEmployeeModel = new EditEmployeeModel();
+		$editEmployeeModel->employeeProfile = $this->mapEmployeeProfile($employee);
 
-        $editEmployeeModel->employeeDepartmentIds = [];
-        foreach ($employee->departments as $department) {
+		return $editEmployeeModel;
+	}
 
-            array_push($editEmployeeModel->employeeDepartmentIds, $department->id);
-        }
+	private function mapEmployeeProfile($employee) {
 
-        $editEmployeeModel->employeeId = $employee->id;
-        $editEmployeeModel->firstName = $employee->firstName;
-        $editEmployeeModel->lastName = $employee->lastName;
-        $editEmployeeModel->hireDate = $employee->hireDate;
-        $editEmployeeModel->overTimeRate = $employee->OvertimeRate;
-        $editEmployeeModel->terminationDate = $employee->terminationDate;
-        $editEmployeeModel->jobTitle = $employee->jobTitle;
-        $editEmployeeModel->annualSalary = $employee->annualSalary;
-        $editEmployeeModel->hourlyRate = $employee->hourlyRate;
+		$employeeProfileModel = new EmployeeProfileModel();
 
-        $editEmployeeModel->streetLine1 = $employee->address->streetLine1;
-        $editEmployeeModel->streetLine2 = $employee->address->streetLine2;
-        $editEmployeeModel->country = $employee->address->country;
-        $editEmployeeModel->stateProvince = $employee->address->stateProvince;
-        $editEmployeeModel->city = $employee->address->city;
+		$employeeProfileModel->employeeId = $employee->id;
+		$employeeProfileModel->firstName = $employee->firstName;
+		$employeeProfileModel->lastName = $employee->lastName;
+		$employeeProfileModel->hireDate = $employee->hireDate;
+		$employeeProfileModel->overTimeRate = $employee->OvertimeRate;
+		$employeeProfileModel->terminationDate = $employee->terminationDate;
+		$employeeProfileModel->jobTitle = $employee->jobTitle;
+		$employeeProfileModel->annualSalary = $employee->annualSalary;
+		$employeeProfileModel->hourlyRate = $employee->hourlyRate;
 
-        return $editEmployeeModel;
-    }
+		$employeeProfileModel->streetLine1 = $employee->address->streetLine1;
+		$employeeProfileModel->streetLine2 = $employee->address->streetLine2;
+		$employeeProfileModel->country = $employee->address->country;
+		$employeeProfileModel->stateProvince = $employee->address->stateProvince;
+		$employeeProfileModel->city = $employee->address->city;
 
-    public function viewEmployee($employee)
-    {
+		return $employeeProfileModel;
+	}
 
-        $employeeModel = new EmployeeModel();
+	public function viewEmployee($employee) {
 
-        $employeeModel->employeeDepartmentIds = [];
-        foreach ($employee->departments as $department) {
+		$employeeModel = new EmployeeModel();
 
-            array_push($employeeModel->employeeDepartmentIds, $department->name);
-        }
+		$employeeModel->employeeDepartmentIds = [];
+		foreach ($employee->departments as $department) {
 
-        $totalHoursOnClientProjects = 0;
-        $totalHoursOnCompanyProjects = 0;
+			array_push($employeeModel->employeeDepartmentIds, $department->name);
+		}
 
-        $employeeModel->employeeId = $employee->id;
-        $employeeModel->firstName = $employee->firstName;
-        $employeeModel->lastName = $employee->lastName;
-        $employeeModel->hireDate = $employee->hireDate;
-        $employeeModel->overTimeRate = $employee->OvertimeRate;
-        $employeeModel->streetLine1 = $employee->address->streetLine1;
-        $employeeModel->streetLine2 = $employee->address->streetLine2;
-        $employeeModel->country = $employee->address->country;
-        $employeeModel->stateProvince = $employee->address->stateProvince;
-        $employeeModel->city = $employee->address->city;
+		$totalHoursOnClientProjects = 0;
+		$totalHoursOnCompanyProjects = 0;
 
-        $clientProjectResources=$this->ClientProjectResourceService->getClientProjectResourcesOnActiveProjects($employee->id);
+		$employeeModel->employeeProfile = $this->mapEmployeeProfile($employee);
 
-        foreach ($clientProjectResources as $clientProjectResource) {
-            $projectModel = new EmployeeProjectModel();
+		$clientProjectResources = $this->ClientProjectResourceService->getClientProjectResourcesOnActiveProjects($employee->id);
 
-            $projectModel->clientName = $clientProjectResource->clientProject->client->name;
-            $projectModel->projectId = $clientProjectResource->clientProject->id;
-            $projectModel->projectName = $clientProjectResource->clientProject->name;
-            $projectModel->clientId = $clientProjectResource->clientProject->client_id;
-            $projectModel->projectStartDate = $clientProjectResource->startDate;
-            $projectModel->projectEndDate = $clientProjectResource->endDate;
-            $projectModel->hoursPerWeek = $clientProjectResource->hoursPerWeek;
+		foreach ($clientProjectResources as $clientProjectResource) {
+			$projectModel = new EmployeeProjectModel();
 
-            $projectModel->isActive = True;
-            $totalHoursOnClientProjects = $totalHoursOnClientProjects + $clientProjectResource->hoursPerWeek;
+			$projectModel->clientName = $clientProjectResource->clientProject->client->name;
+			$projectModel->projectId = $clientProjectResource->clientProject->id;
+			$projectModel->projectName = $clientProjectResource->clientProject->name;
+			$projectModel->clientId = $clientProjectResource->clientProject->client_id;
+			$projectModel->projectStartDate = $clientProjectResource->startDate;
+			$projectModel->projectEndDate = $clientProjectResource->endDate;
+			$projectModel->hoursPerWeek = $clientProjectResource->hoursPerWeek;
 
-            if (is_null($employeeModel->clientProjects)) {
-                $employeeModel->clientProjects[] = new EmployeeProjectModel;
-                array_push($employeeModel->clientProjects, $projectModel);
-            }
-        }
+			$projectModel->isActive = True;
+			$totalHoursOnClientProjects = $totalHoursOnClientProjects + $clientProjectResource->hoursPerWeek;
 
-        $employeeModel->totalHoursOnClientProjects = $totalHoursOnClientProjects;
-        $companyProjectResources=$this->CompanyProjectResourceService->getCompanyProjectResourcesOnActiveProjects($employee->id);
+			if (is_null($employeeModel->clientProjects)) {
+				$employeeModel->clientProjects[] = new EmployeeProjectModel;
+				array_push($employeeModel->clientProjects, $projectModel);
+			}
+		}
 
-        foreach ($companyProjectResources as $companyProjectResource) {
-            $projectModel = new EmployeeProjectModel();
+		$employeeModel->totalHoursOnClientProjects = $totalHoursOnClientProjects;
+		$companyProjectResources = $this->CompanyProjectResourceService->getCompanyProjectResourcesOnActiveProjects($employee->id);
 
-            $projectModel->companyName = $companyProjectResource->companyProject->company->name;
-            $projectModel->projectId = $companyProjectResource->companyProject->id;
-            $projectModel->projectName = $companyProjectResource->companyProject->name;
-            $projectModel->clientId = $companyProjectResource->companyProject->company_id;
-            $projectModel->projectStartDate = $companyProjectResource->actualStartDate;
-            $projectModel->projectEndDate = $companyProjectResource->actualEndDate;
-            $projectModel->hoursPerWeek = $companyProjectResource->hoursPerWeek;
+		foreach ($companyProjectResources as $companyProjectResource) {
+			$projectModel = new EmployeeProjectModel();
 
-            $projectModel->isActive = True;
-            $totalHoursOnCompanyProjects = $totalHoursOnCompanyProjects + $companyProjectResource->hoursPerWeek;
+			$projectModel->companyName = $companyProjectResource->companyProject->company->name;
+			$projectModel->projectId = $companyProjectResource->companyProject->id;
+			$projectModel->projectName = $companyProjectResource->companyProject->name;
+			$projectModel->clientId = $companyProjectResource->companyProject->company_id;
+			$projectModel->projectStartDate = $companyProjectResource->actualStartDate;
+			$projectModel->projectEndDate = $companyProjectResource->actualEndDate;
+			$projectModel->hoursPerWeek = $companyProjectResource->hoursPerWeek;
 
-            if (is_null($employeeModel->companyProjects)) {
-                $employeeModel->companyProjects[] = new EmployeeProjectModel;
-                array_push($employeeModel->companyProjects, $projectModel);
-            }
-        }
-        $employeeModel->totalHoursOnCompanyProjects = $totalHoursOnCompanyProjects;
+			$projectModel->isActive = True;
+			$totalHoursOnCompanyProjects = $totalHoursOnCompanyProjects + $companyProjectResource->hoursPerWeek;
 
-        if (($totalHoursOnCompanyProjects) + ($totalHoursOnClientProjects) > 40) {
-            $employeeModel->isWorkingOverTime = 1;
-        } else {
-            $employeeModel->isWorkingOverTime = NULL;
-        }
-        return $employeeModel;
-    }
+			if (is_null($employeeModel->companyProjects)) {
+				$employeeModel->companyProjects[] = new EmployeeProjectModel;
+				array_push($employeeModel->companyProjects, $projectModel);
+			}
+		}
+		$employeeModel->totalHoursOnCompanyProjects = $totalHoursOnCompanyProjects;
+
+		if (($totalHoursOnCompanyProjects) + ($totalHoursOnClientProjects) > 40) {
+			$employeeModel->isWorkingOverTime = 1;
+		} else {
+			$employeeModel->isWorkingOverTime = NULL;
+		}
+		return $employeeModel;
+	}
 
 }

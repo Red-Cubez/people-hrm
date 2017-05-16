@@ -7,17 +7,7 @@ class EmployeeModel {
 	public function __construct() {
 	}
 
-	public $employeeId;
-	public $firstName;
-	public $lastName;
-	public $hireDate;
-	public $overTimeRate;
-	public $streetLine1;
-	public $streetLine2;
-	public $stateProvince;
-	public $country;
-	public $city;
-
+	public $employeeProfile;
 	public $companyName;
 	public $companyId;
 	public $clientProjects;

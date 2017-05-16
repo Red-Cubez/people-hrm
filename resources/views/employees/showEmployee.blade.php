@@ -4,41 +4,53 @@
     <div class="panel-body">
         @include('common.errors')
         <div>
-            <label for="name" class="control-label">Name : </label>
-            {{$employeeModel->firstName}}
+            <label for="name" class="control-label">First Name : </label>
+            {{$employeeModel->employeeProfile->firstName}}
         </div>
         <div>
             <label for="name" class="control-label">Last Name : </label>
-            {{$employeeModel->lastName}}
+            {{$employeeModel->employeeProfile->lastName}}
         </div>
         <div>
             <label for="name" class="control-label">Hire Date : </label>
-            {{$employeeModel->hireDate}}
+            {{$employeeModel->employeeProfile->hireDate}}
+        </div>
+         <div>
+            <label for="name" class="control-label">Job Title : </label>
+            {{$employeeModel->employeeProfile->jobTitle}}
+        </div>
+         <div>
+            <label for="name" class="control-label">Annual Salary : </label>
+            {{$employeeModel->employeeProfile->annualSalary}}
+        </div>
+         <div>
+            <label for="name" class="control-label">Hourly Rate : </label>
+            {{$employeeModel->employeeProfile->hourlyRate}}
         </div>
         <div>
             <label for="name" class="control-label">Overtime Rate : </label>
-            {{$employeeModel->overTimeRate}}
+            {{$employeeModel->employeeProfile->overTimeRate}}
         </div>
         <div>
             <label for="name" class="control-label">streetLine1 : </label>
-            {{$employeeModel->streetLine1}}
+            {{$employeeModel->employeeProfile->streetLine1}}
         </div>
         <div>
             <label for="name" class="control-label">streetLine2 : </label>
-            {{$employeeModel->streetLine2}}
+            {{$employeeModel->employeeProfile->streetLine2}}
         </div>
         <div>
             <label for="name" class="control-label">country : </label>
-            {{$employeeModel->country}}
+            {{$employeeModel->employeeProfile->country}}
         </div>
         <div>
             <label for="name" class="control-label">state / Province : </label>
-            {{$employeeModel->stateProvince}}
+            {{$employeeModel->employeeProfile->stateProvince}}
         </div>
 
         <div>
             <label for="name" class="control-label">city : </label>
-            {{$employeeModel->city}}
+            {{$employeeModel->employeeProfile->city}}
         </div>
         <div>
             <label for="name" class="control-label">Departments : </label>
@@ -51,7 +63,7 @@
 
         {{$employeeModel->totalHoursWorked()}}
 
-        <form action="{{ url('employees/'.$employeeModel->employeeId.'/edit') }}" method="POST">
+        <form action="{{ url('employees/'.$employeeModel->employeeProfile->employeeId.'/edit') }}" method="POST">
             {{ csrf_field() }}
             {{ method_field('GET') }}
             <button type="submit" class="btn btn-danger">

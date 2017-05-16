@@ -8,7 +8,7 @@ class EmployeeProjectModel {
 	public $projectName;
 	public $projectStartDate;
 	public $projectEndDate;
-	public $isActive;
+	public $isActive = False;
 	public $clientId;
 	public $clientName;
 	public $companyName;

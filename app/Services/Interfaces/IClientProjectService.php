@@ -9,5 +9,6 @@ interface IClientProjectService {
 	public function updateClientProject($request, $clientproject);
 	public function getClientProjects();
 	public function manageClientProjects($clientid);
+	public function viewClientProject($clientProjectId);
 
 }

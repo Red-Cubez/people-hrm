@@ -56,14 +56,14 @@
                              </button>
                            </form>
 
-                           <form action="{{ url('companyprojects/'.$company->project->id) }}" method="POST">
+                           <form action="{{ url('companyprojects/'.$company->project->id.'/edit') }}" method="POST">
                              {{ csrf_field() }}
                              {{ method_field('GET') }}
 
                               <button type="submit" class="btn btn-danger">
-                              <i class="fa fa-trash"> Edit</i>
+                              <i class="fa fa-trash"> View</i>
                               </button>
-                            </form> 
+                            </form>
 
                           <form action="{{ url('companyprojectresources/'.$company->project->id) }}" method="POST">
                              {{ csrf_field() }}
@@ -79,5 +79,5 @@
                         </tbody>
                     </table>
                 </div>
-        @endif 
- 
+        @endif
+

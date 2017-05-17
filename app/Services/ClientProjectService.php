@@ -3,6 +3,7 @@
 namespace People\Services;
 use People\Models\ClientProject;
 use People\Services\Interfaces\IClientProjectService;
+use People\PresentationModels\ClientProject\ViewClientProjectModel;
 
 class ClientProjectService implements IClientProjectService {
 
@@ -17,6 +18,68 @@ class ClientProjectService implements IClientProjectService {
 		$clientproject->delete();
 		return $clientid;
 
+	}
+
+	private function isProjectOnTime($clientProject) {
+		$currentDate = date("Y-m-d");
+        $isOnTime="Not On";
+		 if (($clientProject->actualEndDate) != NULL ) {
+             if ((($clientProject->actualEndDate) >= $currentDate)) {
+
+                 $isOnTime = "On";
+             }
+         }
+
+		 elseif ($clientProject->expectedEndDate != NULL &&($clientProject->actualEndDate == NULL)) {
+
+             if (($clientProject->expectedEndDate) >= $currentDate) {
+                 $isOnTime = "On";
+             }
+         }
+
+		 else {
+                 $isOnTime="Not On";
+		 }
+        return $isOnTime;
+
+	}
+	private function isProjectOnBudget($clientProject)
+    {
+        $cost=$clientProject->cost;
+        $budget=$clientProject->budget;
+
+        if($cost<$budget)
+        {
+            $isOnBudget="On";
+        }
+        else{
+            $isOnBudget="Not On";
+        }
+        return $isOnBudget;
+    }
+
+	public function viewClientProject($clientProjectId) {
+
+
+		$clientProject = ClientProject::find($clientProjectId);
+
+        $isOnTime = $this->isProjectOnTime($clientProject);
+        $isOnBudget = $this->isProjectOnBudget($clientProject);
+
+        $clientProjectModel =new ViewClientProjectModel();
+
+        $clientProjectModel->id=$clientProject->id;
+		$clientProjectModel->name=$clientProject->name;
+		$clientProjectModel->actualStartDate=$clientProject->actualStartDate;
+        $clientProjectModel->actualEndDate=$clientProject->actualEndDate;
+        $clientProjectModel->expectedStartDate=$clientProject->expectedStartDate;
+        $clientProjectModel->expectedEndDate=$clientProject->expectedEndDate;
+		$clientProjectModel->budget=$clientProject->budget;
+        $clientProjectModel->cost=$clientProject->cost;
+        $clientProjectModel->isProjectOnTime=$isOnTime;
+        $clientProjectModel->isProjectOnBudget=$isOnBudget;
+
+		return $clientProjectModel;
 	}
 
 	public function manageClientProjects($clientid) {
@@ -51,7 +114,6 @@ class ClientProjectService implements IClientProjectService {
 		$clientProject->cost = $request->cost;
 
 		return $clientProject;
-
 	}
 
 	public function updateClientProject($request, $clientproject) {
@@ -61,5 +123,4 @@ class ClientProjectService implements IClientProjectService {
 
 		return $clientProject;
 	}
-
 }

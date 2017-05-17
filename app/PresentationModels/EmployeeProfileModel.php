@@ -3,6 +3,7 @@
 namespace People\PresentationModels;
 
 class EmployeeProfileModel {
+
 	public $employeeId;
 	public $firstName;
 	public $lastName;

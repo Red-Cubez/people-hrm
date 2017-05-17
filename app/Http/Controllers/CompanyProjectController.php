@@ -69,8 +69,12 @@ class CompanyProjectController extends Controller {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function edit($id) {
-		//
+	public function edit($companyProjectId) {
+
+		$companyProject = $this->CompanyProjectService->viewCompanyProject($companyProjectId);
+
+		return view('companyProjects/viewCompanyProject', ['project' => $companyProject]);
+
 	}
 
 	/**

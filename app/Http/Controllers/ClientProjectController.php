@@ -59,7 +59,7 @@ class ClientProjectController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show(ClientProject $clientproject) {
-		
+
 		return view('clientProjects/clientProjectEditForm', ['clientProject' => $clientproject]);
 	}
 
@@ -69,8 +69,11 @@ class ClientProjectController extends Controller {
 	 * @param  \People\Models\ClientProject  $clientProject
 	 * @return \Illuminate\Http\Response
 	 */
-	public function edit(ClientProject $clientProject) {
-		//
+	public function edit($clientProjectId) {
+
+		$clientProjectModel = $this->ClientProjectService->viewClientProject($clientProjectId);
+
+		return view('clientProjects/viewClientProject', ['project' => $clientProjectModel]);
 	}
 
 	/**

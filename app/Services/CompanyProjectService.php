@@ -3,6 +3,7 @@
 namespace People\Services;
 use People\Models\CompanyProject;
 use People\Services\Interfaces\ICompanyProjectService;
+use People\PresentationModels\CompanyProject\ViewCompanyProjectModel;
 
 class CompanyProjectService implements ICompanyProjectService {
 
@@ -10,6 +11,65 @@ class CompanyProjectService implements ICompanyProjectService {
 
 		$companyprojects = CompanyProject::orderBy('created_at', 'asc')->get();
 		return $companyprojects;
+	}
+
+    private function isProjectOnTime($companyProject) {
+        $currentDate = date("Y-m-d");
+        $isOnTime="Not On";
+        if (($companyProject->actualEndDate) != NULL ) {
+            if ((($companyProject->actualEndDate) >= $currentDate)) {
+
+                $isOnTime = "On";
+            }
+        }
+        elseif ($companyProject->expectedEndDate != NULL &&($companyProject->actualEndDate == NULL)) {
+
+            if (($companyProject->expectedEndDate) >= $currentDate) {
+                $isOnTime = "On";
+            }
+        }
+        else {
+            $isOnTime="Not On";
+        }
+        return $isOnTime;
+    }
+    private function isProjectOnBudget($companyProject)
+    {
+        $cost=$companyProject->cost;
+        $budget=$companyProject->budget;
+
+        if($cost<$budget)
+        {
+            $isOnBudget="On";
+        }
+        else{
+            $isOnBudget="Not On";
+        }
+        return $isOnBudget;
+    }
+
+    public function viewCompanyProject($companyProjectId) {
+
+        $companyProject=CompanyProject::find($companyProjectId);
+
+        $isOnTime=$this->isProjectOnTime($companyProject);
+        $isOnBudget=$this->isProjectOnBudget($companyProject);
+
+        $companyProjectModel =new ViewCompanyProjectModel();
+
+        $companyProjectModel->id=$companyProject->id;
+        $companyProjectModel->name=$companyProject->name;
+        $companyProjectModel->actualStartDate=$companyProject->actualStartDate;
+        $companyProjectModel->actualEndDate=$companyProject->actualEndDate;
+        $companyProjectModel->expectedStartDate=$companyProject->expectedStartDate;
+        $companyProjectModel->expectedEndDate=$companyProject->expectedEndDate;
+        $companyProjectModel->budget=$companyProject->budget;
+        $companyProjectModel->cost=$companyProject->cost;
+        $companyProjectModel->isProjectOnTime=$isOnTime;
+        $companyProjectModel->isProjectOnBudget=$isOnBudget;
+
+        return $companyProjectModel;
+
 	}
 
 	public function saveCompanyProject($request) {
@@ -48,7 +108,6 @@ class CompanyProjectService implements ICompanyProjectService {
 	public function deleteCompanyProject($companyproject) {
 
 		$companyproject->delete();
-
 	}
 
 	public function manageProject($companyid) {

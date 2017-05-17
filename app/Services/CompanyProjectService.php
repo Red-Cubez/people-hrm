@@ -57,9 +57,9 @@ class CompanyProjectService implements ICompanyProjectService
                 if ($companyProject->actualEndDate <= $companyProject->expectedEndDate) {
 
                     $isOnTime = "On Time";
-                    if (($companyProject->actualEndDate <= $currentDate) && ($companyProject->actualEndDate == $companyProject->expectedEndDate)) {
-                        $isOnTime = "Completed ";
-                    } elseif (($companyProject->actualEndDate <= $currentDate) && ($companyProject->actualEndDate < $companyProject->expectedEndDate)) {
+                    if (($companyProject->actualEndDate <= $currentDate)) {
+                        $isOnTime = "Project Completed ";
+                    } elseif (($companyProject->actualEndDate < $companyProject->expectedEndDate)) {
                         $isOnTime = "Completed Before Time ";
                     }
                 }

@@ -63,9 +63,9 @@ class ClientProjectService implements IClientProjectService
 
                 if ($clientProject->actualEndDate <= $clientProject->expectedEndDate) {
                     $isOnTime = "On Time";
-                    if (($clientProject->actualEndDate <= $currentDate) && ($clientProject->actualEndDate == $clientProject->expectedEndDate)) {
+                    if (($clientProject->actualEndDate <= $currentDate)) {
                         $isOnTime = "Completed ";
-                    } elseif (($clientProject->actualEndDate <= $currentDate) && ($clientProject->actualEndDate < $clientProject->expectedEndDate)) {
+                    } elseif ($clientProject->actualEndDate < $clientProject->expectedEndDate) {
                         $isOnTime = "Completed Before Time ";
                     }
 

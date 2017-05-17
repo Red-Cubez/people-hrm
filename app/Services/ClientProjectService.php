@@ -1,126 +1,144 @@
 <?php
 
 namespace People\Services;
+
 use People\Models\ClientProject;
-use People\Services\Interfaces\IClientProjectService;
 use People\PresentationModels\ClientProject\ViewClientProjectModel;
+use People\Services\Interfaces\IClientProjectService;
 
-class ClientProjectService implements IClientProjectService {
+class ClientProjectService implements IClientProjectService
+{
 
-	public function getClientProjects() {
-
-		$clientProjects = ClientProject::orderBy('created_at', 'asc')->get();
-		return $clientProjects;
-	}
-
-	public function deleteClientProject($clientproject) {
-		$clientid = $clientproject->client_id;
-		$clientproject->delete();
-		return $clientid;
-
-	}
-
-	private function isProjectOnTime($clientProject) {
-		$currentDate = date("Y-m-d");
-        $isOnTime="Not On";
-		 if (($clientProject->actualEndDate) != NULL ) {
-             if ((($clientProject->actualEndDate) >= $currentDate)) {
-
-                 $isOnTime = "On";
-             }
-         }
-
-		 elseif ($clientProject->expectedEndDate != NULL &&($clientProject->actualEndDate == NULL)) {
-
-             if (($clientProject->expectedEndDate) >= $currentDate) {
-                 $isOnTime = "On";
-             }
-         }
-
-		 else {
-                 $isOnTime="Not On";
-		 }
-        return $isOnTime;
-
-	}
-	private function isProjectOnBudget($clientProject)
+    public function getClientProjects()
     {
-        $cost=$clientProject->cost;
-        $budget=$clientProject->budget;
 
-        if($cost<$budget)
-        {
-            $isOnBudget="On";
-        }
-        else{
-            $isOnBudget="Not On";
-        }
-        return $isOnBudget;
+        $clientProjects = ClientProject::orderBy('created_at', 'asc')->get();
+        return $clientProjects;
     }
 
-	public function viewClientProject($clientProjectId) {
+    public function deleteClientProject($clientproject)
+    {
+        $clientid = $clientproject->client_id;
+        $clientproject->delete();
+        return $clientid;
+    }
 
+    public function viewClientProject($clientProjectId)
+    {
 
-		$clientProject = ClientProject::find($clientProjectId);
+        $clientProject = ClientProject::find($clientProjectId);
 
         $isOnTime = $this->isProjectOnTime($clientProject);
         $isOnBudget = $this->isProjectOnBudget($clientProject);
 
-        $clientProjectModel =new ViewClientProjectModel();
+        $clientProjectModel = new ViewClientProjectModel();
 
-        $clientProjectModel->id=$clientProject->id;
-		$clientProjectModel->name=$clientProject->name;
-		$clientProjectModel->actualStartDate=$clientProject->actualStartDate;
-        $clientProjectModel->actualEndDate=$clientProject->actualEndDate;
-        $clientProjectModel->expectedStartDate=$clientProject->expectedStartDate;
-        $clientProjectModel->expectedEndDate=$clientProject->expectedEndDate;
-		$clientProjectModel->budget=$clientProject->budget;
-        $clientProjectModel->cost=$clientProject->cost;
-        $clientProjectModel->isProjectOnTime=$isOnTime;
-        $clientProjectModel->isProjectOnBudget=$isOnBudget;
+        $clientProjectModel->id = $clientProject->id;
+        $clientProjectModel->name = $clientProject->name;
+        $clientProjectModel->actualStartDate = $clientProject->actualStartDate;
+        $clientProjectModel->actualEndDate = $clientProject->actualEndDate;
+        $clientProjectModel->expectedStartDate = $clientProject->expectedStartDate;
+        $clientProjectModel->expectedEndDate = $clientProject->expectedEndDate;
+        $clientProjectModel->budget = $clientProject->budget;
+        $clientProjectModel->cost = $clientProject->cost;
+        $clientProjectModel->isProjectOnTime = $isOnTime;
+        $clientProjectModel->isProjectOnBudget = $isOnBudget;
 
-		return $clientProjectModel;
-	}
+        return $clientProjectModel;
+    }
 
-	public function manageClientProjects($clientid) {
+    private function isProjectOnTime($clientProject)
+    {
+        $currentDate = date("Y-m-d");
+        $isOnTime = "Not On Time";
 
-		$clientProjects = ClientProject::where('client_id', $clientid)->orderBy('created_at', 'asc')->get();
-		return $clientProjects;
-	}
+        if ($clientProject->expectedEndDate != NULL) {
+            if ($clientProject->actualEndDate == NULL) {
+                if (($clientProject->expectedEndDate) >= $currentDate) {
+                    $isOnTime = "On Time";
+                } else {
+                    $isOnTime = "Not On Time";
+                }
+            } else {
 
-	public function createClientProject($request) {
+                if ($clientProject->actualEndDate <= $clientProject->expectedEndDate) {
+                    $isOnTime = "On Time";
+                    if (($clientProject->actualEndDate <= $currentDate) && ($clientProject->actualEndDate == $clientProject->expectedEndDate)) {
+                        $isOnTime = "Completed ";
+                    } elseif (($clientProject->actualEndDate <= $currentDate) && ($clientProject->actualEndDate < $clientProject->expectedEndDate)) {
+                        $isOnTime = "Completed Before Time ";
+                    }
 
-		$clientProject = $this->createOrUpdateClientProject($request, null);
-		$clientProject->client_id = $request->clientid;
-		$clientProject->save();
+                }
+            }
+        } //This scenario should not occur. The validation should stop user from have a blank expected end date
+        else {
+            $isOnTime = "Cannot determine time. Please set expected end date";
+        }
+        return $isOnTime;
+    }
 
-		return $clientProject;
+    private function isProjectOnBudget($clientProject)
+    {
+        $cost = $clientProject->cost;
+        $budget = $clientProject->budget;
+        if (($cost != NULL) && ($budget != NULL)) {
+            if ($cost < $budget) {
+                $isOnBudget = "Project is On Budget";
+            } else {
+                $isOnBudget = "Project is Not On Budget";
+            }
+        } elseif ($cost == NULL) {
+            $isOnBudget = "Budget Cannot determine.Please set cost ";
+        } else {
+            $isOnBudget = "Budget Cannot determine.Please set budget ";
+        }
+        return $isOnBudget;
+    }
 
-	}
+    public function manageClientProjects($clientid)
+    {
 
-	public function createOrUpdateClientProject($request, $clientProject) {
+        $clientProjects = ClientProject::where('client_id', $clientid)->orderBy('created_at', 'asc')->get();
+        return $clientProjects;
+    }
 
-		if (!isset($clientProject)) {
+    public function createClientProject($request)
+    {
 
-			$clientProject = new ClientProject();
-		}
+        $clientProject = $this->createOrUpdateClientProject($request, null);
+        $clientProject->client_id = $request->clientid;
+        $clientProject->save();
 
-		$clientProject->name = $request->name;
-		$clientProject->expectedStartDate = $request->expectedStartDate;
-		$clientProject->expectedEndDate = $request->expectedEndDate;
-		$clientProject->actualStartDate = $request->actualStartDate;
-		$clientProject->actualEndDate = $request->actualEndDate;
-		$clientProject->budget = $request->budget;
-		$clientProject->cost = $request->cost;
+        return $clientProject;
 
-		return $clientProject;
-	}
+    }
 
-	public function updateClientProject($request, $clientproject) {
+    public function createOrUpdateClientProject($request, $clientProject)
+    {
 
-		$clientProject = $this->createOrUpdateClientProject($request, $clientproject);
-		$clientProject->save();
+        if (!isset($clientProject)) {
 
-		return $clientProject;
-	}
+            $clientProject = new ClientProject();
+        }
+
+        $clientProject->name = $request->name;
+        $clientProject->expectedStartDate = $request->expectedStartDate;
+        $clientProject->expectedEndDate = $request->expectedEndDate;
+        $clientProject->actualStartDate = $request->actualStartDate;
+        $clientProject->actualEndDate = $request->actualEndDate;
+        $clientProject->budget = $request->budget;
+        $clientProject->cost = $request->cost;
+
+        return $clientProject;
+    }
+
+    public function updateClientProject($request, $clientproject)
+    {
+
+        $clientProject = $this->createOrUpdateClientProject($request, $clientproject);
+        $clientProject->save();
+
+        return $clientProject;
+    }
 }

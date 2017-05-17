@@ -33,8 +33,8 @@
             {{$project->cost }}
     </div>
     <div>
-            Project is {{$project->isProjectOnTime }} Time
+            Project is {{$project->isProjectOnTime }}
     </div>
     <div>
-            Project is {{$project->isProjectOnBudget }} Budget
+             {{$project->isProjectOnBudget }}
     </div>

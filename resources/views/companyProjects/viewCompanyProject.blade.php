@@ -5,7 +5,7 @@
 
 @include('viewProject/viewProject')
 
-<form action="{{ url('companyprojects/'.$project->id) }}" method="POST">
+<form action="{{ url('companyprojects/'.$project->projectId) }}" method="POST">
     {{ csrf_field() }}
     {{ method_field('GET') }}
 

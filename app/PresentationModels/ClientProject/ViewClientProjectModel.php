@@ -2,17 +2,11 @@
 
 namespace People\PresentationModels\ClientProject;
 
-class ViewClientProjectModel {
+use People\PresentationModels\ProjectModel;
 
-    public $id;
-    public $name;
-    public $actualStartDate;
-    public $actualEndDate;
-    public $expectedStartDate;
-    public $expectedEndDate;
-    public $budget;
-    public $cost;
-    public $isProjectOnTime;
-    public $isProjectOnBudget;
-
+class ViewClientProjectModel extends ProjectModel
+{
+    public function __set($name, $value){
+        throw new \Exception("Dynamic properties shouldn't be set");
+    }
 }

@@ -5,9 +5,18 @@ namespace People\Services;
 use People\Models\ClientProject;
 use People\PresentationModels\ClientProject\ViewClientProjectModel;
 use People\Services\Interfaces\IClientProjectService;
+use People\services\Interfaces\IProjectService;
+
 
 class ClientProjectService implements IClientProjectService
 {
+    public $ProjectService;
+
+    public function __construct(IProjectService $projectService)
+    {
+
+        $this->ProjectService = $projectService;
+    }
 
     public function getClientProjects()
     {
@@ -25,7 +34,6 @@ class ClientProjectService implements IClientProjectService
 
     public function viewClientProject($clientProjectId)
     {
-
         $clientProject = ClientProject::find($clientProjectId);
 
         $isOnTime = $this->isProjectOnTime($clientProject);
@@ -33,18 +41,7 @@ class ClientProjectService implements IClientProjectService
 
         $clientProjectModel = new ViewClientProjectModel();
 
-        $clientProjectModel->id = $clientProject->id;
-        $clientProjectModel->name = $clientProject->name;
-        $clientProjectModel->actualStartDate = $clientProject->actualStartDate;
-        $clientProjectModel->actualEndDate = $clientProject->actualEndDate;
-        $clientProjectModel->expectedStartDate = $clientProject->expectedStartDate;
-        $clientProjectModel->expectedEndDate = $clientProject->expectedEndDate;
-        $clientProjectModel->budget = $clientProject->budget;
-        $clientProjectModel->cost = $clientProject->cost;
-        $clientProjectModel->isProjectOnTime = $isOnTime;
-        $clientProjectModel->isProjectOnBudget = $isOnBudget;
-
-        return $clientProjectModel;
+        return $this->ProjectService->getClientProjectAndCompanyProjectDetails($clientProjectModel, $clientProject, $isOnTime, $isOnBudget);
     }
 
     private function isProjectOnTime($clientProject)
@@ -116,9 +113,7 @@ class ClientProjectService implements IClientProjectService
 
     public function createOrUpdateClientProject($request, $clientProject)
     {
-
         if (!isset($clientProject)) {
-
             $clientProject = new ClientProject();
         }
 
@@ -135,7 +130,6 @@ class ClientProjectService implements IClientProjectService
 
     public function updateClientProject($request, $clientproject)
     {
-
         $clientProject = $this->createOrUpdateClientProject($request, $clientproject);
         $clientProject->save();
 

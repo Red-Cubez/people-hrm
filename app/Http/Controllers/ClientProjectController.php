@@ -4,7 +4,6 @@ namespace People\Http\Controllers;
 use Illuminate\Http\Request;
 use People\Models\Client;
 use People\Models\ClientProject;
-use People\Services\ClientProjectService;
 use People\Services\Interfaces\IClientProjectService;
 
 class ClientProjectController extends Controller {
@@ -15,10 +14,14 @@ class ClientProjectController extends Controller {
 	 */
 
 	public $ClientProjectService;
+//    public function __construct(IClientProjectService $clientProjectService) {
+	//
+	//        $this->ClientProjectService = $clientProjectService;
+	//    }
 
-	public function __construct(IClientProjectService $clientprojectService) {
+	public function __construct(IClientProjectService $clientProjectService) {
 
-		$this->ClientProjectService = $clientprojectService;
+		$this->ClientProjectService = $clientProjectService;
 	}
 
 	public function index() {

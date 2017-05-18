@@ -93,7 +93,6 @@ class CompanyProjectController extends Controller
      */
     public function update(Request $request, CompanyProject $companyproject)
     {
-        //
         $this->CompanyProjectService->updateCompanyProject($request, $companyproject);
 
         return redirect('/companies/' . $companyproject->company_id);

@@ -27,63 +27,9 @@ class CompanyProjectService implements ICompanyProjectService
     {
         $companyProject = CompanyProject::find($companyProjectId);
 
-        $isOnTime = $this->isProjectOnTime($companyProject);
-        $isOnBudget = $this->isProjectOnBudget($companyProject);
-
         $companyProjectModel = new ViewCompanyProjectModel();
 
-        return $this->ProjectService->getClientProjectAndCompanyProjectDetails($companyProjectModel, $companyProject, $isOnTime, $isOnBudget);
-    }
-
-    private function isProjectOnTime($companyProject)
-    {
-        $currentDate = date("Y-m-d");
-        $isOnTime = "Not On";
-        if ($companyProject->expectedEndDate != NULL) {
-            if ($companyProject->actualEndDate == NULL) {
-                if (($companyProject->expectedEndDate) >= $currentDate) {
-
-                    $isOnTime = "On Time";
-                } else {
-                    $isOnTime = "Not On Time";
-                }
-            } else {
-                if ($companyProject->actualEndDate <= $companyProject->expectedEndDate) {
-
-                    $isOnTime = "On Time";
-                    if (($companyProject->actualEndDate <= $currentDate)) {
-                        $isOnTime = "Project Completed ";
-                    } elseif (($companyProject->actualEndDate < $companyProject->expectedEndDate)) {
-                        $isOnTime = "Completed Before Time ";
-                    }
-                }
-            }
-        } //This scenario should not occur. The validation should stop user from have a blank expected end date
-        else {
-            $isOnTime = "Cannot determine time. Please set expected end date";
-        }
-        return $isOnTime;
-    }
-
-    private function isProjectOnBudget($companyProject)
-    {
-        $cost = $companyProject->cost;
-        $budget = $companyProject->budget;
-
-        if (($cost != NULL) && ($budget != NULL)) {
-            if ($cost < $budget) {
-                $isOnBudget = "Project is On Budget";
-            } else {
-                $isOnBudget = "Project is Not On Budget";
-            }
-        } elseif ($cost == NULL) {
-            $isOnBudget = "Budget Cannot determine.Please set cost ";
-        } else {
-            $isOnBudget = "Budget Cannot determine.Please set budget ";
-
-        }
-
-        return $isOnBudget;
+        return $this->ProjectService->getProjectDetails($companyProjectModel, $companyProject);
     }
 
     public function saveCompanyProject($request)

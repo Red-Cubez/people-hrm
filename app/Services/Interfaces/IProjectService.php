@@ -4,6 +4,6 @@ namespace People\Services\Interfaces;
 
 interface IProjectService
 {
-    public function getClientProjectAndCompanyProjectDetails($projectModel, $project, $isOnTime, $isOnBudget);
+    public function getProjectDetails($projectModel, $project);
 
 }

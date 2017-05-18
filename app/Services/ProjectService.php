@@ -2,51 +2,74 @@
 
 namespace People\Services;
 
-use People\Repositories\Interfaces\IEmployeeRepository;
-use People\Repositories\Interfaces\IProjectRepository;
+use People\Services\Interfaces\IProjectService;
 
-class ProjectService {
+class ProjectService implements IProjectService
+{
+    public function getProjectDetails($projectModel, $project)
+    {
+        $isOnTime = $this->isProjectOnTime($project->expectedEndDate, $project->actualEndDate);
+        $isOnBudget = $this->isProjectOnBudget($project->cost, $project->budget);
 
-	public $EmployeeRepository;
-	public $ProjectRepository;
+        $projectModel->projectId = $project->id;
+        $projectModel->name = $project->name;
+        $projectModel->actualStartDate = $project->actualStartDate;
+        $projectModel->actualEndDate = $project->actualEndDate;
+        $projectModel->expectedStartDate = $project->expectedStartDate;
+        $projectModel->expectedEndDate = $project->expectedEndDate;
+        $projectModel->budget = $project->budget;
+        $projectModel->cost = $project->cost;
+        $projectModel->isProjectOnTime = $isOnTime;
+        $projectModel->isProjectOnBudget = $isOnBudget;
+        return $projectModel;
+    }
 
-	public function __construct(
-		IEmployeeRepository $employeeRepository,
-		IProjectRepository $projectRepository) {
-		$this->EmployeeRepository = $employeeRepository;
-		$this->ProjectRepository = $projectRepository;
-	}
+    private function isProjectOnTime($expectedEndDate, $actualEndDate)
+    {
+        $currentDate = date("Y-m-d");
+        $isOnTime = "Not On Time";
 
-	private function getEmployee($employeeId) {
-		return $this->EmployeeRepository->find($employeeId);
-	}
+        if ($expectedEndDate != NULL) {
+            if ($actualEndDate == NULL) {
+                if (($expectedEndDate) >= $currentDate) {
+                    $isOnTime = "On Time";
+                } else {
+                    $isOnTime = "Not On Time";
+                }
+            } else {
 
-	public function ProjectResources($project) {
-		return 0;
+                if ($actualEndDate <= $expectedEndDate) {
+                    $isOnTime = "On Time";
+                    if ($actualEndDate <= $currentDate) {
+                        $isOnTime = "Completed ";
+                    } elseif ($actualEndDate < $expectedEndDate) {
+                        $isOnTime = "Completed Before Time ";
+                    }
 
-	}
+                }
+            }
+        } //This scenario should not occur. The validation should stop user from have a blank expected end date
+        else {
+            $isOnTime = "Cannot determine time. Please set expected end date";
+        }
+        return $isOnTime;
+    }
 
-	public function ProjectCost($project) {
-		$totalCost = 0;
-		foreach ($project->resources() as $resource) {
-			$totalCost = $totalCost + $resource->employee->HourlyRate;
-		}
-		return $totalCost;
-	}
+    private function isProjectOnBudget($cost, $budget)
+    {
 
-	public function IsOnTime($project) {
-		if ($project->ExpectedEndDate === null) {
-			return false;
-		}
-		if ($project->ActualEndDate === null && (date('Y-m-d') > $project->ExpectedEndDate)) {
-			return false;
-		} elseif ($project->ActualEndDate === null && (date('Y-m-d') <= $project->ExpectedEndDate)) {
-			return true;
-		}
+        if (($cost != NULL) && ($budget != NULL)) {
+            if ($cost < $budget) {
+                $isOnBudget = "Project is On Budget";
+            } else {
+                $isOnBudget = "Project is Not On Budget";
+            }
+        } elseif ($cost == NULL) {
+            $isOnBudget = "Budget Cannot determine.Please set cost ";
+        } else {
+            $isOnBudget = "Budget Cannot determine.Please set budget ";
+        }
+        return $isOnBudget;
+    }
 
-		if ($project->ActualEndDate !== null && ($project->ExpectedEndDate >= $project->ActualEndDate)) {
-			return true;
-		}
-		return false;
-	}
 }

@@ -6,7 +6,7 @@ use Tests\TestCase;
 use People\Models\Employee;
 use People\Models\Project;
 use People\Models\Resource;
-use People\Services\ProjectService;
+use People\Services\ClientProjectService;
 
 class ProjectServiceTest extends TestCase {
 	public $ProjectService;
@@ -18,7 +18,7 @@ class ProjectServiceTest extends TestCase {
 		$employeeRepository = $this->mock('People\Repositories\Interfaces\IEmployeeRepository');
 		$projectRepository = $this->mock('People\Repositories\Interfaces\IProjectRepository');
 
-		$this->ProjectService = new ProjectService($employeeRepository, $projectRepository);
+		$this->ProjectService = new ClientProjectService($employeeRepository, $projectRepository);
 
 		$this->Project = new Project();
 		$this->Project->Name = "Project 1";

@@ -83,7 +83,7 @@
                                 <i class="fa fa-trash"> Add New Project</i>
                             </button>
                         </form>
-                        
+
 </div>
     @include('clientProjects/showProjects')
 

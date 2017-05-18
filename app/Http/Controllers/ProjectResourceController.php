@@ -53,7 +53,6 @@ class ProjectResourceController extends Controller {
 
 	public function manageressources($clientProjectid) {
 
-		//TODO get resources based on availibility
 		list($currentProjectResources,$availableEmployees) = $this->ProjectResourceService->manageProjectResources($clientProjectid);
 
         return view('projectResources.index', [

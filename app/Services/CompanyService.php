@@ -1,69 +1,79 @@
 <?php
 
 namespace People\Services;
+
 use People\Models\Company;
 use People\Models\CompanyAddress;
 use People\Services\Interfaces\ICompanyService;
 
-class CompanyService implements ICompanyService {
+class CompanyService implements ICompanyService
+{
 
-	public function createOrUpdateCompanyAddress($userRequest, $companyAddress, $companyId) {
+    public function getCompanyAddressAndCompanyProjects($company)
+    {
 
-		if (!isset($companyAddress)) {
-			$companyAddress = new CompanyAddress();
-		}
-		$companyAddress->streetLine1 = $userRequest->streetLine1;
-		$companyAddress->streetLine2 = $userRequest->streetLine2;
-		$companyAddress->country = $userRequest->country;
-		$companyAddress->stateProvince = $userRequest->stateProvince;
-		$companyAddress->city = $userRequest->city;
-		$companyAddress->company_id = $companyId;
-		$companyAddress->save();
-	}
-	public function getCompanyAddressAndCompanyProjects($company) {
+        $companyAddress = $company->address;
+        return array($company, $companyAddress);
 
-		$companyAddress = $company->address;
-		return array($company, $companyAddress);
+    }
 
-	}
+    public function createCompany($request)
+    {
 
-	public function createCompany($request) {
+        $company = new Company();
+        $company->name = $request->name;
+        $company->normaHoursPerWeek = $request->normalHoursPerWeek;
+        $company->applyOverTimeRule = $request->applyOverTimeRule;
+        if ($request->applyOverTimeRule == NULL) {
+            $company->applyOverTimeRule = 0;
 
-		$company = new Company();
-		$company->name = $request->name;
-		$company->normaHoursPerWeek = $request->normalHoursPerWeek;
-		$company->applyOverTimeRule = $request->applyOverTimeRule;
-		if ($request->applyOverTimeRule == NULL) {
-			$company->applyOverTimeRule = 0;
+        }
+        $company->save();
 
-		}
-		$company->save();
+        $this->createOrUpdateCompanyAddress($request, null, $company->id);
 
-		$this->createOrUpdateCompanyAddress($request, null, $company->id);
+    }
 
-	}
-	public function updateCompany($updateRequest, $company) {
-		$company->name = $updateRequest->name;
-		$company->normaHoursPerWeek = $updateRequest->normalHoursPerWeek;
-		$company->applyOverTimeRule = $updateRequest->applyOverTimeRule;
+    public function createOrUpdateCompanyAddress($userRequest, $companyAddress, $companyId)
+    {
 
-		if ($updateRequest->applyOverTimeRule == NULL) {
-			$company->applyOverTimeRule = 0;
+        if (!isset($companyAddress)) {
+            $companyAddress = new CompanyAddress();
+        }
+        $companyAddress->streetLine1 = $userRequest->streetLine1;
+        $companyAddress->streetLine2 = $userRequest->streetLine2;
+        $companyAddress->country = $userRequest->country;
+        $companyAddress->stateProvince = $userRequest->stateProvince;
+        $companyAddress->city = $userRequest->city;
+        $companyAddress->company_id = $companyId;
+        $companyAddress->save();
+    }
 
-		}
+    public function updateCompany($updateRequest, $company)
+    {
+        $company->name = $updateRequest->name;
+        $company->normaHoursPerWeek = $updateRequest->normalHoursPerWeek;
+        $company->applyOverTimeRule = $updateRequest->applyOverTimeRule;
 
-		$this->createOrUpdateCompanyAddress($updateRequest, $company->address, $company->id);
+        if ($updateRequest->applyOverTimeRule == NULL) {
+            $company->applyOverTimeRule = 0;
 
-		$company->save();
-	}
+        }
 
-	public function deleteCompany($company) {
-		$company->delete();
-	}
+        $this->createOrUpdateCompanyAddress($updateRequest, $company->address, $company->id);
 
-	public function getAllCompanies() {
-		$companies = Company::orderBy('created_at', 'asc')->get();
-		return $companies;
-	}
+        $company->save();
+    }
+
+    public function deleteCompany($company)
+    {
+        $company->delete();
+    }
+
+    public function getAllCompanies()
+    {
+        $companies = Company::orderBy('created_at', 'asc')->get();
+        return $companies;
+    }
 
 }

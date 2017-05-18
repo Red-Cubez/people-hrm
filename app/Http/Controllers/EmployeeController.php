@@ -50,8 +50,6 @@ class EmployeeController extends Controller {
 
 		$this->EmployeeService->createEmployee($request);
 
-		//TODO Get company properly
-
 		return redirect('/employees');
 	}
 

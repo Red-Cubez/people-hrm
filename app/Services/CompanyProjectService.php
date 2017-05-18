@@ -44,8 +44,6 @@ class CompanyProjectService implements ICompanyProjectService
         $companyProject->budget = $request->budget;
         $companyProject->cost = $request->cost;
         $companyProject->company_id = $request->companyid;
-        //TODO These properties need to be set from fields
-        //TODO this value needs to come from the correct client Project
 
         $companyProject->save();
     }

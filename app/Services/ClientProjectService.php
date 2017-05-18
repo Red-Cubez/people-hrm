@@ -7,7 +7,6 @@ use People\PresentationModels\ClientProject\ViewClientProjectModel;
 use People\Services\Interfaces\IClientProjectService;
 use People\services\Interfaces\IProjectService;
 
-
 class ClientProjectService implements IClientProjectService
 {
     public $ProjectService;
@@ -20,7 +19,6 @@ class ClientProjectService implements IClientProjectService
 
     public function getClientProjects()
     {
-
         $clientProjects = ClientProject::orderBy('created_at', 'asc')->get();
         return $clientProjects;
     }
@@ -50,13 +48,11 @@ class ClientProjectService implements IClientProjectService
 
     public function createClientProject($request)
     {
-
         $clientProject = $this->createOrUpdateClientProject($request, null);
         $clientProject->client_id = $request->clientid;
         $clientProject->save();
 
         return $clientProject;
-
     }
 
     public function createOrUpdateClientProject($request, $clientProject)

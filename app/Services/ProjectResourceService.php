@@ -18,7 +18,6 @@ class ProjectResourceService implements IProjectResourceService
         if (isset($request->projectResourceId)) {
             $projectResource = projectResource::find($request->projectResourceId);
         }
-        //  //TODO get the relative project Resource id
         if (isset($request->projectResourceId)) {
             $projectResource->title = $request->title;
             $projectResource->expectedStartDate = $request->expectedStartDate;
@@ -29,9 +28,7 @@ class ProjectResourceService implements IProjectResourceService
             $projectResource->hoursPerWeek = $request->hoursPerWeek;
 
             $projectResource->save();
-        } //  //TODO set other properties as well for the resource
-
-        elseif (!isset($request->projectResourceId)) {
+        } elseif (!isset($request->projectResourceId)) {
             $projectResource->title = $request->title;
             $projectResource->expectedStartDate = $request->expectedStartDate;
             $projectResource->expectedEndDate = $request->expectedEndDate;
@@ -41,7 +38,7 @@ class ProjectResourceService implements IProjectResourceService
             $projectResource->hoursPerWeek = $request->hoursPerWeek;
             $projectResource->employee_id = $request->employee_id;
             $projectResource->client_project_id = $request->clientProjectid;
-            //TODO set other properties as well for the resource
+
             $projectResource->save();
         }
     }
@@ -50,9 +47,7 @@ class ProjectResourceService implements IProjectResourceService
     {
         $Resource = ProjectResource::where('id', $clientid)->orderBy('created_at', 'asc')->get();
         return $Resource;
-
     }
-
 
     public function manageProjectResources($clientProjectid)
     {

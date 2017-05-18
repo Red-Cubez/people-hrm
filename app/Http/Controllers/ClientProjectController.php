@@ -50,8 +50,6 @@ class ClientProjectController extends Controller
     {
 
         $clientProject = $this->ClientProjectService->createClientProject($request);
-        //TODO These properties need to be set from fields
-        //TODO this value needs to come from the correct client Project
 
         return redirect('/clients/' . $clientProject->client_id);
     }

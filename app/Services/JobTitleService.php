@@ -15,6 +15,44 @@ class JobTitleService implements IJobTitleService
         return $jobTitles;
 
     }
+    public function updateJobTitle($request,$jobTitleId)
+    {
+        //update
+        $jobTitle=JobTitle::find($jobTitleId);
+
+        $jobTitle->title=$request->jobTitle;
+        $jobTitle->save();
+
+    }
+
+    public function getJobTitleDetails($jobTitleId)
+
+    {
+        $jobTitle=JobTitle::find($jobTitleId);
+        return $jobTitle;
+    }
+
+    public function saveJobTitle($request)
+    {
+        $companyJobTitle = new JobTitle();
+
+        $companyJobTitle->title = $request->jobTitle;
+        $companyJobTitle->company_id = $request->companyId;
+
+        $companyJobTitle->save();
+    }
+
+    public function deleteJobTitle($jobTitleId)
+    {
+        $jobTitle=JobTitle::find($jobTitleId);
+        $companyId=$jobTitle->company_id;
+
+        $jobTitle->delete();
+
+        return $companyId;
+
+    }
+
 
     public function getEmployeeJobTilte($jobTitleId)
     {

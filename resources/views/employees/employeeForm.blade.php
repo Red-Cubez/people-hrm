@@ -15,6 +15,14 @@
     </div>
 </div>
 <div class="form-group">
+    <label for="name" class="col-sm-3 control-label">Date of Birth</label>
+    <div class="col-sm-6">
+        <input type="date" name="birthDate" id="employee-birthDate" class="form-control"
+               @if(isset($editEmployeeModel->employeeProfile->birthDate)) value="{{ $editEmployeeModel->employeeProfile->birthDate }}"
+               @else placeholder="Hire Date" @endif>
+    </div>
+</div>
+<div class="form-group">
     <label for="name" class="col-sm-3 control-label">Hire Date</label>
     <div class="col-sm-6">
         <input type="date" name="hireDate" id="employee-hireDate" class="form-control"

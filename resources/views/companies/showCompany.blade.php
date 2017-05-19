@@ -64,6 +64,9 @@
 
         </div>
 
+
+
+
         <div>
             <label for="contactPerson" class="control-label">Company Job Titles: </label>
 
@@ -71,6 +74,13 @@
                 {{$companyJobTitle->title}}
                  {{  " | " }}
             @endforeach
+
+        </div>
+
+        <div>
+            <label for="contactPerson" class="control-label">Birthday This Month:</label>
+
+            to do
 
         </div>
 

@@ -51,9 +51,10 @@ class EmployeeService implements IEmployeeService
 
         $employee->firstName = $request->firstName;
         $employee->lastName = $request->lastName;
+        $employee->birthDate = $request->birthDate;
         $employee->hireDate = $request->hireDate;
         $employee->terminationDate = $request->terminationDate;
-        $employee->jobTitle = $request->jobTitle;
+        $employee->job_title_id = $request->jobTitleId;
         $employee->annualSalary = $request->annualSalary;
         $employee->overTimeRate = $request->overTimeRate;
         $employee->hourlyRate = $request->hourlyRate;
@@ -121,10 +122,11 @@ class EmployeeService implements IEmployeeService
         $employeeProfileModel->employeeId = $employee->id;
         $employeeProfileModel->firstName = $employee->firstName;
         $employeeProfileModel->lastName = $employee->lastName;
+        $employeeProfileModel->birthDate = $employee->birthDate;
         $employeeProfileModel->hireDate = $employee->hireDate;
         $employeeProfileModel->overTimeRate = $employee->OvertimeRate;
         $employeeProfileModel->terminationDate = $employee->terminationDate;
-        $employeeProfileModel->jobTitle = $employee->jobTitle;
+        $employeeProfileModel->jobTitle = $employee->JobTitle->title;
         $employeeProfileModel->annualSalary = $employee->annualSalary;
         $employeeProfileModel->hourlyRate = $employee->hourlyRate;
 

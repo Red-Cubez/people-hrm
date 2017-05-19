@@ -13,4 +13,10 @@ class Employee extends Model {
 	public function address() {
 		return $this->hasOne('People\Models\EmployeeAddress');
 	}
+    public function jobTitle() {
+        return $this->belongsTo('People\Models\JobTitle');
+    }
+    public function company() {
+        return $this->belongsTo('People\Models\Company');
+    }
 }

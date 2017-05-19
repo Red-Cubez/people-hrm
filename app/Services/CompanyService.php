@@ -4,6 +4,7 @@ namespace People\Services;
 
 use People\Models\Company;
 use People\Models\CompanyAddress;
+use People\Models\Employee;
 use People\Services\Interfaces\ICompanyService;
 
 class CompanyService implements ICompanyService
@@ -22,7 +23,7 @@ class CompanyService implements ICompanyService
 
         $company = new Company();
         $company->name = $request->name;
-        $company->normaHoursPerWeek = $request->normalHoursPerWeek;
+        $company->normalHoursPerWeek = $request->normalHoursPerWeek;
         $company->applyOverTimeRule = $request->applyOverTimeRule;
         if ($request->applyOverTimeRule == NULL) {
             $company->applyOverTimeRule = 0;
@@ -52,7 +53,7 @@ class CompanyService implements ICompanyService
     public function updateCompany($updateRequest, $company)
     {
         $company->name = $updateRequest->name;
-        $company->normaHoursPerWeek = $updateRequest->normalHoursPerWeek;
+        $company->normalHoursPerWeek = $updateRequest->normalHoursPerWeek;
         $company->applyOverTimeRule = $updateRequest->applyOverTimeRule;
 
         if ($updateRequest->applyOverTimeRule == NULL) {
@@ -74,6 +75,14 @@ class CompanyService implements ICompanyService
     {
         $companies = Company::orderBy('created_at', 'asc')->get();
         return $companies;
+    }
+
+    public function getAllEmployeesWithBirthDayThisMonth($company)
+    {
+        $currentDate = date("m");
+
+        return Employee::where('company_id', $company->id)->whereMonth('birthDate','=',$currentDate)->get();
+
     }
 
 }

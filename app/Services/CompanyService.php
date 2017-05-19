@@ -22,7 +22,7 @@ class CompanyService implements ICompanyService
 
         $company = new Company();
         $company->name = $request->name;
-        $company->normaHoursPerWeek = $request->normalHoursPerWeek;
+        $company->normalHoursPerWeek = $request->normalHoursPerWeek;
         $company->applyOverTimeRule = $request->applyOverTimeRule;
         if ($request->applyOverTimeRule == NULL) {
             $company->applyOverTimeRule = 0;
@@ -52,7 +52,7 @@ class CompanyService implements ICompanyService
     public function updateCompany($updateRequest, $company)
     {
         $company->name = $updateRequest->name;
-        $company->normaHoursPerWeek = $updateRequest->normalHoursPerWeek;
+        $company->normalHoursPerWeek = $updateRequest->normalHoursPerWeek;
         $company->applyOverTimeRule = $updateRequest->applyOverTimeRule;
 
         if ($updateRequest->applyOverTimeRule == NULL) {

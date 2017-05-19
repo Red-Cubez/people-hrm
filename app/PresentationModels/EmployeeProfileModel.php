@@ -19,4 +19,5 @@ class EmployeeProfileModel {
 	public $stateProvince;
 	public $city;
 
+
 }

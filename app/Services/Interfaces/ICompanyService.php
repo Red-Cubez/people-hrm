@@ -9,4 +9,5 @@ interface ICompanyService {
 	public function getAllCompanies();
 	public function getCompanyAddressAndCompanyProjects($company);
 
+
 }

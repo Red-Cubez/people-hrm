@@ -4,18 +4,24 @@ namespace People\Http\Controllers;
 
 use Illuminate\Http\Request;
 use People\Models\Employee;
+use People\Models\JobTitle;
 use People\Services\EmployeeService;
 use People\Services\Interfaces\IDepartmentService;
 use People\Services\Interfaces\IEmployeeService;
+use People\Services\Interfaces\IJobTitleService;
 
 class EmployeeController extends Controller {
 
 	public $EmployeeService;
+    public $DepartmentService;
+    public $JobTitleService;
 
-	public function __construct(IEmployeeService $employeeService, IDepartmentService $departmentService) {
+
+	public function __construct(IEmployeeService $employeeService, IDepartmentService $departmentService,IJobTitleService $jobTitleService) {
 
 		$this->EmployeeService = $employeeService;
 		$this->DepartmentService = $departmentService;
+        $this->JobTitleService = $jobTitleService;
 	}
 	/**
 	 * Display a listing of the resource.
@@ -26,8 +32,15 @@ class EmployeeController extends Controller {
 
 		$employees = $this->EmployeeService->getAllEmployees();
 		$departments = $this->DepartmentService->getAllDepartments();
+		$jobTitles=$this->JobTitleService->getAllJobTitles();
 
-		return view('employees.index', ['employees' => $employees, 'departments' => $departments]);
+		return view('employees.index',
+            [
+                'employees' => $employees,
+                'departments' => $departments,
+                'jobTitles' => $jobTitles,
+
+            ]);
 	}
 
 	/**
@@ -63,6 +76,7 @@ class EmployeeController extends Controller {
 
 		$employeeModel = $this->EmployeeService->viewEmployee($employee);
 		$departments = $this->EmployeeService->getAllDepartments();
+
 		return view('employees/showEmployee',
 			['employeeModel' => $employeeModel,
 				'departments' => $departments,
@@ -78,9 +92,11 @@ class EmployeeController extends Controller {
 
 		$editEmployeeModel = $this->EmployeeService->editEmployee($employee);
 		$departments = $this->EmployeeService->getAllDepartments();
+        $jobTitles=$this->JobTitleService->getAllJobTitles();
 		return view('employees/update',
 			['editEmployeeModel' => $editEmployeeModel,
 				'departments' => $departments,
+                'jobTitles' => $jobTitles,
 			]);
 
 	}

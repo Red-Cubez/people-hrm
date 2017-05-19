@@ -8,6 +8,6 @@ interface ICompanyService {
 	public function deleteCompany($company);
 	public function getAllCompanies();
 	public function getCompanyAddressAndCompanyProjects($company);
-
+    public function getAllEmployeesWithBirthDayThisMonth($company);
 
 }

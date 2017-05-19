@@ -1,10 +1,11 @@
+
 <?php
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateEmployeeTab extends Migration
+class UpdateEmployeeTableAddBirthDateAndCompanyIdColoumn extends Migration
 {
     /**
      * Run the migrations.
@@ -16,6 +17,10 @@ class UpdateEmployeeTab extends Migration
         Schema::table('employees', function (Blueprint $table) {
 
             $table->date('birthDate')->nullable();
+
+            $table->integer('company_id')->unsigned()->nullable();
+            $table->foreign('company_id')->references('id')->on('companies');
+
         });
     }
 
@@ -26,6 +31,10 @@ class UpdateEmployeeTab extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('employees', function (Blueprint $table) {
+            $table->dropColumn('birthDate');
+            $table->dropForeign('company_id');
+
+        });
     }
 }

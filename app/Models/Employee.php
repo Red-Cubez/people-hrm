@@ -16,4 +16,7 @@ class Employee extends Model {
     public function jobTitle() {
         return $this->belongsTo('People\Models\JobTitle');
     }
+    public function company() {
+        return $this->belongsTo('People\Models\Company');
+    }
 }

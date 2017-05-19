@@ -4,6 +4,7 @@ namespace People\Services;
 
 use People\Models\Company;
 use People\Models\CompanyAddress;
+use People\Models\Employee;
 use People\Services\Interfaces\ICompanyService;
 
 class CompanyService implements ICompanyService
@@ -74,6 +75,14 @@ class CompanyService implements ICompanyService
     {
         $companies = Company::orderBy('created_at', 'asc')->get();
         return $companies;
+    }
+
+    public function getAllEmployeesWithBirthDayThisMonth($company)
+    {
+        $currentDate = date("m");
+
+        return Employee::where('company_id', $company->id)->whereMonth('birthDate','=',$currentDate)->get();
+
     }
 
 }

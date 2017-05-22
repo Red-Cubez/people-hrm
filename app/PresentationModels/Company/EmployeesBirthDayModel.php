@@ -2,7 +2,8 @@
 
 namespace People\PresentationModels\Company;
 
-class EmployeesBirthDayModel {
+class EmployeesBirthDayModel
+{
 
     public $firstName;
     public $lastName;

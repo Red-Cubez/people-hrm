@@ -88,7 +88,7 @@
                         &nbsp -
                         &nbsp
 
-                        ({{date("d-m",strtotime(($employee->birthDate)))}})
+                        ({{date("d-M",strtotime(($employee->birthDate)))}})
                     </li>
                 @endforeach
 

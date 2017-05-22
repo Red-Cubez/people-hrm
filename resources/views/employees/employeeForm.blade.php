@@ -55,7 +55,7 @@
                         selected
                         @endif
 
-                         value="{{$jobTitle->id}}" id="jobTitle_{{$jobTitle->title}}">
+                        value="{{$jobTitle->id}}" id="jobTitle_{{$jobTitle->title}}">
 
                     {{$jobTitle->title}}
 

@@ -76,44 +76,57 @@
         </div>
 
         <div>
-            <label for="contactPerson" class="control-label">Birthday This Month:</label>
-
-            @foreach($employeesWithBirhthday as $employee)
-                {{$employee->firstName}}
-                {{" | "}}
-            @endforeach
-
-
+            <label for="birthdate" class="col-sm-3 control-label">Birthday This Month:</label>
         </div>
+        <div class="col-sm-3">
+            <ol type="1">
+                @foreach($employeesWithBirhthday as $employee)
+                    <li>{{$employee->firstName}}
+                        &nbsp
+                        {{$employee->lastName}}
 
-        <form action="{{ url('companies/'.$company->id.'/edit') }}" method="POST">
-            {{ csrf_field() }}
-            {{ method_field('GET') }}
+                        &nbsp -
+                        &nbsp
+                        
+                        ({{date("d-m",strtotime(($employee->birthDate)))}})
+                    </li>
+                @endforeach
 
-            <button type="submit" class="btn btn-danger">
-                <i class="fa fa-trash"> Edit</i>
-            </button>
-        </form>
-
-
-        <form action="{{ url('/companies/'.$company->id.'/companyprojects') }}" method="POST">
-            {{ csrf_field() }}
-            {{ method_field('GET') }}
+            </ol>
+        </div>
+    </div>
 
 
-            <button type="submit" class="btn btn-danger">
-                <i class="fa fa-trash"> Add New Projects</i>
-            </button>
-        </form>
 
-        <form action="{{ url('jobtitle/'.$company->id) }}" method="POST">
-            {{ csrf_field() }}
-            {{ method_field('GET') }}
 
-            <button type="submit" class="btn btn-danger">
-                <i class="fa fa-trash"> Add New Job Title</i>
-            </button>
-        </form>
+    <form action="{{ url('companies/'.$company->id.'/edit') }}" method="POST">
+        {{ csrf_field() }}
+        {{ method_field('GET') }}
+
+        <button type="submit" class="btn btn-danger">
+            <i class="fa fa-trash"> Edit</i>
+        </button>
+    </form>
+
+
+    <form action="{{ url('/companies/'.$company->id.'/companyprojects') }}" method="POST">
+        {{ csrf_field() }}
+        {{ method_field('GET') }}
+
+
+        <button type="submit" class="btn btn-danger">
+            <i class="fa fa-trash"> Add New Projects</i>
+        </button>
+    </form>
+
+    <form action="{{ url('jobtitle/'.$company->id) }}" method="POST">
+        {{ csrf_field() }}
+        {{ method_field('GET') }}
+
+        <button type="submit" class="btn btn-danger">
+            <i class="fa fa-trash"> Add New Job Title</i>
+        </button>
+    </form>
 
     </div>
     @include('companyProjects/showProjects')

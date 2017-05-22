@@ -1,4 +1,4 @@
- @if (count($company->projects) > 0)
+ @if (count($companyProfileModel->companyProjects) > 0)
               <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3>Current Projects</h3>
@@ -20,34 +20,34 @@
                         </thead>
                         <!-- Table Body -->
                         <tbody>
-                            @foreach ($company->projects as $company->project)
+                            @foreach ($companyProfileModel->companyProjects as $project)
                                 <tr>
                                     <!-- company->project Name -->
                                     <td class="table-text">
-                                        <div>{{ $company->project->name }}</div>
+                                        <div>{{ $project->projectName }}</div>
                                     </td>
                                      <td class="table-text">
-                                        <div>{{ $company->project->expectedStartDate }}</div>
+                                        <div>{{ $project->expectedStartDate }}</div>
                                     </td>
                                      <td class="table-text">
-                                        <div>{{ $company->project->expectedEndDate }}</div>
+                                        <div>{{ $project->expectedEndDate }}</div>
                                     </td>
                                     <td class="table-text">
-                                        <div>{{ $company->project->actualStartDate }}</div>
+                                        <div>{{ $project->actualStartDate }}</div>
                                     </td>
                                     <td class="table-text">
-                                        <div>{{ $company->project->actualEndDate }}</div>
+                                        <div>{{ $project->actualEndDate }}</div>
                                     </td>
                                     <td class="table-text">
-                                        <div>{{ $company->project->budget}}</div>
+                                        <div>{{ $project->budget}}</div>
                                     </td>
                                     <td class="table-text">
-                                        <div>{{ $company->project->cost }}</div>
+                                        <div>{{ $project->cost }}</div>
                                     </td>
 
                                     <!-- Delete Button -->
                                     <td>
-                           <form action="{{ url('companyprojects/'.$company->project->id) }}" method="POST">
+                           <form action="{{ url('companyprojects/'.$project->projectId) }}" method="POST">
                              {{ csrf_field() }}
                              {{ method_field('DELETE') }}
                              <input type="hidden" name="_method" value="DELETE">
@@ -56,7 +56,7 @@
                              </button>
                            </form>
 
-                           <form action="{{ url('companyprojects/'.$company->project->id.'/edit') }}" method="POST">
+                           <form action="{{ url('companyprojects/'.$project->projectId.'/edit') }}" method="POST">
                              {{ csrf_field() }}
                              {{ method_field('GET') }}
 
@@ -65,7 +65,7 @@
                               </button>
                             </form>
 
-                          <form action="{{ url('companyprojectresources/'.$company->project->id) }}" method="POST">
+                          <form action="{{ url('companyprojectresources/'.$project->projectId) }}" method="POST">
                              {{ csrf_field() }}
                              {{ method_field('GET') }}
 

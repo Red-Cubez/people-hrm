@@ -4,8 +4,11 @@ namespace People\Services;
 
 use People\Models\Company;
 use People\Models\CompanyAddress;
-use People\Models\Employee;
+use People\PresentationModels\Company\CompanyProfileModel;
+use People\PresentationModels\Company\CompanyProjectModel;
+use People\PresentationModels\Company\EmployeesBirthDayModel;
 use People\Services\Interfaces\ICompanyService;
+
 
 class CompanyService implements ICompanyService
 {
@@ -77,12 +80,62 @@ class CompanyService implements ICompanyService
         return $companies;
     }
 
-    public function getAllEmployeesWithBirthDayThisMonth($company)
+    public function mapCompanyProfile($company, $companyAddress, $companyJobTitles, $employeesWithBirthday)
     {
-        $currentDate = date("m");
 
-        return Employee::where('company_id', $company->id)->whereMonth('birthDate','=',$currentDate)->get();
+        $companyProfileModel = new CompanyProfileModel();
+
+        $companyProfileModel->companyName = $company->name;
+        $companyProfileModel->companyId = $company->id;
+        $companyProfileModel->normalHoursPerWeek = $company->normalHoursPerWeek;
+        $companyProfileModel->applyOverTimeRule = $company->applyOverTimeRule;
+        $companyProfileModel->streetLine1 = $companyAddress->streetLine1;
+        $companyProfileModel->streetLine2 = $companyAddress->streetLine2;
+        $companyProfileModel->country = $companyAddress->country;
+        $companyProfileModel->stateProvince = $companyAddress->stateProvince;
+        $companyProfileModel->city = $companyAddress->city;
+
+        $companyProfileModel->jobTitles = [];
+        foreach ($companyJobTitles as $jobTitle) {
+            array_push($companyProfileModel->jobTitles, $jobTitle->title);
+        }
+
+
+        foreach ($employeesWithBirthday as $employee) {
+
+            $employeesBirthdayModel = new EmployeesBirthDayModel();
+            $employeesBirthdayModel->firstName = $employee->firstName;
+            $employeesBirthdayModel->lastName = $employee->lastName;
+            $employeesBirthdayModel->birthDate = $employee->birthDate;
+
+            if (is_null($companyProfileModel->employeesBirthday)) {
+                $companyProfileModel->employeesBirthday = [];
+            }
+
+            array_push($companyProfileModel->employeesBirthday, $employeesBirthdayModel);
+        }
+
+        
+        foreach ($company->projects as $project) {
+            $companyProjectModel = new CompanyProjectModel();
+            $companyProjectModel->projectId = $project->id;
+            $companyProjectModel->projectName = $project->name;
+            $companyProjectModel->expectedStartDate = $project->expectedStartDate;
+            $companyProjectModel->expectedEndDate = $project->expectedEndDate;
+            $companyProjectModel->actualStartDate = $project->actualStartDate;
+            $companyProjectModel->actualEndDate = $project->actualEndDate;
+            $companyProjectModel->budget = $project->budget;
+            $companyProjectModel->cost = $project->cost;
+
+            if (is_null($companyProfileModel->companyProjects)) {
+                $companyProfileModel->companyProjects = [];
+            }
+            array_push($companyProfileModel->companyProjects, $companyProjectModel);
+        }
+
+        return $companyProfileModel;
 
     }
+
 
 }

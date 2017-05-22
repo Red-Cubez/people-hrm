@@ -9,7 +9,7 @@
             <label for="name" class="control-label">Name : </label>
 
 
-            {{$company->name}}
+            {{$companyProfileModel->companyName}}
 
         </div>
         <div>
@@ -17,7 +17,7 @@
             <label for="normalHoursPerWeek" class="control-label">Normal Hours / Week : </label>
 
 
-            {{$company->normalHoursPerWeek}}
+            {{$companyProfileModel->normalHoursPerWeek}}
 
         </div>
         <div>
@@ -25,9 +25,9 @@
             <label for="applyOverTimeRule" class="control-label">Over Time Rule : </label>
 
 
-            @if(($company->applyOverTimeRule)==1)
+            @if(($companyProfileModel->applyOverTimeRule)==1)
                 Yes
-            @elseif(($company->applyOverTimeRule==0))
+            @elseif(($companyProfileModel->applyOverTimeRule==0))
                 No
             @endif
 
@@ -35,32 +35,32 @@
         <div>
             <label for="contactPerson" class="control-label">Street Line 1 : </label>
 
-            {{$company->address->streetLine1 }}
+            {{$companyProfileModel->streetLine1 }}
 
         </div>
         <div>
             <label for="contactPerson" class="control-label">Street Line 2 : </label>
 
-            {{$company->address->streetLine2 }}
+            {{$companyProfileModel->streetLine2 }}
 
         </div>
         <div>
             <label for="contactPerson" class="control-label">Country: </label>
 
-            {{$company->address->country }}
+            {{$companyProfileModel->country }}
 
         </div>
         <div>
             <label for="contactPerson" class="control-label">State / Province : </label>
 
-            {{$company->address->stateProvince }}
+            {{$companyProfileModel->stateProvince }}
 
         </div>
 
         <div>
             <label for="contactPerson" class="control-label">City</label>
 
-            {{$company->address->city }}
+            {{$companyProfileModel->city }}
 
         </div>
 
@@ -68,8 +68,8 @@
         <div>
             <label for="contactPerson" class="control-label">Company Job Titles: </label>
 
-            @foreach($companyJobTitles as $companyJobTitle)
-                {{$companyJobTitle->title}}
+            @foreach($companyProfileModel->jobTitles as $companyJobTitle)
+                {{$companyJobTitle}}
                 {{  " | " }}
             @endforeach
 
@@ -80,14 +80,14 @@
         </div>
         <div class="col-sm-3">
             <ol type="1">
-                @foreach($employeesWithBirhthday as $employee)
+                @foreach($companyProfileModel->employeesBirthday as $employee)
                     <li>{{$employee->firstName}}
                         &nbsp
                         {{$employee->lastName}}
 
                         &nbsp -
                         &nbsp
-                        
+
                         ({{date("d-m",strtotime(($employee->birthDate)))}})
                     </li>
                 @endforeach
@@ -99,7 +99,7 @@
 
 
 
-    <form action="{{ url('companies/'.$company->id.'/edit') }}" method="POST">
+    <form action="{{ url('companies/'.$companyProfileModel->companyId.'/edit') }}" method="POST">
         {{ csrf_field() }}
         {{ method_field('GET') }}
 
@@ -109,7 +109,7 @@
     </form>
 
 
-    <form action="{{ url('/companies/'.$company->id.'/companyprojects') }}" method="POST">
+    <form action="{{ url('/companies/'.$companyProfileModel->companyId.'/companyprojects') }}" method="POST">
         {{ csrf_field() }}
         {{ method_field('GET') }}
 
@@ -119,7 +119,7 @@
         </button>
     </form>
 
-    <form action="{{ url('jobtitle/'.$company->id) }}" method="POST">
+    <form action="{{ url('jobtitle/'.$companyProfileModel->companyId) }}" method="POST">
         {{ csrf_field() }}
         {{ method_field('GET') }}
 

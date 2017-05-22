@@ -5,6 +5,7 @@ namespace People\Http\Controllers;
 use Illuminate\Http\Request;
 use People\Models\Company;
 use People\Services\Interfaces\ICompanyService;
+use People\Services\Interfaces\IEmployeeService;
 use People\Services\Interfaces\IJobTitleService;
 
 class CompanyController extends Controller
@@ -12,12 +13,14 @@ class CompanyController extends Controller
 
     public $CompanyService;
     public $JobTitleService;
+    public $EmployeeService;
 
-    public function __construct(ICompanyService $companyService,IJobTitleService $jobTitleService)
+    public function __construct(ICompanyService $companyService,IJobTitleService $jobTitleService,IEmployeeService $employeeService)
     {
 
         $this->CompanyService = $companyService;
         $this->JobTitleService = $jobTitleService;
+        $this->EmployeeService = $employeeService;
     }
 
     /**
@@ -68,16 +71,14 @@ class CompanyController extends Controller
     {
 
         //below query is nothing,its just to use companyaddress model in this controller.will be handled soon
-        list($company, $CompanyAddress) = $this->CompanyService->getCompanyAddressAndCompanyProjects($company);
+        list($company, $companyAddress) = $this->CompanyService->getCompanyAddressAndCompanyProjects($company);
         $companyJobTitles=$this->JobTitleService->getJobTitlesOfCompany($company->id);
 
-        $employeesWithBirhthday=$this->CompanyService->getAllEmployeesWithBirthDayThisMonth($company);
-
+        $employeesWithBirthday=$this->EmployeeService->getAllEmployeesWithBirthDayThisMonth($company);
+        $companyProfileModel=$this->CompanyService->mapCompanyProfile($company,$companyAddress,$companyJobTitles,$employeesWithBirthday);
         return view('companies/showCompany',
-            ['company' => $company,
-                'CompanyAddress' => $CompanyAddress,
-                'companyJobTitles' => $companyJobTitles,
-                'employeesWithBirhthday'=> $employeesWithBirhthday,
+            [
+                'companyProfileModel' => $companyProfileModel,
             ]);
     }
 

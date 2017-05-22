@@ -10,5 +10,6 @@ interface IEmployeeService {
 	public function getAllDepartments();
 	public function viewEmployee($employee);
 	public function editEmployee($employee);
+    public function getAllEmployeesWithBirthDayThisMonth($company);
 
 }

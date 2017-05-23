@@ -96,8 +96,9 @@
         </div>
     </div>
 
-
-
+<div>
+    @include('companyHolidays/showHolidays')
+</div>
 
     <form action="{{ url('companies/'.$companyProfileModel->companyId.'/edit') }}" method="POST">
         {{ csrf_field() }}
@@ -125,6 +126,16 @@
 
         <button type="submit" class="btn btn-danger">
             <i class="fa fa-trash"> Add New Job Title</i>
+        </button>
+    </form>
+
+    <form action="{{ url('companyholidays/') }}" method="POST">
+        {{ csrf_field() }}
+        {{ method_field('GET') }}
+        <input type="hidden" name="companyId" value="{{$companyProfileModel->companyId}}">
+
+        <button type="submit" class="btn btn-danger">
+            <i class="fa fa-trash"> Set Holidays</i>
         </button>
     </form>
 

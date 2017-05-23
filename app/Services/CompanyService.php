@@ -7,6 +7,7 @@ use People\Models\CompanyAddress;
 use People\PresentationModels\Company\CompanyProfileModel;
 use People\PresentationModels\Company\CompanyProjectModel;
 use People\PresentationModels\Company\EmployeesBirthDayModel;
+use People\PresentationModels\Company\CompanyHolidayModel;
 use People\Services\Interfaces\ICompanyService;
 
 
@@ -131,6 +132,19 @@ class CompanyService implements ICompanyService
                 $companyProfileModel->companyProjects = [];
             }
             array_push($companyProfileModel->companyProjects, $companyProjectModel);
+        }
+
+        foreach ($company->holidays as $holiday) {
+            $companyHolidayModel = new CompanyHolidayModel();
+            $companyHolidayModel->holidayId = $holiday->id;
+            $companyHolidayModel->holidayName = $holiday->name;
+            $companyHolidayModel->startDate = $holiday->startDate;
+            $companyHolidayModel->endDate = $holiday->endDate;
+
+            if (is_null($companyProfileModel->companyHolidays)) {
+                $companyProfileModel->companyHolidays = [];
+            }
+            array_push($companyProfileModel->companyHolidays, $companyHolidayModel);
         }
 
         return $companyProfileModel;

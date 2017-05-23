@@ -15,6 +15,8 @@ class CompanyProfileModel
     public $stateProvince;
     public $city;
 
+    public $companyHolidays;
+
     public $companyProjects;
 
     public $employeesBirthday;

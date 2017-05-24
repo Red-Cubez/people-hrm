@@ -78,8 +78,8 @@
         <div>
             <label for="birthdate" class="col-sm-3 control-label">Birthday This Month:</label>
         </div>
-        <div class="col-sm-3">
-            <ol type="1">
+        <div>
+            <ol type="1"  >
                 @foreach($companyProfileModel->employeesBirthday as $employee)
                     <li>{{$employee->firstName}}
                         &nbsp

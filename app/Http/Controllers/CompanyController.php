@@ -114,7 +114,7 @@ class CompanyController extends Controller
     {
         $this->CompanyService->updateCompany($request, $company);
 
-        return redirect('/companies');
+        return redirect('/companies/'.$company->id);
     }
 
     /**

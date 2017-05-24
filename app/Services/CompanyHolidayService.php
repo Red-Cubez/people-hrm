@@ -26,10 +26,18 @@ class CompanyHolidayService implements ICompanyHolidayService
         return CompanyHoliday::orderBy('startDate','asc')->where('company_id',$companyId)->get();
 
     }
-    public function countHolidays($endDate,$startDate)
-    {
-        return date("d",strtotime($endDate)) - date("d",strtotime($startDate));
 
+    /**
+     * @param $endDate
+     * @param $startDate
+     */
+    public function countHolidays($endDate, $startDate)
+    {
+
+//        $count =  date_diff($endDate, $startDate);
+//        dd($count);
+     return date("d",strtotime($endDate)) - date("d",strtotime($startDate));
+//        dd($count);
     }
 
     public function getHolidayDetails($holidayId)

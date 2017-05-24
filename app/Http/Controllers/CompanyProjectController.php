@@ -5,6 +5,7 @@ namespace People\Http\Controllers;
 use Illuminate\Http\Request;
 use People\Models\CompanyProject;
 use People\Services\Interfaces\ICompanyProjectService;
+use People\Services\Interfaces\ICompanyProjectResourceService;
 
 class CompanyProjectController extends Controller
 {
@@ -15,11 +16,13 @@ class CompanyProjectController extends Controller
      */
 
     public $CompanyProjectService;
+    public $CompanyProjectResourceService;
 
-    public function __construct(ICompanyProjectService $companyProjectService)
+    public function __construct(ICompanyProjectService $companyProjectService,ICompanyProjectResourceService $companyProjectResourceService)
     {
 
         $this->CompanyProjectService = $companyProjectService;
+        $this->CompanyProjectResourceService = $companyProjectResourceService;
     }
 
     public function index()
@@ -65,7 +68,6 @@ class CompanyProjectController extends Controller
      */
     public function show(CompanyProject $companyproject)
     {
-
         return view('companyProjects/companyProjectEditForm', ['companyproject' => $companyproject]);
     }
 
@@ -78,9 +80,18 @@ class CompanyProjectController extends Controller
     public function edit($companyProjectId)
     {
 
+        list($currentProjectResources, $availableEmployees) = $this->CompanyProjectResourceService->showCompanyProjectResources($companyProjectId);
+
+
         $companyProject = $this->CompanyProjectService->viewCompanyProject($companyProjectId);
 
-        return view('companyProjects/viewCompanyProject', ['project' => $companyProject]);
+        return view('companyProjects/viewCompanyProject',
+            [
+                'project' => $companyProject,
+                'projectResources' => $currentProjectResources,
+                'availableEmployees' => $availableEmployees,
+                'companyProjectId' => $companyProjectId,
+        ]);
 
     }
 

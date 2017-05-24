@@ -17,7 +17,7 @@ class CompanyController extends Controller
     public $EmployeeService;
     public $CompanyHolidayService;
 
-    public function __construct(ICompanyService $companyService,IJobTitleService $jobTitleService,IEmployeeService $employeeService,ICompanyHolidayService $companyHolidayService)
+    public function __construct(ICompanyService $companyService, IJobTitleService $jobTitleService, IEmployeeService $employeeService, ICompanyHolidayService $companyHolidayService)
     {
 
         $this->CompanyService = $companyService;
@@ -74,11 +74,17 @@ class CompanyController extends Controller
     {
 
         //below query is nothing,its just to use companyaddress model in this controller.will be handled soon
+
+        $companyJobTitles = $this->JobTitleService->getJobTitlesOfCompany($company->id);
+
+
+        $companyHolidays = $this->CompanyHolidayService->getCompanyHolidays($company->id);
+
+        $employeesWithBirthday = $this->EmployeeService->getAllEmployeesWithBirthDayThisMonth($company);
+
         list($company, $companyAddress) = $this->CompanyService->getCompanyAddressAndCompanyProjects($company);
-        $companyJobTitles=$this->JobTitleService->getJobTitlesOfCompany($company->id);
-        $companyHolidays=$this->CompanyHolidayService->getCompanyHolidays($company->id);
-        $employeesWithBirthday=$this->EmployeeService->getAllEmployeesWithBirthDayThisMonth($company);
-        $companyProfileModel=$this->CompanyService->mapCompanyProfile($company,$companyAddress,$companyJobTitles,$employeesWithBirthday,$companyHolidays);
+        $companyProfileModel = $this->CompanyService->mapCompanyProfile($company, $companyAddress, $companyJobTitles, $employeesWithBirthday, $companyHolidays);
+
         return view('companies/showCompany',
             [
                 'companyProfileModel' => $companyProfileModel,

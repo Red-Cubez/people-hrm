@@ -16,6 +16,7 @@ class CompanyHolidayService implements ICompanyHolidayService
         $companyHoliday->startDate = $request->startDate;
         $companyHoliday->endDate = $request->endDate;
         $companyHoliday->company_id = $request->companyId;
+        $companyHoliday->holidays = $this->countHolidays($request->endDate,$request->startDate);
         $companyHoliday->save();
 
     }
@@ -23,6 +24,11 @@ class CompanyHolidayService implements ICompanyHolidayService
     public function getCompanyHolidays($companyId)
     {
         return CompanyHoliday::orderBy('startDate','asc')->where('company_id',$companyId)->get();
+
+    }
+    public function countHolidays($endDate,$startDate)
+    {
+        return date("d",strtotime($endDate)) - date("d",strtotime($startDate));
 
     }
 
@@ -37,6 +43,7 @@ class CompanyHolidayService implements ICompanyHolidayService
         $holiday->name=$request->name;
         $holiday->startDate=$request->startDate;
         $holiday->endDate=$request->endDate;
+        $holiday->holidays = $this->countHolidays($request->endDate,$request->startDate);
         $holiday->save();
     }
     public function deleteHoliday($holidayId)

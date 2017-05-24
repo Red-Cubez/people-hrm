@@ -140,6 +140,7 @@ class CompanyService implements ICompanyService
             $companyHolidayModel->holidayName = $holiday->name;
             $companyHolidayModel->startDate = $holiday->startDate;
             $companyHolidayModel->endDate = $holiday->endDate;
+            $companyHolidayModel->countHolidays = $holiday->holidays;
 
             if (is_null($companyProfileModel->companyHolidays)) {
                 $companyProfileModel->companyHolidays = [];

@@ -11,6 +11,7 @@
                 <th>Holiday Name </th>
                 <th>Start Date</th>
                 <th>End Date</th>
+                <th>Total Holidays</th>
                 <th>Operations</th>
                 <th></th>
 
@@ -28,6 +29,9 @@
                         </td>
                         <td class="table-text">
                             <div>{{ $companyHoliday->endDate }}</div>
+                        </td>
+                        <td class="table-text">
+                            <div>{{ $companyHoliday->countHolidays }}</div>
                         </td>
                         <td>
                             <form action="{{ url('companyholidays/'.$companyHoliday->holidayId.'/edit') }}" method="POST">

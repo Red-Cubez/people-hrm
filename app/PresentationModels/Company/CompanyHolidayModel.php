@@ -8,4 +8,5 @@ class CompanyHolidayModel
     public $holidayName;
     public $startDate;
     public $endDate;
+    public $countHolidays;
 }

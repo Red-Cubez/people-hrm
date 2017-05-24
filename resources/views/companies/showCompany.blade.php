@@ -105,7 +105,7 @@
         {{ method_field('GET') }}
 
         <button type="submit" class="btn btn-danger">
-            <i class="fa fa-trash"> Edit</i>
+            <i class="fa fa-trash"> Edit Company</i>
         </button>
     </form>
 

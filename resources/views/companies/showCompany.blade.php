@@ -1,121 +1,78 @@
 @extends('layouts.app')
 
 @section('content')
+    <div class="container">
 
-    <div class="panel-body">
-        @include('common.errors')
-        <div>
+        <div class="row">
+            <div class="col-sm-3">
+                @include('companies/showCompanyProfile')
+                <form action="{{ url('companies/'.$companyProfileModel->companyId.'/edit') }}" method="POST">
+                    {{ csrf_field() }}
+                    {{ method_field('GET') }}
 
-            <label for="name" class="control-label">Name : </label>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fa fa-trash"> Edit Company</i>
+                    </button>
+                </form>
 
-
-            {{$company->name}}
-
-        </div>
-        <div>
-
-            <label for="normalHoursPerWeek" class="control-label">Normal Hours / Week : </label>
-
-
-            {{$company->normalHoursPerWeek}}
+            </div>{{--end div of included page--}}
 
         </div>
-        <div>
+        <div class="col-sm-7">
+            @include('companyHolidays/showHolidays')
+            <form action="{{ url('companyholidays/') }}" method="POST">
+                {{ csrf_field() }}
+                {{ method_field('GET') }}
+                <input type="hidden" name="companyId" value="{{$companyProfileModel->companyId}}">
 
-            <label for="applyOverTimeRule" class="control-label">Over Time Rule : </label>
+                <button type="submit" class="btn btn-danger">
+                    <i class="fa fa-trash"> Set Holidays</i>
+                </button>
+            </form>
 
-
-            @if(($company->applyOverTimeRule)==1)
-                Yes
-            @elseif(($company->applyOverTimeRule==0))
-                No
-            @endif
-
+        </div>{{--end div of included page--}}
         </div>
-        <div>
-            <label for="contactPerson" class="control-label">Street Line 1 : </label>
-
-            {{$company->address->streetLine1 }}
-
-        </div>
-        <div>
-            <label for="contactPerson" class="control-label">Street Line 2 : </label>
-
-            {{$company->address->streetLine2 }}
-
-        </div>
-        <div>
-            <label for="contactPerson" class="control-label">Country: </label>
-
-            {{$company->address->country }}
-
-        </div>
-        <div>
-            <label for="contactPerson" class="control-label">State / Province : </label>
-
-            {{$company->address->stateProvince }}
-
-        </div>
-
-        <div>
-            <label for="contactPerson" class="control-label">City</label>
-
-            {{$company->address->city }}
-
-        </div>
-
-
-        <div>
-            <label for="contactPerson" class="control-label">Company Job Titles: </label>
-
-            @foreach($companyJobTitles as $companyJobTitle)
-                {{$companyJobTitle->title}}
-                {{  " | " }}
-            @endforeach
-
-        </div>
-
-        <div>
-            <label for="contactPerson" class="control-label">Birthday This Month:</label>
-
-            @foreach($employeesWithBirhthday as $employee)
-                {{$employee->firstName}}
-                {{" | "}}
-            @endforeach
-
-
-        </div>
-
-        <form action="{{ url('companies/'.$company->id.'/edit') }}" method="POST">
-            {{ csrf_field() }}
-            {{ method_field('GET') }}
-
-            <button type="submit" class="btn btn-danger">
-                <i class="fa fa-trash"> Edit</i>
-            </button>
-        </form>
-
-
-        <form action="{{ url('/companies/'.$company->id.'/companyprojects') }}" method="POST">
-            {{ csrf_field() }}
-            {{ method_field('GET') }}
-
-
-            <button type="submit" class="btn btn-danger">
-                <i class="fa fa-trash"> Add New Projects</i>
-            </button>
-        </form>
-
-        <form action="{{ url('jobtitle/'.$company->id) }}" method="POST">
-            {{ csrf_field() }}
-            {{ method_field('GET') }}
-
-            <button type="submit" class="btn btn-danger">
-                <i class="fa fa-trash"> Add New Job Title</i>
-            </button>
-        </form>
 
     </div>
-    @include('companyProjects/showProjects')
+
+    <div class="row">
+        <div class="col-sm-3">
+            @include('companies/showCompanyJobTitles')
+            <form action="{{ url('jobtitle/'.$companyProfileModel->companyId) }}" method="POST">
+                {{ csrf_field() }}
+                {{ method_field('GET') }}
+
+                <button type="submit" class="btn btn-danger">
+                    <i class="fa fa-trash"> Add New Job Title</i>
+                </button>
+
+            </form>
+
+        </div> {{--end div of included page--}}
+        </div>
+
+        <div class="col-sm-8">
+            @include('companyProjects/showProjects')
+            <form action="{{ url('/companies/'.$companyProfileModel->companyId.'/companyprojects') }}"
+                  method="POST">
+                {{ csrf_field() }}
+                {{ method_field('GET') }}
+                <button type="submit" class="btn btn-danger">
+                    <i class="fa fa-trash"> Add New Projects</i>
+                </button>
+            </form>
+        </div>{{--end div of included page--}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+
+            @include('employees/showEmployeesWithBirthdayThisMonth')
+
+
+        </div>
+    </div>
+
+    </div>
 
 @endsection

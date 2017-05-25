@@ -48,6 +48,9 @@ class AppServiceProvider extends ServiceProvider {
             'People\Services\Interfaces\IProjectService', 'People\Services\ProjectService');
         $this->app->bind(
             'People\Services\Interfaces\IJobTitleService', 'People\Services\JobTitleService');
+
+        $this->app->bind(
+            'People\Services\Interfaces\ICompanyHolidayService', 'People\Services\CompanyHolidayService');
 	}
 
 }

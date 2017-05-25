@@ -24,4 +24,8 @@ class Company extends Model {
 	public function departments() {
 		return $this->hasMany('People\Models\Department');
 	}
+
+//    public function holidays() {
+//        return $this->hasMany('People\Models\CompanyHoliday');
+//    }
 }

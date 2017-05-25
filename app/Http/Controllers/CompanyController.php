@@ -4,7 +4,9 @@ namespace People\Http\Controllers;
 
 use Illuminate\Http\Request;
 use People\Models\Company;
+use People\Services\Interfaces\ICompanyHolidayService;
 use People\Services\Interfaces\ICompanyService;
+use People\Services\Interfaces\IEmployeeService;
 use People\Services\Interfaces\IJobTitleService;
 
 class CompanyController extends Controller
@@ -12,12 +14,16 @@ class CompanyController extends Controller
 
     public $CompanyService;
     public $JobTitleService;
+    public $EmployeeService;
+    public $CompanyHolidayService;
 
-    public function __construct(ICompanyService $companyService,IJobTitleService $jobTitleService)
+    public function __construct(ICompanyService $companyService, IJobTitleService $jobTitleService, IEmployeeService $employeeService, ICompanyHolidayService $companyHolidayService)
     {
 
         $this->CompanyService = $companyService;
         $this->JobTitleService = $jobTitleService;
+        $this->EmployeeService = $employeeService;
+        $this->CompanyHolidayService = $companyHolidayService;
     }
 
     /**
@@ -68,16 +74,19 @@ class CompanyController extends Controller
     {
 
         //below query is nothing,its just to use companyaddress model in this controller.will be handled soon
-        list($company, $CompanyAddress) = $this->CompanyService->getCompanyAddressAndCompanyProjects($company);
-        $companyJobTitles=$this->JobTitleService->getJobTitlesOfCompany($company->id);
 
-        $employeesWithBirhthday=$this->CompanyService->getAllEmployeesWithBirthDayThisMonth($company);
+        $companyJobTitles = $this->JobTitleService->getJobTitlesOfCompany($company->id);
+        $companyHolidays = $this->CompanyHolidayService->getCompanyHolidays($company->id);
+
+        $employeesWithBirthday = $this->EmployeeService->getAllEmployeesWithBirthDayThisMonth($company);
+
+        list($company, $companyAddress) = $this->CompanyService->getCompanyAddressAndCompanyProjects($company);
+        $companyProfileModel = $this->CompanyService->mapCompanyProfile($company, $companyAddress,
+            $companyJobTitles, $employeesWithBirthday, $companyHolidays);
 
         return view('companies/showCompany',
-            ['company' => $company,
-                'CompanyAddress' => $CompanyAddress,
-                'companyJobTitles' => $companyJobTitles,
-                'employeesWithBirhthday'=> $employeesWithBirhthday,
+            [
+                'companyProfileModel' => $companyProfileModel,
             ]);
     }
 
@@ -104,7 +113,7 @@ class CompanyController extends Controller
     {
         $this->CompanyService->updateCompany($request, $company);
 
-        return redirect('/companies');
+        return redirect('/companies/'.$company->id);
     }
 
     /**

@@ -58,6 +58,8 @@ Route::resource('companyprojects', 'CompanyProjectController');
 Route::resource('projectresources', 'ProjectResourceController');
 Route::resource('companyprojectresources', 'CompanyProjectResourceController');
 Route::resource('jobtitle', 'JobTitleController');
+Route::resource('companyholidays', 'CompanyHolidayController');
+
 
 Route::get('/clients/{clientid}/clientprojects', 'ClientProjectController@manageProject');
 

@@ -25,6 +25,14 @@ class EmployeeService implements IEmployeeService
         $this->ClientProjectResourceService = $clientProjectResourceService;
     }
 
+    public function getAllEmployeesWithBirthDayThisMonth($company)
+    {
+        $currentDate = date("m");
+
+        return Employee::orderBy('birthDate','asc')->where('company_id', $company->id)->whereMonth('birthDate', '=', $currentDate)->get();
+
+    }
+
     public function getAllEmployees()
     {
 

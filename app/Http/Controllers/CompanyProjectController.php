@@ -4,6 +4,7 @@ namespace People\Http\Controllers;
 
 use Illuminate\Http\Request;
 use People\Models\CompanyProject;
+use People\Services\Interfaces\ICompanyProjectResourceService;
 use People\Services\Interfaces\ICompanyProjectService;
 
 class CompanyProjectController extends Controller
@@ -15,11 +16,13 @@ class CompanyProjectController extends Controller
      */
 
     public $CompanyProjectService;
+    public $CompanyProjectResourceService;
 
-    public function __construct(ICompanyProjectService $companyProjectService)
+    public function __construct(ICompanyProjectService $companyProjectService, ICompanyProjectResourceService $companyProjectResourceService)
     {
 
         $this->CompanyProjectService = $companyProjectService;
+        $this->CompanyProjectResourceService = $companyProjectResourceService;
     }
 
     public function index()
@@ -63,11 +66,29 @@ class CompanyProjectController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show(CompanyProject $companyproject)
+    public function show($companyProjectId)
     {
 
-        return view('companyProjects/companyProjectEditForm', ['companyproject' => $companyproject]);
+        list($currentProjectResources, $availableEmployees) = $this->CompanyProjectResourceService->showCompanyProjectResources($companyProjectId);
+
+
+        $companyProject = $this->CompanyProjectService->viewCompanyProject($companyProjectId);
+
+        return view('companyProjects/viewCompanyProject',
+            [
+                'project' => $companyProject,
+                'projectResources' => $currentProjectResources,
+                'availableEmployees' => $availableEmployees,
+                'companyProjectId' => $companyProjectId,
+            ]);
+
     }
+
+//    public function show(CompanyProject $companyproject)
+//    {
+//
+//        return view('companyProjects/companyProjectEditForm', ['companyproject' => $companyproject]);
+//    }
 
     /**
      * Show the form for editing the specified resource.
@@ -75,12 +96,9 @@ class CompanyProjectController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($companyProjectId)
+    public function edit(CompanyProject $companyproject)
     {
-
-        $companyProject = $this->CompanyProjectService->viewCompanyProject($companyProjectId);
-
-        return view('companyProjects/viewCompanyProject', ['project' => $companyProject]);
+        return view('companyProjects/companyProjectEditForm', ['companyproject' => $companyproject]);
 
     }
 
@@ -95,7 +113,7 @@ class CompanyProjectController extends Controller
     {
         $this->CompanyProjectService->updateCompanyProject($request, $companyproject);
 
-        return redirect('/companies/' . $companyproject->company_id);
+        return redirect('/companyprojects/' . $companyproject->id);
     }
 
     /**

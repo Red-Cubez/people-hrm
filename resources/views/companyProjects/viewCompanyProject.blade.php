@@ -1,27 +1,27 @@
-
 @extends('layouts.app')
 
 @section('content')
 
-@include('viewProject/viewProject')
+    @include('viewProject/viewProject')
 
-<form action="{{ url('companyprojects/'.$project->projectId) }}" method="POST">
-    {{ csrf_field() }}
-    {{ method_field('GET') }}
+    <form action="{{ url('companyprojects/'.$project->projectId.'/edit') }}" method="POST">
+        {{ csrf_field() }}
+        {{ method_field('GET') }}
 
-    <button type="submit" class="btn btn-danger">
-       <i class="fa fa-trash"> Edit</i>
-    </button>
-</form>
-<form action="{{ url('companyprojectresources/'.$project->projectId) }}" method="POST">
-    {{ csrf_field() }}
-    {{ method_field('GET') }}
+        <button type="submit" class="btn btn-danger">
+            <i class="fa fa-trash"> Edit</i>
+        </button>
+    </form>
 
-    <button type="submit" class="btn btn-danger">
-        <i class="fa fa-trash"> Manage Resource</i>
-    </button>
-</form>
-@include('CompanyProjectResources/viewCompanyProjectResources')
+    <form action="{{ url('companyprojectresources/'.$project->projectId) }}" method="POST">
+        {{ csrf_field() }}
+        {{ method_field('GET') }}
+
+        <button type="submit" class="btn btn-danger">
+            <i class="fa fa-trash"> Add Resource</i>
+        </button>
+        @include('CompanyProjectResources/viewCompanyProjectResources')
+    </form>
 
 
 

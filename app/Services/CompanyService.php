@@ -4,22 +4,19 @@ namespace People\Services;
 
 use People\Models\Company;
 use People\Models\CompanyAddress;
+use People\PresentationModels\Company\CompanyHolidayModel;
 use People\PresentationModels\Company\CompanyProfileModel;
 use People\PresentationModels\Company\CompanyProjectModel;
 use People\PresentationModels\Company\EmployeesBirthDayModel;
-use People\PresentationModels\Company\CompanyHolidayModel;
 use People\Services\Interfaces\ICompanyService;
 
 
 class CompanyService implements ICompanyService
 {
-
     public function getCompanyAddressAndCompanyProjects($company)
     {
-
         $companyAddress = $company->address;
         return array($company, $companyAddress);
-
     }
 
     public function createCompany($request)
@@ -81,9 +78,8 @@ class CompanyService implements ICompanyService
         return $companies;
     }
 
-    public function mapCompanyProfile($company, $companyAddress, $companyJobTitles, $employeesWithBirthday)
+    public function mapCompanyProfile($company, $companyAddress, $companyJobTitles, $employeesWithBirthday, $companyHolidays)
     {
-
         $companyProfileModel = new CompanyProfileModel();
 
         $companyProfileModel->companyName = $company->name;
@@ -101,9 +97,7 @@ class CompanyService implements ICompanyService
             array_push($companyProfileModel->jobTitles, $jobTitle->title);
         }
 
-
         foreach ($employeesWithBirthday as $employee) {
-
             $employeesBirthdayModel = new EmployeesBirthDayModel();
             $employeesBirthdayModel->firstName = $employee->firstName;
             $employeesBirthdayModel->lastName = $employee->lastName;
@@ -112,11 +106,9 @@ class CompanyService implements ICompanyService
             if (is_null($companyProfileModel->employeesBirthday)) {
                 $companyProfileModel->employeesBirthday = [];
             }
-
             array_push($companyProfileModel->employeesBirthday, $employeesBirthdayModel);
         }
 
-        
         foreach ($company->projects as $project) {
             $companyProjectModel = new CompanyProjectModel();
             $companyProjectModel->projectId = $project->id;
@@ -134,7 +126,7 @@ class CompanyService implements ICompanyService
             array_push($companyProfileModel->companyProjects, $companyProjectModel);
         }
 
-        foreach ($company->holidays as $holiday) {
+        foreach ($companyHolidays as $holiday) {
             $companyHolidayModel = new CompanyHolidayModel();
             $companyHolidayModel->holidayId = $holiday->id;
             $companyHolidayModel->holidayName = $holiday->name;
@@ -149,8 +141,5 @@ class CompanyService implements ICompanyService
         }
 
         return $companyProfileModel;
-
     }
-
-
 }

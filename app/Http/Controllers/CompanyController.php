@@ -76,14 +76,13 @@ class CompanyController extends Controller
         //below query is nothing,its just to use companyaddress model in this controller.will be handled soon
 
         $companyJobTitles = $this->JobTitleService->getJobTitlesOfCompany($company->id);
-
-
         $companyHolidays = $this->CompanyHolidayService->getCompanyHolidays($company->id);
 
         $employeesWithBirthday = $this->EmployeeService->getAllEmployeesWithBirthDayThisMonth($company);
 
         list($company, $companyAddress) = $this->CompanyService->getCompanyAddressAndCompanyProjects($company);
-        $companyProfileModel = $this->CompanyService->mapCompanyProfile($company, $companyAddress, $companyJobTitles, $employeesWithBirthday, $companyHolidays);
+        $companyProfileModel = $this->CompanyService->mapCompanyProfile($company, $companyAddress,
+            $companyJobTitles, $employeesWithBirthday, $companyHolidays);
 
         return view('companies/showCompany',
             [

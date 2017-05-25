@@ -11,10 +11,7 @@ class CompanyHolidayController extends Controller
     public $CompanyHolidayService;
 
     public function __construct(ICompanyHolidayService $companyHolidayService) {
-
         $this->CompanyHolidayService = $companyHolidayService;
-
-
     }
 
 
@@ -103,6 +100,5 @@ class CompanyHolidayController extends Controller
         $this->CompanyHolidayService->deleteHoliday($holidayId);
 
         return redirect('/companies/'.$request->companyId);
-
     }
 }

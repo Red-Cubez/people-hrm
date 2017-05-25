@@ -43,7 +43,7 @@ class CompanyProjectResourceController extends Controller {
 
 		$this->CompanyProjectResourceService->saveOrUpdateCompanyProjectResource($request);
 
-		return redirect('/companyprojects/' . $request->companyProjectId.'/edit');
+		return redirect('/companyprojects/' . $request->companyProjectId);
 
 	}
 
@@ -104,7 +104,7 @@ class CompanyProjectResourceController extends Controller {
 
 		$this->CompanyProjectResourceService->deleteCompanyProjectResource($companyprojectresource);
 
-		return redirect('/companyprojects/' . $request->companyProjectId.'/edit');
+		return redirect('/companyprojects/' . $request->companyProjectId);
 	}
 
 }

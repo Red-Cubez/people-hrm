@@ -8,7 +8,7 @@
             <table class="table table-striped task-table">
                 <!-- Table Headings -->
                 <thead>
-                <th>Holiday Name </th>
+                <th>Holiday Name</th>
                 <th>Start Date</th>
                 <th>End Date</th>
                 <th>Total Holidays</th>
@@ -34,7 +34,8 @@
                             <div>{{ $companyHoliday->countHolidays }}</div>
                         </td>
                         <td>
-                            <form action="{{ url('companyholidays/'.$companyHoliday->holidayId.'/edit') }}" method="POST">
+                            <form action="{{ url('companyholidays/'.$companyHoliday->holidayId.'/edit') }}"
+                                  method="POST">
                                 {{ csrf_field() }}
                                 {{ method_field('GET') }}
 
@@ -60,6 +61,10 @@
                 @endforeach
                 </tbody>
             </table>
+
         </div>
+
+
+
 @endif
 

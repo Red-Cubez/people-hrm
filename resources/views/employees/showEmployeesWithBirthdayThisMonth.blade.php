@@ -14,20 +14,7 @@
                 </thead>
                 <!-- Table Body -->
                 <tbody>
-                {{--<ol type="1">--}}
-                {{--@foreach($companyProfileModel->employeesBirthday as $employee)--}}
-                {{--<li>{{$employee->firstName}}--}}
-                {{--&nbsp--}}
-                {{--{{$employee->lastName}}--}}
 
-                {{--&nbsp ---}}
-                {{--&nbsp--}}
-
-                {{--({{date("d-M",strtotime(($employee->birthDate)))}})--}}
-                {{--</li>--}}
-                {{--@endforeach--}}
-
-                {{--</ol>--}}
                 @foreach ($companyProfileModel->employeesBirthday as $employee)
                     <tr>
                         <!--  Name -->
@@ -47,7 +34,8 @@
             </table>
 
         </div>
-    </div>
+
+
 @endif
 
 

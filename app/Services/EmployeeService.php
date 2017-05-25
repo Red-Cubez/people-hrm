@@ -29,7 +29,7 @@ class EmployeeService implements IEmployeeService
     {
         $currentDate = date("m");
 
-        return Employee::where('company_id', $company->id)->whereMonth('birthDate', '=', $currentDate)->get();
+        return Employee::orderBy('birthDate','asc')->where('company_id', $company->id)->whereMonth('birthDate', '=', $currentDate)->get();
 
     }
 

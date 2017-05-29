@@ -4,7 +4,10 @@ namespace People\Services;
 
 use People\Models\Company;
 use People\Models\CompanyAddress;
+use People\PresentationModels\Company\CompanyClientModel;
+use People\PresentationModels\Company\CompanyEmployeeModel;
 use People\PresentationModels\Company\CompanyHolidayModel;
+use People\PresentationModels\Company\CompanyJobTitles;
 use People\PresentationModels\Company\CompanyProfileModel;
 use People\PresentationModels\Company\CompanyProjectModel;
 use People\PresentationModels\Company\EmployeesBirthDayModel;
@@ -78,7 +81,8 @@ class CompanyService implements ICompanyService
         return $companies;
     }
 
-    public function mapCompanyProfile($company, $companyAddress, $companyJobTitles, $employeesWithBirthday, $companyHolidays)
+    public function mapCompanyProfile($company, $companyAddress, $companyJobTitles, $employeesWithBirthday, $companyHolidays,
+                                      $companyCurrentEmployees,$companyCurrentClients)
     {
         $companyProfileModel = new CompanyProfileModel();
 
@@ -92,10 +96,17 @@ class CompanyService implements ICompanyService
         $companyProfileModel->stateProvince = $companyAddress->stateProvince;
         $companyProfileModel->city = $companyAddress->city;
 
-        $companyProfileModel->jobTitles = [];
         foreach ($companyJobTitles as $jobTitle) {
-            array_push($companyProfileModel->jobTitles, $jobTitle->title);
+            $CompanyJobTitleModel = new CompanyJobTitles();
+            $CompanyJobTitleModel->jobTitle = $jobTitle->title;
+            $CompanyJobTitleModel->jobTitleId = $jobTitle->id;
+
+            if (is_null($companyProfileModel->jobTitles)) {
+                $companyProfileModel->jobTitles = [];
+            }
+            array_push($companyProfileModel->jobTitles, $CompanyJobTitleModel);
         }
+
 
         foreach ($employeesWithBirthday as $employee) {
             $employeesBirthdayModel = new EmployeesBirthDayModel();
@@ -138,6 +149,32 @@ class CompanyService implements ICompanyService
                 $companyProfileModel->companyHolidays = [];
             }
             array_push($companyProfileModel->companyHolidays, $companyHolidayModel);
+        }
+
+        foreach ($companyCurrentEmployees as $currentEmployee) {
+            $companyEmployeeModel = new CompanyEmployeeModel();
+            $companyEmployeeModel->firstName = $currentEmployee->firstName;
+            $companyEmployeeModel->lastName = $currentEmployee->lastName;
+            $companyEmployeeModel->hireDate = $currentEmployee->hireDate;
+
+
+            if (is_null($companyProfileModel->companyEmployees)) {
+                $companyProfileModel->companyEmployees = [];
+            }
+            array_push($companyProfileModel->companyEmployees, $companyEmployeeModel);
+        }
+
+        foreach ($companyCurrentClients as $currentClient) {
+            $companyClienteModel = new CompanyClientModel();
+            $companyClienteModel->clientName = $currentClient->name;
+            $companyClienteModel->contactPerson= $currentClient->contactPerson;
+            $companyClienteModel->contactNumber= $currentClient->contactNumber;
+
+
+            if (is_null($companyProfileModel->companyClients)) {
+                $companyProfileModel->companyClients = [];
+            }
+            array_push($companyProfileModel->companyClients, $companyClienteModel);
         }
 
         return $companyProfileModel;

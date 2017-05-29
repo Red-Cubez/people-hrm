@@ -1,21 +1,21 @@
-@if (count($companyProfileModel->employeesBirthday) > 0)
+@if (count($companyProfileModel->companyEmployees) > 0)
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3>BirthDays in {{date('M')}}</h3>
+            <h3>Current Employees</h3>
         </div>
 
         <div class="panel-body">
             <table class="table table-striped task-table">
                 <!-- Table Headings -->
                 <thead>
-                <th>Employee First Name</th>
-                <th>Employee Last Name</th>
-                <th>Date of Birth</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Hire Date</th>
                 </thead>
                 <!-- Table Body -->
                 <tbody>
 
-                @foreach ($companyProfileModel->employeesBirthday as $employee)
+                @foreach ($companyProfileModel->companyEmployees as $employee)
                     <tr>
                         <!--  Name -->
                         <td class="table-text">
@@ -25,7 +25,7 @@
                             <div>{{ $employee->lastName}}</div>
                         </td>
                         <td class="table-text">
-                            <div>{{ date("d-M",strtotime(($employee->birthDate))) }}</div>
+                            <div>{{ $employee->hireDate}}</div>
                         </td>
 
                     </tr>
@@ -34,7 +34,7 @@
             </table>
 
         </div>
-
+    </div>
 
 @endif
 

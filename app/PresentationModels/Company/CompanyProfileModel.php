@@ -17,6 +17,10 @@ class CompanyProfileModel
 
     public $companyHolidays;
 
+    public $companyEmployees;
+
+    public $companyClients;
+
     public $companyProjects;
 
     public $employeesBirthday;

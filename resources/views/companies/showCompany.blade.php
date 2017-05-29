@@ -31,7 +31,7 @@
             </form>
 
         </div>{{--end div of included page--}}
-        </div>
+    </div>
 
     </div>
 
@@ -49,20 +49,20 @@
             </form>
 
         </div> {{--end div of included page--}}
-        </div>
+    </div>
 
-        <div class="col-sm-8">
-            @include('companyProjects/showProjects')
-            <form action="{{ url('/companies/'.$companyProfileModel->companyId.'/companyprojects') }}"
-                  method="POST">
-                {{ csrf_field() }}
-                {{ method_field('GET') }}
-                <button type="submit" class="btn btn-danger">
-                    <i class="fa fa-trash"> Add New Projects</i>
-                </button>
-            </form>
-        </div>{{--end div of included page--}}
-        </div>
+    <div class="col-sm-8">
+        @include('companyProjects/showProjects')
+        <form action="{{ url('/companies/'.$companyProfileModel->companyId.'/companyprojects') }}"
+              method="POST">
+            {{ csrf_field() }}
+            {{ method_field('GET') }}
+            <button type="submit" class="btn btn-danger">
+                <i class="fa fa-trash"> Add New Projects</i>
+            </button>
+        </form>
+    </div>{{--end div of included page--}}
+    </div>
     </div>
     <div class="row">
         <div class="col-sm-6">
@@ -72,7 +72,18 @@
 
         </div>
     </div>
+    <div class="row">
+        <div class="col-sm-5">
 
+            @include('companies/showCompanyCurrentEmployees')
+
+
+        </div>
+        <div class="col-sm-5">
+
+            @include('companies/showCompanyCurrentClients')
+
+        </div>
     </div>
-
+    </div>
 @endsection

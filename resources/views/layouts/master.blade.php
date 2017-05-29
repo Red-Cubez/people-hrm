@@ -27,7 +27,6 @@
 <div class="container">
     @yield('content')
 </div>
-
 <footer class="row">
     @include('layouts.footer')
 </footer>

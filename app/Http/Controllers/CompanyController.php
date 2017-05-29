@@ -78,11 +78,14 @@ class CompanyController extends Controller
         $companyJobTitles = $this->JobTitleService->getJobTitlesOfCompany($company->id);
         $companyHolidays = $this->CompanyHolidayService->getCompanyHolidays($company->id);
 
+        $companyCurrentEmployees=$this->EmployeeService->getAllEmployeesOfCompany($company->id);
+        $companyCurrentClients=$this->EmployeeService->getAllClientsOfCompany($company->id);
+
         $employeesWithBirthday = $this->EmployeeService->getAllEmployeesWithBirthDayThisMonth($company);
 
         list($company, $companyAddress) = $this->CompanyService->getCompanyAddressAndCompanyProjects($company);
         $companyProfileModel = $this->CompanyService->mapCompanyProfile($company, $companyAddress,
-            $companyJobTitles, $employeesWithBirthday, $companyHolidays);
+            $companyJobTitles, $employeesWithBirthday, $companyHolidays,$companyCurrentEmployees,$companyCurrentClients);
 
         return view('companies/showCompany',
             [

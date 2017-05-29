@@ -44,11 +44,9 @@ class JobTitleController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request);
         $this->JobTitleService->saveJobTitle($request);
 
-       // dd("save");
-        return redirect('/jobtitle/'.$request->companyId);
+        return redirect('/companies/'.$request->companyId);
 
     }
 
@@ -98,7 +96,7 @@ class JobTitleController extends Controller
 
         $this->JobTitleService->updateJobTitle($request,$jobTitleid);
 
-        return redirect('/jobtitle/'.$request->companyId);
+        return redirect('/companies/'.$request->companyId);
     }
 
     /**
@@ -107,11 +105,15 @@ class JobTitleController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($jobTitleId)
+    public function destroy($jobTitleId,Request $request)
     {
+        if($request->ajax())
+        {
+            dd($request);
+        }
        $companyId= $this->JobTitleService->deleteJobTitle($jobTitleId);
        // dd("deleted");
-        return redirect('/jobtitle/'.$companyId);
+        return redirect('/companies/'.$companyId);
 
     }
 }

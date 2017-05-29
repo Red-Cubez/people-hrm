@@ -2,6 +2,8 @@
 
 namespace People\Services;
 
+use People\Models\Client;
+use People\Models\Company;
 use People\Models\Department;
 use People\Models\Employee;
 use People\Models\EmployeeAddress;
@@ -145,6 +147,17 @@ class EmployeeService implements IEmployeeService
         $employeeProfileModel->city = $employee->address->city;
 
         return $employeeProfileModel;
+
+    }
+    public function getAllEmployeesOfCompany($companyId)
+    {
+        return Employee::where('company_id',$companyId)->get();
+    }
+
+    public function getAllClientsOfCompany($companyId)
+    {
+        return Client::where('company_id',$companyId)->get();
+
     }
 
     public function viewEmployee($employee)

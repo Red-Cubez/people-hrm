@@ -57,6 +57,8 @@ Route::resource('clientprojects', 'ClientProjectController');
 Route::resource('companyprojects', 'CompanyProjectController');
 Route::resource('projectresources', 'ProjectResourceController');
 Route::resource('companyprojectresources', 'CompanyProjectResourceController');
+
+Route::get('/updatejobtitle', 'JobTitleController@updateJobTitle');
 Route::resource('jobtitle', 'JobTitleController');
 Route::resource('companyholidays', 'CompanyHolidayController');
 

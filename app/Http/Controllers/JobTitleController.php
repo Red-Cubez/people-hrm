@@ -91,6 +91,10 @@ class JobTitleController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
+    public function updateJobTitle(Request $request)
+    {
+        dd($request);
+    }
     public function update(Request $request, $jobTitleid)
     {
 

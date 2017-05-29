@@ -64,8 +64,6 @@
                                     <i class="fa fa-trash"> View</i>
                                 </button>
                             </form>
-
-
                         </td>
                     </tr>
                 @endforeach
@@ -73,7 +71,15 @@
             </table>
 
         </div>
+        <form action="{{ url('/companies/'.$companyProfileModel->companyId.'/companyprojects') }}"
+              method="POST">
+            {{ csrf_field() }}
+            {{ method_field('GET') }}
+            <button type="submit" class="btn btn-danger">
+                <i class="fa fa-trash"> Add New Projects</i>
+            </button>
+        </form>
 
-
+    </div>
 @endif
 

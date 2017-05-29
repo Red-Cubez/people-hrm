@@ -72,6 +72,16 @@
 
         </div>
 
+        <form action="{{ url('companies/'.$companyProfileModel->companyId.'/edit') }}" method="POST">
+            {{ csrf_field() }}
+            {{ method_field('GET') }}
+
+            <button type="submit" class="btn btn-danger">
+                <i class="fa fa-trash"> Edit Company</i>
+            </button>
+        </form>
+    </div>
+
 @endif
 
 

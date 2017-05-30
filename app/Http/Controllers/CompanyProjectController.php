@@ -7,135 +7,124 @@ use People\Models\CompanyProject;
 use People\Services\Interfaces\ICompanyProjectResourceService;
 use People\Services\Interfaces\ICompanyProjectService;
 
-class CompanyProjectController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+class CompanyProjectController extends Controller {
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
 
-    public $CompanyProjectService;
-    public $CompanyProjectResourceService;
+	public $CompanyProjectService;
+	public $CompanyProjectResourceService;
 
-    public function __construct(ICompanyProjectService $companyProjectService, ICompanyProjectResourceService $companyProjectResourceService)
-    {
+	public function __construct(ICompanyProjectService $companyProjectService, ICompanyProjectResourceService $companyProjectResourceService) {
 
-        $this->CompanyProjectService = $companyProjectService;
-        $this->CompanyProjectResourceService = $companyProjectResourceService;
-    }
+		$this->CompanyProjectService = $companyProjectService;
+		$this->CompanyProjectResourceService = $companyProjectResourceService;
+	}
 
-    public function index()
-    {
+	public function index() {
 
-        $companyprojects = $this->CompanyProjectService->getAllCompanyProjects();
+		$companyprojects = $this->CompanyProjectService->getAllCompanyProjects();
 
-        return view('companyprojects.index', [
-            'companyprojects' => $companyprojects,
-        ]);
+		return view('companyprojects.index', [
+			'companyprojects' => $companyprojects,
+		]);
 
-    }
+	}
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+	/**
+	 * Show the form for creating a new resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function create() {
+		//
+	}
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
+	/**
+	 * Store a newly created resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function store(Request $request) {
 
-        $this->CompanyProjectService->saveCompanyProject($request);
+		$companyProjectId = $this->CompanyProjectService->saveCompanyProject($request);
 
-        return redirect('/companies/' . $request->companyid);
-    }
+		return redirect('/companyprojects/' . $companyProjectId);
+	}
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($companyProjectId)
-    {
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  int $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function show($companyProjectId) {
 
-        list($currentProjectResources, $availableEmployees) = $this->CompanyProjectResourceService->showCompanyProjectResources($companyProjectId);
+		list($currentProjectResources, $availableEmployees) = $this->CompanyProjectResourceService->showCompanyProjectResources($companyProjectId);
 
+		$companyProject = $this->CompanyProjectService->viewCompanyProject($companyProjectId);
 
-        $companyProject = $this->CompanyProjectService->viewCompanyProject($companyProjectId);
+		return view('companyProjects/viewCompanyProject',
+			[
+				'project' => $companyProject,
+				'projectResources' => $currentProjectResources,
+				'availableEmployees' => $availableEmployees,
+				'companyProjectId' => $companyProjectId,
+			]);
 
-        return view('companyProjects/viewCompanyProject',
-            [
-                'project' => $companyProject,
-                'projectResources' => $currentProjectResources,
-                'availableEmployees' => $availableEmployees,
-                'companyProjectId' => $companyProjectId,
-            ]);
-
-    }
+	}
 
 //    public function show(CompanyProject $companyproject)
-//    {
-//
-//        return view('companyProjects/companyProjectEditForm', ['companyproject' => $companyproject]);
-//    }
+	//    {
+	//
+	//        return view('companyProjects/companyProjectEditForm', ['companyproject' => $companyproject]);
+	//    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(CompanyProject $companyproject)
-    {
-        return view('companyProjects/companyProjectEditForm', ['companyproject' => $companyproject]);
+	/**
+	 * Show the form for editing the specified resource.
+	 *
+	 * @param  int $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function edit(CompanyProject $companyproject) {
+		return view('companyProjects/companyProjectEditForm', ['companyproject' => $companyproject]);
 
-    }
+	}
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, CompanyProject $companyproject)
-    {
-        $this->CompanyProjectService->updateCompanyProject($request, $companyproject);
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request $request
+	 * @param  int $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function update(Request $request, CompanyProject $companyproject) {
+		$this->CompanyProjectService->updateCompanyProject($request, $companyproject);
 
-        return redirect('/companyprojects/' . $companyproject->id);
-    }
+		return redirect('/companyprojects/' . $companyproject->id);
+	}
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(CompanyProject $companyproject)
-    {
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param  int $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function destroy(CompanyProject $companyproject) {
 
-        $this->CompanyProjectService->deleteCompanyProject($companyproject);
+		$this->CompanyProjectService->deleteCompanyProject($companyproject);
 
-        return redirect('/companies/' . $companyproject->company_id);
-    }
+		return redirect('/companies/' . $companyproject->company_id);
+	}
 
-    public function manageProject($companyid)
-    {
+	public function manageProject($companyid) {
 
-        $companyProjects = $this->CompanyProjectService->manageProject($companyid);
+		$companyProjects = $this->CompanyProjectService->manageProject($companyid);
 
-        return view('companyprojects.index', ['companyProjects' => $companyProjects, 'companyid' => $companyid]);
-    }
+		return view('companyprojects.index', ['companyProjects' => $companyProjects, 'companyid' => $companyid]);
+	}
 
 }

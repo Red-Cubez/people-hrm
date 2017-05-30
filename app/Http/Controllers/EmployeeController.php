@@ -4,7 +4,6 @@ namespace People\Http\Controllers;
 
 use Illuminate\Http\Request;
 use People\Models\Employee;
-use People\Models\JobTitle;
 use People\Services\EmployeeService;
 use People\Services\Interfaces\IDepartmentService;
 use People\Services\Interfaces\IEmployeeService;
@@ -13,34 +12,34 @@ use People\Services\Interfaces\IJobTitleService;
 class EmployeeController extends Controller {
 
 	public $EmployeeService;
-    public $DepartmentService;
-    public $JobTitleService;
+	public $DepartmentService;
+	public $JobTitleService;
 
-
-	public function __construct(IEmployeeService $employeeService, IDepartmentService $departmentService,IJobTitleService $jobTitleService) {
+	public function __construct(IEmployeeService $employeeService, IDepartmentService $departmentService, IJobTitleService $jobTitleService) {
 
 		$this->EmployeeService = $employeeService;
 		$this->DepartmentService = $departmentService;
-        $this->JobTitleService = $jobTitleService;
+		$this->JobTitleService = $jobTitleService;
 	}
 	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function index() {
+	public function index(Request $request) {
 
 		$employees = $this->EmployeeService->getAllEmployees();
 		$departments = $this->DepartmentService->getAllDepartments();
-		$jobTitles=$this->JobTitleService->getAllJobTitles();
+		$jobTitles = $this->JobTitleService->getAllJobTitles();
 
 		return view('employees.index',
-            [
-                'employees' => $employees,
-                'departments' => $departments,
-                'jobTitles' => $jobTitles,
+			[
+				'employees' => $employees,
+				'departments' => $departments,
+				'jobTitles' => $jobTitles,
+				'companyId' => $request->companyId,
 
-            ]);
+			]);
 	}
 
 	/**
@@ -61,9 +60,9 @@ class EmployeeController extends Controller {
 	 */
 	public function store(Request $request) {
 
-		$this->EmployeeService->createEmployee($request);
+		$employeeId = $this->EmployeeService->createEmployee($request);
 
-		return redirect('/employees');
+		return redirect('/employees/' . $employeeId);
 	}
 
 	/**
@@ -92,11 +91,11 @@ class EmployeeController extends Controller {
 
 		$editEmployeeModel = $this->EmployeeService->editEmployee($employee);
 		$departments = $this->EmployeeService->getAllDepartments();
-        $jobTitles=$this->JobTitleService->getAllJobTitles();
+		$jobTitles = $this->JobTitleService->getAllJobTitles();
 		return view('employees/update',
 			['editEmployeeModel' => $editEmployeeModel,
 				'departments' => $departments,
-                'jobTitles' => $jobTitles,
+				'jobTitles' => $jobTitles,
 			]);
 
 	}
@@ -113,7 +112,7 @@ class EmployeeController extends Controller {
 
 		$this->EmployeeService->updateEmployee($request, $employee);
 
-		return redirect('/employees');
+		return redirect('/employees/' . $employee->id);
 	}
 
 	/**
@@ -125,6 +124,6 @@ class EmployeeController extends Controller {
 	public function destroy(Employee $employee) {
 		$this->EmployeeService->deleteEmployee($employee);
 
-		return redirect('/employees');
+		return redirect('/companies/' . $employee->company_id);
 	}
 }

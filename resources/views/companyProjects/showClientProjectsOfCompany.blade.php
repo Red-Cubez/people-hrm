@@ -1,7 +1,7 @@
-@if (count($companyProfileModel->companyProjects) > 0)
+@if (count($companyProfileModel->clientProjects) > 0)
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3>Current Internal Projects</h3>
+            <h3>Current Projects</h3>
         </div>
 
         <div class="panel-body">
@@ -20,7 +20,7 @@
                 </thead>
                 <!-- Table Body -->
                 <tbody>
-                @foreach ($companyProfileModel->companyProjects as $project)
+                @foreach ($companyProfileModel->clientProjects as $project)
                     <tr>
                         <!-- company->project Name -->
                         <td class="table-text">
@@ -47,7 +47,7 @@
 
                         <!-- Delete Button -->
                         <td>
-                            <form action="{{ url('companyprojects/'.$project->projectId) }}" method="POST">
+                            <form action="{{ url('clientprojects/'.$project->projectId) }}" method="POST">
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
                                 <input type="hidden" name="_method" value="DELETE">
@@ -56,7 +56,7 @@
                                 </button>
                             </form>
 
-                            <form action="{{ url('companyprojects/'.$project->projectId) }}" method="POST">
+                            <form action="{{ url('clientprojects/'.$project->projectId) }}" method="POST">
                                 {{ csrf_field() }}
                                 {{ method_field('GET') }}
 
@@ -71,14 +71,24 @@
             </table>
 
         </div>
-        <form action="{{ url('/companies/'.$companyProfileModel->companyId.'/companyprojects') }}"
+        <form action="{{ url('/clientprojects/create') }}"
+              method="POST">
+            {{ csrf_field() }}
+            {{ method_field('GET') }}
+            <input type="hidden" name="companyId" value="{{$companyProfileModel->companyId}}">
+            <button type="submit" class="btn btn-danger">
+                <i class="fa fa-trash"> Add New Projects</i>
+            </button>
+        </form>
+        {{--   <form action="{{ url('/companies/'.$companyProfileModel->companyId.'/clientprojects') }}"
               method="POST">
             {{ csrf_field() }}
             {{ method_field('GET') }}
             <button type="submit" class="btn btn-danger">
                 <i class="fa fa-trash"> Add New Projects</i>
             </button>
-        </form>
+        </form> --}}
+
 
     </div>
 @endif

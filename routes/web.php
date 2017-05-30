@@ -12,7 +12,7 @@
  */
 
 Route::get('/', function () {
-    return view('welcome');
+	return view('welcome');
 });
 
 /**
@@ -20,21 +20,21 @@ Route::get('/', function () {
  */
 Route::post('/task', function (Request $request) {
 
-    $validator = Validator::make($request->all(), [
-        'name' => 'required|max:255',
-    ]);
+	$validator = Validator::make($request->all(), [
+		'name' => 'required|max:255',
+	]);
 
-    if ($validator->fails()) {
-        return redirect('/')
-            ->withInput()
-            ->withErrors($validator);
-    }
+	if ($validator->fails()) {
+		return redirect('/')
+			->withInput()
+			->withErrors($validator);
+	}
 
-    $task = new People\Models\Task;
-    $task->name = $request->name;
-    $task->save();
+	$task = new People\Models\Task;
+	$task->name = $request->name;
+	$task->save();
 
-    return redirect('/');
+	return redirect('/');
 });
 
 /**
@@ -42,9 +42,9 @@ Route::post('/task', function (Request $request) {
  */
 Route::delete('/task/{task}', function (People\Models\Task $task) {
 
-    $task->delete();
+	$task->delete();
 
-    return redirect('/');
+	return redirect('/');
 });
 
 Auth::routes();
@@ -58,10 +58,8 @@ Route::resource('companyprojects', 'CompanyProjectController');
 Route::resource('projectresources', 'ProjectResourceController');
 Route::resource('companyprojectresources', 'CompanyProjectResourceController');
 
-Route::get('/updatejobtitle', 'JobTitleController@updateJobTitle');
 Route::resource('jobtitle', 'JobTitleController');
 Route::resource('companyholidays', 'CompanyHolidayController');
-
 
 Route::get('/clients/{clientid}/clientprojects', 'ClientProjectController@manageProject');
 
@@ -73,6 +71,3 @@ Route::get('/clientprojects/{clientProjectid}/projectresources', 'ProjectResourc
 Route::get('/projectresources/{projectResourceid}/updateResource', 'ProjectResourceController@updateressources');
 
 Route::get('/companies/{companyid}/companyprojects', 'CompanyProjectController@manageProject');
-
-
-

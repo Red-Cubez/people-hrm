@@ -70,7 +70,7 @@
             <input type="hidden" name="companyId" value="{{$companyProfileModel->companyId}}">
 
             <button type="submit" class="btn btn-danger">
-                <i class="fa fa-trash"> Set Holidays</i>
+                <i class="fa fa-trash">Add Holidays</i>
             </button>
         </form>
     </div>

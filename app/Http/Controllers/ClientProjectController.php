@@ -6,116 +6,127 @@ use Illuminate\Http\Request;
 use People\Models\ClientProject;
 use People\Services\Interfaces\IClientProjectService;
 
-class ClientProjectController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+class ClientProjectController extends Controller {
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
 
-    public $ClientProjectService;
+	public $ClientProjectService;
 
-    public function __construct(IClientProjectService $clientProjectService)
-    {
+	public function __construct(IClientProjectService $clientProjectService) {
 
-        $this->ClientProjectService = $clientProjectService;
-    }
+		$this->ClientProjectService = $clientProjectService;
+	}
 
-    public function index()
-    {
-        //TODO only get projects for a particular client
-        $clientProjects = $this->ClientProjectService->getClientProjects();
+	public function index() {
+		//TODO only get projects for a particular client
+		$clientProjects = $this->ClientProjectService->getClientProjects();
 
-        return view('clientprojects.index', ['clientProjects' => $clientProjects]);
-    }
+		return view('clientprojects.index', ['clientProjects' => $clientProjects]);
+	}
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+	/**
+	 * Show the form for creating a new resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function create() {
+		//
+		dd("here");
+	}
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
+	/**
+	 * Store a newly created resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function store(Request $request) {
 
-        $clientProject = $this->ClientProjectService->createClientProject($request);
+		$clientProject = $this->ClientProjectService->createClientProject($request);
 
-        return redirect('/clients/' . $clientProject->client_id);
-    }
+		return redirect('/clients/' . $clientProject->client_id);
+	}
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \People\Models\ClientProject $clientProject
-     * @return \Illuminate\Http\Response
-     */
-    public function show(ClientProject $clientproject)
-    {
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  \People\Models\ClientProject $clientProject
+	 * @return \Illuminate\Http\Response
+	 */
+	public function show($clientProjectId) {
+		$clientProjectModel = $this->ClientProjectService->viewClientProject($clientProjectId);
 
-        return view('clientProjects/clientProjectEditForm', ['clientProject' => $clientproject]);
-    }
+		return view('clientProjects/viewClientProject', ['project' => $clientProjectModel]);
+		//
+	}
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \People\Models\ClientProject $clientProject
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($clientProjectId)
-    {
+	/**
+	 * Show the form for editing the specified resource.
+	 *
+	 * @param  \People\Models\ClientProject $clientProject
+	 * @return \Illuminate\Http\Response
+	 */
+	public function edit($clientProjectId) {
+		$clientProject = $this->ClientProjectService->getClientProjectDetails($clientProjectId);
+		return view('clientProjects/clientProjectEditForm', ['clientProject' => $clientProject]);
+	}
 
-        $clientProjectModel = $this->ClientProjectService->viewClientProject($clientProjectId);
+	// public function show(ClientProject $clientproject)
+	// {
 
-        return view('clientProjects/viewClientProject', ['project' => $clientProjectModel]);
-    }
+	//     return view('clientProjects/clientProjectEditForm', ['clientProject' => $clientproject]);
+	// }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \People\Models\ClientProject $clientProject
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, ClientProject $clientproject)
-    {
+	// *
+	//  * Show the form for editing the specified resource.
+	//  *
+	//  * @param  \People\Models\ClientProject $clientProject
+	//  * @return \Illuminate\Http\Response
 
-        $clientid = $this->ClientProjectService->updateClientProject($request, $clientproject);
+	// public function edit($clientProjectId)
+	// {
 
-        return redirect('/clients/' . $clientproject->client_id);
+	//     $clientProjectModel = $this->ClientProjectService->viewClientProject($clientProjectId);
 
-    }
+	//     return view('clientProjects/viewClientProject', ['project' => $clientProjectModel]);
+	// }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \People\Models\ClientProject $clientproject
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(ClientProject $clientproject)
-    {
-        $clientid = $this->ClientProjectService->deleteClientProject($clientproject);
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request $request
+	 * @param  \People\Models\ClientProject $clientProject
+	 * @return \Illuminate\Http\Response
+	 */
+	public function update(Request $request, ClientProject $clientproject) {
 
-        return redirect('/clients/' . $clientid);
-    }
+		$clientid = $this->ClientProjectService->updateClientProject($request, $clientproject);
 
-    public function manageProject($clientid)
-    {
-        $clientProjects = $this->ClientProjectService->manageClientProjects($clientid);
+		return redirect('/clientprojects/' . $clientproject->id);
 
-        return view('clientprojects.index',
-            ['clientProjects' => $clientProjects,
-                'clientid' => $clientid,
-            ]);
-    }
+	}
+
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param  \People\Models\ClientProject $clientproject
+	 * @return \Illuminate\Http\Response
+	 */
+	public function destroy(ClientProject $clientproject) {
+		$clientid = $this->ClientProjectService->deleteClientProject($clientproject);
+
+		return redirect('/clients/' . $clientid);
+	}
+
+	public function manageProject($clientid) {
+		$clientProjects = $this->ClientProjectService->manageClientProjects($clientid);
+
+		return view('clientprojects.index',
+			['clientProjects' => $clientProjects,
+				'clientid' => $clientid,
+			]);
+	}
 }

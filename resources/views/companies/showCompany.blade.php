@@ -28,6 +28,14 @@
             </div>
         </div>
         <div class="row">
+            <div class="col-sm-10">
+
+                @include('companyProjects/showClientProjectsOfCompany')
+
+
+            </div>
+        </div>
+        <div class="row">
             <div class="col-sm-6">
 
                 @include('employees/showEmployeesWithBirthdayThisMonth')

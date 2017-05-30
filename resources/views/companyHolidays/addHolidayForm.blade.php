@@ -2,7 +2,7 @@
 <div class="form-group">
     <label for="companyproject" class="col-sm-3 control-label">Holiday Name</label>
     <div class="col-sm-6">
-        <input type="text" name="name" id="name" class="form-control" @if(isset($holiday->name)) value="{{$holiday->name}}"  @else placeholder="Enter Name" @endif >
+        <input type="text" name="name" id="name" class="form-control" @if(isset($holiday->name)) value="{{$holiday->name}}"  @else placeholder="Enter Name" @endif required>
     </div>
 </div>
 <div class="form-group">
@@ -10,7 +10,7 @@
 
     <div class="col-sm-6">
         <input type="date" name="startDate" id="startDate" class="form-control"
-               @if(isset($holiday->startDate)) value="{{$holiday->startDate}}" @else placeholder="Enter expected Start Date" @endif>
+               @if(isset($holiday->startDate)) value="{{$holiday->startDate}}" @else placeholder="Enter expected Start Date" @endif required>
     </div>
 </div>
 <div class="form-group">

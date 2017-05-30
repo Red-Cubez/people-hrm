@@ -19,10 +19,15 @@ class ClientController extends Controller {
 		$this->ClientService = $clientService;
 	}
 
-	public function index() {
+	public function index(Request $request) {
 		$clients = $this->ClientService->getAllClients();
 
-		return view('clients.index', ['clients' => $clients]);
+		return view('clients.index',
+			[
+				'clients' => $clients,
+				'companyId' => $request->companyId,
+
+			]);
 	}
 
 	/**s
@@ -41,9 +46,10 @@ class ClientController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(Request $request) {
-		$this->ClientService->createClient($request);
 
-		return redirect('/clients');
+		$clientId = $this->ClientService->createClient($request);
+
+		return redirect('/clients/' . $clientId);
 	}
 
 	/**
@@ -52,14 +58,14 @@ class ClientController extends Controller {
 	 * @param  \People\Models\Client  $client
 	 * @return \Illuminate\Http\Response
 	 */
-	public function show(Client $client) {
-		// dd('this is it');
+	public function show(Client $client, Request $request) {
 
 		$clientProjects = $this->ClientService->getClientProjects($client);
 
 		return view('clients/showClient',
 			['client' => $client,
 				'clientProjects' => $clientProjects,
+				'companyId' => $request->companyId,
 			]);
 	}
 	/**
@@ -68,9 +74,15 @@ class ClientController extends Controller {
 	 * @param  \People\Models\Client  $client
 	 * @return \Illuminate\Http\Response
 	 */
-	public function edit(Client $client) {
+	public function edit(Client $client, Request $request) {
 		//
-		return view('clients/clientEditForm', ['client' => $client]);
+
+		return view('clients/clientEditForm',
+			[
+				'client' => $client,
+				'companyId' => $request->companyId,
+
+			]);
 	}
 
 	/**
@@ -84,6 +96,7 @@ class ClientController extends Controller {
 		//
 		//$clientAddress = ClientAddress::where('client_id', '=', $client->id)->get();
 		//dd($clientAddress);
+
 		$this->ClientService->updateClient($request, $client);
 
 		return redirect('/clients/' . $client->id);
@@ -99,7 +112,7 @@ class ClientController extends Controller {
 	public function destroy(Client $client) {
 		$this->ClientService->deleteClient($client);
 
-		return redirect('/clients');
+		return redirect('/companies/' . $client->company_id);
 
 	}
 }

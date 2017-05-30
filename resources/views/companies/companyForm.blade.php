@@ -17,8 +17,8 @@
     </div>
     <div class="form-group">
             <label for="applyOverTimeRule" class="col-sm-3 control-label">Apply Over Time Rule</label>
-            <div class="col-sm-6">
-                <input type="checkbox" value="1" name="applyOverTimeRule" id="applyOverTimeRule" class="form-control"
+            <div class="checkbox-inline">
+                <input type="checkbox" value="1" name="applyOverTimeRule" id="applyOverTimeRule"
                 @if(isset($company))
                   @if(($company->applyOverTimeRule)==1)
                      value="1" checked

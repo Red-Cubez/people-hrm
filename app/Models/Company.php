@@ -26,6 +26,6 @@ class Company extends Model {
 	}
 
 //    public function holidays() {
-//        return $this->hasMany('People\Models\CompanyHoliday');
-//    }
+	//        return $this->hasMany('People\Models\CompanyHoliday');
+	//    }
 }

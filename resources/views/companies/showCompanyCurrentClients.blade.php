@@ -1,4 +1,3 @@
-@if (count($companyProfileModel->companyClients) > 0)
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3>
@@ -6,6 +5,7 @@
         </h3>
     </div>
     <div class="panel-body">
+        @if (count($companyProfileModel->companyClients) > 0)
         <table class="table table-striped task-table">
             <!-- Table Headings -->
             <thead>
@@ -46,23 +46,25 @@
                         <form action="{{ url('clients/'.$client->clientId) }}" method="POST">
                             {{ csrf_field() }}
                         {{ method_field('GET') }}
-                          <input  type="hidden" name="companyId" value="{{$companyProfileModel->companyId}}">
-                            <button class="btn btn-danger" type="submit">
-                                <i class="fa fa-trash">
-                                    View
-                                </i>
-                            </button>
+                            <input name="companyId" type="hidden" value="{{$companyProfileModel->companyId}}">
+                                <button class="btn btn-danger" type="submit">
+                                    <i class="fa fa-trash">
+                                        View
+                                    </i>
+                                </button>
+                            </input>
                         </form>
                     </td>
                 </tr>
                 @endforeach
             </tbody>
         </table>
+        @endif
     </div>
     <form action="{{ url('clients/') }}" method="POST">
         {{ csrf_field() }}
                         {{ method_field('GET') }}
-        <input  type="hidden" name="companyId" value="{{$companyProfileModel->companyId}}">
+        <input name="companyId" type="hidden" value="{{$companyProfileModel->companyId}}">
             <button class="btn btn-danger" type="submit">
                 <i class="fa fa-trash">
                     Add new Client
@@ -71,4 +73,3 @@
         </input>
     </form>
 </div>
-@endif

@@ -138,9 +138,10 @@ class CompanyService implements ICompanyService {
 		//dd($companyClientProjects);
 
 		foreach ($company->clients as $client) {
-
+			//	dd($client->projects);
 			$companyClientProjectModel = new CompanyClientProjectModel();
 			$companyClientProjectModel->projectId = $client->projects[0]->id;
+			$companyClientProjectModel->clientId = $client->projects[0]->client_id;
 			$companyClientProjectModel->projectName = $client->projects[0]->name;
 			$companyClientProjectModel->expectedStartDate = $client->projects[0]->expectedStartDate;
 			$companyClientProjectModel->expectedEndDate = $client->projects[0]->expectedEndDate;

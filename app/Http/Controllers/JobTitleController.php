@@ -39,9 +39,9 @@ class JobTitleController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(Request $request) {
-		$this->JobTitleService->saveJobTitle($request);
+		$jobTitle = $this->JobTitleService->saveJobTitle($request);
 
-		return redirect('/companies/' . $request->companyId);
+		return $jobTitle;
 
 	}
 
@@ -100,9 +100,9 @@ class JobTitleController extends Controller {
 	 */
 	public function destroy($jobTitleId, Request $request) {
 
-		$companyId = $this->JobTitleService->deleteJobTitle($jobTitleId);
+		$this->JobTitleService->deleteJobTitle($jobTitleId);
 
-		return redirect('/companies/' . $companyId);
+		return $jobTitleId;
 
 	}
 }

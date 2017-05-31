@@ -5,7 +5,7 @@
     <!-- Display Validation Errors -->
 @include('common.errors')
 
-    <form action="{{url('companyholidays') }}" method="POST" class="form-horizontal">
+    <form id="saveForm" action="{{url('companyholidays') }}" method="POST" class="form-horizontal">
         {{ csrf_field() }}
         {{ method_field('POST') }}
         <div class="form-group" >

@@ -45,8 +45,9 @@ class ClientProjectService implements IClientProjectService {
 	}
 
 	public function createClientProject($request) {
+
 		$clientProject = $this->createOrUpdateClientProject($request, null);
-		$clientProject->client_id = $request->clientid;
+		$clientProject->client_id = $request->clientId;
 		$clientProject->save();
 
 		return $clientProject;

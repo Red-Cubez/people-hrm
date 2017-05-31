@@ -20,11 +20,16 @@ class ClientProjectController extends Controller {
 		$this->ClientProjectService = $clientProjectService;
 	}
 
-	public function index() {
+	public function index(Request $request) {
+
 		//TODO only get projects for a particular client
 		$clientProjects = $this->ClientProjectService->getClientProjects();
 
-		return view('clientprojects.index', ['clientProjects' => $clientProjects]);
+		return view('clientprojects.index',
+			[
+				'clientProjects' => $clientProjects,
+				'companyId' => $request->companyId,
+			]);
 	}
 
 	/**
@@ -34,7 +39,8 @@ class ClientProjectController extends Controller {
 	 */
 	public function create() {
 		//
-		dd("here");
+		dd("create");
+		// return view('clientProjects/index');
 	}
 
 	/**
@@ -121,12 +127,12 @@ class ClientProjectController extends Controller {
 		return redirect('/clients/' . $clientid);
 	}
 
-	public function manageProject($clientid) {
-		$clientProjects = $this->ClientProjectService->manageClientProjects($clientid);
+	public function manageProject($clientId) {
+		$clientProjects = $this->ClientProjectService->manageClientProjects($clientId);
 
 		return view('clientprojects.index',
 			['clientProjects' => $clientProjects,
-				'clientid' => $clientid,
+				'clientId' => $clientId,
 			]);
 	}
 }

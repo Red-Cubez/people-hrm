@@ -30,10 +30,11 @@ class JobTitleService implements IJobTitleService {
 	public function saveJobTitle($request) {
 		$companyJobTitle = new JobTitle();
 
-		$companyJobTitle->title = $request->jobTitle;
+		$companyJobTitle->title = $request->name;
 		$companyJobTitle->company_id = $request->companyId;
 
 		$companyJobTitle->save();
+		return $companyJobTitle->title;
 	}
 
 	public function deleteJobTitle($jobTitleId) {

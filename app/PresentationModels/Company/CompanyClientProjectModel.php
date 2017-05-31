@@ -4,6 +4,7 @@ namespace People\PresentationModels\Company;
 
 class CompanyClientProjectModel {
 	public $projectId;
+	public $clientId;
 	public $projectName;
 	public $expectedStartDate;
 	public $expectedEndDate;

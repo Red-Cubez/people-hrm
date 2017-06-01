@@ -6,7 +6,7 @@
     </div>
     <div class="panel-body">
         @if (count($companyProfileModel->jobTitles) > 0)
-        <table  class="table table-striped task-table">
+        <table id="jobTitleTable" class="table table-striped task-table">
             <!-- Table Headings -->
             <thead>
                 <th>
@@ -156,10 +156,15 @@
 
                     $('#jobTitleModal').modal('toggle');
                     $('#jobTitleName').val(null);
+
+                   // $("#jobTitleTable").before("<p>Hello world!</p>");
+
                   //  $("#jobTitlePage").load("http://people.app/companies/3 #jobTitlePage");
 
 
-            },
+            }
+
+        }
         });
     }
 </script>

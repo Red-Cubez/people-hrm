@@ -11,6 +11,7 @@
                     Job Title
                 </h4>
             </div>
+            <input type="hidden" id="toBeUpdatedJobTitle">
             <div class="modal-body">
                 <div class="form-group">
                     <label for="usr">
@@ -25,16 +26,9 @@
                     Close
                 </button>
                 <span class="pull-right">
-               {{--  @if(isset($companyJobTitle)) --}}
-                    <button class="btn btn-primary" onclick="updateJobTitle()" type="button">
-                        Update Job Title
+                    <button class="btn btn-primary" id="addUpdateJobTitleButton" onclick="addUpdateJobTitle()" type="button">
                     </button>
-                {{-- @elseif(!isset($companyJobTitle)) --}}
-                      <button class="btn btn-primary" onclick="addJobTitle()" type="button">
-                        Add Job Title
-                    </button>
-           {{--      @endif --}}
-                </span>
+               </span>
             </div>
         </div>
     </div>

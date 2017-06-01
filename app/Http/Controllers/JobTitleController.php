@@ -41,7 +41,7 @@ class JobTitleController extends Controller {
 	public function store(Request $request) {
 		$jobTitle = $this->JobTitleService->saveJobTitle($request);
 
-		return $jobTitle;
+		return response()->json(['jobTitle' => $jobTitle->title, 'jobTitleId' => $jobTitle->id]);
 
 	}
 
@@ -88,7 +88,8 @@ class JobTitleController extends Controller {
 	public function update(Request $request, $jobTitleid) {
 
 		$this->JobTitleService->updateJobTitle($request, $jobTitleid);
-		return $request->name;
+
+		return response()->json(['jobTitle' => $request->name]);
 
 	}
 
@@ -102,7 +103,7 @@ class JobTitleController extends Controller {
 
 		$this->JobTitleService->deleteJobTitle($jobTitleId);
 
-		return $jobTitleId;
+		return response()->json(['jobTitleId' => $jobTitleId]);
 
 	}
 }

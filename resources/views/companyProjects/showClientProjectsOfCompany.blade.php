@@ -101,6 +101,8 @@
                 @endforeach
             </tbody>
         </table>
+        @else
+                No Record Found
         @endif
     </div>
     {{--

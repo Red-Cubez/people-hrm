@@ -59,6 +59,8 @@
                 @endforeach
             </tbody>
         </table>
+        @else
+                No Record Found
         @endif
     </div>
     <form action="{{ url('employees/') }}" method="POST">

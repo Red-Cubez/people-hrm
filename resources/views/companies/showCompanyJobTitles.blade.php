@@ -1,46 +1,57 @@
-<div class="panel panel-default" {{-- id="jobTitlePage" --}}>
+<div class="panel panel-default" id="jobTitlePage">
     <div class="panel-heading">
         <h3>
             Company Job Titles
         </h3>
     </div>
     <div class="panel-body">
-        @if (count($companyProfileModel->jobTitles) > 0)
+
         <table id="jobTitleTable" class="table table-striped task-table">
+
+
             <!-- Table Headings -->
+            @if (count($companyProfileModel->jobTitles) > 0)
             <thead>
                 <th>
                     Job Title Name
                 </th>
             </thead>
+            @endif
+
             <!-- Table Body -->
-            <tbody id="jobTitleTable">
+            <tbody id="jobTitleTableBody">
+             @if (count($companyProfileModel->jobTitles) > 0)
                 @foreach ($companyProfileModel->jobTitles as $companyJobTitle)
-                <tr>
+                <tr id="jobTitle_{{$companyJobTitle->jobTitleId}}">
+
                     <!--  Name -->
                     <td class="table-text">
                         <div id="jobTitle_{{$companyJobTitle->jobTitleId}}">
                             {{$companyJobTitle->jobTitle }}
                         </div>
                     </td>
-                    <td>
+                    <td >
                         <button
                         class="btn btn-primary btn-lg"
-                        onclick="openJobTitleModal({{$companyJobTitle->jobTitleId}});"
+                        onclick="openJobTitleModal({{$companyJobTitle->jobTitleId}},null);"
                         type="button">
                         Edit
                         </button>
+
                         <button class="btn btn-danger" onclick="deleteJobTitle({{$companyJobTitle->jobTitleId}})" type="submit">
                             <i class="fa fa-trash">DELETE</i>
                         </button>
                     </td>
                 </tr>
                 @endforeach
+            @else
+            No Record Found
             @endif
+
             </tbody>
         </table>
     </div>
-    <button class="btn btn-primary btn-lg" onclick="openJobTitleModal(null);" type="button">
+    <button class="btn btn-primary btn-lg" onclick="openJobTitleModal(null,null);" type="button">
         Add New Job Title
     </button>
 </div>
@@ -51,18 +62,33 @@
     function initializeJobTitleModal()
     {
         $('#jobTitleName').val(null);
-        $('#jobTitleId').val(null);
+        //$('#jobTitleId').val(null);
         $('#toBeUpdatedJobTitle').val(null);
     }
-    function setupJobTitleEditValues(jobTitleId) {
+    function setupJobTitleEditValues(jobTitleId,jobTitle) {
+
+        if(jobTitle==null)
+        {
         var jobTitleValue = $('#jobTitle_' + jobTitleId).text().trim();
-        $("#jobTitleName").val(jobTitleValue);
+
     }
-    function openJobTitleModal(jobTitleId) {
+    else
+    {
+         var jobTitleValue=jobTitle;
+
+    }
+     $("#jobTitleName").val(jobTitleValue);
+
+
+
+}
+    function openJobTitleModal(jobTitleId,jobTitle) {
+
         initializeJobTitleModal();
+        ///alert(jobTitleId);
         if (jobTitleId !== null) {
             $('#toBeUpdatedJobTitle').val(jobTitleId);
-            setupJobTitleEditValues(jobTitleId);
+            setupJobTitleEditValues(jobTitleId,jobTitle);
             $('#addUpdateJobTitleButton').html('Update Job Title');
         }
         else{
@@ -100,7 +126,9 @@
                     $('.error').text(data.errors.name);
                 } else {
 
-                    $("#jobTitlePage").load("http://people.app/companies/3 #jobTitlePage");
+                   $('#jobTitle_' + jobTitleId).remove();
+
+                    ///$("#jobTitlePage").load("http://people.app/companies/3 #jobTitlePage");
                 }
             },
         });
@@ -123,7 +151,7 @@
                     $('.error').removeClass('hidden');
                     $('.error').text(data.errors.name);
                 } else {
-
+//------------------------------------here------------------------------------------
                     $('#jobTitleModal').modal('toggle');
                     $('#jobTitleName').val(null);
                     $('#jobTitleId').val(null);
@@ -135,7 +163,7 @@
         });
     }
 
-    function addJobTitle() {
+     function addJobTitle() {
         var newValue = $("#jobTitleName").val();
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
@@ -157,15 +185,42 @@
                     $('#jobTitleModal').modal('toggle');
                     $('#jobTitleName').val(null);
 
-                   // $("#jobTitleTable").before("<p>Hello world!</p>");
+                  var jobTitle = data.jobTitle;
+                  var editButton = $('<button>Edit</button>').click(function () {
 
-                  //  $("#jobTitlePage").load("http://people.app/companies/3 #jobTitlePage");
+                     openJobTitleModal(data.jobTitleId);
+                     });
+                  var deleteButton = $('<button>Delete</button>').click(function () {
 
+                     deleteJobTitle(data.jobTitleId);
+                     });
 
-            }
-
+                  var html =  '\
+                 <tr id="jobTitle_' + data.jobTitleId + ' ">\
+                    <td class="table-text">\
+                        <div id="jobTitle_' + data.jobTitleId + ' ">\
+                            ' + data.jobTitle + '\
+                        </div>\
+                    </td>\
+                    <td >\
+                        <button \
+                        class="btn btn-primary btn-lg" \
+                        onclick="openJobTitleModal(\'' + data.jobTitleId +'\',\''+ data.jobTitle +'\');" \
+                        type="button"> \
+                        Edit \
+                        </button> \
+                        <button class="btn btn-danger" onclick="deleteJobTitle(' + data.jobTitleId + ')" type="submit"> \
+                            <i class="fa fa-trash">DELETE</i> \
+                        </button> \
+                    </td> \
+                    </tr>"\
+                    ';
+                      //var  jobTitleId="jobTitle_"+data.jobTitleId;
+                     $("#jobTitleTableBody").append(html);
+                    //$(jobTitleId).text(data.jobTitle);
+                   }
+                 }
+            });
         }
-        });
-    }
 </script>
 @endsection

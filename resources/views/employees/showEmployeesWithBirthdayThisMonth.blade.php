@@ -1,7 +1,7 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3>
-            BirthDays in {{date('M')}}
+            Birthdays in {{date('F')}}
         </h3>
     </div>
     <div class="panel-body">
@@ -43,6 +43,8 @@
                 @endforeach
             </tbody>
         </table>
+        @else
+                No Record Found
         @endif
     </div>
 </div>

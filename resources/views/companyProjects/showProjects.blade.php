@@ -99,6 +99,8 @@
                     </td>
                 </tr>
                 @endforeach
+                @else
+                No Record Found
                 @endif
             </tbody>
         </table>

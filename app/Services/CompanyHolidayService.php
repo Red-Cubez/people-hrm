@@ -13,14 +13,17 @@ class CompanyHolidayService implements ICompanyHolidayService {
 		$companyHoliday->name = $request->name;
 		$companyHoliday->startDate = $request->startDate;
 
-		$companyHoliday->endDate = $request->endDate;
 		if (!isset($request->endDate)) {
 			$companyHoliday->endDate = $request->startDate;
+		} else {
+			$companyHoliday->endDate = $request->endDate;
 		}
 
 		$companyHoliday->company_id = $request->companyId;
-		$companyHoliday->holidays = $this->countHolidays($request->endDate, $request->startDate);
+		$companyHoliday->holidays = $this->countHolidays($companyHoliday->endDate, $companyHoliday->startDate);
+
 		$companyHoliday->save();
+		return $companyHoliday;
 
 	}
 
@@ -52,6 +55,7 @@ class CompanyHolidayService implements ICompanyHolidayService {
 
 		$holiday->holidays = $this->countHolidays($request->endDate, $request->startDate);
 		$holiday->save();
+		return $holiday;
 	}
 
 	public function getHolidayDetails($holidayId) {

@@ -1,4 +1,4 @@
-<div aria-labelledby="favoritesModalLabel" class="modal fade" id="holidayModal" role="dialog" tabindex="-1">
+<div aria-labelledby="favoritesModalLasbel" class="modal fade" id="holidayModal" role="dialog" tabindex="-1">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -7,45 +7,51 @@
                         ×
                     </span>
                 </button>
-                <h4 class="modal-title" id="holidayModal">
+                <h4 class="modal-title" id="holidayModalLabel">
                     Holiday
                 </h4>
             </div>
+            <input type="hidden" id="toBeUpdatedHoliday">
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="Holiday">
-                        Holiday Name
+                    <label for="usr">
+                        Holiday Name:
                     </label>
                     <input class="form-control" id="holidayName" type="text">
                     </input>
                 </div>
+            </div>
+
+            <div class="modal-body">
                 <div class="form-group">
-                    <label for="start date">
-                        Start Date
+                    <label for="usr">
+                        Start Date:
                     </label>
-                    <input class="form-control" id="startDate" type="date">
+                      <input type="date" name="startDate" id="startDate" class="form-control" required >
                     </input>
                 </div>
+            </div>
+            <div class="modal-body">
                 <div class="form-group">
-                    <label for="end date">
-                        Holiday Name
+                    <label for="usr">
+                        End Date:
                     </label>
-                    <input class="form-control" id="endDate" type="date">
+                     <input type="date" name="endDate" id="endDate" class="form-control" required >
                     </input>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-default" data-dismiss="modal" type="button">
+                <button class="btn btn-default" data-dismiss="modal"  type="button">
                     Close
                 </button>
                 <span class="pull-right">
-                    <button class="btn btn-default" id="save" onclick="formSubmit();" type="button">
-                        <i class="fa fa-plus">
-                        </i>
-                        {{isset($holiday)? "Update": "Add"}} Holiday
+                    <button class="btn btn-primary" id="addUpdateHolidayButton" onclick="addUpdateHoliday();" type="button">
                     </button>
-                </span>
+               </span>
             </div>
         </div>
     </div>
 </div>
+
+
+

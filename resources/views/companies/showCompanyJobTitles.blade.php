@@ -5,47 +5,48 @@
         </h3>
     </div>
     <div class="panel-body">
-
+        @if (count($companyProfileModel->jobTitles) > 0)
         <table id="jobTitleTable" class="table table-striped task-table">
 
 
             <!-- Table Headings -->
-            @if (count($companyProfileModel->jobTitles) > 0)
-            <thead>
+
+                <thead>
                 <th>
                     Job Title Name
                 </th>
-            </thead>
-            @endif
+                </thead>
+        @endif
 
-            <!-- Table Body -->
+        <!-- Table Body -->
             <tbody id="jobTitleTableBody">
-             @if (count($companyProfileModel->jobTitles) > 0)
+            @if (count($companyProfileModel->jobTitles) > 0)
                 @foreach ($companyProfileModel->jobTitles as $companyJobTitle)
-                <tr id="jobTitle_{{$companyJobTitle->jobTitleId}}">
+                    <tr id="jobTitle_{{$companyJobTitle->jobTitleId}}">
 
-                    <!--  Name -->
-                    <td class="table-text">
-                        <div id="jobTitle_{{$companyJobTitle->jobTitleId}}">
-                            {{$companyJobTitle->jobTitle }}
-                        </div>
-                    </td>
-                    <td >
-                        <button
-                        class="btn btn-primary btn-lg"
-                        onclick="openJobTitleModal({{$companyJobTitle->jobTitleId}},null);"
-                        type="button">
-                        Edit
-                        </button>
+                        <!--  Name -->
+                        <td class="table-text">
+                            <div id="jobTitleName_{{$companyJobTitle->jobTitleId}}">
+                                {{$companyJobTitle->jobTitle }}
+                            </div>
+                        </td>
+                        <td>
+                            <button
+                                    class="btn btn-primary btn-lg"
+                                    onclick="openJobTitleModal({{$companyJobTitle->jobTitleId}},null);"
+                                    type="button">
+                                Edit
+                            </button>
 
-                        <button class="btn btn-danger" onclick="deleteJobTitle({{$companyJobTitle->jobTitleId}})" type="submit">
-                            <i class="fa fa-trash">DELETE</i>
-                        </button>
-                    </td>
-                </tr>
+                            <button class="btn btn-danger" onclick="deleteJobTitle({{$companyJobTitle->jobTitleId}});"
+                                    type="submit">
+                                DELETE
+                            </button>
+                        </td>
+                    </tr>
                 @endforeach
             @else
-            No Record Found
+                No Record Found
             @endif
 
             </tbody>
@@ -58,169 +59,178 @@
 @include('jobTitles/jobTitleModal')
 
 @section('page-scripts')
-<script type="text/javascript">
-    function initializeJobTitleModal()
-    {
-        $('#jobTitleName').val(null);
-        //$('#jobTitleId').val(null);
-        $('#toBeUpdatedJobTitle').val(null);
-    }
-    function setupJobTitleEditValues(jobTitleId,jobTitle) {
-
-        if(jobTitle==null)
-        {
-        var jobTitleValue = $('#jobTitle_' + jobTitleId).text().trim();
-
-    }
-    else
-    {
-         var jobTitleValue=jobTitle;
-
-    }
-     $("#jobTitleName").val(jobTitleValue);
-
-
-
-}
-    function openJobTitleModal(jobTitleId,jobTitle) {
-
-        initializeJobTitleModal();
-        ///alert(jobTitleId);
-        if (jobTitleId !== null) {
-            $('#toBeUpdatedJobTitle').val(jobTitleId);
-            setupJobTitleEditValues(jobTitleId,jobTitle);
-            $('#addUpdateJobTitleButton').html('Update Job Title');
+    @parent
+    <script type="text/javascript">
+        function initializeJobTitleModal() {
+            $('#jobTitleName').val(null);
+            //$('#jobTitleId').val(null);
+            $('#toBeUpdatedJobTitle').val(null);
         }
-        else{
-            $('#addUpdateJobTitleButton').html('Add Job Title');
-        }
-        $('#jobTitleModal').modal('show');
-    }
+        function setupJobTitleEditValues(jobTitleId, jobTitle) {
 
-    function addUpdateJobTitle()
-    {
-        var jobTitleId = $('#toBeUpdatedJobTitle').val();
+            if (jobTitle == null) {
+                var jobTitleValue = $('#jobTitleName_' + jobTitleId).text().trim();
+                alert(jobTitleId);
+            }
+            else {
 
-        if (jobTitleId == '' || jobTitleId === null) {
-            addJobTitle();
-                  }
-        else
-        {
-            updateJobTitle();
+                var jobTitleValue = jobTitle;
+
+            }
+            $("#jobTitleName").val(jobTitleValue);
 
         }
-    }
+        function openJobTitleModal(jobTitleId, jobTitle) {
 
-    function deleteJobTitle(jobTitleId) {
-        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-        $.ajax({
-            type: 'DELETE',
-            url: '/jobtitle/' + jobTitleId,
-            data: {
-                '_token': CSRF_TOKEN,
-            },
-            success: function (data) {
-                if ((data.errors)) {
-                    alert('errors');
-                    $('.error').removeClass('hidden');
-                    $('.error').text(data.errors.name);
-                } else {
+            initializeJobTitleModal();
+            ///alert(jobTitleId);
+            if (jobTitleId !== null) {
+                $('#toBeUpdatedJobTitle').val(jobTitleId);
+                setupJobTitleEditValues(jobTitleId, jobTitle);
+                $('#addUpdateJobTitleButton').html('Update Job Title');
+            }
+            else {
+                $('#addUpdateJobTitleButton').html('Add Job Title');
+            }
+            $('#jobTitleModal').modal('show');
+        }
 
-                   $('#jobTitle_' + jobTitleId).remove();
+        function addUpdateJobTitle() {
+            var jobTitleId = $('#toBeUpdatedJobTitle').val();
 
-                    ///$("#jobTitlePage").load("http://people.app/companies/3 #jobTitlePage");
-                }
-            },
-        });
-    }
-    function updateJobTitle() {
-        var newValue = $("#jobTitleName").val();
-        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-        jobTitleId = $('#toBeUpdatedJobTitle').val();
+            if (jobTitleId == '' || jobTitleId === null) {
+                addJobTitle();
+            }
+            else {
+                updateJobTitle();
 
-        $.ajax({
-            type: 'put',
-            url: '/jobtitle/' + jobTitleId,
-            data: {
-                '_token': CSRF_TOKEN,
-                'name': newValue
-            },
-            success: function (data) {
-                if ((data.errors)) {
-                    alert('errors');
-                    $('.error').removeClass('hidden');
-                    $('.error').text(data.errors.name);
-                } else {
-//------------------------------------here------------------------------------------
-                    $('#jobTitleModal').modal('toggle');
-                    $('#jobTitleName').val(null);
-                    $('#jobTitleId').val(null);
-                    $('#jobTitle_' + jobTitleId).text(data.jobTitle);
-                    $('.error').remove();
-                }
+            }
+        }
 
-            },
-        });
-    }
+        function deleteJobTitle(jobTitleId) {
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                type: 'DELETE',
+                url: '/jobtitle/' + jobTitleId,
+                data: {
+                    '_token': CSRF_TOKEN,
+                },
+                success: function (data) {
+                    if ((data.errors)) {
+                        alert('errors');
+                        $('.error').removeClass('hidden');
+                        $('.error').text(data.errors.name);
+                    } else {
 
-     function addJobTitle() {
-        var newValue = $("#jobTitleName").val();
-        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+                        $('#jobTitle_' + jobTitleId).remove();
+                    }
+                },
+            });
+        }
+        function updateJobTitle() {
+            var newValue = $("#jobTitleName").val().trim();
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            jobTitleId = $('#toBeUpdatedJobTitle').val();
+            //alert(newValue);
+            $.ajax({
+                type: 'put',
+                url: '/jobtitle/' + jobTitleId,
+                data: {
+                    '_token': CSRF_TOKEN,
+                    'name': newValue
+                },
+                success: function (data) {
+                    if ((data.errors)) {
+                        alert('errors');
+                        $('.error').removeClass('hidden');
+                        $('.error').text(data.errors.name);
+                    } else {
+                        $('#jobTitleModal').modal('toggle');
+                        $('#jobTitleName').val(null);
+                        $('#jobTitleId').val(null);
 
-        $.ajax({
-            type: 'POST',
-            url: '/jobtitle/',
-            data: {
-                '_token': CSRF_TOKEN,
-                'name': newValue,
-                'companyId':<?php echo $companyProfileModel->companyId; ?>
-            },
-            success: function (data) {
-                if ((data.errors)) {
-                    alert('errors');
-                    $('.error').removeClass('hidden');
-                    $('.error').text(data.errors.name);
-                } else {
-
-                    $('#jobTitleModal').modal('toggle');
-                    $('#jobTitleName').val(null);
-
-                  var jobTitle = data.jobTitle;
-                  var editButton = $('<button>Edit</button>').click(function () {
-
-                     openJobTitleModal(data.jobTitleId);
-                     });
-                  var deleteButton = $('<button>Delete</button>').click(function () {
-
-                     deleteJobTitle(data.jobTitleId);
-                     });
-
-                  var html =  '\
-                 <tr id="jobTitle_' + data.jobTitleId + ' ">\
+                        var html = '\
                     <td class="table-text">\
-                        <div id="jobTitle_' + data.jobTitleId + ' ">\
+                        <div id="jobTitleName_' + data.jobTitleId + ' ">\
                             ' + data.jobTitle + '\
                         </div>\
                     </td>\
                     <td >\
                         <button \
                         class="btn btn-primary btn-lg" \
-                        onclick="openJobTitleModal(\'' + data.jobTitleId +'\',\''+ data.jobTitle +'\');" \
+                        onclick="openJobTitleModal(\'' + data.jobTitleId + '\',\'' + data.jobTitle + '\');" \
                         type="button"> \
                         Edit \
                         </button> \
-                        <button class="btn btn-danger" onclick="deleteJobTitle(' + data.jobTitleId + ')" type="submit"> \
+                        <button class="btn btn-danger" onclick="deleteJobTitle(\''+ data.jobTitleId +'\')" type="submit"> \
                             <i class="fa fa-trash">DELETE</i> \
                         </button> \
                     </td> \
-                    </tr>"\
-                    ';
-                      //var  jobTitleId="jobTitle_"+data.jobTitleId;
-                     $("#jobTitleTableBody").append(html);
-                    //$(jobTitleId).text(data.jobTitle);
-                   }
-                 }
+                    </tr>';
+                        // $('#jobTitle_' + jobTitleId).text(data.jobTitle);
+                        $('#jobTitle_' + jobTitleId).html(html);
+                    }
+                        },
             });
         }
-</script>
+
+        function addJobTitle() {
+            var newValue = $("#jobTitleName").val();
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+            $.ajax({
+                type: 'POST',
+                url: '/jobtitle/',
+                data: {
+                    '_token': CSRF_TOKEN,
+                    'name': newValue,
+                    'companyId':<?php echo $companyProfileModel->companyId; ?>
+                },
+                success: function (data) {
+                    if ((data.errors)) {
+                        alert('errors');
+                        $('.error').removeClass('hidden');
+                        $('.error').text(data.errors.name);
+                    } else {
+
+                        $('#jobTitleModal').modal('toggle');
+                        $('#jobTitleName').val(null);
+
+                        var jobTitle = data.jobTitle;
+                        var editButton = $('<button>Edit</button>').click(function () {
+
+                            openJobTitleModal(data.jobTitleId);
+                        });
+                        var deleteButton = $('<button>Delete</button>').click(function () {
+
+                            deleteJobTitle(data.jobTitleId);
+                        });
+
+                        var html = '\
+                 <tr id="jobTitle_'+data.jobTitleId +'">\
+                    <td class="table-text">\
+                        <div id="jobTitleName_' + data.jobTitleId + ' ">\
+                            ' + data.jobTitle + '\
+                        </div>\
+                    </td>\
+                    <td >\
+                        <button \
+                        class="btn btn-primary btn-lg" \
+                        onclick="openJobTitleModal(\'' + data.jobTitleId + '\',\'' + data.jobTitle + '\');" \
+                        type="button"> \
+                        Edit \
+                        </button> \
+                        <button class="btn btn-danger" onclick="deleteJobTitle(\''+ data.jobTitleId +'\')" type="submit"> \
+                            <i class="fa fa-trash">DELETE</i> \
+                        </button> \
+                    </td> \
+                    </tr>';
+                        //var  jobTitleId="jobTitle_"+data.jobTitleId;
+                        $("#jobTitleTableBody").append(html);
+                        //$(jobTitleId).text(data.jobTitle);
+                    }
+                }
+            });
+        }
+    </script>
 @endsection

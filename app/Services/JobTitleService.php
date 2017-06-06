@@ -19,6 +19,7 @@ class JobTitleService implements IJobTitleService {
 
 		$jobTitle->title = $request->name;
 		$jobTitle->save();
+		return $jobTitle;
 
 	}
 

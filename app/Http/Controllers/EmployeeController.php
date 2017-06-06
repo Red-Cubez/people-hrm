@@ -30,7 +30,7 @@ class EmployeeController extends Controller {
 
 		$employees = $this->EmployeeService->getAllEmployees();
 		$departments = $this->DepartmentService->getAllDepartments();
-		$jobTitles = $this->JobTitleService->getAllJobTitles();
+		$jobTitles = $this->JobTitleService->getJobTitlesOfCompany($request->companyId);
 
 		return view('employees.index',
 			[
@@ -91,7 +91,7 @@ class EmployeeController extends Controller {
 
 		$editEmployeeModel = $this->EmployeeService->editEmployee($employee);
 		$departments = $this->EmployeeService->getAllDepartments();
-		$jobTitles = $this->JobTitleService->getAllJobTitles();
+		$jobTitles = $this->JobTitleService->getJobTitlesOfCompany($employee->company_id);
 		return view('employees/update',
 			['editEmployeeModel' => $editEmployeeModel,
 				'departments' => $departments,

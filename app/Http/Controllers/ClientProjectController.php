@@ -22,12 +22,16 @@ class ClientProjectController extends Controller
         $this->ClientProjectService = $clientProjectService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        //TODO only get projects for a particular client
+
         $clientProjects = $this->ClientProjectService->getClientProjects();
 
-        return view('clientprojects.index', ['clientProjects' => $clientProjects]);
+        return view('clientprojects.index',
+            [
+                'clientProjects' => $clientProjects,
+                'companyId' => $request->companyId,
+            ]);
     }
 
     /**
@@ -37,7 +41,7 @@ class ClientProjectController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -60,10 +64,12 @@ class ClientProjectController extends Controller
      * @param  \People\Models\ClientProject $clientProject
      * @return \Illuminate\Http\Response
      */
-    public function show(ClientProject $clientproject)
+    public function show($clientProjectId)
     {
+        $clientProjectModel = $this->ClientProjectService->viewClientProject($clientProjectId);
 
-        return view('clientProjects/clientProjectEditForm', ['clientProject' => $clientproject]);
+        return view('clientProjects/viewClientProject', ['project' => $clientProjectModel]);
+
     }
 
     /**
@@ -74,10 +80,8 @@ class ClientProjectController extends Controller
      */
     public function edit($clientProjectId)
     {
-
-        $clientProjectModel = $this->ClientProjectService->viewClientProject($clientProjectId);
-
-        return view('clientProjects/viewClientProject', ['project' => $clientProjectModel]);
+        $clientProject = $this->ClientProjectService->getClientProjectDetails($clientProjectId);
+        return view('clientProjects/clientProjectEditForm', ['clientProject' => $clientProject]);
     }
 
     /**
@@ -92,7 +96,7 @@ class ClientProjectController extends Controller
 
         $clientid = $this->ClientProjectService->updateClientProject($request, $clientproject);
 
-        return redirect('/clients/' . $clientproject->client_id);
+        return redirect('/clientprojects/' . $clientproject->id);
 
     }
 
@@ -109,13 +113,13 @@ class ClientProjectController extends Controller
         return redirect('/clients/' . $clientid);
     }
 
-    public function manageProject($clientid)
+    public function manageProject($clientId)
     {
-        $clientProjects = $this->ClientProjectService->manageClientProjects($clientid);
+        $clientProjects = $this->ClientProjectService->manageClientProjects($clientId);
 
         return view('clientprojects.index',
             ['clientProjects' => $clientProjects,
-                'clientid' => $clientid,
+                'clientId' => $clientId,
             ]);
     }
 }

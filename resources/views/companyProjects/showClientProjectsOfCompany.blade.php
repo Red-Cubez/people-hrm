@@ -1,11 +1,11 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3>
-            Current Internal Projects
+            Current Projects
         </h3>
     </div>
     <div class="panel-body">
-        @if (count($companyProfileModel->companyProjects) > 0)
+        @if (count($companyProfileModel->clientProjects) > 0)
         <table class="table table-striped task-table">
             <!-- Table Headings -->
             <thead>
@@ -36,7 +36,7 @@
             </thead>
             <!-- Table Body -->
             <tbody>
-                @foreach ($companyProfileModel->companyProjects as $project)
+                @foreach ($companyProfileModel->clientProjects as $project)
                 <tr>
                     <!-- company->project Name -->
                     <td class="table-text">
@@ -76,7 +76,7 @@
                     </td>
                     <!-- Delete Button -->
                     <td>
-                        <form action="{{ url('companyprojects/'.$project->projectId) }}" method="POST">
+                        <form action="{{ url('clientprojects/'.$project->projectId) }}" method="POST">
                             {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
                             <input name="_method" type="hidden" value="DELETE">
@@ -87,7 +87,7 @@
                                 </button>
                             </input>
                         </form>
-                        <form action="{{ url('companyprojects/'.$project->projectId) }}" method="POST">
+                        <form action="{{ url('clientprojects/'.$project->projectId) }}" method="POST">
                             {{ csrf_field() }}
                                 {{ method_field('GET') }}
                             <button class="btn btn-primary" type="submit">
@@ -99,19 +99,34 @@
                     </td>
                 </tr>
                 @endforeach
-                @else
-                No Record Found
-                @endif
             </tbody>
         </table>
+        @else
+                No Record Found
+        @endif
     </div>
-    <form action="{{ url('/companies/'.$companyProfileModel->companyId.'/companyprojects') }}" method="POST">
+    {{--
+    <form action="{{ url('/clientprojects/') }}" method="POST">
         {{ csrf_field() }}
             {{ method_field('GET') }}
-        <button class="btn btn-primary" type="submit">
+        <input name="companyId" type="hidden" value="{{$companyProfileModel->companyId}}">
+            <button class="btn btn-danger" type="submit">
+                <i class="fa fa-trash">
+                    Add New Projects
+                </i>
+            </button>
+        </input>
+    </form>
+    --}}
+        {{--
+    <form action="{{ url('/companies/'.$companyProfileModel->companyId.'/clientprojects') }}" method="POST">
+        {{ csrf_field() }}
+            {{ method_field('GET') }}
+        <button class="btn btn-danger" type="submit">
             <i class="fa fa-trash">
                 Add New Projects
             </i>
         </button>
     </form>
+    --}}
 </div>

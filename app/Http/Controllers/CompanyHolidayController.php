@@ -10,10 +10,10 @@ class CompanyHolidayController extends Controller
 
     public $CompanyHolidayService;
 
-    public function __construct(ICompanyHolidayService $companyHolidayService) {
+    public function __construct(ICompanyHolidayService $companyHolidayService)
+    {
         $this->CompanyHolidayService = $companyHolidayService;
     }
-
 
     /**
      * Display a listing of the resource.
@@ -22,7 +22,7 @@ class CompanyHolidayController extends Controller
      */
     public function index(Request $request)
     {
-        return view('companyHolidays/index', ['companyId' => $request->companyId,]);
+        return view('companyHolidays/index', ['companyId' => $request->companyId]);
     }
 
     /**
@@ -38,20 +38,25 @@ class CompanyHolidayController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $this->CompanyHolidayService->createHoliday($request);
-        return redirect('/companies/'.$request->companyId);
-
+        $companyHoliday = $this->CompanyHolidayService->createHoliday($request);
+        return response()->json([
+            'holidayName' => $companyHoliday->name,
+            'holidayId' => $companyHoliday->id,
+            'startDate' => $companyHoliday->startDate,
+            'endDate' => $companyHoliday->endDate,
+            'holidays' => $companyHoliday->holidays,
+        ]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -62,12 +67,12 @@ class CompanyHolidayController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($holidayid)
     {
-        $holiday=$this->CompanyHolidayService->getHolidayDetails($holidayid);
+        $holiday = $this->CompanyHolidayService->getHolidayDetails($holidayid);
 
         return view('companyHolidays/editHolidayForm',
             [
@@ -78,27 +83,35 @@ class CompanyHolidayController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $holidayId)
     {
-        $this->CompanyHolidayService->updateHoliday($request,$holidayId);
 
-        return redirect('/companies/'.$request->companyId);
+        $holiday = $this->CompanyHolidayService->updateHoliday($request, $holidayId);
+
+        return response()->json(
+            [
+                'holidayName' => $holiday->name,
+                'holidayId' => $holiday->id,
+                'startDate' => $holiday->startDate,
+                'endDate' => $holiday->endDate,
+                'holidays' => $holiday->holidays,
+            ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($holidayId,Request $request)
+    public function destroy($holidayId, Request $request)
     {
         $this->CompanyHolidayService->deleteHoliday($holidayId);
 
-        return redirect('/companies/'.$request->companyId);
+        return $holidayId;
     }
 }

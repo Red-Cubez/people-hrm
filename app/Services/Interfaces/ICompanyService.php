@@ -8,7 +8,9 @@ interface ICompanyService {
 	public function deleteCompany($company);
 	public function getAllCompanies();
 	public function getCompanyAddressAndCompanyProjects($company);
-    public function mapCompanyProfile($company,$CompanyAddress,$companyJobTitles,$employeesWithBirthday,$companyHolidays);
+    public function mapCompanyProfile($company,$CompanyAddress,$companyJobTitles,
+                                      $employeesWithBirthday,$companyHolidays,
+                                      $companyCurrentEmployees,$companyCurrentClients);
 
 
 }

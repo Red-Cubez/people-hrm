@@ -3,7 +3,6 @@
 namespace People\Http\Controllers;
 
 use Illuminate\Http\Request;
-use People\Models\JobTitle;
 use People\Services\Interfaces\IJobTitleService;
 
 class JobTitleController extends Controller
@@ -16,7 +15,8 @@ class JobTitleController extends Controller
      */
     public $JobTitleService;
 
-    public function __construct(IJobTitleService $jobTitleService) {
+    public function __construct(IJobTitleService $jobTitleService)
+    {
 
         $this->JobTitleService = $jobTitleService;
     }
@@ -44,11 +44,13 @@ class JobTitleController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request);
-        $this->JobTitleService->saveJobTitle($request);
+        $jobTitle = $this->JobTitleService->saveJobTitle($request);
 
-       // dd("save");
-        return redirect('/jobtitle/'.$request->companyId);
+        return response()->json(
+            [
+                'jobTitle' => $jobTitle->title,
+                'jobTitleId' => $jobTitle->id,
+            ]);
 
     }
 
@@ -61,11 +63,11 @@ class JobTitleController extends Controller
     public function show($companyId)
     {
 
-        $jobTitles=$this->JobTitleService->getJobTitlesOfCompany($companyId);
+        $jobTitles = $this->JobTitleService->getJobTitlesOfCompany($companyId);
 
         return view('jobTitles/index',
             ['companyId' => $companyId,
-                'jobTitles' =>$jobTitles,
+                'jobTitles' => $jobTitles,
 
             ]);
     }
@@ -78,10 +80,10 @@ class JobTitleController extends Controller
      */
     public function edit($jobTitleId)
     {
-        $jobTitle=$this->JobTitleService->getJobTitleDetails($jobTitleId);
+        $jobTitle = $this->JobTitleService->getJobTitleDetails($jobTitleId);
 
         return view('jobTitles/updateJobTitleForm',
-            ['jobTitle' =>$jobTitle,
+            ['jobTitle' => $jobTitle,
 
             ]);
     }
@@ -93,12 +95,19 @@ class JobTitleController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
+
     public function update(Request $request, $jobTitleid)
     {
 
-        $this->JobTitleService->updateJobTitle($request,$jobTitleid);
+        $jobTitle = $this->JobTitleService->updateJobTitle($request, $jobTitleid);
 
-        return redirect('/jobtitle/'.$request->companyId);
+        return response()->json(
+            [
+                'jobTitle' => $request->name,
+                'jobTitleId' => $jobTitle->id,
+
+            ]);
+
     }
 
     /**
@@ -107,11 +116,12 @@ class JobTitleController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($jobTitleId)
+    public function destroy($jobTitleId, Request $request)
     {
-       $companyId= $this->JobTitleService->deleteJobTitle($jobTitleId);
-       // dd("deleted");
-        return redirect('/jobtitle/'.$companyId);
+
+        $this->JobTitleService->deleteJobTitle($jobTitleId);
+
+        return response()->json(['jobTitleId' => $jobTitleId]);
 
     }
 }

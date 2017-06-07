@@ -2,8 +2,9 @@
 
 namespace People\PresentationModels\Company;
 
-class CompanyProjectModel {
+class CompanyClientProjectModel {
 	public $projectId;
+	public $clientId;
 	public $projectName;
 	public $expectedStartDate;
 	public $expectedEndDate;

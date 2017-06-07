@@ -55,9 +55,9 @@ class CompanyProjectController extends Controller
     public function store(Request $request)
     {
 
-        $this->CompanyProjectService->saveCompanyProject($request);
+        $companyProjectId = $this->CompanyProjectService->saveCompanyProject($request);
 
-        return redirect('/companies/' . $request->companyid);
+        return redirect('/companyprojects/' . $companyProjectId);
     }
 
     /**
@@ -71,7 +71,6 @@ class CompanyProjectController extends Controller
 
         list($currentProjectResources, $availableEmployees) = $this->CompanyProjectResourceService->showCompanyProjectResources($companyProjectId);
 
-
         $companyProject = $this->CompanyProjectService->viewCompanyProject($companyProjectId);
 
         return view('companyProjects/viewCompanyProject',
@@ -84,12 +83,6 @@ class CompanyProjectController extends Controller
 
     }
 
-//    public function show(CompanyProject $companyproject)
-//    {
-//
-//        return view('companyProjects/companyProjectEditForm', ['companyproject' => $companyproject]);
-//    }
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -99,7 +92,6 @@ class CompanyProjectController extends Controller
     public function edit(CompanyProject $companyproject)
     {
         return view('companyProjects/companyProjectEditForm', ['companyproject' => $companyproject]);
-
     }
 
     /**

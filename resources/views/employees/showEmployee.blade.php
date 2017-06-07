@@ -91,7 +91,7 @@
     <form action="{{ url('employees/'.$employeeModel->employeeProfile->employeeId.'/edit') }}" method="POST">
         {{ csrf_field() }}
             {{ method_field('GET') }}
-        <button class="btn btn-danger" type="submit">
+        <button class="btn btn-primary" type="submit">
             <i class="fa fa-trash">
                 EDIT
             </i>

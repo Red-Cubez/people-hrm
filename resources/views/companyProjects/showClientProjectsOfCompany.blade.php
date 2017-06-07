@@ -90,7 +90,7 @@
                         <form action="{{ url('clientprojects/'.$project->projectId) }}" method="POST">
                             {{ csrf_field() }}
                                 {{ method_field('GET') }}
-                            <button class="btn btn-danger" type="submit">
+                            <button class="btn btn-primary" type="submit">
                                 <i class="fa fa-trash">
                                     View
                                 </i>

@@ -20,10 +20,14 @@
         ]) !!};
     </script>
     <script
-        src="https://code.jquery.com/jquery-3.2.1.min.js"
-        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-        crossorigin="anonymous"></script>
-<script src="{{ asset('js/app.js') }}"></script>
+            src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
+    <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js">
+    </script>
+
     @yield('page-scripts')
 </head>
 <body>
@@ -86,7 +90,6 @@
             </div>
         </div>
     </nav>
-
     @yield('content')
 </div>
 </body>

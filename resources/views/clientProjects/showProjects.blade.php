@@ -51,7 +51,7 @@
                                 {{ csrf_field() }}
                                 {{ method_field('GET') }}
 
-                                <button type="submit" class="btn btn-danger">
+                                <button type="submit" class="btn btn-primary">
                                     <i class="fa fa-trash"> View</i>
                                 </button>
                             </form>

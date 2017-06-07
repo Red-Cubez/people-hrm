@@ -5,20 +5,19 @@
         </h3>
     </div>
     <div class="panel-body">
-        @if (count($companyProfileModel->jobTitles) > 0)
+
         <table id="jobTitleTable" class="table table-striped task-table">
 
 
             <!-- Table Headings -->
 
-                <thead>
-                <th>
-                    Job Title Name
-                </th>
-                </thead>
-        @endif
+            <thead>
+            <th>
+                Job Title Name
+            </th>
+            </thead>
 
-        <!-- Table Body -->
+            <!-- Table Body -->
             <tbody id="jobTitleTableBody">
             @if (count($companyProfileModel->jobTitles) > 0)
                 @foreach ($companyProfileModel->jobTitles as $companyJobTitle)
@@ -32,7 +31,7 @@
                         </td>
                         <td>
                             <button
-                                    class="btn btn-primary btn-lg"
+                                    class="btn btn-primary"
                                     onclick="openJobTitleModal({{$companyJobTitle->jobTitleId}},null);"
                                     type="button">
                                 Edit
@@ -45,8 +44,7 @@
                         </td>
                     </tr>
                 @endforeach
-            @else
-                No Record Found
+
             @endif
 
             </tbody>
@@ -63,27 +61,21 @@
     <script type="text/javascript">
         function initializeJobTitleModal() {
             $('#jobTitleName').val(null);
-            //$('#jobTitleId').val(null);
             $('#toBeUpdatedJobTitle').val(null);
         }
         function setupJobTitleEditValues(jobTitleId, jobTitle) {
 
             if (jobTitle == null) {
                 var jobTitleValue = $('#jobTitleName_' + jobTitleId).text().trim();
-                alert(jobTitleId);
             }
             else {
-
                 var jobTitleValue = jobTitle;
-
             }
             $("#jobTitleName").val(jobTitleValue);
-
         }
         function openJobTitleModal(jobTitleId, jobTitle) {
 
             initializeJobTitleModal();
-            ///alert(jobTitleId);
             if (jobTitleId !== null) {
                 $('#toBeUpdatedJobTitle').val(jobTitleId);
                 setupJobTitleEditValues(jobTitleId, jobTitle);
@@ -96,6 +88,10 @@
         }
 
         function addUpdateJobTitle() {
+
+            var form = $("#jobTitleModalForm");
+            form.valid();
+
             var jobTitleId = $('#toBeUpdatedJobTitle').val();
 
             if (jobTitleId == '' || jobTitleId === null) {
@@ -103,7 +99,6 @@
             }
             else {
                 updateJobTitle();
-
             }
         }
 
@@ -131,7 +126,6 @@
             var newValue = $("#jobTitleName").val().trim();
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             jobTitleId = $('#toBeUpdatedJobTitle').val();
-            //alert(newValue);
             $.ajax({
                 type: 'put',
                 url: '/jobtitle/' + jobTitleId,
@@ -157,20 +151,19 @@
                     </td>\
                     <td >\
                         <button \
-                        class="btn btn-primary btn-lg" \
+                        class="btn btn-primary" \
                         onclick="openJobTitleModal(\'' + data.jobTitleId + '\',\'' + data.jobTitle + '\');" \
                         type="button"> \
                         Edit \
                         </button> \
-                        <button class="btn btn-danger" onclick="deleteJobTitle(\''+ data.jobTitleId +'\')" type="submit"> \
+                        <button class="btn btn-danger" onclick="deleteJobTitle(\'' + data.jobTitleId + '\')" type="submit"> \
                             <i class="fa fa-trash">DELETE</i> \
                         </button> \
                     </td> \
                     </tr>';
-                        // $('#jobTitle_' + jobTitleId).text(data.jobTitle);
                         $('#jobTitle_' + jobTitleId).html(html);
                     }
-                        },
+                },
             });
         }
 
@@ -207,7 +200,7 @@
                         });
 
                         var html = '\
-                 <tr id="jobTitle_'+data.jobTitleId +'">\
+                 <tr id="jobTitle_' + data.jobTitleId + '">\
                     <td class="table-text">\
                         <div id="jobTitleName_' + data.jobTitleId + ' ">\
                             ' + data.jobTitle + '\
@@ -215,19 +208,17 @@
                     </td>\
                     <td >\
                         <button \
-                        class="btn btn-primary btn-lg" \
+                        class="btn btn-primary" \
                         onclick="openJobTitleModal(\'' + data.jobTitleId + '\',\'' + data.jobTitle + '\');" \
                         type="button"> \
                         Edit \
                         </button> \
-                        <button class="btn btn-danger" onclick="deleteJobTitle(\''+ data.jobTitleId +'\')" type="submit"> \
+                        <button class="btn btn-danger" onclick="deleteJobTitle(\'' + data.jobTitleId + '\')" type="submit"> \
                             <i class="fa fa-trash">DELETE</i> \
                         </button> \
                     </td> \
                     </tr>';
-                        //var  jobTitleId="jobTitle_"+data.jobTitleId;
                         $("#jobTitleTableBody").append(html);
-                        //$(jobTitleId).text(data.jobTitle);
                     }
                 }
             });

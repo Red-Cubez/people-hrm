@@ -1,3 +1,4 @@
+<form id="jobTitleModalForm">
 <div aria-labelledby="favoritesModalLasbel" class="modal fade" id="jobTitleModal" role="dialog" tabindex="-1">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -17,7 +18,7 @@
                     <label for="usr">
                         Job Title Name:
                     </label>
-                    <input class="form-control" id="jobTitleName" type="text" required="required">
+                    <input class="form-control" id="jobTitleName" type="text" required>
                     </input>
                 </div>
             </div>
@@ -33,4 +34,4 @@
         </div>
     </div>
 </div>
-
+</form>

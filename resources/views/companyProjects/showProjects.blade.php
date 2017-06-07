@@ -90,7 +90,7 @@
                         <form action="{{ url('companyprojects/'.$project->projectId) }}" method="POST">
                             {{ csrf_field() }}
                                 {{ method_field('GET') }}
-                            <button class="btn btn-danger" type="submit">
+                            <button class="btn btn-primary" type="submit">
                                 <i class="fa fa-trash">
                                     View
                                 </i>
@@ -108,7 +108,7 @@
     <form action="{{ url('/companies/'.$companyProfileModel->companyId.'/companyprojects') }}" method="POST">
         {{ csrf_field() }}
             {{ method_field('GET') }}
-        <button class="btn btn-danger" type="submit">
+        <button class="btn btn-primary" type="submit">
             <i class="fa fa-trash">
                 Add New Projects
             </i>

@@ -11,7 +11,6 @@
 
                     <label for="name" class="control-label">Name : </label>
 
-
                     {{$companyProfileModel->companyName}}
 
                 </div>
@@ -19,14 +18,12 @@
 
                     <label for="normalHoursPerWeek" class="control-label">Normal Hours / Week : </label>
 
-
                     {{$companyProfileModel->normalHoursPerWeek}}
 
                 </div>
                 <div>
 
                     <label for="applyOverTimeRule" class="control-label">Over Time Rule : </label>
-
 
                     @if(($companyProfileModel->applyOverTimeRule)==1)
                         Yes
@@ -64,10 +61,7 @@
                     <label for="contactPerson" class="control-label">City</label>
 
                     {{$companyProfileModel->city }}
-
                 </div>
-
-
             </table>
 
         </div>
@@ -76,7 +70,7 @@
             {{ csrf_field() }}
             {{ method_field('GET') }}
 
-            <button type="submit" class="btn btn-danger">
+            <button type="submit" class="btn btn-primary">
                 <i class="fa fa-trash"> Edit Company</i>
             </button>
         </form>

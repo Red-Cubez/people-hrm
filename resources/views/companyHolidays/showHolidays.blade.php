@@ -5,30 +5,31 @@
         </h3>
     </div>
     <div class="panel-body">
-        @if (count($companyProfileModel->companyHolidays) > 0)
-            <table class="table table-striped task-table">
-                <!-- Table Headings -->
-                <thead>
-                <th>
-                    Holiday Name
-                </th>
-                <th>
-                    Start Date
-                </th>
-                <th>
-                    End Date
-                </th>
-                <th>
-                    Total Holidays
-                </th>
-                <th>
-                    Operations
-                </th>
-                <th>
-                </th>
-                </thead>
-                <!-- Table Body -->
-                <tbody id="holidayTableBody">
+
+        <table class="table table-striped task-table">
+            <!-- Table Headings -->
+            <thead>
+            <th>
+                Holiday Name
+            </th>
+            <th>
+                Start Date
+            </th>
+            <th>
+                End Date
+            </th>
+            <th>
+                Total Holidays
+            </th>
+            <th>
+                Operations
+            </th>
+            <th>
+            </th>
+            </thead>
+            <!-- Table Body -->
+            <tbody id="holidayTableBody">
+            @if (count($companyProfileModel->companyHolidays) > 0)
                 @foreach ($companyProfileModel->companyHolidays as $companyHoliday)
                     <tr id="holiday_{{$companyHoliday->holidayId}}">
                         <!--  Name -->
@@ -53,7 +54,7 @@
                             </div>
                         </td>
                         <td>
-                            <button class="btn btn-danger"
+                            <button class="btn btn-primary"
                                     onclick="openHolidayModal({{$companyHoliday->holidayId}},null,null,null);"
                                     type="button">
                                 <i class="">
@@ -72,11 +73,10 @@
                         </td>
                     </tr>
                 @endforeach
-                @else
-                    No Record Found
-                @endif
-                </tbody>
-            </table>
+
+            @endif
+            </tbody>
+        </table>
     </div>
 
     <button class="btn btn-primary btn-lg" onclick="openHolidayModal(null,null,null,null);" type="button">
@@ -125,18 +125,44 @@
             $('#holidayModal').modal('show');
         }
 
-        function addUpdateHoliday() {
-            var holidayId = $('#toBeUpdatedHoliday').val();
-
-            if (holidayId == '' || holidayId === null) {
-                addHoliday();
+        function areDatesValid() {
+            var startDate = $("#startDate").val();
+            var endDate = $("#endDate").val();
+            if (endDate == '') {
+                if (startDate != '')
+                {
+                    return true;
+                }
+                return true;
             }
-            else {
-                updateHoliday();
+            if (endDate < startDate) {
+                return false;
+            }
+            return 1;
+        }
+        function addUpdateHoliday() {
 
+            var areDatesValid = this.areDatesValid();
+
+            if (areDatesValid) {
+                var form = $("#holidayModalForm");
+
+                if (form.valid()) {
+
+                    var holidayId = $('#toBeUpdatedHoliday').val();
+
+                    if (holidayId == '' || holidayId === null) {
+                        addHoliday();
+                    }
+                    else {
+                        updateHoliday();
+                    }
+                }
+            }
+            if(!areDatesValid) {
+                alert("Enter Corrrect End Date");
             }
         }
-
         function updateHoliday() {
 
             var holidayName = $("#holidayName").val();
@@ -169,7 +195,6 @@
                         $('#holidayName_' + holidayId).text(data.jobTitle);
                         $('.error').remove();
 
-
                         var html = '\
                      <td id="holidayName_' + data.holidayId + ' " class="table-text" >\
                         <div >\
@@ -193,7 +218,7 @@
                     </td>\
                     <td >\
                         <button \
-                        class="btn btn-primary btn-lg" \
+                        class="btn btn-primary" \
                         onclick="openHolidayModal(\'' + data.holidayId + '\',\'' + data.holidayName + '\',\'' + data.startDate + '\',\'' + data.endDate + '\');" \
                         type="button"> \
                         Edit \
@@ -207,9 +232,7 @@
                         // $('#holiday_' + data.holidayId)
                         // $("#holidayTableBody").append(html);
                         $('#holiday_' + data.holidayId).html(html);
-
                     }
-
                 },
             });
         }
@@ -266,7 +289,7 @@
                     </td>\
                     <td >\
                         <button \
-                        class="btn btn-danger" \
+                        class="btn btn-primary " \
                         onclick="openHolidayModal(\'' + data.holidayId + '\',\'' + data.holidayName + '\',\'' + data.startDate + '\',\'' + data.endDate + '\');" \
                         type="submit"> \
                         Edit \
@@ -279,15 +302,10 @@
                     </td> \
                     </tr>"\
                     ';
-                        //var  jobTitleId="jobTitle_"+data.jobTitleId;
                         $("#holidayTableBody").append(html);
-                        //$(jobTitleId).text(data.jobTitle);
                     }
-
                 }
             });
-
-
         }
         function deleteHoliday(holidayId) {
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
@@ -303,36 +321,10 @@
                         $('.error').removeClass('hidden');
                         $('.error').text(data.errors.name);
                     } else {
-
                         $('#holiday_' + holidayId).remove();
-
-
                     }
                 },
             });
-        }
-        function formSubmit() {
-            var areDatesValid = this.areDatesValid();
-            if (areDatesValid) {
-                var formValid = $('#saveForm').validate();
-                if (formValid) {
-                    $("#saveForm").submit();
-                }
-                else {
-                    alert('form has errors');
-                }
-            }
-            else {
-                alert("Enter Corrrect End Date");
-            }
-        }
-        function areDatesValid() {
-            var startDate = $("#startDate").value;
-            var endDate = $("#endDate").value;
-            if (endDate < startDate) {
-                return false;
-            }
-            return true;
         }
     </script>
 @endsection

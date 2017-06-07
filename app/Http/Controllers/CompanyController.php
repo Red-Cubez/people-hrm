@@ -9,118 +9,127 @@ use People\Services\Interfaces\ICompanyService;
 use People\Services\Interfaces\IEmployeeService;
 use People\Services\Interfaces\IJobTitleService;
 
-class CompanyController extends Controller {
+class CompanyController extends Controller
+{
 
-	public $CompanyService;
-	public $JobTitleService;
-	public $EmployeeService;
-	public $CompanyHolidayService;
+    public $CompanyService;
+    public $JobTitleService;
+    public $EmployeeService;
+    public $CompanyHolidayService;
 
-	public function __construct(ICompanyService $companyService, IJobTitleService $jobTitleService, IEmployeeService $employeeService, ICompanyHolidayService $companyHolidayService) {
+    public function __construct(ICompanyService $companyService, IJobTitleService $jobTitleService,
 
-		$this->CompanyService = $companyService;
-		$this->JobTitleService = $jobTitleService;
-		$this->EmployeeService = $employeeService;
-		$this->CompanyHolidayService = $companyHolidayService;
-	}
+                                IEmployeeService $employeeService, ICompanyHolidayService $companyHolidayService)
+    {
 
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function index() {
-		$companies = $this->CompanyService->getAllCompanies();
+        $this->CompanyService = $companyService;
+        $this->JobTitleService = $jobTitleService;
+        $this->EmployeeService = $employeeService;
+        $this->CompanyHolidayService = $companyHolidayService;
+    }
 
-		return view('companies.index', ['companies' => $companies]);
-	}
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $companies = $this->CompanyService->getAllCompanies();
 
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
+        return view('companies.index', ['companies' => $companies]);
+    }
 
-	public function create() {
-		dd("here");
-	}
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request $request
-	 * @return \Illuminate\Http\Response
-	 */
-	public function store(Request $request) {
+    public function create()
+    {
 
-		$this->CompanyService->createCompany($request);
+    }
 
-		return redirect('/companies');
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
 
-	}
+        $this->CompanyService->createCompany($request);
 
-	/**
-	 * Dsisplay the specified resource.
-	 *
-	 * @param  \People\Models\Company $company
-	 * @return \Illuminate\Http\Responseo
-	 */
-	public function show(Company $company) {
+        return redirect('/companies');
 
-		//below query is nothing,its just to use companyaddress model in this controller.will be handled soon
+    }
 
-		$companyJobTitles = $this->JobTitleService->getJobTitlesOfCompany($company->id);
-		$companyHolidays = $this->CompanyHolidayService->getCompanyHolidays($company->id);
+    /**
+     * Dsisplay the specified resource.
+     *
+     * @param  \People\Models\Company $company
+     * @return \Illuminate\Http\Responseo
+     */
+    public function show(Company $company)
+    {
 
-		$companyCurrentEmployees = $this->EmployeeService->getAllEmployeesOfCompany($company->id);
-		$companyCurrentClients = $this->EmployeeService->getAllClientsOfCompany($company->id);
+        $companyJobTitles = $this->JobTitleService->getJobTitlesOfCompany($company->id);
+        $companyHolidays = $this->CompanyHolidayService->getCompanyHolidays($company->id);
 
-		$employeesWithBirthday = $this->EmployeeService->getAllEmployeesWithBirthDayThisMonth($company);
+        $companyCurrentEmployees = $this->EmployeeService->getAllEmployeesOfCompany($company->id);
+        $companyCurrentClients = $this->EmployeeService->getAllClientsOfCompany($company->id);
 
-		list($company, $companyAddress) = $this->CompanyService->getCompanyAddressAndCompanyProjects($company);
-		$companyProfileModel = $this->CompanyService->mapCompanyProfile($company, $companyAddress,
-			$companyJobTitles, $employeesWithBirthday, $companyHolidays, $companyCurrentEmployees, $companyCurrentClients);
+        $employeesWithBirthday = $this->EmployeeService->getAllEmployeesWithBirthDayThisMonth($company);
 
-		return view('companies/showCompany',
-			[
-				'companyProfileModel' => $companyProfileModel,
-			]);
-	}
+        list($company, $companyAddress) = $this->CompanyService->getCompanyAddressAndCompanyProjects($company);
+        $companyProfileModel = $this->CompanyService->mapCompanyProfile($company, $companyAddress,
+            $companyJobTitles, $employeesWithBirthday, $companyHolidays, $companyCurrentEmployees, $companyCurrentClients);
 
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  \People\Models\Company $company
-	 * @return \Illuminate\Http\Response
-	 */
-	public function edit(Company $company) {
-		return view('companies/companyEditForm', ['company' => $company]);
+        return view('companies/showCompany',
+            [
+                'companyProfileModel' => $companyProfileModel,
+            ]);
+    }
 
-	}
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \People\Models\Company $company
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Company $company)
+    {
+        return view('companies/companyEditForm', ['company' => $company]);
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request $request
-	 * @param  \People\Models\Company $company
-	 * @return \Illuminate\Http\Response
-	 */
-	public function update(Request $request, Company $company) {
-		$this->CompanyService->updateCompany($request, $company);
+    }
 
-		return redirect('/companies/' . $company->id);
-	}
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  \People\Models\Company $company
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Company $company)
+    {
+        $this->CompanyService->updateCompany($request, $company);
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  \People\Models\Company $company
-	 * @return \Illuminate\Http\Response
-	 */
-	public function destroy(Company $company) {
-		//TODO: HG - check for company dependencies before deleting a company
-		$this->CompanyService->deleteCompany($company);
+        return redirect('/companies/' . $company->id);
+    }
 
-		return redirect('/companies');
-	}
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \People\Models\Company $company
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Company $company)
+    {
+        //TODO: HG - check for company dependencies before deleting a company
+        $this->CompanyService->deleteCompany($company);
+
+        return redirect('/companies');
+    }
 }

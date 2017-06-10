@@ -38,3 +38,4 @@
     <div>
              {{$project->isProjectOnBudget }}
     </div>
+</div>

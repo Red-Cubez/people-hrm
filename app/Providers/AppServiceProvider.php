@@ -51,6 +51,9 @@ class AppServiceProvider extends ServiceProvider {
 
         $this->app->bind(
             'People\Services\Interfaces\ICompanyHolidayService', 'People\Services\CompanyHolidayService');
+
+        $this->app->bind(
+            'People\Services\Interfaces\IProjectGrapher', 'People\Services\ProjectGrapher');
 	}
 
 }

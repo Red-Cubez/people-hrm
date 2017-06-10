@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use People\Models\CompanyProject;
 use People\Services\Interfaces\ICompanyProjectResourceService;
 use People\Services\Interfaces\ICompanyProjectService;
+use People\Services\Interfaces\IProjectGrapher;
 
 class CompanyProjectController extends Controller
 {
@@ -17,12 +18,16 @@ class CompanyProjectController extends Controller
 
     public $CompanyProjectService;
     public $CompanyProjectResourceService;
+    public $ProjectGrapher;
 
-    public function __construct(ICompanyProjectService $companyProjectService, ICompanyProjectResourceService $companyProjectResourceService)
+    public function __construct(ICompanyProjectService $companyProjectService,
+                                ICompanyProjectResourceService $companyProjectResourceService,
+                                IProjectGrapher $ProjectGrapher)
     {
 
         $this->CompanyProjectService = $companyProjectService;
         $this->CompanyProjectResourceService = $companyProjectResourceService;
+        $this->ProjectGrapher = $ProjectGrapher;
     }
 
     public function index()
@@ -72,6 +77,8 @@ class CompanyProjectController extends Controller
         list($currentProjectResources, $availableEmployees) = $this->CompanyProjectResourceService->showCompanyProjectResources($companyProjectId);
 
         $companyProject = $this->CompanyProjectService->viewCompanyProject($companyProjectId);
+      //  dd($companyProject);
+        $this->ProjectGrapher->setupProjectCost($companyProject,$currentProjectResources,true);
 
         return view('companyProjects/viewCompanyProject',
             [

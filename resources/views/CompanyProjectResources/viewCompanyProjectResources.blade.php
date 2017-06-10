@@ -15,7 +15,7 @@
                     <!-- Table Headings -->
                     <thead>
                     <th>Project</th>
-                    <th>&nbsp;</th>
+                    <th>Operations</th>
                     </thead>
                     <!-- Table Body -->
                     <tbody>
@@ -58,4 +58,6 @@
                 </table>
             </div>
         </div>
+</div>
+
 @endif

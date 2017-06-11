@@ -26,33 +26,36 @@ class ProjectGrapher implements IProjectGrapher
         $startDate = strtotime($projectStartDate);
         $nextMonthDate = date("Y-m-d", strtotime("+1 month", $startDate));
 
-         if($projectEndDate>=$nextMonthDate)
-         {
-             $projectIsInProcessTillNextMonth=true;
-             $currentmonthAndYear=date("Y-m",$startDate);
+        if ($projectEndDate >= $nextMonthDate) {
+            $projectIsInProcessTillNextMonth = true;
+            $currentmonthAndYear = date("Y-m", $startDate);
 
-         }
-         else{
-             $projectIsInProcessTillNextMonth=false;
-         }
+        } else {
+            $projectIsInProcessTillNextMonth = false;
+        }
 
-         if($projectIsInProcessTillNextMonth)
-         {
+        if ($projectIsInProcessTillNextMonth) {
 
-           //  $projectStartDate=date("Y-m", $projectStartDate);
-             foreach ($projectResources as $projectResource) {
-                 $weeksWorked = $this->calculateWeeksOfResourcesUsedInProject($projectResource);
-                 $costPerMonth=$weeksWorked*($projectResource->hourlyBillingRate) * ($projectResource->hoursPerWeek)*4;
-                 $yearMonth=date("Y-m",strtotime($projectResource->actualStartDate));
-               //  date(""$projectResource->actualStartDate;
+            //  $projectStartDate=date("Y-m", $projectStartDate);
+            if($yearMonth-$projectResource->actualStartDate <=30)
+            {
+                dd("here");
+            foreach ($projectResources as $projectResource) {
+                $yearMonth = date("Y-m", strtotime($projectResource->actualStartDate));
+                $weeksWorked = $this->calculateWeeksOfResourcesUsedInProject($projectResource);
+                $costPerMonth = $weeksWorked * ($projectResource->hourlyBillingRate) * ($projectResource->hoursPerWeek) * 4;
+
+
+                //  date(""$projectResource->actualStartDate;
 //                 if($projectResource->actualStartDate)
 //                 {
 //
 //                 }
-dd($yearMonth);
-             }
+//dd($yearMonth);
+            }
+            }
 
-         }
+        }
 
         $cost = 0;
         $perWeekCost = 0;
@@ -63,11 +66,11 @@ dd($yearMonth);
             $perWeekCost = ($projectResource->hourlyBillingRate) * ($projectResource->hoursPerWeek);
             $expectedPerMonthCost = ($perWeekCost) * 4;
             $actualPerMonthCost = $weeks / $expectedPerMonthCost;
-            dd($actualPerMonthCost);
+            //   dd($actualPerMonthCost);
 
 
         }
-        dd($cost);
+        //    dd($cost);
         return $cost;
     }
 

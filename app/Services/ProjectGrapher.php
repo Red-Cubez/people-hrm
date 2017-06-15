@@ -2,6 +2,7 @@
 
 namespace People\Services;
 
+use People\Models\Employee;
 use People\Services\Interfaces\IProjectGrapher;
 
 class ProjectTimeline
@@ -21,9 +22,78 @@ class ResourceTimeline
 
 }
 
+class ResourceCost
+{
+    public $resourceName;
+    public $cost;
+}
+
 
 class ProjectGrapher implements IProjectGrapher
 {
+    public function calculateProjectTotalCost($projectTimeLines)
+    {
+        $totalCost=0;
+        foreach ($projectTimeLines as $projectTimeLine)
+        {
+            $totalCost=$totalCost+$projectTimeLine->cost;
+        }
+       // dd($totalCost);
+        return $totalCost;
+    }
+    public function getResourcesTotalCostForProject($projectDetails, $projectResources)
+    {
+
+        $resourceDetails = array();
+        foreach ($projectResources as $projectResource) {
+            $totalCost = 0;
+            if ($projectResource->actualEndDate == null) {
+                $projectResourceEndDate = $projectResource->expectedEndDate;
+            } else {
+                $projectResourceEndDate = $projectResource->actualEndDate;
+
+            }
+            if ($projectDetails->actualEndDate != null) {
+                $projectEndDate = $projectDetails->actualEndDate;
+            } else {
+                $projectEndDate = $projectDetails->expectedEndDate;
+            }
+
+            if ($projectResource->actualStartDate >= $projectDetails->actualStartDate && $projectResourceEndDate <= $projectEndDate) {
+
+                $difference = $this->calculateDiffernceBetweenTwoDates(date("Y-m-d", strtotime($projectResource->actualStartDate)), date("Y-m-d", strtotime($projectResourceEndDate)));
+
+                $weeksWorked = ($difference->days) / 7;
+
+                $cost = $weeksWorked * ($projectResource->hourlyBillingRate) * ($projectResource->hoursPerWeek);
+                $totalCost = $totalCost + $cost;
+                //dd($totalCost);
+                //$projectTimeLine->cost = round($totalCost);
+                $resourceCost = new ResourceCost();
+
+                if ($projectResource->employee_id == null) {
+                    $resourceCost->resourceName = $projectResource->title;
+                } else {
+                    $employee = Employee::find($projectResource->employee_id);
+                    $resourceCost->resourceName = $employee->firstName . ' ' . $employee->lastName;
+                }
+
+                $resourceCost->cost = round($totalCost);
+                array_push($resourceDetails, $resourceCost);
+            }
+
+        }
+        return $resourceDetails;
+    }
+
+    public function calculateDiffernceBetweenTwoDates($d1, $d2)
+    {
+
+        $date1 = date_create($d1);
+        $date2 = date_create($d2);
+        $diff = date_diff($date1, $date2);
+        return $diff;
+    }
 
     public function setupProjectCost($project, $projectResources, $isCompanyProject)
     {
@@ -88,7 +158,7 @@ class ProjectGrapher implements IProjectGrapher
     {
 
         $currentMonthStartDate = $currentMonthStartDate->format("Y-m-d");
-        $currentMonthName = date("Y-M", strtotime($currentMonthStartDate));
+        $currentMonthName = date("M-Y", strtotime($currentMonthStartDate));
 
         $dateDiff = $this->calculateDiffernceBetweenTwoDates($currentMonthStartDate, $currentMonthEndDate);
 
@@ -100,15 +170,6 @@ class ProjectGrapher implements IProjectGrapher
         $projectDetails->cost = 0;
 
         return $projectDetails;
-    }
-
-    public function calculateDiffernceBetweenTwoDates($d1, $d2)
-    {
-
-        $date1 = date_create($d1);
-        $date2 = date_create($d2);
-        $diff = date_diff($date1, $date2);
-        return $diff;
     }
 
     public function calculateResourcesCost($projectResources, $projectTimeLines)
@@ -161,14 +222,14 @@ class ProjectGrapher implements IProjectGrapher
 
                 foreach ($resourceTimeLines as $resourceTimeLine) {
 
-                    if ($resourceTimeLine->startDate >= $projectTimeLine->startDate && $resourceTimeLine->startDate <= $projectTimeLine->startDate) {
+                    if ($resourceTimeLine->startDate >= $projectTimeLine->startDate && $resourceTimeLine->endDate <= $projectTimeLine->endDate) {
                         $difference = $this->calculateDiffernceBetweenTwoDates(date("Y-m-d", strtotime($resourceTimeLine->startDate)), date("Y-m-d", strtotime($resourceTimeLine->endDate)));
 
                         $weeksWorkedInCurrentMonth = ($difference->days) / 7;
 
                         $costPerMonth = $weeksWorkedInCurrentMonth * ($projectResource->hourlyBillingRate) * ($projectResource->hoursPerWeek);
                         $totalCostPerMonth = $totalCostPerMonth + $costPerMonth;
-                        $projectTimeLine->cost=$totalCostPerMonth;
+                        $projectTimeLine->cost = round($totalCostPerMonth);
                     }
                 }
 

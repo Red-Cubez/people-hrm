@@ -77,8 +77,8 @@ class CompanyProjectController extends Controller
         list($currentProjectResources, $availableEmployees) = $this->CompanyProjectResourceService->showCompanyProjectResources($companyProjectId);
 
         $companyProject = $this->CompanyProjectService->viewCompanyProject($companyProjectId);
-      //  dd($companyProject);
-        $this->ProjectGrapher->setupProjectCost($companyProject,$currentProjectResources,true);
+
+        $projectTimeLines = $this->ProjectGrapher->setupProjectCost($companyProject, $currentProjectResources, true);
 
         return view('companyProjects/viewCompanyProject',
             [
@@ -86,6 +86,7 @@ class CompanyProjectController extends Controller
                 'projectResources' => $currentProjectResources,
                 'availableEmployees' => $availableEmployees,
                 'companyProjectId' => $companyProjectId,
+                'projectTimeLines' => $projectTimeLines,
             ]);
 
     }

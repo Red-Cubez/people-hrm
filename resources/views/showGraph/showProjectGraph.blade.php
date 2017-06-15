@@ -15,8 +15,13 @@
         var chart = c3.generate({
             bindto: '#chart',
             data: {
+
                 columns: [
-                    ['cost', 30, 200, 100, 400, 150, 250,1000,1],
+                    ['Project Cost', @foreach($projectTimeLines as $projectTimeline)
+
+                    {{$projectTimeline->cost}},
+                        @endforeach
+                    ],
 
                 ],
                 type: 'spline'
@@ -24,32 +29,11 @@
             axis: {
                 x: {
                     type: 'category',
-                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'July', 'Aug', 'Sep']
+                    categories: [ @foreach($projectTimeLines as $projectTimeline)
+                        '{{$projectTimeline->monthName}}',
+                        @endforeach
+                    ]
                 }
             }
         });
     </script>
-
-
-
-
-{{--<h2>Chart </h2>--}}
-{{--<div>--}}
-{{--<canvas id="myChart"></canvas>--}}
-{{--</div>--}}
-{{--<script >--}}
-
-{{--var ctx = document.getElementById('myChart').getContext('2d');--}}
-{{--var myChart = new Chart(ctx, {--}}
-{{--type: 'line',--}}
-{{--data: {--}}
-{{--labels: ['Jan', 'Feb', 'March', 'April', 'May', 'June', 'July','Aug','Sept','Oct','Nov','Dec'],--}}
-{{--datasets: [{--}}
-{{--label: 'Profit',--}}
-{{--data: [12, 19, 3, 17, 6, 3, 7,8],--}}
-{{--backgroundColor: "rgba(153,255,51,0.4)"--}}
-{{--},]--}}
-{{--}--}}
-{{--});--}}
-
-{{--</script>--}}

@@ -1,10 +1,11 @@
+
 @extends('layouts.app')
 
 @section('content')
 
     <div class="container">
         <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-5">
                 @include('viewProject/viewProject')
 
                 <form action="{{ url('companyprojects/'.$project->projectId.'/edit') }}" method="POST">
@@ -17,7 +18,7 @@
                 </form>
             </div>
 
-            <div class="col-sm-6">
+            <div class="col-sm-7">
                 @include('showGraph/showProjectGraph')
                
             </div>

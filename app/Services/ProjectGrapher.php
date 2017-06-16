@@ -38,7 +38,7 @@ class ProjectGrapher implements IProjectGrapher
         {
             $totalCost=$totalCost+$projectTimeLine->cost;
         }
-       // dd($totalCost);
+
         return $totalCost;
     }
     public function getResourcesTotalCostForProject($projectDetails, $projectResources)
@@ -67,8 +67,7 @@ class ProjectGrapher implements IProjectGrapher
 
                 $cost = $weeksWorked * ($projectResource->hourlyBillingRate) * ($projectResource->hoursPerWeek);
                 $totalCost = $totalCost + $cost;
-                //dd($totalCost);
-                //$projectTimeLine->cost = round($totalCost);
+
                 $resourceCost = new ResourceCost();
 
                 if ($projectResource->employee_id == null) {

@@ -5,7 +5,7 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-sm-5">
+            <div class="col-sm-4">
                 @include('viewProject/viewProject')
 
                 <form action="{{ url('companyprojects/'.$project->projectId.'/edit') }}" method="POST">
@@ -18,7 +18,7 @@
                 </form>
             </div>
 
-            <div class="col-sm-7">
+            <div class="col-sm-8">
                 @include('showGraph/showProjectGraph')
                
             </div>

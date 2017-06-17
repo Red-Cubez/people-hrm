@@ -4,8 +4,9 @@ namespace People\Http\Controllers;
 
 use Illuminate\Http\Request;
 use People\Models\ClientProject;
+use People\Models\ProjectResource;
 use People\Services\Interfaces\IClientProjectService;
-
+use People\Services\Interfaces\IProjectGrapher;
 class ClientProjectController extends Controller
 {
     /**
@@ -15,11 +16,12 @@ class ClientProjectController extends Controller
      */
 
     public $ClientProjectService;
-
-    public function __construct(IClientProjectService $clientProjectService)
+    public $ProjectGrapher;
+    public function __construct(IClientProjectService $clientProjectService,IProjectGrapher $ProjectGrapher)
     {
 
         $this->ClientProjectService = $clientProjectService;
+        $this->ProjectGrapher = $ProjectGrapher;
     }
 
     public function index(Request $request)
@@ -64,11 +66,28 @@ class ClientProjectController extends Controller
      * @param  \People\Models\ClientProject $clientProject
      * @return \Illuminate\Http\Response
      */
+
+
     public function show($clientProjectId)
     {
-        $clientProjectModel = $this->ClientProjectService->viewClientProject($clientProjectId);
 
-        return view('clientProjects/viewClientProject', ['project' => $clientProjectModel]);
+        $clientProjectModel = $this->ClientProjectService->viewClientProject($clientProjectId);
+        $clientProject=$this->ClientProjectService->getClientProjectDetails($clientProjectId);
+        $currentProjectResources = ProjectResource::where('client_project_id', $clientProjectId)->orderBy('created_at', 'asc')
+            ->get();
+
+        $projectTimeLines = $this->ProjectGrapher->setupProjectCost($clientProject, $currentProjectResources, false);
+        $resourcesDetails = $this->ProjectGrapher->getResourcesTotalCostForProject($clientProject, $currentProjectResources);
+        $projectTotalCost = $this->ProjectGrapher->calculateProjectTotalCost($projectTimeLines);
+
+        return view('clientProjects/viewClientProject',
+            [
+                'project' => $clientProjectModel,
+                'projectTimeLines' => $projectTimeLines,
+                'resourcesDetails' => $resourcesDetails,
+                'projectTotalCost' => $projectTotalCost,
+
+            ]);
 
     }
 

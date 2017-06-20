@@ -25,7 +25,7 @@ class ResourceTimeline
 class ResourceCost
 {
     public $resourceName;
-    public $cost;
+    public $costPercentage;
 }
 
 
@@ -41,7 +41,7 @@ class ProjectGrapher implements IProjectGrapher
 
         return $totalCost;
     }
-    public function getResourcesTotalCostForProject($projectDetails, $projectResources)
+    public function getResourcesTotalCostForProject($projectDetails, $projectResources,$projectTotalCost)
     {
 
         $resourceDetails = array();
@@ -77,7 +77,7 @@ class ProjectGrapher implements IProjectGrapher
                     $resourceCost->resourceName = $employee->firstName . ' ' . $employee->lastName;
                 }
 
-                $resourceCost->cost = round($totalCost);
+                $resourceCost->costPercentage = ($totalCost/$projectTotalCost)*100;
                 array_push($resourceDetails, $resourceCost);
             }
 

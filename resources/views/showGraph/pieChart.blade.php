@@ -7,7 +7,7 @@
 // iris data from R
             columns: [
                     @foreach($resourcesDetails as $resourcesDetail)
-                ['{{$resourcesDetail->resourceName}}', {{($resourcesDetail->cost / $projectTotalCost)*100}},],
+                ['{{$resourcesDetail->resourceName}}', {{$resourcesDetail->costPercentage}},],
                 @endforeach
 
             ],

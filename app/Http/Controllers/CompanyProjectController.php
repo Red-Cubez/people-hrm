@@ -79,8 +79,8 @@ class CompanyProjectController extends Controller
         $companyProject = $this->CompanyProjectService->viewCompanyProject($companyProjectId);
 
         $projectTimeLines = $this->ProjectGrapher->setupProjectCost($companyProject, $currentProjectResources, true);
-        $resourcesDetails=$this->ProjectGrapher->getResourcesTotalCostForProject($companyProject,$currentProjectResources);
         $projectTotalCost=$this->ProjectGrapher->calculateProjectTotalCost($projectTimeLines);
+        $resourcesDetails=$this->ProjectGrapher->getResourcesTotalCostForProject($companyProject,$currentProjectResources,$projectTotalCost);
 
         return view('companyProjects/viewCompanyProject',
             [

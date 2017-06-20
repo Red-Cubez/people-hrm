@@ -77,8 +77,9 @@ class ClientProjectController extends Controller
             ->get();
 
         $projectTimeLines = $this->ProjectGrapher->setupProjectCost($clientProject, $currentProjectResources, false);
-        $resourcesDetails = $this->ProjectGrapher->getResourcesTotalCostForProject($clientProject, $currentProjectResources);
         $projectTotalCost = $this->ProjectGrapher->calculateProjectTotalCost($projectTimeLines);
+        $resourcesDetails = $this->ProjectGrapher->getResourcesTotalCostForProject($clientProject, $currentProjectResources,$projectTotalCost);
+
 
         return view('clientProjects/viewClientProject',
             [
@@ -99,6 +100,8 @@ class ClientProjectController extends Controller
      */
     public function edit($clientProjectId)
     {
+
+
         $clientProject = $this->ClientProjectService->getClientProjectDetails($clientProjectId);
         return view('clientProjects/clientProjectEditForm', ['clientProject' => $clientProject]);
     }

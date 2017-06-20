@@ -12,5 +12,6 @@ interface IProjectResourceService
     public function updateProjectRessources($clientid);
 
     public function manageProjectResources($clientproject);
+    public function showClientProjectResources($clientProjectId);
 
 }

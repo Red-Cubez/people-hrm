@@ -9,6 +9,7 @@ use People\Models\Employee;
 use People\Models\ProjectResource;
 use People\Services\ProjectResourceService;
 use People\Services\Interfaces\IProjectResourceService;
+use People\Services\Interfaces\IProjectService;
 
 
 class ProjectResourceController extends Controller {
@@ -18,11 +19,14 @@ class ProjectResourceController extends Controller {
 	 * @return \Illuminate\Http\Response
 
 	 */
+    public $ProjectService;
+
     public $ProjectResourceService;
 
-	public function __construct(IProjectResourceService $projectResourceService) {
+	public function __construct(IProjectResourceService $projectResourceService,IProjectService $projectService) {
 
 		$this->ProjectResourceService = $projectResourceService;
+        $this->ProjectService = $projectService;
 	}
 
 	public function index() {
@@ -51,14 +55,15 @@ class ProjectResourceController extends Controller {
 
 	}
 
-	public function manageressources($clientProjectid) {
+	public function manageressources($clientProjectId) {
+        list($currentProjectResources,$availableEmployees)=$this->ProjectResourceService->showClientProjectResources($clientProjectId);
 
-		list($currentProjectResources,$availableEmployees) = $this->ProjectResourceService->manageProjectResources($clientProjectid);
+        $projectResources=$this->ProjectService->mapResourcesDetailsToClass($currentProjectResources,false);
 
         return view('projectResources.index', [
-			'projectResources' => $currentProjectResources,
+			'projectResources' => $projectResources,
 			'availableEmployees' => $availableEmployees,
-			'clientProjectid' => $clientProjectid,
+			'clientProjectid' => $clientProjectId,
 		]);
 
 	}

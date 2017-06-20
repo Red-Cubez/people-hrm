@@ -3,13 +3,62 @@
 namespace People\Services;
 
 use People\Services\Interfaces\IProjectService;
-
+class ProjectResourceDetails{
+    public $resourceName;
+    public $resourceId;
+    public $employee_id;
+    public $projectId;
+    public $expectedStartDate;
+    public $expectedEndDate;
+    public $actualStartDate;
+    public $actualEndDate;
+    public $hourlyBillingRate;
+    public $hoursPerWeek;
+    public $title;
+}
 class ProjectService implements IProjectService
 {
+    function mapResourcesDetailsToClass($currentProjectResources,$isCompanyProject)
+    {
+        $projectResources=array();
+
+        foreach ($currentProjectResources as $currentProjectResource)
+        {
+
+            $projectResourceDetails = new ProjectResourceDetails();
+            $projectResourceDetails->resourceId = $currentProjectResource->id;
+            $projectResourceDetails->employee_id = $currentProjectResource->employee_id;
+            $projectResourceDetails->title = $currentProjectResource->title;
+            if($isCompanyProject) {
+                $projectResourceDetails->projectId = $currentProjectResource->company_project_id;
+            }
+            else
+            {
+                $projectResourceDetails->projectId = $currentProjectResource->client_project_id;
+            }
+            $projectResourceDetails->expectedStartDate = $currentProjectResource->expectedStartDate;
+            $projectResourceDetails->expectedEndDate = $currentProjectResource->expectedEndDate;
+            $projectResourceDetails->actualStartDate = $currentProjectResource->actualStartDate;
+            $projectResourceDetails->actualEndDate = $currentProjectResource->actualEndDate;
+            $projectResourceDetails->hourlyBillingRate = $currentProjectResource->hourlyBillingRate;
+            $projectResourceDetails->hoursPerWeek = $currentProjectResource->hoursPerWeek;
+            if($currentProjectResource->employee_id==null) {
+                $projectResourceDetails->resourceName = $currentProjectResource->title;
+
+            }
+            else{
+
+                $projectResourceDetails->resourceName = $currentProjectResource->employee->firstName.' '.$currentProjectResource->employee->lastName;
+            }
+            array_push($projectResources,$projectResourceDetails);
+
+        }
+        return $projectResources;
+    }
     public function getProjectDetails($projectModel, $project)
     {
         $isOnTime = $this->isProjectOnTime($project->expectedEndDate, $project->actualEndDate);
-        $isOnBudget = $this->isProjectOnBudget($project->cost, $project->budget);
+     //   $isOnBudget = $this->isProjectOnBudget($project->cost, $project->budget);
 
         $projectModel->projectId = $project->id;
         $projectModel->name = $project->name;
@@ -18,9 +67,9 @@ class ProjectService implements IProjectService
         $projectModel->expectedStartDate = $project->expectedStartDate;
         $projectModel->expectedEndDate = $project->expectedEndDate;
         $projectModel->budget = $project->budget;
-        $projectModel->cost = $project->cost;
-        $projectModel->isProjectOnTime = $isOnTime;
-        $projectModel->isProjectOnBudget = $isOnBudget;
+        //$projectModel->cost = $project->cost;
+       $projectModel->isProjectOnTime = $isOnTime;
+       // $projectModel->isProjectOnBudget = $isOnBudget;
         return $projectModel;
     }
 
@@ -55,7 +104,7 @@ class ProjectService implements IProjectService
         return $isOnTime;
     }
 
-    private function isProjectOnBudget($cost, $budget)
+    public function isProjectOnBudget($cost, $budget)
     {
 
         if (($cost != NULL) && ($budget != NULL)) {

@@ -1,4 +1,6 @@
+
 @if(isset($clientProjectid))
+
     <form action="{{ url('projectresources/') }}" method="POST" class="form-horizontal">
         {{ csrf_field() }}
         {{ method_field('POST') }}
@@ -20,6 +22,7 @@
                                 <input type="hidden" name="clientProjectid" value="{{ $clientProjectid }}"
                                        class="form-control">
                             @elseif(isset($companyProjectId))
+
                                 <input type="hidden" name="companyProjectId" value="{{ $companyProjectId }}"
                                        class="form-control">
                             @endif
@@ -27,6 +30,7 @@
 
                         @elseif(isset($projectresources))
                             @if(isset($clientProjectid))
+
                                 <input type="hidden" name="clientProjectid"
                                        value="{{ $projectresources[0]->client_project_id}}" class="form-control">
                             @elseif(isset($companyProjectId))

@@ -1,10 +1,7 @@
 <div class="panel-body">
     <!-- Display Validation Errors -->
-@include('common.errors')
-<!-- New clientProject Form -->
-<!--  <form action="{{url('projectresources') }}" method="POST" class="form-horizontal">
-        {{ csrf_field() }} -->
-    <!-- Resource Name -->
+    @include('common.errors')
+
     @if (count($projectResources)>0 )
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -23,19 +20,15 @@
                         <tr>
                             <!-- clientProject Name -->
                             <td class="table-text">
-                                @if(isset($projectResource->employee))
+
                                     <div>
-                                        {{ $projectResource->employee->firstName}} {{$projectResource->employee->lastName}}
+                                        {{ $projectResource->resourceName}}
                                     </div>
-                                @elseif (isset($projectResource->title))
-                                    <div>
-                                        {{ $projectResource->title}}
-                                    </div>
-                                @endif
+
                             </td>
 
                             <td>
-                                <form action=" {{ url('companyprojectresources/'.$projectResource->id.'/edit') }}"
+                                <form action=" {{ url('companyprojectresources/'.$projectResource->resourceId.'/edit') }}"
                                       method="POST">
                                     {{ csrf_field() }}
                                     {{ method_field('GET') }}
@@ -43,10 +36,11 @@
                                         <i class="fa fa-trash"> EDIT </i>
                                     </button>
                                 </form>
-                                <form action="{{ url('companyprojectresources/'.$projectResource->id) }}" method="POST">
+                                <form action="{{ url('companyprojectresources/'.$projectResource->resourceId) }}" method="POST">
                                     {{ csrf_field() }}
                                     {{ method_field('DELETE') }}
-                                    <input type="hidden" name="companyProjectId" value="{{$projectResource->company_project_id}}">
+                                    <input type="hidden" name="companyProjectId"
+                                           value="{{$projectResource->projectId}}">
                                     <button type="submit" class="btn btn-danger">
                                         <i class="fa fa-trash"> Delete </i>
                                     </button>

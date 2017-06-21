@@ -47,19 +47,14 @@
                         <tr>
                             <!-- clientProject Name -->
                             <td class="table-text">
-                                @if(isset($projectResource->employee))
-                                <div> 
-                                {{ $projectResource->employee->firstName}} {{$projectResource->employee->lastName}}
-                                </div>
-                                @elseif (isset($projectResource->title))  
                                 <div>
-                                {{ $projectResource->title}}
+                                {{ $projectResource->resourceName}}
                                 </div>
-                                @endif
+
                             </td>
 
                             <td>
-                                <form action=" {{ url('projectresources/'.$projectResource->id.'/updateResource') }}"
+                                <form action=" {{ url('projectresources/'.$projectResource->resourceId.'/updateResource') }}"
                                  method="POST">
 
                                     {{ csrf_field() }}
@@ -70,7 +65,7 @@
                                         <i class="fa fa-trash"> EDIT </i>
                                     </button>
                                 </form>
-                                <form action="{{ url('projectresources/'.$projectResource->id) }}" method="POST">
+                                <form action="{{ url('projectresources/'.$projectResource->resourceId) }}" method="POST">
                                     {{ csrf_field() }}
                                     {{ method_field('DELETE') }}
                                                  

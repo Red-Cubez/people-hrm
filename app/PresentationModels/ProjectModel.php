@@ -14,5 +14,6 @@ abstract class ProjectModel
     public $cost;
     public $isProjectOnTime;
     public $isProjectOnBudget;
+    public $projectCostDetails;
 
 }

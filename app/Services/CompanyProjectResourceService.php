@@ -5,9 +5,16 @@ namespace People\Services;
 use People\Models\CompanyProjectResource;
 use People\Models\Employee;
 use People\Services\Interfaces\ICompanyProjectResourceService;
+use People\Services\Interfaces\IProjectService;
 
 class CompanyProjectResourceService implements ICompanyProjectResourceService
 {
+    public $ProjectService;
+
+    public function __construct(IProjectService $projectService) {
+
+        $this->ProjectService = $projectService;
+    }
 
     public function showCompanyProjectResources($companyProjectId)
     {
@@ -15,9 +22,11 @@ class CompanyProjectResourceService implements ICompanyProjectResourceService
         $currentProjectResources = CompanyProjectResource::where('company_project_id', $companyProjectId)->orderBy('created_at', 'asc')
             ->get();
 
-        $availableEmployees = Employee::orderBy('created_at', 'asc')->get();
+        $projectResources=$this->ProjectService->mapResourcesDetailsToClass($currentProjectResources,true);
 
-        return array($currentProjectResources, $availableEmployees);
+        $availableEmployees= Employee::all();
+
+        return array($projectResources,$availableEmployees);
     }
 
     public function saveOrUpdateCompanyProjectResource($request)

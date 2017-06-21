@@ -3,6 +3,8 @@
 @section('content')
 
     <div class="panel-body">
+        <div class="panel-heading">Add Resource</div>
+
         <a class="btn btn-primary" role="button" data-toggle="collapse" href="#employees" aria-expanded="false"
            aria-controls="collapseExample"> Employees
         </a>
@@ -14,7 +16,7 @@
             <div class="well">
                 @include('projectResources/employeeResourcesForm')
             </div>
-            \
+
         </div>
 
         <div class="collapse" id="fixedResources">

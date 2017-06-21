@@ -1,28 +1,42 @@
+
 @extends('layouts.app')
 
 @section('content')
 
-    @include('viewProject/viewProject')
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4">
+                @include('viewProject/viewProject')
 
-    <form action="{{ url('companyprojects/'.$project->projectId.'/edit') }}" method="POST">
-        {{ csrf_field() }}
-        {{ method_field('GET') }}
+                <form action="{{ url('companyprojects/'.$project->projectId.'/edit') }}" method="POST">
+                    {{ csrf_field() }}
+                    {{ method_field('GET') }}
 
-        <button type="submit" class="btn btn-primary">
-            <i class="fa fa-trash"> Edit</i>
-        </button>
-    </form>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa fa-trash"> Edit</i>
+                    </button>
+                </form>
+            </div>
 
-    <form action="{{ url('companyprojectresources/'.$project->projectId) }}" method="POST">
-        {{ csrf_field() }}
-        {{ method_field('GET') }}
+            <div class="col-sm-8">
+                @include('showGraph/showProjectGraph')
+               
+            </div>
+        </div>
 
-        <button type="submit" class="btn btn-primary">
-            <i class="fa fa-trash"> Add Resource</i>
-        </button>
-        @include('CompanyProjectResources/viewCompanyProjectResources')
-    </form>
+        <div class="row">
+            <div class="col-sm-11">
+                <form action="{{ url('companyprojectresources/'.$project->projectId) }}" method="POST">
+                    {{ csrf_field() }}
+                    {{ method_field('GET') }}
 
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa fa-trash"> Add Resource</i>
+                    </button>
+                    @include('CompanyProjectResources/viewCompanyProjectResources')
+                </form>
 
-
+            </div>
+        </div>
+    </div>
 @endsection

@@ -4,7 +4,11 @@ namespace People\Http\Controllers;
 
 use Illuminate\Http\Request;
 use People\Models\ClientProject;
+use People\Models\ProjectResource;
 use People\Services\Interfaces\IClientProjectService;
+use People\Services\Interfaces\IProjectGrapher;
+use People\Services\Interfaces\IProjectService;
+use People\Services\Interfaces\IProjectResourceService;
 
 class ClientProjectController extends Controller
 {
@@ -15,11 +19,17 @@ class ClientProjectController extends Controller
      */
 
     public $ClientProjectService;
-
-    public function __construct(IClientProjectService $clientProjectService)
+    public $ProjectGrapher;
+    public $ProjectService;
+    public $ProjectResourceService;
+    public function __construct(IClientProjectService $clientProjectService,IProjectGrapher $projectGrapher,
+                                IProjectService $projectService,IProjectResourceService $projectResourceService)
     {
 
         $this->ClientProjectService = $clientProjectService;
+        $this->ProjectGrapher = $projectGrapher;
+        $this->ProjectService =$projectService;
+        $this->ProjectResourceService =$projectResourceService;
     }
 
     public function index(Request $request)
@@ -64,11 +74,36 @@ class ClientProjectController extends Controller
      * @param  \People\Models\ClientProject $clientProject
      * @return \Illuminate\Http\Response
      */
+
+
     public function show($clientProjectId)
     {
-        $clientProjectModel = $this->ClientProjectService->viewClientProject($clientProjectId);
 
-        return view('clientProjects/viewClientProject', ['project' => $clientProjectModel]);
+        $clientProjectModel = $this->ClientProjectService->viewClientProject($clientProjectId);
+        $clientProject=$this->ClientProjectService->getClientProjectDetails($clientProjectId);
+
+//        $currentProjectResources = ProjectResource::where('client_project_id', $clientProjectId)->orderBy('created_at', 'asc')
+//            ->get();
+        list($currentProjectResources,$availableEmployees)=$this->ProjectResourceService->showClientProjectResources($clientProjectId);
+
+
+        $projectResources=$this->ProjectService->mapResourcesDetailsToClass($currentProjectResources,false);
+        $projectTimeLines = $this->ProjectGrapher->setupProjectCost($clientProjectModel, $projectResources, false);
+        $projectTotalCost = $this->ProjectGrapher->calculateProjectTotalCost($projectTimeLines);
+        $resourcesDetails = $this->ProjectGrapher->getResourcesTotalCostForProject($clientProjectModel, $projectResources,$projectTotalCost);
+
+        $clientProjectModel->cost = $projectTotalCost;
+        $isOnBudget=$this->ProjectService->isProjectOnBudget($projectTotalCost, $clientProjectModel->budget);
+        $clientProjectModel->isProjectOnBudget=$isOnBudget;
+
+        return view('clientProjects/viewClientProject',
+            [
+                'project' => $clientProjectModel,
+                'projectTimeLines' => $projectTimeLines,
+                'resourcesDetails' => $resourcesDetails,
+                'projectTotalCost' => $projectTotalCost,
+
+            ]);
 
     }
 
@@ -80,6 +115,8 @@ class ClientProjectController extends Controller
      */
     public function edit($clientProjectId)
     {
+
+
         $clientProject = $this->ClientProjectService->getClientProjectDetails($clientProjectId);
         return view('clientProjects/clientProjectEditForm', ['clientProject' => $clientProject]);
     }

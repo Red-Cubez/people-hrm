@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use People\Models\CompanyProject;
 use People\Services\Interfaces\ICompanyProjectResourceService;
 use People\Services\Interfaces\ICompanyProjectService;
+use People\Services\Interfaces\IProjectGrapher;
+use People\Services\Interfaces\IProjectService;
 
 class CompanyProjectController extends Controller
 {
@@ -17,12 +19,18 @@ class CompanyProjectController extends Controller
 
     public $CompanyProjectService;
     public $CompanyProjectResourceService;
+    public $ProjectGrapher;
+    public $ProjectService;
 
-    public function __construct(ICompanyProjectService $companyProjectService, ICompanyProjectResourceService $companyProjectResourceService)
+    public function __construct(ICompanyProjectService $companyProjectService,
+                                ICompanyProjectResourceService $companyProjectResourceService,
+                                IProjectGrapher $ProjectGrapher, IProjectService $ProjectService)
     {
 
         $this->CompanyProjectService = $companyProjectService;
         $this->CompanyProjectResourceService = $companyProjectResourceService;
+        $this->ProjectGrapher = $ProjectGrapher;
+        $this->ProjectService = $ProjectService;
     }
 
     public function index()
@@ -69,16 +77,28 @@ class CompanyProjectController extends Controller
     public function show($companyProjectId)
     {
 
-        list($currentProjectResources, $availableEmployees) = $this->CompanyProjectResourceService->showCompanyProjectResources($companyProjectId);
+        list($currentProjectResources) = $this->CompanyProjectResourceService->showCompanyProjectResources($companyProjectId);
 
         $companyProject = $this->CompanyProjectService->viewCompanyProject($companyProjectId);
+
+
+        $projectTimeLines = $this->ProjectGrapher->setupProjectCost($companyProject, $currentProjectResources, true);
+        $projectTotalCost = $this->ProjectGrapher->calculateProjectTotalCost($projectTimeLines);
+        $resourcesDetails = $this->ProjectGrapher->getResourcesTotalCostForProject($companyProject, $currentProjectResources, $projectTotalCost);
+
+        $companyProject->cost = $projectTotalCost;
+        $isOnBudget = $this->ProjectService->isProjectOnBudget($projectTotalCost, $companyProject->budget);
+        $companyProject->isProjectOnBudget = $isOnBudget;
 
         return view('companyProjects/viewCompanyProject',
             [
                 'project' => $companyProject,
                 'projectResources' => $currentProjectResources,
-                'availableEmployees' => $availableEmployees,
                 'companyProjectId' => $companyProjectId,
+                'projectTimeLines' => $projectTimeLines,
+                'resourcesDetails' => $resourcesDetails,
+                'projectTotalCost' => $projectTotalCost,
+
             ]);
 
     }

@@ -47,7 +47,7 @@
                         <!-- Delete Button -->
                         <td>
 
-                            <form action="{{ url('clientprojects/'.$clientProject->id.'/edit') }}" method="POST">
+                            <form action="{{ url('clientprojects/'.$clientProject->id) }}" method="POST">
                                 {{ csrf_field() }}
                                 {{ method_field('GET') }}
 

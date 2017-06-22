@@ -12,6 +12,7 @@
 
 <!-- Styles -->
 <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="{{ asset('css/index.css') }}" type="text/css">
 
 <!-- Scripts -->
 <script>
@@ -91,5 +92,6 @@
     </nav>
     @yield('content')
 </div>
+<script type="text/javascript" src="{{ URL::asset('js/index.js')}}"></script>
 </body>
 </html>

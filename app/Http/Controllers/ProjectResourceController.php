@@ -50,7 +50,7 @@ class ProjectResourceController extends Controller {
 	 */
 	public function store(Request $request) {
 		$this->ProjectResourceService->saveOrUpdateProjectResource($request);
-		
+
 		return redirect('/clientprojects/' . $request->clientProjectid . '/projectresources');
 
 	}

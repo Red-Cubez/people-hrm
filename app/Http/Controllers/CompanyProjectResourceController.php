@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use People\Models\CompanyProjectResource;
 use People\Services\CompanyProjectResourceService;
 use People\Services\Interfaces\ICompanyProjectResourceService;
+use People\Services\Interfaces\IResourceFormValidator;
 
 class CompanyProjectResourceController extends Controller {
 	/**
@@ -14,10 +15,13 @@ class CompanyProjectResourceController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public $CompanyProjectResourceService;
+	public $ResourceFormValidator;
 
-	public function __construct(ICompanyProjectResourceService $companyProjectResourceService) {
+	public function __construct(ICompanyProjectResourceService $companyProjectResourceService,
+                                IResourceFormValidator $resourceFormValidator) {
 
 		$this->CompanyProjectResourceService = $companyProjectResourceService;
+		$this->ResourceFormValidator = $resourceFormValidator;
 	}
 
 	public function index() {
@@ -40,10 +44,31 @@ class CompanyProjectResourceController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(Request $request) {
+        if (isset($request->projectResourceId)) {
+            //update
 
-		$this->CompanyProjectResourceService->saveOrUpdateCompanyProjectResource($request);
+        }
+        elseif (!isset($request->projectResourceId)) {
+            //save
+        }
+        $formErrors=$this->ResourceFormValidator->validateForm($request);
 
-		return redirect('/companyprojects/' . $request->companyProjectId);
+        if($formErrors->hasErrors)
+        {
+            list($currentProjectResources, $availableEmployees) = $this->CompanyProjectResourceService->showCompanyProjectResources($request->companyProjectId);
+            return view('CompanyProjectResources.index', [
+                'projectResources' => $currentProjectResources,
+                'availableEmployees' => $availableEmployees,
+                'companyProjectId' => $request->companyProjectId,
+                'formErrors' =>$formErrors,
+
+            ]);
+        }
+        else {
+            $this->CompanyProjectResourceService->saveOrUpdateCompanyProjectResource($request);
+
+            return redirect('/companyprojects/' . $request->companyProjectId);
+        }
 
 	}
 
@@ -54,9 +79,8 @@ class CompanyProjectResourceController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show($companyProjectId) {
-
+dd("here");
 		list($currentProjectResources, $availableEmployees) = $this->CompanyProjectResourceService->showCompanyProjectResources($companyProjectId);
-
 		return view('CompanyProjectResources.index', [
 			'projectResources' => $currentProjectResources,
 			'availableEmployees' => $availableEmployees,

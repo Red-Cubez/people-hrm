@@ -3,7 +3,26 @@
 @section('content')
 
     <div class="panel-body">
+        @if (isset($formErrors))
+            <div class="alert alert-danger">
+                <ul>
 
+                    @if(isset($formErrors->employeeNotSelected))
+                        <li>{{ $formErrors->employeeNotSelected}}</li>
+                    @endif
+                    @if(isset($formErrors->startDateNotEntered))
+                        <li>{{ $formErrors->startDateNotEntered}}</li>
+                    @endif
+                    @if(isset($formErrors->endDateNotEntered))
+                        <li>{{$formErrors->endDateNotEntered}}</li>
+                    @endif
+                    @if(isset($formErrors->wrongEndDate))
+                        <li>{{$formErrors->wrongEndDate}}</li>
+                    @endif
+
+                </ul>
+            </div>
+        @endif
         <form id="resourceForm" action="{{ url('projectresources/') }}" method="POST" class="form-horizontal">
             {{ csrf_field() }}
             {{ method_field('POST') }}
@@ -26,6 +45,7 @@
                            value="{{ $projectresources[0]->client_project_id}}" class="form-control">
                 @endif
             @endif
+
             <div><input type="radio" name="resource" value="employee" id="resource"> <label
                         for="choice-animals-dogs">Employee Resource</label>
                 <div id="error"></div>

@@ -3,6 +3,26 @@
 @section('content')
 
     <div class="panel-body">
+        @if (isset($formErrors))
+            <div class="alert alert-danger">
+                <ul>
+
+                    @if(isset($formErrors->employeeNotSelected))
+                        <li>{{ $formErrors->employeeNotSelected}}</li>
+                    @endif
+                    @if(isset($formErrors->startDateNotEntered))
+                        <li>{{ $formErrors->startDateNotEntered}}</li>
+                    @endif
+                    @if(isset($formErrors->endDateNotEntered))
+                        <li>{{$formErrors->endDateNotEntered}}</li>
+                    @endif
+                    @if(isset($formErrors->wrongEndDate))
+                        <li>{{$formErrors->wrongEndDate}}</li>
+                    @endif
+
+                </ul>
+            </div>
+        @endif
         <div>
             <form id="resourceForm" action="{{ url('companyprojectresources/') }}" method="POST"
                   class="form-horizontal">
@@ -49,52 +69,52 @@
 
 
     {{--<div class="panel-body">--}}
-        {{--<div class="panel-heading">Add Resource</div>--}}
+    {{--<div class="panel-heading">Add Resource</div>--}}
 
-        {{--<a class="btn btn-primary" role="button" data-toggle="collapse" href="#employees" aria-expanded="false"--}}
-           {{--aria-controls="collapseExample"> Employees--}}
-        {{--</a>--}}
-        {{--<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#fixedResources"--}}
-                {{--aria-expanded="false" aria-controls="collapseExample"> Fixed Resources--}}
-        {{--</button>--}}
+    {{--<a class="btn btn-primary" role="button" data-toggle="collapse" href="#employees" aria-expanded="false"--}}
+    {{--aria-controls="collapseExample"> Employees--}}
+    {{--</a>--}}
+    {{--<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#fixedResources"--}}
+    {{--aria-expanded="false" aria-controls="collapseExample"> Fixed Resources--}}
+    {{--</button>--}}
 
-        {{--<div class="collapse" id="employees">--}}
-            {{--<div class="well">--}}
-                {{--<form action="{{ url('companyprojectresources/') }}" method="POST" class="form-horizontal">--}}
-                    {{--{{ csrf_field() }}--}}
-                    {{--{{ method_field('POST') }}--}}
-                    {{--@if(isset($companyProjectId))--}}
-                        {{--<input type="hidden" name="companyProjectId" value="{{ $companyProjectId }}">--}}
+    {{--<div class="collapse" id="employees">--}}
+    {{--<div class="well">--}}
+    {{--<form action="{{ url('companyprojectresources/') }}" method="POST" class="form-horizontal">--}}
+    {{--{{ csrf_field() }}--}}
+    {{--{{ method_field('POST') }}--}}
+    {{--@if(isset($companyProjectId))--}}
+    {{--<input type="hidden" name="companyProjectId" value="{{ $companyProjectId }}">--}}
 
-                    {{--@endif--}}
-                    {{--@include('projectResources/employeeResourcesForm')--}}
-                    {{--@include('projectResources/fixedResourcesForm')--}}
-                {{--</form>--}}
-            {{--</div>--}}
+    {{--@endif--}}
+    {{--@include('projectResources/employeeResourcesForm')--}}
+    {{--@include('projectResources/fixedResourcesForm')--}}
+    {{--</form>--}}
+    {{--</div>--}}
 
-        {{--</div>--}}
+    {{--</div>--}}
 
-        {{--<div class="collapse" id="fixedResources">--}}
-            {{--<div class="well">--}}
-                {{--<form action="{{ url('companyprojectresources/') }}" method="POST" class="form-horizontal">--}}
-                    {{--{{ csrf_field() }}--}}
-                    {{--{{ method_field('POST') }}--}}
-                    {{--@if(isset($companyProjectId))--}}
+    {{--<div class="collapse" id="fixedResources">--}}
+    {{--<div class="well">--}}
+    {{--<form action="{{ url('companyprojectresources/') }}" method="POST" class="form-horizontal">--}}
+    {{--{{ csrf_field() }}--}}
+    {{--{{ method_field('POST') }}--}}
+    {{--@if(isset($companyProjectId))--}}
 
-                        {{--<input type="hidden" name="companyProjectId" value="{{ $companyProjectId }}"--}}
-                               {{--class="form-control">--}}
-                    {{--@endif--}}
+    {{--<input type="hidden" name="companyProjectId" value="{{ $companyProjectId }}"--}}
+    {{--class="form-control">--}}
+    {{--@endif--}}
 
-                    {{--@if(isset($projectresources))--}}
-                        {{--@if(isset($companyProjectId))--}}
-                            {{--<input type="hidden" name="companyProjectId"--}}
-                                   {{--value="{{ $projectresources[0]->company_project_id}}" class="form-control">--}}
-                        {{--@endif--}}
-                    {{--@endif--}}
-                    {{--@include('projectResources/fixedResourcesForm')--}}
-                {{--</form>--}}
-            {{--</div>--}}
-        {{--</div>--}}
+    {{--@if(isset($projectresources))--}}
+    {{--@if(isset($companyProjectId))--}}
+    {{--<input type="hidden" name="companyProjectId"--}}
+    {{--value="{{ $projectresources[0]->company_project_id}}" class="form-control">--}}
+    {{--@endif--}}
+    {{--@endif--}}
+    {{--@include('projectResources/fixedResourcesForm')--}}
+    {{--</form>--}}
+    {{--</div>--}}
+    {{--</div>--}}
     {{--</div>--}}
 
     @include('CompanyProjectResources/viewCompanyProjectResources')

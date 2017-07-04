@@ -3,26 +3,7 @@
 @section('content')
 
     <div class="panel-body">
-        @if (isset($formErrors))
-            <div class="alert alert-danger">
-                <ul>
 
-                    @if(isset($formErrors->employeeNotSelected))
-                        <li>{{ $formErrors->employeeNotSelected}}</li>
-                    @endif
-                    @if(isset($formErrors->startDateNotEntered))
-                        <li>{{ $formErrors->startDateNotEntered}}</li>
-                    @endif
-                    @if(isset($formErrors->endDateNotEntered))
-                        <li>{{$formErrors->endDateNotEntered}}</li>
-                    @endif
-                    @if(isset($formErrors->wrongEndDate))
-                        <li>{{$formErrors->wrongEndDate}}</li>
-                    @endif
-
-                </ul>
-            </div>
-        @endif
         <div>
             <form id="resourceForm" action="{{ url('companyprojectresources/') }}" method="POST"
                   class="form-horizontal">

@@ -53,34 +53,44 @@ class ProjectResourceController extends Controller
      */
     public function store(Request $request)
     {
-        /////////////
-        ///
-        ///
-        ///
-        ///
-        ///
-        ///
-        ///
-        /// ///////////
         $formErrors = $this->ResourceFormValidator->validateForm($request);
 
-        if ($formErrors->hasErrors) {
-            list($currentProjectResources, $availableEmployees) = $this->ProjectResourceService->showClientProjectResources($request->clientProjectid);
+        if (!isset($request->projectResourceId)) {
+            //store
+            if ($formErrors->hasErrors) {
+                list($currentProjectResources, $availableEmployees) = $this->ProjectResourceService->showClientProjectResources($request->clientProjectid);
 
-            $projectResources = $this->ProjectService->mapResourcesDetailsToClass($currentProjectResources, false);
+                $projectResources = $this->ProjectService->mapResourcesDetailsToClass($currentProjectResources, false);
 
-            return view('projectResources.index', [
-                'projectResources' => $projectResources,
-                'availableEmployees' => $availableEmployees,
-                'clientProjectid' => $request->clientProjectid,
-                'formErrors' => $formErrors,
-            ]);
-        } else {
-            $this->ProjectResourceService->saveOrUpdateProjectResource($request);
+                return view('projectResources.index', [
+                    'projectResources' => $projectResources,
+                    'availableEmployees' => $availableEmployees,
+                    'clientProjectid' => $request->clientProjectid,
+                    'formErrors' => $formErrors,
+                ]);
+            } else {
+                $this->ProjectResourceService->saveOrUpdateProjectResource($request);
 
-            return redirect('/clientprojects/' . $request->clientProjectid . '/projectresources');
+                return redirect('/clientprojects/' . $request->clientProjectid . '/projectresources');
+            }
+
+        } else if (isset($request->projectResourceId)) {
+            //update
+            if ($formErrors->hasErrors) {
+                $Resource = $this->ProjectResourceService->updateProjectRessources($request->projectResourceId);
+
+                return view('projectResources.updateResource', [
+                    'projectresources' => $Resource,
+                    'formErrors' => $formErrors,
+
+                ]);
+            } else {
+                $this->ProjectResourceService->saveOrUpdateProjectResource($request);
+
+                return redirect('/clientprojects/' . $request->clientProjectid . '/projectresources');
+            }
+
         }
-
     }
 
     public function manageressources($clientProjectId)
@@ -148,6 +158,7 @@ class ProjectResourceController extends Controller
 
     public function updateressources($projectResourceid)
     {
+        //edit form
         $Resource = $this->ProjectResourceService->updateProjectRessources($projectResourceid);
 
         return view('projectResources.updateResource', [

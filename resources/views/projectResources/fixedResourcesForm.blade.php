@@ -1,4 +1,23 @@
+@if (isset($formErrors))
+    <div class="alert alert-danger">
+        <ul>
 
+            @if(isset($formErrors->employeeNotSelected))
+                <li>{{ $formErrors->employeeNotSelected}}</li>
+            @endif
+            @if(isset($formErrors->startDateNotEntered))
+                <li>{{ $formErrors->startDateNotEntered}}</li>
+            @endif
+            @if(isset($formErrors->endDateNotEntered))
+                <li>{{$formErrors->endDateNotEntered}}</li>
+            @endif
+            @if(isset($formErrors->wrongEndDate))
+                <li>{{$formErrors->wrongEndDate}}</li>
+            @endif
+
+        </ul>
+    </div>
+@endif
 <div class="form-group">
     <label class="col-sm-2 control-label">Title</label>
     <div class="col-sm-10">

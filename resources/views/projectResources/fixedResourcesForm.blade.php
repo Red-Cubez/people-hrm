@@ -1,4 +1,6 @@
+
 @if (isset($formErrors))
+
     <div class="alert alert-danger">
         <ul>
 
@@ -87,6 +89,7 @@
 <div class="form-group">
     <div class="col-sm-offset-3 col-sm-10">
         <button type="submit" class="btn btn-danger">
+            <input type="hidden" name="formSubmitted" value="true">
             @if(isset($projectresources))
                 <i class="fa fa-trash"> Update </i>
                 <input type="hidden" name="projectResourceId" value="{{ $projectresources[0]->id}}"
@@ -96,9 +99,37 @@
                 <input type="hidden" name="clientProjectid"
                        value="{{ $projectresources[0]->client_project_id}}">
             @else
-                <i class="fa fa-trash"> Add </i>
+                <i class="fa fa-trash"> Add</i>
         </button>
         @endif
     </div>
 </div>
 
+<script type=“text/javascript”>
+        $(document).ready(function () {
+
+           var $contactForm = $(‘#main_contact_form’);
+
+           $contactForm.on(‘submit’, function (ev) {
+                ev.preventDefault();
+
+               $.ajax({
+                    url: “/contactus”,
+                    type: ‘POST’,
+                    data: $contactForm.serialize(),
+                    success: function (response) {
+                        if (response.mailSuccessful == true) {
+                            toastr.success(response.responseMessage);
+                        }
+                        else {
+                            toastr.error(response.responseMessage);
+                        }
+                    },
+                    error: function () {
+                        alert(“Bad submit”);
+                    }
+                });
+
+           });
+        });
+    </script>

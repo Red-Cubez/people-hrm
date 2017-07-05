@@ -57,7 +57,7 @@ class ProjectResourceController extends Controller
 
         if (!isset($request->projectResourceId)) {
             //store
-            if ($formErrors->hasErrors) {
+            if ($formErrors->haveErrorss) {
                 list($currentProjectResources, $availableEmployees) = $this->ProjectResourceService->showClientProjectResources($request->clientProjectid);
 
                 $projectResources = $this->ProjectService->mapResourcesDetailsToClass($currentProjectResources, false);
@@ -76,7 +76,7 @@ class ProjectResourceController extends Controller
 
         } else if (isset($request->projectResourceId)) {
             //update
-            if ($formErrors->hasErrors) {
+            if ($formErrors->haveErrors) {
                 $Resource = $this->ProjectResourceService->updateProjectRessources($request->projectResourceId);
 
                 return view('projectResources.updateResource', [
@@ -91,6 +91,7 @@ class ProjectResourceController extends Controller
             }
 
         }
+
     }
 
     public function manageressources($clientProjectId)

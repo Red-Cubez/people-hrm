@@ -7,7 +7,7 @@ use People\Services\Interfaces\IResourceFormValidator;
 class FormErrors
 {
     public static $instance = null;
-    public $haveErrors;
+    public $hasErrors;
     public $employeeNotSelected;
     public $startDateNotEntered;
     public $endDateNotEntered;
@@ -23,7 +23,7 @@ class ResourceFormValidator implements IResourceFormValidator
 
         $formErrors = new FormErrors();
 
-            $formErrors->haveErrors = false;
+            $formErrors->hasErrors = false;
             $startDate = null;
             $endDate = null;
 
@@ -39,22 +39,22 @@ class ResourceFormValidator implements IResourceFormValidator
                 $endDate = $request->expectedEndDate;
             }
 
-            if (($request->resource == "employee") && ($request->employee_id == null)) {
+            if (($request->resource == "employee") && ($request->employee_id == '' || ($request->employee_id == null))) {
                 $formErrors->employeeNotSelected = "Please Select Employee From List";
-                $formErrors->haveErrors = true;
+                $formErrors->hasErrors = true;
             }
             if ($startDate == null) {
                 $formErrors->startDateNotEntered = "Please Enter Expected Start Date or Actual  Start Date";
-                $formErrors->haveErrors = true;
+                $formErrors->hasErrors = true;
             }
 
             if ($endDate == null) {
                 $formErrors->endDateNotEntered = "Please Enter Expected End Date or Actual  End Date";
-                $formErrors->haveErrors = true;
+                $formErrors->hasErrors = true;
             }
             if ($endDate < $startDate) {
                 $formErrors->wrongEndDate = "End Date Can not be smaller than Start Date";
-                $formErrors->haveErrors = true;
+                $formErrors->hasErrors = true;
             }
 
 

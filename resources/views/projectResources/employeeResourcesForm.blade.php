@@ -1,6 +1,6 @@
 @if (count($availableEmployees) > 0)
     <div>
-        <select name="employee_id" id="availableEmployeesList">
+        <select name="employee_id" id="availableEmployeesList" >
             <option></option>
             @foreach ($availableEmployees as $availableEmployee)
                 <option value="{{$availableEmployee->id}}" id="availableEmployees_{{$availableEmployee->firtstName}}">
@@ -47,7 +47,7 @@
         console.log('StartDate: ' +startDate);
 
 
-        var form = $('#resourceForm');
+        //var form = $('#resourceForm');
 //        form.validate().form();
         form.validate({
             rules: {

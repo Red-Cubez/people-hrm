@@ -4,7 +4,7 @@
 
     <div class="panel-body">
 
-        <form id="resourceForm" action="{{ url('projectresources/') }}" method="POST" class="form-horizontal">
+        <form name="resourceForm" id="resourceForm" action="{{ url('projectresources/') }}" method="POST" class="form-horizontal">
             {{ csrf_field() }}
             {{ method_field('POST') }}
             @if(isset($clientProjectid))

@@ -1,4 +1,3 @@
-
 @if (isset($formErrors))
 
     <div class="alert alert-danger">
@@ -20,7 +19,7 @@
         </ul>
     </div>
 @endif
-<div class="form-group">
+<div id="main" class="form-group">
     <label class="col-sm-2 control-label">Title</label>
     <div class="col-sm-10">
 
@@ -89,7 +88,7 @@
 <div class="form-group">
     <div class="col-sm-offset-3 col-sm-10">
         <button type="submit" class="btn btn-danger">
-            <input type="hidden" name="formSubmitted" value="true">
+            {{--<input type="hidden" name="formSubmitted" value="true">--}}
             @if(isset($projectresources))
                 <i class="fa fa-trash"> Update </i>
                 <input type="hidden" name="projectResourceId" value="{{ $projectresources[0]->id}}"
@@ -105,31 +104,142 @@
     </div>
 </div>
 
-<script type=“text/javascript”>
-        $(document).ready(function () {
+<script type="text/javascript">
 
-           var $contactForm = $(‘#main_contact_form’);
+    $(document).ready(function () {
+        var resourceForm = $('#resourceForm');
 
-           $contactForm.on(‘submit’, function (ev) {
-                ev.preventDefault();
+        resourceForm.on('submit', function (env) {
 
-               $.ajax({
-                    url: “/contactus”,
-                    type: ‘POST’,
-                    data: $contactForm.serialize(),
-                    success: function (response) {
-                        if (response.mailSuccessful == true) {
-                            toastr.success(response.responseMessage);
-                        }
-                        else {
-                            toastr.error(response.responseMessage);
-                        }
-                    },
-                    error: function () {
-                        alert(“Bad submit”);
+            env.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: '/companyprojectresources/validateform',
+                data: resourceForm.serialize(),
+                success: function (data) {
+
+                    if (data.formErrors.hasErrors == false) {
+                        //form have no errors
+
+                        submitResourceForm(resourceForm);
                     }
-                });
+                    else if (data.formErrors.hasErrors == true) {
 
-           });
+                        alert("form have errors");
+
+                        var htmlError='';
+                        if(abc)
+                        {
+                            htmlError = htmlError + "<li>"+ "</li>";
+                        }
+
+
+                        var html = '\
+                             <div class="alert alert-danger">\
+                             <ul>\
+                              <li> </li>\
+                                <li></li>\
+                        <li></li>\
+                            <li></li>\
+                        </ul>\
+                        </div>';
+
+                        $("#main").before(html);
+                    }
+                },
+                error: function () {
+                    alert("Bad submit");
+                }
+            });
         });
-    </script>
+    });
+    function submitResourceForm(resourceForm) {
+
+        $.ajax({
+            type: 'POST',
+            url: '/companyprojectresources/',
+            data: resourceForm.serialize(),
+            success: function (data) {
+                top.location.href = "/companyprojects/" + data.projectId;
+
+            },
+            error: function () {
+                alert("Bad submit");
+            }
+        });
+    }
+
+
+    //
+    //                        var html = '\
+    //
+    //<td id="holidayName_' + data.holidayId + ' " class="table-text">\
+    //    //
+    //    <div>\
+    //        // ' + data.holidayName + '\
+    //        //
+    //    </div>
+    //    \
+    //    //
+    //</td>\
+    ////
+    //<td id="startDate_' + data.holidayId + ' " class="table-text">\
+    //    //
+    //    <div>\
+    //        // ' + data.startDate + '\
+    //        //
+    //    </div>
+    //    \
+    //    //
+    //</td>\
+    ////
+    //<td id="endDate_' + data.holidayId + ' " class="table-text">\
+    //    //
+    //    <div>\
+    //        // ' + data.endDate + '\
+    //        //
+    //    </div>
+    //    \
+    //    //
+    //</td>\
+    ////
+    //<td id="countHolidays_' + data.holidayId + ' " class="table-text">\
+    //    //
+    //    <div>\
+    //        // ' + data.holidays + '\
+    //        //
+    //    </div>
+    //    \
+    //    //
+    //</td>\
+    ////
+    //<td>\
+    //    //
+    //    <button \
+    //    // class="btn btn-primary" \
+    //    // onclick="openHolidayModal(\'' + data.holidayId + '\',\'' + data.holidayName + '\',\'' + data.startDate + '\',\''
+    //    + data.endDate + '\');" \
+    //    // type="button"> \
+    //    // Edit \
+    //    //                        </button> \
+    //    //
+    //</td> \
+    ////
+    //<td>\
+    //    //
+    //    <button class="btn btn-danger" onclick="deleteHoliday(' + data.holidayId + ')" type="submit"> \
+    //        // <i class="fa fa-trash">DELETE</i> \
+    //        //
+    //    </button>
+    //    \
+    //    //
+    //</td>';
+    ////                        // $('#holiday_' + data.holidayId)
+    ////                        // $("#holidayTableBody").append(html);
+    ////                        $('#holiday_' + data.holidayId).html(html);
+    ////                    }
+    ////                },
+    ////            });
+    ////        }
+
+</script>

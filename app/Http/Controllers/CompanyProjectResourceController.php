@@ -9,7 +9,7 @@ use People\Services\Interfaces\IResourceFormValidator;
 
 class CompanyProjectResourceController extends Controller
 {
-   public static $instance;
+
     /**
      * Display a listing of the resource.
      *
@@ -48,114 +48,26 @@ class CompanyProjectResourceController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
+    public function validateResourceForm(Request $request)
+    {
+        $formErrors = $this->ResourceFormValidator->validateForm($request);
+
+        return response()->json(
+            [
+                'formErrors' => $formErrors,
+            ]);
+
+    }
+
     public function store(Request $request)
     {
+        $this->CompanyProjectResourceService->saveOrUpdateCompanyProjectResource($request);
+        return response()->json(
+            [
+                'projectId' =>  $request->companyProjectId,
+            ]);
 
-        $formErrors = $this->ResourceFormValidator->validateForm($request);
-        if(!isset(CompanyProjectResourceController::$instance)) {
-            echo 1;
-        }
-        if (isset($request->projectResourceId)) {
-            //update
-            //  if ($formErrors::executed == 0) {
-
-            if ($formErrors->haveErrors) {
-                $resource = $this->CompanyProjectResourceService->showEditForm($request->projectResourceId);
-//                if($instance==null) {
-//                    dd("df");
-//                    $request->formSubmitted="false";
-                    if(!isset(CompanyProjectResourceController::$instance)) {
-                    dd("df");
-                        CompanyProjectResourceController::$instance=1;
-                    return view('CompanyProjectResources.updateResource', [
-                        'projectresources' => $resource,
-                        'formErrors' => $formErrors,
-                    ]);
-
-                }
-                else
-                {
-                    return view('CompanyProjectResources.updateResource', [
-                        'projectresources' => $resource,
-
-                    ]);
-
-                   }
-            } else {
-                $this->CompanyProjectResourceService->saveOrUpdateCompanyProjectResource($request);
-
-                return redirect('/companyprojects/' . $request->companyProjectId);
-            }
-
-        } elseif (!isset($request->projectResourceId)) {
-            //save
-
-            if ($formErrors->haveErrors) {
-
-
-                list($currentProjectResources, $availableEmployees) = $this->CompanyProjectResourceService->showCompanyProjectResources($request->companyProjectId);
-//                if($request->formSubmitted=="true") {
-//                    $request->formSubmitted="false";
-                if(!isset(CompanyProjectResourceController::$instance))
-                     {
-
-                         CompanyProjectResourceController::$instance=1;
-
-                    return view('CompanyProjectResources.index', [
-                        'projectResources' => $currentProjectResources,
-                        'availableEmployees' => $availableEmployees,
-                        'companyProjectId' => $request->companyProjectId,
-                        'formErrors' => $formErrors,
-                    ]);
-
-                }
-                else{
-
-                    return view('CompanyProjectResources.index', [
-                        'projectResources' => $currentProjectResources,
-                        'availableEmployees' => $availableEmployees,
-                        'companyProjectId' => $request->companyProjectId,
-                    ]);
-                }
-            } else {
-                $this->CompanyProjectResourceService->saveOrUpdateCompanyProjectResource($request);
-
-                return redirect('/companyprojects/' . $request->companyProjectId);
-            }
-
-        }
-
-        if ($formErrors->hasErrors) {
-            list($currentProjectResources, $availableEmployees) = $this->CompanyProjectResourceService->showCompanyProjectResources($request->companyProjectId);
-//            if($request->formSubmitted=="true") {
-//                $request->formSubmitted="false";
-            if(!isset(CompanyProjectResourceController::$instance)) {
-                    CompanyProjectResourceController::$instance=1;
-                return view('CompanyProjectResources.index', [
-                    'projectResources' => $currentProjectResources,
-                    'availableEmployees' => $availableEmployees,
-                    'companyProjectId' => $request->companyProjectId,
-                    'formErrors' => $formErrors,
-
-                ]);
-
-            }
-            else
-            {
-                return view('CompanyProjectResources.index', [
-                    'projectResources' => $currentProjectResources,
-                    'availableEmployees' => $availableEmployees,
-                    'companyProjectId' => $request->companyProjectId,
-                ]);
-            }
-
-        } else {
-            $this->CompanyProjectResourceService->saveOrUpdateCompanyProjectResource($request);
-
-            return redirect('/companyprojects/' . $request->companyProjectId);
-        }
-
-
+//        return redirect('/companyprojects/'. $request->companyProjectId);
 
     }
 

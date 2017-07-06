@@ -55,7 +55,11 @@ Route::resource('employees', 'EmployeeController');
 Route::resource('clients', 'ClientController');
 Route::resource('clientprojects', 'ClientProjectController');
 Route::resource('companyprojects', 'CompanyProjectController');
+
 Route::resource('projectresources', 'ProjectResourceController');
+
+
+Route::post('/companyprojectresources/validateform', 'CompanyProjectResourceController@validateResourceForm');
 Route::resource('companyprojectresources', 'CompanyProjectResourceController');
 
 Route::resource('jobtitle', 'JobTitleController');
@@ -67,6 +71,8 @@ Route::resource('departments', 'DepartmentController');
 Route::resource('companies', 'CompanyController');
 
 Route::get('/clientprojects/{clientProjectid}/projectresources', 'ProjectResourceController@manageressources');
+
+
 
 Route::get('/projectresources/{projectResourceid}/updateResource', 'ProjectResourceController@updateressources');
 

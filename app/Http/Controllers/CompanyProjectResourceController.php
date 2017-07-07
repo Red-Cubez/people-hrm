@@ -105,6 +105,8 @@ class CompanyProjectResourceController extends Controller
 
         return view('CompanyProjectResources.updateResource', [
             'projectresources' => $resource,
+            'companyProjectId'=>$companyProjectId,
+
         ]);
 
     }

@@ -92,7 +92,7 @@
             env.preventDefault();
             $.ajax({
                 type: 'POST',
-                <?php if( isset($companyProjectId) || isset($projectresources)){ ?>
+                <?php if( isset($companyProjectId)){ ?>
                 url: '/companyprojectresources/validateform',
                 <?php } ?>
                     <?php if(isset($clientProjectid)){ ?>
@@ -129,7 +129,7 @@
                     }
                 },
                 error: function () {
-                    alert("Bad submit");
+                    alert("Bad submit validate");
                 }
             });
         });
@@ -138,7 +138,6 @@
 
         $.ajax({
             type: 'POST',
-
             <?php if(isset($companyProjectId)){ ?>
             url: '/companyprojectresources/',
             <?php } ?>
@@ -149,22 +148,19 @@
 
             data: resourceForm.serialize(),
 
-
             <?php if(isset($companyProjectId)){ ?>
             success: function (data) {
                 top.location.href = "/companyprojects/" + data.projectId;
 
             },
             <?php } ?>
-
                 <?php if(isset($clientProjectid)){ ?>
             success: function (data) {
                 top.location.href = "/clientprojects/" + data.projectId +"/projectresources";
             },
             <?php } ?>
-
             error: function () {
-                alert("Bad submit");
+                alert("Bad submit store/update");
             }
         });
     }

@@ -5,7 +5,7 @@
     <!-- Display Validation Errors -->
     @include('common.errors')
  <!-- Update Company Form -->
-    <form id="resourceForm" class="form-horizontal">
+    <form id="resourceForm" name="resourceForm" class="form-horizontal">
 
       {{ csrf_field() }}
 

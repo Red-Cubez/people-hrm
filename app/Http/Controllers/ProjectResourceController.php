@@ -51,121 +51,107 @@ class ProjectResourceController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function validateResourceForm(Request $request)
     {
         $formErrors = $this->ResourceFormValidator->validateForm($request);
 
-        if (!isset($request->projectResourceId)) {
-            //store
-            if ($formErrors->haveErrorss) {
-                list($currentProjectResources, $availableEmployees) = $this->ProjectResourceService->showClientProjectResources($request->clientProjectid);
-
-                $projectResources = $this->ProjectService->mapResourcesDetailsToClass($currentProjectResources, false);
-
-                return view('projectResources.index', [
-                    'projectResources' => $projectResources,
-                    'availableEmployees' => $availableEmployees,
-                    'clientProjectid' => $request->clientProjectid,
-                    'formErrors' => $formErrors,
-                ]);
-            } else {
-                $this->ProjectResourceService->saveOrUpdateProjectResource($request);
-
-                return redirect('/clientprojects/' . $request->clientProjectid . '/projectresources');
-            }
-
-        } else if (isset($request->projectResourceId)) {
-            //update
-            if ($formErrors->haveErrors) {
-                $Resource = $this->ProjectResourceService->updateProjectRessources($request->projectResourceId);
-
-                return view('projectResources.updateResource', [
-                    'projectresources' => $Resource,
-                    'formErrors' => $formErrors,
-
-                ]);
-            } else {
-                $this->ProjectResourceService->saveOrUpdateProjectResource($request);
-
-                return redirect('/clientprojects/' . $request->clientProjectid . '/projectresources');
-            }
-
-        }
+        return response()->json(
+            [
+                'formErrors' => $formErrors,
+            ]);
 
     }
-
-    public function manageressources($clientProjectId)
+    public function store(Request $request)
     {
 
-        list($currentProjectResources, $availableEmployees) = $this->ProjectResourceService->showClientProjectResources($clientProjectId);
+        $this->ProjectResourceService->saveOrUpdateProjectResource($request);
+        return response()->json(
+            [
+                'projectId' => $request->clientProjectid,
+            ]);
 
-        $projectResources = $this->ProjectService->mapResourcesDetailsToClass($currentProjectResources, false);
-
-        return view('projectResources.index', [
-            'projectResources' => $projectResources,
-            'availableEmployees' => $availableEmployees,
-            'clientProjectid' => $clientProjectId,
-        ]);
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \People\Models\ClientProject $clientProject
-     * @return \Illuminate\Http\Response
-     */
-    public function show(ProjectResource $projectresource)
-    {
-        //
-    }
+public
+function manageressources($clientProjectId)
+{
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \People\Models\ClientProject $clientProject
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(ProjectResource $projectresource)
-    {
-        //
-    }
+    list($currentProjectResources, $availableEmployees) = $this->ProjectResourceService->showClientProjectResources($clientProjectId);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \People\Models\ClientProject $clientProject
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, ProjectResource $projectresource)
-    {
+    $projectResources = $this->ProjectService->mapResourcesDetailsToClass($currentProjectResources, false);
 
-    }
+    return view('projectResources.index', [
+        'projectResources' => $projectResources,
+        'availableEmployees' => $availableEmployees,
+        'clientProjectid' => $clientProjectId,
+    ]);
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \People\Models\ProjectResource $projectresource
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(ProjectResource $projectresource, Request $request)
-    {
+}
 
-        $this->ProjectResourceService->deleteProjectResource($projectresource);
+/**
+ * Display the specified resource.
+ *
+ * @param  \People\Models\ClientProject $clientProject
+ * @return \Illuminate\Http\Response
+ */
+public
+function show(ProjectResource $projectresource)
+{
+    //
+}
 
-        return redirect('/clientprojects/' . $projectresource->client_project_id . '/projectresources');
-    }
+/**
+ * Show the form for editing the specified resource.
+ *
+ * @param  \People\Models\ClientProject $clientProject
+ * @return \Illuminate\Http\Response
+ */
+public
+function edit(ProjectResource $projectresource)
+{
+    //
+}
 
-    public function updateressources($projectResourceid)
-    {
-        //edit form
-        $Resource = $this->ProjectResourceService->updateProjectRessources($projectResourceid);
+/**
+ * Update the specified resource in storage.
+ *
+ * @param  \Illuminate\Http\Request $request
+ * @param  \People\Models\ClientProject $clientProject
+ * @return \Illuminate\Http\Response
+ */
+public
+function update(Request $request, ProjectResource $projectresource)
+{
 
-        return view('projectResources.updateResource', [
-            'projectresources' => $Resource
+}
 
-        ]);
-    }
+/**
+ * Remove the specified resource from storage.
+ *
+ * @param  \People\Models\ProjectResource $projectresource
+ * @return \Illuminate\Http\Response
+ */
+public
+function destroy(ProjectResource $projectresource, Request $request)
+{
+
+    $this->ProjectResourceService->deleteProjectResource($projectresource);
+
+    return redirect('/clientprojects/' . $projectresource->client_project_id . '/projectresources');
+}
+
+public
+function updateressources($projectResourceid)
+{
+    //edit form
+    $Resource = $this->ProjectResourceService->updateProjectRessources($projectResourceid);
+
+    return view('projectResources.updateResource', [
+        'projectresources' => $Resource,
+        'clientProjectid'=>$Resource[0]->client_project_id,
+
+    ]);
+}
 
 }

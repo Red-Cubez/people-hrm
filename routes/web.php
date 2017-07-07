@@ -56,6 +56,7 @@ Route::resource('clients', 'ClientController');
 Route::resource('clientprojects', 'ClientProjectController');
 Route::resource('companyprojects', 'CompanyProjectController');
 
+Route::post('/projectresources/validateform', 'ProjectResourceController@validateResourceForm');
 Route::resource('projectresources', 'ProjectResourceController');
 
 

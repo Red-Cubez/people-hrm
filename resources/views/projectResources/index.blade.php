@@ -7,7 +7,7 @@
         <form name="resourceForm" id="resourceForm" class="form-horizontal">
             {{ csrf_field() }}
 
-          
+
             @if(isset($clientProjectid))
                 <input type="hidden" name="clientProjectid" value="{{ $clientProjectid }}">
             @endif

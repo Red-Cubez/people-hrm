@@ -1,24 +1,4 @@
-@if (isset($formErrors))
 
-    <div class="alert alert-danger">
-        <ul>
-
-            @if(isset($formErrors->employeeNotSelected))
-                <li>{{ $formErrors->employeeNotSelected}}</li>
-            @endif
-            @if(isset($formErrors->startDateNotEntered))
-                <li>{{ $formErrors->startDateNotEntered}}</li>
-            @endif
-            @if(isset($formErrors->endDateNotEntered))
-                <li>{{$formErrors->endDateNotEntered}}</li>
-            @endif
-            @if(isset($formErrors->wrongEndDate))
-                <li>{{$formErrors->wrongEndDate}}</li>
-            @endif
-
-        </ul>
-    </div>
-@endif
 <div id="main" class="form-group">
     <label class="col-sm-2 control-label">Title</label>
     <div class="col-sm-10">
@@ -108,42 +88,43 @@
 
     $(document).ready(function () {
         var resourceForm = $('#resourceForm');
-
         resourceForm.on('submit', function (env) {
-
             env.preventDefault();
             $.ajax({
                 type: 'POST',
+                <?php if( isset($companyProjectId) || isset($projectresources)){ ?>
                 url: '/companyprojectresources/validateform',
+                <?php } ?>
+                    <?php if(isset($clientProjectid)){ ?>
+                url: '/projectresources/validateform',
+
+                <?php } ?>
+
                 data: resourceForm.serialize(),
                 success: function (data) {
 
                     if (data.formErrors.hasErrors == false) {
                         //form have no errors
-
                         submitResourceForm(resourceForm);
                     }
                     else if (data.formErrors.hasErrors == true) {
 
-                        alert("form have errors");
-
-                        var htmlError='';
-                        if(abc)
-                        {
-                            htmlError = htmlError + "<li>"+ "</li>";
+                        var htmlError = '<div id="list" class="alert alert-danger">';
+                        if (data.formErrors.employeeNotSelected) {
+                            htmlError = htmlError + "<li>" + data.formErrors.employeeNotSelected + "</li>";
+                        }
+                        if (data.formErrors.startDateNotEntered) {
+                            htmlError = htmlError + "<li>" + data.formErrors.startDateNotEntered + "</li>";
+                        }
+                        if (data.formErrors.endDateNotEntered) {
+                            htmlError = htmlError + "<li>" + data.formErrors.endDateNotEntered + "</li>";
+                        }
+                        if (data.formErrors.wrongEndDate) {
+                            htmlError = htmlError + "<li>" + data.formErrors.wrongEndDate + "</li>";
                         }
 
-
-                        var html = '\
-                             <div class="alert alert-danger">\
-                             <ul>\
-                              <li> </li>\
-                                <li></li>\
-                        <li></li>\
-                            <li></li>\
-                        </ul>\
-                        </div>';
-
+                        html = htmlError;
+                        $("#list").remove();
                         $("#main").before(html);
                     }
                 },
@@ -157,89 +138,36 @@
 
         $.ajax({
             type: 'POST',
+
+            <?php if(isset($companyProjectId)){ ?>
             url: '/companyprojectresources/',
+            <?php } ?>
+
+                <?php if(isset($clientProjectid)){ ?>
+            url: '/projectresources/',
+            <?php } ?>
+
             data: resourceForm.serialize(),
+
+
+            <?php if(isset($companyProjectId)){ ?>
             success: function (data) {
                 top.location.href = "/companyprojects/" + data.projectId;
 
             },
+            <?php } ?>
+
+                <?php if(isset($clientProjectid)){ ?>
+            success: function (data) {
+                top.location.href = "/clientprojects/" + data.projectId +"/projectresources";
+            },
+            <?php } ?>
+
             error: function () {
                 alert("Bad submit");
             }
         });
     }
 
-
-    //
-    //                        var html = '\
-    //
-    //<td id="holidayName_' + data.holidayId + ' " class="table-text">\
-    //    //
-    //    <div>\
-    //        // ' + data.holidayName + '\
-    //        //
-    //    </div>
-    //    \
-    //    //
-    //</td>\
-    ////
-    //<td id="startDate_' + data.holidayId + ' " class="table-text">\
-    //    //
-    //    <div>\
-    //        // ' + data.startDate + '\
-    //        //
-    //    </div>
-    //    \
-    //    //
-    //</td>\
-    ////
-    //<td id="endDate_' + data.holidayId + ' " class="table-text">\
-    //    //
-    //    <div>\
-    //        // ' + data.endDate + '\
-    //        //
-    //    </div>
-    //    \
-    //    //
-    //</td>\
-    ////
-    //<td id="countHolidays_' + data.holidayId + ' " class="table-text">\
-    //    //
-    //    <div>\
-    //        // ' + data.holidays + '\
-    //        //
-    //    </div>
-    //    \
-    //    //
-    //</td>\
-    ////
-    //<td>\
-    //    //
-    //    <button \
-    //    // class="btn btn-primary" \
-    //    // onclick="openHolidayModal(\'' + data.holidayId + '\',\'' + data.holidayName + '\',\'' + data.startDate + '\',\''
-    //    + data.endDate + '\');" \
-    //    // type="button"> \
-    //    // Edit \
-    //    //                        </button> \
-    //    //
-    //</td> \
-    ////
-    //<td>\
-    //    //
-    //    <button class="btn btn-danger" onclick="deleteHoliday(' + data.holidayId + ')" type="submit"> \
-    //        // <i class="fa fa-trash">DELETE</i> \
-    //        //
-    //    </button>
-    //    \
-    //    //
-    //</td>';
-    ////                        // $('#holiday_' + data.holidayId)
-    ////                        // $("#holidayTableBody").append(html);
-    ////                        $('#holiday_' + data.holidayId).html(html);
-    ////                    }
-    ////                },
-    ////            });
-    ////        }
 
 </script>

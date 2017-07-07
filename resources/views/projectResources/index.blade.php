@@ -4,12 +4,10 @@
 
     <div class="panel-body">
 
-        <form name="resourceForm" id="resourceForm" action="{{ url('projectresources/') }}" method="POST" class="form-horizontal">
+        <form name="resourceForm" id="resourceForm" class="form-horizontal">
             {{ csrf_field() }}
-            {{ method_field('POST') }}
-            @if(isset($clientProjectid))
-                <input type="hidden" name="clientProjectid" value="{{ $clientProjectid }}">
-            @endif
+
+          
             @if(isset($clientProjectid))
                 <input type="hidden" name="clientProjectid" value="{{ $clientProjectid }}">
             @endif

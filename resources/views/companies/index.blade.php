@@ -64,13 +64,8 @@
              </button>
            </form>
             <!-- Update Button -->
-           <form action="{{url('companies/'.$company->id) }}" method="POST">
-             {{ csrf_field() }}
-             {{ method_field('GET') }}
-             <button type="submit" class="btn btn-danger">
-               View
-             </button>
-           </form>
+             <a href="{{route('companies.show', $company->id)}}"> <button class="btn btn-primary"> View </button></a>
+
         </td>
 
        </tr>

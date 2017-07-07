@@ -72,6 +72,7 @@ class CompanyProjectResourceService implements ICompanyProjectResourceService
 
         $resource = CompanyProjectResource::where('id', $companyProjectId)->orderBy('created_at', 'asc')->get();
         return $resource;
+
     }
 
     public function deleteCompanyProjectResource($companyprojectresource)

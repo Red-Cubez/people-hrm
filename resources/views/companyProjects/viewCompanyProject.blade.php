@@ -20,21 +20,14 @@
 
             <div class="col-sm-8">
                 @include('showGraph/showProjectGraph')
-               
+
             </div>
         </div>
 
         <div class="row">
             <div class="col-sm-11">
-                <form action="{{ url('companyprojectresources/'.$project->projectId) }}" method="POST">
-                    {{ csrf_field() }}
-                    {{ method_field('GET') }}
-
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fa fa-trash"> Add Resource</i>
-                    </button>
-                    @include('CompanyProjectResources/viewCompanyProjectResources')
-                </form>
+                <a href="{{route('companyprojectresources.show', $project->projectId)}}"> <button class="btn btn-primary"> Add Resource </button></a>
+                @include('CompanyProjectResources/viewCompanyProjectResources')
 
             </div>
         </div>

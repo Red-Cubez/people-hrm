@@ -31,10 +31,12 @@ class ProjectResourceService implements IProjectResourceService
     public function saveOrUpdateProjectResource($request)
     {
         if (!isset($request->projectResourceId)) {
+            //store
             $projectResource = new ProjectResource();
         }
 
         if (isset($request->projectResourceId)) {
+            //update
             $projectResource = projectResource::find($request->projectResourceId);
         }
         if (isset($request->projectResourceId)) {

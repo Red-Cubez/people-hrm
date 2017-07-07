@@ -54,6 +54,8 @@ class AppServiceProvider extends ServiceProvider {
 
         $this->app->bind(
             'People\Services\Interfaces\IProjectGrapher', 'People\Services\ProjectGrapher');
+        $this->app->bind(
+            'People\Services\Interfaces\IResourceFormValidator', 'People\Services\ResourceFormValidator');
 	}
 
 }

@@ -4,107 +4,140 @@ namespace People\Http\Controllers;
 
 use Illuminate\Http\Request;
 use People\Models\CompanyProjectResource;
-use People\Services\CompanyProjectResourceService;
 use People\Services\Interfaces\ICompanyProjectResourceService;
+use People\Services\Interfaces\IResourceFormValidator;
 
-class CompanyProjectResourceController extends Controller {
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public $CompanyProjectResourceService;
+class CompanyProjectResourceController extends Controller
+{
 
-	public function __construct(ICompanyProjectResourceService $companyProjectResourceService) {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public $CompanyProjectResourceService;
+    public $ResourceFormValidator;
 
-		$this->CompanyProjectResourceService = $companyProjectResourceService;
-	}
+    public function __construct(ICompanyProjectResourceService $companyProjectResourceService,
+                                IResourceFormValidator $resourceFormValidator)
+    {
 
-	public function index() {
-		//
-	}
+        $this->CompanyProjectResourceService = $companyProjectResourceService;
+        $this->ResourceFormValidator = $resourceFormValidator;
 
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function create() {
-		//
-	}
+    }
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
-	 */
-	public function store(Request $request) {
+    public function index()
+    {
+        //
+    }
 
-		$this->CompanyProjectResourceService->saveOrUpdateCompanyProjectResource($request);
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
 
-		return redirect('/companyprojects/' . $request->companyProjectId);
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function validateResourceForm(Request $request)
+    {
+        $formErrors = $this->ResourceFormValidator->validateForm($request);
 
-	}
+        return response()->json(
+            [
+                'formErrors' => $formErrors,
+            ]);
 
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function show($companyProjectId) {
+    }
 
-		list($currentProjectResources, $availableEmployees) = $this->CompanyProjectResourceService->showCompanyProjectResources($companyProjectId);
+    public function store(Request $request)
+    {
+        $this->CompanyProjectResourceService->saveOrUpdateCompanyProjectResource($request);
+        return response()->json(
+            [
+                'projectId' =>  $request->companyProjectId,
+            ]);
 
-		return view('CompanyProjectResources.index', [
-			'projectResources' => $currentProjectResources,
-			'availableEmployees' => $availableEmployees,
-			'companyProjectId' => $companyProjectId,
+//        return redirect('/companyprojects/'. $request->companyProjectId);
 
-		]);
+    }
 
-	}
+    /**
+     * Display the specified resource.
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+    public
+    function show($companyProjectId)
+    {
 
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function edit($companyProjectId) {
+        list($currentProjectResources, $availableEmployees) = $this->CompanyProjectResourceService->showCompanyProjectResources($companyProjectId);
+        return view('CompanyProjectResources.index', [
+            'projectResources' => $currentProjectResources,
+            'availableEmployees' => $availableEmployees,
+            'companyProjectId' => $companyProjectId,
 
-		$resource = $this->CompanyProjectResourceService->showEditForm($companyProjectId);
+        ]);
 
-		return view('CompanyProjectResources.updateResource', [
-			'projectresources' => $resource,
-		]);
+    }
 
-	}
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+    public
+    function edit($companyProjectId)
+    {
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function update(Request $request, $id) {
-		//
-	}
+        $resource = $this->CompanyProjectResourceService->showEditForm($companyProjectId);
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
+        return view('CompanyProjectResources.updateResource', [
+            'projectresources' => $resource,
+            'companyProjectId'=>$companyProjectId,
 
-	public function destroy(CompanyProjectResource $companyprojectresource, Request $request) {
+        ]);
 
-		$this->CompanyProjectResourceService->deleteCompanyProjectResource($companyprojectresource);
+    }
 
-		return redirect('/companyprojects/' . $request->companyProjectId);
-	}
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+    public
+    function update(Request $request, $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+
+    public
+    function destroy(CompanyProjectResource $companyprojectresource, Request $request)
+    {
+
+        $this->CompanyProjectResourceService->deleteCompanyProjectResource($companyprojectresource);
+
+        return redirect('/companyprojects/' . $request->companyProjectId);
+    }
 
 }

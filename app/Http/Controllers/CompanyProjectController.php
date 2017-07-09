@@ -8,6 +8,7 @@ use People\Services\Interfaces\ICompanyProjectResourceService;
 use People\Services\Interfaces\ICompanyProjectService;
 use People\Services\Interfaces\IProjectGrapher;
 use People\Services\Interfaces\IProjectService;
+use People\Services\Interfaces\IResourceFormValidator;
 
 class CompanyProjectController extends Controller
 {
@@ -21,16 +22,20 @@ class CompanyProjectController extends Controller
     public $CompanyProjectResourceService;
     public $ProjectGrapher;
     public $ProjectService;
+    public $ProjectFormValidator;
+
 
     public function __construct(ICompanyProjectService $companyProjectService,
                                 ICompanyProjectResourceService $companyProjectResourceService,
-                                IProjectGrapher $ProjectGrapher, IProjectService $ProjectService)
+                                IProjectGrapher $ProjectGrapher, IProjectService $ProjectService,
+                                IResourceFormValidator $projectFormValidator)
     {
 
         $this->CompanyProjectService = $companyProjectService;
         $this->CompanyProjectResourceService = $companyProjectResourceService;
         $this->ProjectGrapher = $ProjectGrapher;
         $this->ProjectService = $ProjectService;
+        $this->ProjectFormValidator = $projectFormValidator;
     }
 
     public function index()
@@ -60,12 +65,27 @@ class CompanyProjectController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
+    public function validateProjectForm(Request $request)
+    {
+        $formErrors = $this->ProjectFormValidator->validateProjectForm($request);
+
+        return response()->json(
+            [
+                'formErrors' => $formErrors,
+                'action'=> $request->action,
+            ]);
+
+    }
+
     public function store(Request $request)
     {
 
         $companyProjectId = $this->CompanyProjectService->saveCompanyProject($request);
-
-        return redirect('/companyprojects/' . $companyProjectId);
+        return response()->json(
+            [
+                'projectId' => $companyProjectId,
+            ]);
+      //  return redirect('/companyprojects/' . $companyProjectId);
     }
 
     /**
@@ -123,9 +143,13 @@ class CompanyProjectController extends Controller
      */
     public function update(Request $request, CompanyProject $companyproject)
     {
-        $this->CompanyProjectService->updateCompanyProject($request, $companyproject);
 
-        return redirect('/companyprojects/' . $companyproject->id);
+        $this->CompanyProjectService->updateCompanyProject($request, $companyproject);
+        return response()->json(
+            [
+                'projectId' => $companyproject->id,
+            ]);
+
     }
 
     /**

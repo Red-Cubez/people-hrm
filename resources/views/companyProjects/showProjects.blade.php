@@ -105,7 +105,7 @@
             </tbody>
         </table>
     </div>
-    
+
     <form action="{{ url('/companies/'.$companyProfileModel->companyId.'/companyprojects') }}" method="POST">
         {{ csrf_field() }}
             {{ method_field('GET') }}

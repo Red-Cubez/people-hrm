@@ -5,16 +5,16 @@
         <!-- Display Validation Errors -->
         @include('common.errors')
         <!-- New company Project Form -->
-        <form action="{{url('companyprojects') }}" method="POST" class="form-horizontal">
+        <form id="projectForm" name="projectForm" class="form-horizontal">
             {{ csrf_field() }}
-              <div class="form-group" >
-               <input type="hidden" name="companyid" value="{{$companyid}}">
-               </div>
+
+               <input type="hidden"  name="companyid" value="{{$companyid}}">
+               <input type="hidden" name="action" id="action" value="save">
+
             <!-- Project Name -->
             @include('companyProjects/companyProjectForm')
          </form>
 
-        
     </div>
 
 </div>

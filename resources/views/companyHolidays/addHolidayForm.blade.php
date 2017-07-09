@@ -13,7 +13,7 @@
                @if(isset($holiday->startDate)) value="{{$holiday->startDate}}" @else placeholder="Enter expected Start Date" @endif required >
     </div>
 </div>
-<div class="form-group">
+<div id="endDateDiv" class="form-group">
     <label for="companyproject" class="col-sm-3 control-label">End Date</label>
 
     <div class="col-sm-6">
@@ -55,7 +55,12 @@ function formSubmit()
     }
     else
     {
-         alert("Enter Corrrect End Date");
+        html = 'sdsd';
+
+        $("#endDateDiv").before(html);
+//
+//
+//         alert("Enter Corrrect End Date");
     }
 }
 function areDatesValid()

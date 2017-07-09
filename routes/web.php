@@ -53,7 +53,11 @@ Route::get('/home', 'HomeController@index');
 
 Route::resource('employees', 'EmployeeController');
 Route::resource('clients', 'ClientController');
+
+Route::post('/clientprojects/validateform', 'ClientProjectController@validateProjectForm');
 Route::resource('clientprojects', 'ClientProjectController');
+
+Route::post('/companyprojects/validateform', 'CompanyProjectController@validateProjectForm');
 Route::resource('companyprojects', 'CompanyProjectController');
 
 Route::post('/projectresources/validateform', 'ProjectResourceController@validateResourceForm');

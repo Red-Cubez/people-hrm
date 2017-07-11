@@ -90,6 +90,7 @@
     <script type="text/javascript">
 
         function initializeHolidayModal() {
+            $("#list").remove();
             $('#holidayName').val(null);
             $('#startDate').val(null);
             $('#endDate').val(null);
@@ -102,18 +103,22 @@
                 var holidayNameValue = $('#holidayName_' + holidayId).text().trim();
                 var startDate = $('#startDate_' + holidayId).text().trim();
                 var endDate = $('#endDate_' + holidayId).text().trim();
+
             }
             else {
                 var holidayNameValue = holidayName;
                 var startDate = startDate;
                 var endDate = endDate;
+
             }
+
             $("#holidayName").val(holidayNameValue);
             $("#startDate").val(startDate);
             $("#endDate").val(endDate);
         }
         function openHolidayModal(holidayId, holidayName, startDate, endDate) {
             initializeHolidayModal();
+
             if (holidayId !== null) {
                 $('#toBeUpdatedHoliday').val(holidayId);
                 setupHolidayEditValues(holidayId, holidayName, startDate, endDate);
@@ -160,8 +165,13 @@
                 }
             }
             if(!areDatesValid) {
+                $("#list").remove();
+                var html = '<div id="list" class="alert alert-danger">End Date Can not be Smaller Than Start Date </div>';
 
-                alert("Enter Corrrect End Date");
+                $("#holidayNameDiv").before(html);
+
+              //  alert(wrongEndDate);
+                //alert("Enter Corrrect End Date");
             }
         }
         function updateHoliday() {

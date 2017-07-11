@@ -67,7 +67,7 @@
 
         projectForm.on('submit', function (env) {
             var action=$('#action').val();
-            alert(action);
+
             env.preventDefault();
             $.ajax({
                 type: 'POST',

@@ -141,6 +141,7 @@ class ProjectGrapher implements IProjectGrapher
 
         }
         $projectTimeLines = $this->calculateResourcesCost($projectResources, $projectTimeLine);
+
         return $projectTimeLines;
     }
 

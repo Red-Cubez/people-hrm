@@ -88,18 +88,23 @@
         Hours Worked :
     </label>
     {{$employeeModel->totalHoursWorked()}}
-    <form action="{{ url('employees/'.$employeeModel->employeeProfile->employeeId.'/edit') }}" method="POST">
-        {{ csrf_field() }}
-            {{ method_field('GET') }}
-        <button class="btn btn-primary" type="submit">
-            <i class="fa fa-trash">
-                EDIT
-            </i>
-        </button>
-    </form>
+    <br>
+    <a href="/employees/{{$employeeModel->employeeProfile->employeeId}}/edit">
+        <button class="btn btn-primary"> EDIT
+
+        </button></a>
+    {{--<form action="{{ url('employees/'.$employeeModel->employeeProfile->employeeId.'/edit') }}" method="POST">--}}
+        {{--{{ csrf_field() }}--}}
+            {{--{{ method_field('GET') }}--}}
+        {{--<button class="btn btn-primary" type="submit">--}}
+            {{--<i class="fa fa-trash">--}}
+                {{--EDIT--}}
+            {{--</i>--}}
+        {{--</button>--}}
+    {{--</form>--}}
     <form action="{{ url('employees/'.$employeeModel->employeeProfile->employeeId) }}" method="POST">
         {{ csrf_field() }}
-                                    {{ method_field('DELETE') }}
+        {{ method_field('DELETE') }}
         <button class="btn btn-danger" type="submit">
             <i c="" lass="fa fa-trash">
                 DELETE

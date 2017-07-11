@@ -28,14 +28,18 @@
                             </td>
 
                             <td>
-                                <form action=" {{ url('companyprojectresources/'.$projectResource->resourceId.'/edit') }}"
-                                      method="POST">
-                                    {{ csrf_field() }}
-                                    {{ method_field('GET') }}
-                                    <button type="submit" class="btn">
-                                        <i class="fa fa-trash"> EDIT </i>
-                                    </button>
-                                </form>
+                                <a href="/companyprojectresources/{{$projectResource->resourceId}}/edit">
+                                    <button class="btn btn-primary"> EDIT
+
+                                    </button></a>
+                                {{--<form action=" {{ url('companyprojectresources/'.$projectResource->resourceId.'/edit') }}"--}}
+                                      {{--method="POST">--}}
+                                    {{--{{ csrf_field() }}--}}
+                                    {{--{{ method_field('GET') }}--}}
+                                    {{--<button type="submit" class="btn">--}}
+                                        {{--<i class="fa fa-trash"> EDIT </i>--}}
+                                    {{--</button>--}}
+                                {{--</form>--}}
                                 <form action="{{ url('companyprojectresources/'.$projectResource->resourceId) }}" method="POST">
                                     {{ csrf_field() }}
                                     {{ method_field('DELETE') }}

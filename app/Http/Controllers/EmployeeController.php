@@ -7,6 +7,7 @@ use People\Models\Employee;
 use People\Services\Interfaces\IDepartmentService;
 use People\Services\Interfaces\IEmployeeService;
 use People\Services\Interfaces\IJobTitleService;
+use People\Services\Interfaces\IResourceFormValidator;
 
 class EmployeeController extends Controller
 {
@@ -14,35 +15,53 @@ class EmployeeController extends Controller
     public $EmployeeService;
     public $DepartmentService;
     public $JobTitleService;
-
-    public function __construct(IEmployeeService $employeeService, IDepartmentService $departmentService, IJobTitleService $jobTitleService)
+    public $EmployeeFormValidator;
+    public function __construct(IEmployeeService $employeeService, IDepartmentService $departmentService, IJobTitleService $jobTitleService,
+                                IResourceFormValidator $employeeFormValidator)
     {
 
         $this->EmployeeService = $employeeService;
         $this->DepartmentService = $departmentService;
         $this->JobTitleService = $jobTitleService;
+        $this->EmployeeFormValidator = $employeeFormValidator;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
+    public function validateEmployeeForm(Request $request)
+    {
+        $formErrors = $this->EmployeeFormValidator->validateEmployeeForm($request);
+
+        return response()->json(
+            [
+                'formErrors' => $formErrors,
+                'action'=> $request->action,
+            ]);
+
+    }
+    public function showEmployeeForm($companyId)
     {
 
         $employees = $this->EmployeeService->getAllEmployees();
         $departments = $this->DepartmentService->getAllDepartments();
-        $jobTitles = $this->JobTitleService->getJobTitlesOfCompany($request->companyId);
+        $jobTitles = $this->JobTitleService->getJobTitlesOfCompany($companyId);
 
         return view('employees.index',
             [
                 'employees' => $employees,
                 'departments' => $departments,
                 'jobTitles' => $jobTitles,
-                'companyId' => $request->companyId,
+                'companyId' => $companyId,
 
             ]);
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+    public function index(Request $request)
+    {
+
     }
 
     /**
@@ -51,8 +70,9 @@ class EmployeeController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function create()
+    public function create($companyId)
     {
+        dd('got here');
 
     }
 
@@ -67,7 +87,12 @@ class EmployeeController extends Controller
 
         $employeeId = $this->EmployeeService->createEmployee($request);
 
-        return redirect('/employees/' . $employeeId);
+        return response()->json(
+            [
+                'employeeId' => $employeeId,
+            ]);
+
+
     }
 
     /**
@@ -120,8 +145,11 @@ class EmployeeController extends Controller
     {
 
         $this->EmployeeService->updateEmployee($request, $employee);
+        return response()->json(
+            [
+                'employeeId' => $employee->id,
+            ]);
 
-        return redirect('/employees/' . $employee->id);
     }
 
     /**

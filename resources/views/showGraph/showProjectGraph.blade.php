@@ -16,5 +16,6 @@
 
 @include('showGraph/lineChart')
 
+@if(count($resourcesDetails)>0)
 @include('showGraph/pieChart')
-
+@endif

@@ -1,7 +1,7 @@
-<div class="form-group">
+<div id="name" class="form-group">
     <label for="name" class="col-sm-3 control-label">First Name</label>
     <div class="col-sm-6">
-        <input type="text" name="firstName" id="employee-firstName" class="form-control"
+        <input type="text" name="firstName" id="firstName" class="form-control"
                @if(isset($editEmployeeModel->employeeProfile->firstName)) value="{{ $editEmployeeModel->employeeProfile->firstName }}"
                @else placeholder="First Name" @endif required>
     </div>
@@ -9,7 +9,7 @@
 <div class="form-group">
     <label for="name" class="col-sm-3 control-label">Last Name</label>
     <div class="col-sm-6">
-        <input type="text" name="lastName" id="employee-lastName" class="form-control"
+        <input type="text" name="lastName" id="lastName" class="form-control"
                @if(isset($editEmployeeModel->employeeProfile->lastName)) value="{{ $editEmployeeModel->employeeProfile->lastName }}"
                @else placeholder="Last Name" @endif  required>
     </div>
@@ -17,15 +17,15 @@
 <div class="form-group">
     <label for="name" class="col-sm-3 control-label">Date of Birth</label>
     <div class="col-sm-6">
-        <input type="date" name="birthDate" id="employee-birthDate" class="form-control"
+        <input type="date" name="birthDate" id="birthDate" class="form-control"
                @if(isset($editEmployeeModel->employeeProfile->birthDate)) value="{{ $editEmployeeModel->employeeProfile->birthDate }}"
-               @else placeholder="Hire Date" @endif>
+               @else placeholder="Hire Date" @endif required>
     </div>
 </div>
 <div class="form-group">
     <label for="name" class="col-sm-3 control-label">Hire Date</label>
     <div class="col-sm-6">
-        <input type="date" name="hireDate" id="employee-hireDate" class="form-control"
+        <input type="date" name="hireDate" id="hireDate" class="form-control"
                @if(isset($editEmployeeModel->employeeProfile->hireDate)) value="{{ $editEmployeeModel->employeeProfile->hireDate }}"
                @else placeholder="Hire Date" @endif>
     </div>
@@ -33,7 +33,7 @@
 <div class="form-group">
     <label for="name" class="col-sm-3 control-label">Termination Date</label>
     <div class="col-sm-6">
-        <input type="date" name="terminationDate" id="employee-terminationDate" class="form-control"
+        <input type="date" name="terminationDate" id="terminationDate" class="form-control"
                @if(isset($editEmployeeModel->employeeProfile->terminationDate)) value="{{ $editEmployeeModel->employeeProfile->terminationDate }}"
                @else placeholder="Termination Date" @endif>
     </div>
@@ -41,7 +41,7 @@
 <div class="form-group">
     <label for="Select Job Title" class="col-sm-3 control-label">Job Title</label>
     <div class="col-sm-6">
-        <select class="col-sm-3 " name="jobTitleId" id="jobTitleId" required="required">
+        <select class="col-sm-3 " name="jobTitleId" id="jobTitleId" required>
             <option>
                 @if(!isset($editEmployeeModel->employeeProfile->jobTitle))
 
@@ -116,3 +116,89 @@
         </button>
     </div>
 </div>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        var employeeForm = $('#employeeForm');
+
+        employeeForm.on('submit', function (env) {
+            var action=$('#action').val();
+
+            env.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: '/employees/validateform',
+                data: employeeForm.serialize(),
+                success: function (data) {
+
+                    if (data.formErrors.hasErrors == false) {
+                        //form have no errors
+
+                        submitEmployeeForm(employeeForm,action);
+                    }
+                    else if (data.formErrors.hasErrors == true) {
+
+                        var htmlError = '<div id="list" class="alert alert-danger">';
+
+                        if (data.formErrors.wrongHireDate) {
+                            htmlError = htmlError + "<li>" + data.formErrors.wrongHireDate + "</li>";
+                        }
+                        if (data.formErrors.wrongTerminationDate) {
+                            htmlError = htmlError + "<li>" + data.formErrors.wrongTerminationDate + "</li>";
+                        }
+                        if (data.formErrors.hireDateNotEntered) {
+                            htmlError = htmlError + "<li>" + data.formErrors.hireDateNotEntered + "</li>";
+                        }
+
+                        html = htmlError;
+                        $("#list").remove();
+                        $("#name").before(html);
+                    }
+                },
+                error: function () {
+                    alert("Bad submit validate");
+                }
+            });
+        });
+    });
+    function submitEmployeeForm(employeeForm,action) {
+
+        if(action == 'save') {
+
+            $.ajax({
+                type: 'POST',
+                url: '/employees/',
+                data: employeeForm.serialize(),
+                success: function (data) {
+
+                    top.location.href = "/employees/" + data.employeeId;
+
+                },
+                error: function () {
+                    alert("Bad submit store");
+                }
+
+            });
+        }
+        if (action == 'update') {
+            var employeeId=$('#employeeId').val();
+
+            $.ajax({
+                type: 'PUT',
+                url: '/employees/'+ employeeId,
+                data: employeeForm.serialize(),
+                success: function (data) {
+
+                    top.location.href = "/employees/" + employeeId;
+
+                },
+                error: function () {
+                    alert("Bad submit update");
+                }
+
+            });
+        }
+    }
+
+</script>

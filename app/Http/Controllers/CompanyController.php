@@ -35,6 +35,7 @@ class CompanyController extends Controller
      */
     public function index()
     {
+
         $companies = $this->CompanyService->getAllCompanies();
 
         return view('companies.index', ['companies' => $companies]);
@@ -48,7 +49,7 @@ class CompanyController extends Controller
 
     public function create()
     {
-
+        return view('companies.addNewCompany');
     }
 
     /**
@@ -74,18 +75,20 @@ class CompanyController extends Controller
      */
     public function show(Company $company)
     {
-
+//dd($company);
         $companyJobTitles = $this->JobTitleService->getJobTitlesOfCompany($company->id);
         $companyHolidays = $this->CompanyHolidayService->getCompanyHolidays($company->id);
-
+//        dd($company);
         $companyCurrentEmployees = $this->EmployeeService->getAllEmployeesOfCompany($company->id);
         $companyCurrentClients = $this->EmployeeService->getAllClientsOfCompany($company->id);
-
+//        dd($company);
         $employeesWithBirthday = $this->EmployeeService->getAllEmployeesWithBirthDayThisMonth($company);
-
+//        dd($company);
         list($company, $companyAddress) = $this->CompanyService->getCompanyAddressAndCompanyProjects($company);
+//        dd($company);
         $companyProfileModel = $this->CompanyService->mapCompanyProfile($company, $companyAddress,
             $companyJobTitles, $employeesWithBirthday, $companyHolidays, $companyCurrentEmployees, $companyCurrentClients);
+
 
         return view('companies/showCompany',
             [

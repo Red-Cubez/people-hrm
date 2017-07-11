@@ -39,6 +39,7 @@ class ClientProjectController extends Controller
     public function index(Request $request)
     {
 
+
         $clientProjects = $this->ClientProjectService->getClientProjects();
 
         return view('clientprojects.index',
@@ -100,7 +101,7 @@ class ClientProjectController extends Controller
     {
 
         $clientProjectModel = $this->ClientProjectService->viewClientProject($clientProjectId);
-        $clientProject=$this->ClientProjectService->getClientProjectDetails($clientProjectId);
+        $clientProjects=$this->ClientProjectService->getClientProjectDetails($clientProjectId);
 
 //        $currentProjectResources = ProjectResource::where('client_project_id', $clientProjectId)->orderBy('created_at', 'asc')
 //            ->get();
@@ -109,6 +110,8 @@ class ClientProjectController extends Controller
 
         $projectResources=$this->ProjectService->mapResourcesDetailsToClass($currentProjectResources,false);
         $projectTimeLines = $this->ProjectGrapher->setupProjectCost($clientProjectModel, $projectResources, false);
+
+
         $projectTotalCost = $this->ProjectGrapher->calculateProjectTotalCost($projectTimeLines);
         $resourcesDetails = $this->ProjectGrapher->getResourcesTotalCostForProject($clientProjectModel, $projectResources,$projectTotalCost);
 
@@ -122,6 +125,7 @@ class ClientProjectController extends Controller
                 'projectTimeLines' => $projectTimeLines,
                 'resourcesDetails' => $resourcesDetails,
                 'projectTotalCost' => $projectTotalCost,
+                //'clientProjects'=>$clientProjects,
 
             ]);
 

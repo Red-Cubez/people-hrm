@@ -30,7 +30,7 @@
 
     <div>
         <label for="contactPerson" class="control-label">Cost : </label>
-            {{$project->cost }}
+            {{$project->cost}}
     </div>
     <div>
             Project is {{$project->isProjectOnTime }}

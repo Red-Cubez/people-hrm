@@ -20,9 +20,22 @@ class ClientController extends Controller
 
         $this->ClientService = $clientService;
     }
+    public function showClientForm($companyId)
+    {
 
+
+        $clients = $this->ClientService->getAllClients();
+
+        return view('clients.index',
+            [
+                'clients' => $clients,
+                'companyId' => $companyId,
+
+            ]);
+    }
     public function index(Request $request)
     {
+
         $clients = $this->ClientService->getAllClients();
 
         return view('clients.index',

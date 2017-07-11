@@ -46,15 +46,18 @@
 
                         <!-- Delete Button -->
                         <td>
+                            <a href="/clientprojects/{{$clientProject->id}}">
+                                <button class="btn btn-primary"> View
 
-                            <form action="{{ url('clientprojects/'.$clientProject->id) }}" method="POST">
-                                {{ csrf_field() }}
-                                {{ method_field('GET') }}
+                                </button></a>
+                            {{--<form action="{{ url('clientprojects/'.$clientProject->id) }}" method="POST">--}}
+                                {{--{{ csrf_field() }}--}}
+                                {{--{{ method_field('GET') }}--}}
 
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fa fa-trash"> View</i>
-                                </button>
-                            </form>
+                                {{--<button type="submit" class="btn btn-primary">--}}
+                                    {{--<i class="fa fa-trash"> View</i>--}}
+                                {{--</button>--}}
+                            {{--</form>--}}
 
                             <form action="{{ url('clientprojects/'.$clientProject->id) }}" method="POST">
                                 {{ csrf_field() }}
@@ -63,16 +66,19 @@
                                     <i class="fa fa-trash"> Delete </i>
                                 </button>
                             </form>
+                            <a href="/clientprojects/{{$clientProject->id}}/projectresources">
+                                <button class="btn btn-primary"> Manage Resource
 
-                            <form action="{{ url('clientprojects/'.$clientProject->id.'/projectresources') }}"
-                                  method="POST">
-                                {{ csrf_field() }}
-                                {{ method_field('GET') }}
+                                </button></a>
+                            {{--<form action="{{ url('clientprojects/'.$clientProject->id.'/projectresources') }}"--}}
+                                  {{--method="POST">--}}
+                                {{--{{ csrf_field() }}--}}
+                                {{--{{ method_field('GET') }}--}}
 
-                                <button type="submit" class="btn btn-danger">
-                                    <i class="fa fa-trash"> Manage Resource</i>
-                                </button>
-                            </form>
+                                {{--<button type="submit" class="btn btn-danger">--}}
+                                    {{--<i class="fa fa-trash"> Manage Resource</i>--}}
+                                {{--</button>--}}
+                            {{--</form>--}}
                         </td>
                     </tr>
                 @endforeach

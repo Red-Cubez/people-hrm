@@ -51,7 +51,11 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index');
 
+Route::get('/employees/showemployeeform/{companyId}', 'EmployeeController@showEmployeeForm');
+Route::post('/employees/validateform', 'EmployeeController@validateEmployeeForm');
 Route::resource('employees', 'EmployeeController');
+
+Route::get('/clients/showclientform/{companyId}', 'ClientController@showClientForm');
 Route::resource('clients', 'ClientController');
 
 Route::post('/clientprojects/validateform', 'ClientProjectController@validateProjectForm');

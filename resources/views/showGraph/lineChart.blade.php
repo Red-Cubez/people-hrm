@@ -1,3 +1,4 @@
+
 <?php $sumOfCost = 0; $profit=$project->budget;?>
 <canvas id="lineChart"></canvas>
 <script type="text/javascript">
@@ -113,6 +114,7 @@
     }
 
    </script>
+
 {{--@foreach($projectTimeLines as $projectTimeline)--}}
 
 {{--{{$projectTimeline->cost}},--}}

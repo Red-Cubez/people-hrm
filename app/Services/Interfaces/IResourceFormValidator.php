@@ -8,4 +8,6 @@ interface IResourceFormValidator
 
     public function validateProjectForm($request);
 
+    public function validateEmployeeForm($request);
+
 }

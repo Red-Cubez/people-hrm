@@ -88,11 +88,13 @@ class CompanyController extends Controller
 //        dd($company);
         $companyProfileModel = $this->CompanyService->mapCompanyProfile($company, $companyAddress,
             $companyJobTitles, $employeesWithBirthday, $companyHolidays, $companyCurrentEmployees, $companyCurrentClients);
+        $employeesWithBirthday = $companyProfileModel->employeesBirthday;
 
 
         return view('companies/showCompany',
             [
                 'companyProfileModel' => $companyProfileModel,
+                'employeesWithBirthday'=>$employeesWithBirthday,
             ]);
     }
 

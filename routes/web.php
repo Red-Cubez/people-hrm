@@ -55,6 +55,7 @@ Route::get('/employees/showemployeeform/{companyId}', 'EmployeeController@showEm
 Route::post('/employees/validateform', 'EmployeeController@validateEmployeeForm');
 Route::resource('employees', 'EmployeeController');
 
+
 Route::get('/clients/showclientform/{companyId}', 'ClientController@showClientForm');
 Route::resource('clients', 'ClientController');
 
@@ -78,6 +79,7 @@ Route::get('/clients/{clientid}/clientprojects', 'ClientProjectController@manage
 
 Route::resource('departments', 'DepartmentController');
 Route::resource('companies', 'CompanyController');
+Route::resource('employeetimeline', 'EmployeeTimeline');
 
 Route::get('/clientprojects/{clientProjectid}/projectresources', 'ProjectResourceController@manageressources');
 

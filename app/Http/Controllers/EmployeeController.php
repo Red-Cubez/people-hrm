@@ -4,10 +4,12 @@ namespace People\Http\Controllers;
 
 use Illuminate\Http\Request;
 use People\Models\Employee;
+use People\Models\Company;
 use People\Services\Interfaces\IDepartmentService;
 use People\Services\Interfaces\IEmployeeService;
 use People\Services\Interfaces\IJobTitleService;
 use People\Services\Interfaces\IResourceFormValidator;
+use People\Services\Interfaces\ICompanyHolidayService;
 
 class EmployeeController extends Controller
 {
@@ -16,14 +18,16 @@ class EmployeeController extends Controller
     public $DepartmentService;
     public $JobTitleService;
     public $EmployeeFormValidator;
+    public $CompanyHolidayService;
     public function __construct(IEmployeeService $employeeService, IDepartmentService $departmentService, IJobTitleService $jobTitleService,
-                                IResourceFormValidator $employeeFormValidator)
+                                IResourceFormValidator $employeeFormValidator,ICompanyHolidayService $companyHolidayService)
     {
 
         $this->EmployeeService = $employeeService;
         $this->DepartmentService = $departmentService;
         $this->JobTitleService = $jobTitleService;
         $this->EmployeeFormValidator = $employeeFormValidator;
+        $this->CompanyHolidayService=$companyHolidayService;
     }
 
     public function validateEmployeeForm(Request $request)
@@ -103,13 +107,17 @@ class EmployeeController extends Controller
      */
     public function show(Employee $employee)
     {
+        $company= Company::find($employee->company_id);
 
         $employeeModel = $this->EmployeeService->viewEmployee($employee);
         $departments = $this->EmployeeService->getAllDepartments();
-
+        $companyHolidays=$this->CompanyHolidayService->getCompanyHolidays($employee->company_id);
+        $employeesWithBirthday=$this->EmployeeService->getAllEmployeesWithBirthDayThisMonth($company);
         return view('employees/showEmployee',
-            ['employeeModel' => $employeeModel,
+            [  'employeeModel' => $employeeModel,
                 'departments' => $departments,
+                'companyHolidays'=>$companyHolidays,
+                'employeesWithBirthday' => $employeesWithBirthday,
             ]);
     }
 
@@ -125,6 +133,7 @@ class EmployeeController extends Controller
         $editEmployeeModel = $this->EmployeeService->editEmployee($employee);
         $departments = $this->EmployeeService->getAllDepartments();
         $jobTitles = $this->JobTitleService->getJobTitlesOfCompany($employee->company_id);
+
         return view('employees/update',
             ['editEmployeeModel' => $editEmployeeModel,
                 'departments' => $departments,

@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="panel-body">
                     @include('common.errors')
-                    <div class="">
+                    <div class="row">
                         <div class="col-sm-3">
                             <div>
                                 <label class="control-label" for="name">
@@ -138,21 +138,28 @@
 
                         </div>
                     </div>
-                    <div class="">
+                </div>
+                </div>
+                    <div class="row">
                         <div class="col-sm-12">
-                            <form class="panel-body" action="{{ url('employeetimeline/') }}" method="POST">
-                                {{ csrf_field() }}
-                                {{ method_field('POST') }}
+                            {{--<form class="panel-body" action="{{ url('employeetimeline/') }}" method="POST">--}}
+                                {{--{{ csrf_field() }}--}}
+                                {{--{{ method_field('POST') }}--}}
+                            <a href="/employeetimesheet/timesheet/{{$employeeModel->employeeProfile->employeeId}}">
+                                <button class="btn btn-primary"> Add Timesheet
 
-                                @include('employees/employeeTimeSheet')
-                            </form>
+                                </button></a>
+
+                                {{--@include('employees/employeeTimeSheet')--}}
+                            {{--</form>--}}
                         </div>
                     </div>
                     @include('employees/showEmployeeClientProjects')
                     @include('employees/showEmployeeCompanyProjects')
 
                 </div>
-                @endsection
+
             </div>
         </div>
     </main>
+@endsection

@@ -110,12 +110,12 @@ class EmployeeController extends Controller
         $company= Company::find($employee->company_id);
 
         $employeeModel = $this->EmployeeService->viewEmployee($employee);
-        $departments = $this->EmployeeService->getAllDepartments();
+      //  $departments = $this->EmployeeService->getAllDepartments();
         $companyHolidays=$this->CompanyHolidayService->getCompanyHolidays($employee->company_id);
         $employeesWithBirthday=$this->EmployeeService->getAllEmployeesWithBirthDayThisMonth($company);
         return view('employees/showEmployee',
             [  'employeeModel' => $employeeModel,
-                'departments' => $departments,
+              //  'departments' => $departments,
                 'companyHolidays'=>$companyHolidays,
                 'employeesWithBirthday' => $employeesWithBirthday,
             ]);

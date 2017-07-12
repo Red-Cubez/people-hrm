@@ -4,7 +4,7 @@ namespace People\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class EmployeeTimeline extends Controller
+class EmployeeTimesheetController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,7 +23,16 @@ class EmployeeTimeline extends Controller
      */
     public function create()
     {
-        //
+        //using showTimesheetForm function
+    }
+    public function showTimesheetForm($employeeId)
+    {
+        return view('employees.employeeTimeSheet',
+            [
+                'employeeId' => $employeeId,
+
+
+            ]);
     }
 
     /**

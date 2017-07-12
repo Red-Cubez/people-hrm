@@ -79,7 +79,8 @@ Route::get('/clients/{clientid}/clientprojects', 'ClientProjectController@manage
 
 Route::resource('departments', 'DepartmentController');
 Route::resource('companies', 'CompanyController');
-Route::resource('employeetimeline', 'EmployeeTimeline');
+Route::resource('employeetimesheet', 'EmployeeTimesheetController');
+Route::get('/employeetimesheet/timesheet/{employeeId}', 'EmployeeTimesheetController@showTimesheetForm');
 
 Route::get('/clientprojects/{clientProjectid}/projectresources', 'ProjectResourceController@manageressources');
 

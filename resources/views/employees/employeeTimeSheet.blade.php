@@ -166,22 +166,65 @@
     <script type="text/javascript">
         $(document).ready(function(){
             $("#timesheetDate").change(function(){
+/////////////////////////////////////
                 timesheetDate= $("#timesheetDate").val();
-                var monDiv='Mon ('+ $("#timesheetDate").val() + ')';
-                $("#monDiv").html(monDiv);
 
-                var tueDiv='Tue ('+ $("#timesheetDate").val() + ')';
-                $("#tueDiv").html(tueDiv);
-                var wedDiv='Wed ('+ $("#timesheetDate").val() + ')';
-                $("#wedDiv").html(wedDiv);
-                var thurDiv='Thur ('+ $("#timesheetDate").val() + ')';
-                $("#thurDiv").html(thurDiv);
-                var friDiv='Friday ('+ $("#timesheetDate").val() + ')';
-                $("#friDiv").html(friDiv); var mon='Mon ('+ $("#timesheetDate").val() + ')';
-                var satDiv='sat ('+ $("#timesheetDate").val() + ')';
-                $("#satDiv").html(satDiv); var mon='Mon ('+ $("#timesheetDate").val() + ')';
-                var sunDiv='sun ('+ $("#timesheetDate").val() + ')';
-                $("#sunDiv").html(sunDiv); var mon='Mon ('+ $("#timesheetDate").val() + ')';
+                    $.ajax({
+                        type: 'POST',
+                        url: '/employees/validateform',
+                        data: employeeForm.serialize(),
+                        success: function (data) {
+
+                            if (data.formErrors.hasErrors == false) {
+                                //form have no errors
+
+                                submitEmployeeForm(employeeForm,action);
+                            }
+                            else if (data.formErrors.hasErrors == true) {
+
+                                var htmlError = '<div id="list" class="alert alert-danger">';
+
+                                if (data.formErrors.wrongHireDate) {
+                                    htmlError = htmlError + "<li>" + data.formErrors.wrongHireDate + "</li>";
+                                }
+                                if (data.formErrors.wrongTerminationDate) {
+                                    htmlError = htmlError + "<li>" + data.formErrors.wrongTerminationDate + "</li>";
+                                }
+                                if (data.formErrors.hireDateNotEntered) {
+                                    htmlError = htmlError + "<li>" + data.formErrors.hireDateNotEntered + "</li>";
+                                }
+
+                                html = htmlError;
+                                $("#list").remove();
+                                $("#name").before(html);
+                            }
+                        },
+                        error: function () {
+                            alert("Bad submit validate");
+                        }
+                    });
+
+               //////////////////////////////////////
+//                timesheetDate= $("#timesheetDate").val();
+//
+//                var monDiv='Mon ('+ timesheetDate + ')';
+//                $("#monDiv").html(monDiv);
+//
+//                var tueDiv='Tue ('+ timesheetDate + ')';
+//                $("#tueDiv").html(tueDiv);
+//                var wedDiv='Wed ('+ timesheetDate + ')';
+//                $("#wedDiv").html(wedDiv);
+//                var thurDiv='Thur ('+ timesheetDate + ')';
+//                $("#thurDiv").html(thurDiv);
+//                var friDiv='Friday ('+ timesheetDate + ')';
+//                $("#friDiv").html(friDiv);
+//                var mon='Mon ('+ timesheetDate + ')';
+//                var satDiv='sat ('+ timesheetDate + ')';
+//                $("#satDiv").html(satDiv);
+//                var mon='Mon ('+ timesheetDate + ')';
+//                var sunDiv='sun ('+ timesheetDate + ')';
+//                $("#sunDiv").html(sunDiv);
+//                var mon='Mon ('+ timesheetDate + ')';
 
 
 

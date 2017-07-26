@@ -16,7 +16,7 @@
                             TimesSheet
 
                         </h3>
-                        <input type="week" name="timesheetDate" id="timesheetDate" class="">Select Date
+                        <input type="week" name="timesheetDate" id="timesheetDate" class="" >Select Date
                     </div>
                     <table class="table table-bordered">
                         <thead>
@@ -72,82 +72,11 @@
                                                         class="form-control input-sm " type="number"></td>
 
                         </tr>
-                        {{--<tr>--}}
-                            {{--<th scope="row">Wed<input type="date" name="wednesdayDate" id="wednesdayDate"--}}
-                                                      {{--class="form-control input-sm"></th>--}}
 
-
-
-                        {{--</tr>--}}
-                        {{--<tr>--}}
-                            {{--<th scope="row">Thur<input type="date" name="thursdayDate" id="thursdayDate"--}}
-                                                       {{--class="form-control input-sm"></th>--}}
-
-
-
-
-
-
-                        {{--</tr>--}}
-                        {{--<tr>--}}
-                            {{--<th scope="row">Fri<input type="date" name="fridayDate" id="fridayDate"--}}
-                                                      {{--class="form-control input-sm"></th>--}}
-
-
-                        {{--</tr>--}}
-                        {{--<tr>--}}
-                            {{--<th scope="row">Sat<input type="date" name="saturdayDate" id="saturdayDate"--}}
-                                                      {{--class="form-control input-sm"></th>--}}
-
-
-                        {{--</tr>--}}
-                        {{--<tr>--}}
-                            {{--<th scope="row">Sun<input type="date" name="sundayDate" id="sundayDate"--}}
-                                                      {{--class="form-control input-sm"></th>--}}
-
-
-                        {{--</tr>--}}
 
                         </tbody>
                     </table>
-                    {{--<table class="table table-bordered" >--}}
 
-                    {{--<thead>--}}
-
-                    {{--<tr>--}}
-                    {{--<th>Billable <input type="date" name="date" id="date" class="input-sm content-cell"></th>--}}
-                    {{--<th>Non Bilable<input type="date" name="date" id="date" class="input-sm"></th>--}}
-                    {{--<th>Wed<input type="date" name="date" id="date" class="input-sm"></th>--}}
-                    {{--<th>Thu<input type="date" name="date" id="date" class="input-sm"></th>--}}
-                    {{--<th>Fri<input type="date" name="date" id="date" class="input-sm"></th>--}}
-                    {{--<th>Sat<input type="date" name="date" id="date" class="input-sm"></th>--}}
-                    {{--<th>Sun<input type="date" name="date" id="date" class="input-sm"></th>--}}
-                    {{--</tr>--}}
-                    {{--</thead>--}}
-                    {{--<tbody>--}}
-
-                    {{--<td><input id="monday" name="monday" class="form-control input-sm " type="number" />  </td>--}}
-                    {{--<td><input id="tuesday" name="tuesday"  class="form-control input-sm " type="number" />  </td>--}}
-                    {{--<td><input id="wednesday" name="wednesday"  class="form-control input-sm " type="number" /> </td>--}}
-                    {{--<td><input id="thursday" name="thursday"  class="form-control input-sm " type="number" />  </td>--}}
-                    {{--<td><input id="friday" name="friday"  class="form-control input-sm " type="number" />  </td>--}}
-                    {{--<td><input id="saturday" name="saturday"  class="form-control input-sm " type="number" />  </td>--}}
-                    {{--<td><input id="sunday" name="sunday"  class="form-control input-sm " type="number" />  </td>--}}
-
-                    {{--</tr>--}}
-                    {{--<tr>--}}
-                    {{--<td><input class="form-control input-sm " type="number">  </input></td>--}}
-                    {{--<td><input class="form-control input-sm " type="number">  </input></td>--}}
-                    {{--<td><input class="form-control input-sm " type="number">  </input></td>--}}
-                    {{--<td><input class="form-control input-sm " type="number">  </input></td>--}}
-                    {{--<td><input class="form-control input-sm " type="number">  </input></td>--}}
-                    {{--<td><input class="form-control input-sm " type="number">  </input></td>--}}
-                    {{--</tr>--}}
-
-
-                    {{--</tbody>--}}
-
-                    {{--</table>--}}
                     <button type="submit" class="btn btn-primary">
                         <i class="fa fa-trash"> Add TimeSheet</i>
                     </button>
@@ -156,51 +85,31 @@
 
                         {{--</button>--}}
                     {{--</a>--}}
-
                 </div>
             </div>
             </form>
         </div>
     </div>
     </main>
+
     <script type="text/javascript">
         $(document).ready(function(){
             $("#timesheetDate").change(function(){
-/////////////////////////////////////
-                timesheetDate= $("#timesheetDate").val();
+                var timesheetDate= $("#timesheetDate").val();
+                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
                     $.ajax({
                         type: 'POST',
-                        url: '/employees/validateform',
-                        data: employeeForm.serialize(),
+                        url: '/employeetimesheet/getweekdates',
+                        data: {
+                            '_token':CSRF_TOKEN,
+                            'timesheetDate':timesheetDate,
+                        },
                         success: function (data) {
 
-                            if (data.formErrors.hasErrors == false) {
-                                //form have no errors
-
-                                submitEmployeeForm(employeeForm,action);
-                            }
-                            else if (data.formErrors.hasErrors == true) {
-
-                                var htmlError = '<div id="list" class="alert alert-danger">';
-
-                                if (data.formErrors.wrongHireDate) {
-                                    htmlError = htmlError + "<li>" + data.formErrors.wrongHireDate + "</li>";
-                                }
-                                if (data.formErrors.wrongTerminationDate) {
-                                    htmlError = htmlError + "<li>" + data.formErrors.wrongTerminationDate + "</li>";
-                                }
-                                if (data.formErrors.hireDateNotEntered) {
-                                    htmlError = htmlError + "<li>" + data.formErrors.hireDateNotEntered + "</li>";
-                                }
-
-                                html = htmlError;
-                                $("#list").remove();
-                                $("#name").before(html);
-                            }
                         },
                         error: function () {
-                            alert("Bad submit validate");
+                            alert("Bad submit ");
                         }
                     });
 
@@ -231,4 +140,9 @@
             });
         });
     </script>
+@endsection
+
+@section('pageSpecificScripts')
+
+
 @endsection

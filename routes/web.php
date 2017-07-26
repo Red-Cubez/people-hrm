@@ -81,6 +81,7 @@ Route::resource('departments', 'DepartmentController');
 Route::resource('companies', 'CompanyController');
 Route::resource('employeetimesheet', 'EmployeeTimesheetController');
 Route::get('/employeetimesheet/timesheet/{employeeId}', 'EmployeeTimesheetController@showTimesheetForm');
+Route::post('/employeetimesheet/getweekdates', 'EmployeeTimesheetController@getWeekDates');
 
 Route::get('/clientprojects/{clientProjectid}/projectresources', 'ProjectResourceController@manageressources');
 

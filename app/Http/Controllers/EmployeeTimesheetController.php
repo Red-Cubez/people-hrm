@@ -25,49 +25,38 @@ class EmployeeTimesheetController extends Controller
     {
         //using showTimesheetForm function
     }
-//    public function getDateFromGiveMonthYear()
-//    {
-    function getWeekDates($date)
+
+    public function isTimeSheetAlreadyEntered($weekAndYear)
     {
-        dd($date);
-        $week=date("w",strtotime($date));
-        $year=date("Y",strtotime($date));
-        $dateTime = new \DateTime();
-        $dateTime->setISODate($year, $week);
+        //
+    }
+
+    function getWeekDates(Request $request)
+    {
+     //   $this->isTimeSheetAlreadyEntered($request->timesshhetDate);
+        $timesheetDate=strtotime($request->timesheetDate);
         $week=array();
-        $week['monday'] = $dateTime->format('d-m-Y');
-        $dateTime->modify('+1 days');
-        $week['tuesday'] = $dateTime->format('d-m-Y');
-        $dateTime->modify('+1 days');
-        $week['wednesday'] = $dateTime->format('d-m-Y');
-        $dateTime->modify('+1 days');
-        $week['thursday'] = $dateTime->format('d-m-Y');
-        $dateTime->modify('+1 days');
-        $week['friday'] = $dateTime->format('d-m-Y');
-        $dateTime->modify('+1 days');
-        $week['saturday'] = $dateTime->format('d-m-Y');
-        $dateTime->modify('+1 days');
-        $week['sunday'] = $dateTime->format('d-m-Y');
-       // return $startAndEndDate;
-        dd($week);
-        return response()->json();
+        $week['monday'] = date('d-m-Y',$timesheetDate);
+        $monday=$week['monday'];
+
+        $date = new \DateTime($monday);
+        $week['tuesday'] = $date->modify( '+1 day' )->format('d-m-Y');
+        $week['wednesday'] = $date->modify( '+1 day' )->format('d-m-Y');
+        $week['thursday'] = $date->modify( '+1 day' )->format('d-m-Y');
+        $week['friday'] = $date->modify( '+1 day' )->format('d-m-Y');
+        $week['saturday'] = $date->modify( '+1 day' )->format('d-m-Y');
+        $week['sunday'] = $date->modify( '+1 day' )->format('d-m-Y');
+
+        return response()->json(
+            [
+                'week'=>$week,
+            ]);
 
     }
 
-//        strtotime(sprintf("%4dW%02d", $year, $week))
-//
-//        $date = new \DateTime('midnight');
-//        $date->setISODate($year, $week);
-//    }
     public function showTimesheetForm($employeeId)
     {
-          $startAndEndDate=$this->getWeekDates(52,2016);
-    //     dd($startAndEndDate);
-//        $date = new \DateTime('midnight');
-//        $date->setISODate(2015, 52);
-//        $d = date('d', strtotime('2013W52'));
-//        $monday = $date->format("d");
-//        //dd($monday);
+
         return view('employees.employeeTimeSheet',
             [
                 'employeeId' => $employeeId,
@@ -83,11 +72,11 @@ class EmployeeTimesheetController extends Controller
      */
     public function store(Request $request)
     {
-      //  dd($request->timesheetDate);
+       // dd($request->timesheetDate);
         $date= $request->timesheetDate;
-       dd($request);
+
           // $date=date("d",strtotime($date));
-           $this->getWeekDates($date);
+         //  $this->getWeekDates($date);
      //   dd($date);
     }
 

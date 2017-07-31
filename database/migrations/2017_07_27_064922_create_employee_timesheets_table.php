@@ -16,7 +16,8 @@ class CreateEmployeeTimesheetsTable extends Migration
         Schema::create('employee_timesheets', function (Blueprint $table) {
             $table->increments('id');
             $table->string('weekNoAndYear');
-            $table->json('weeklyTimesheet');
+            $table->json('billableWeeklyTimesheet');
+            $table->json('nonBillableWeeklyTimesheet');
             $table->integer('employee_id');
             $table->timestamps();
         });

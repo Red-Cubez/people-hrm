@@ -19,4 +19,7 @@ class Employee extends Model {
     public function company() {
         return $this->belongsTo('People\Models\Company');
     }
+    public function timesheets() {
+        return $this->hasMany('People\Models\EmployeeTimesheet');
+    }
 }

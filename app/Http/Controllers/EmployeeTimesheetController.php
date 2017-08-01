@@ -64,10 +64,12 @@ class EmployeeTimesheetController extends Controller
 
     public function showTimesheetForm($employeeId)
     {
+        $timesheets=EmployeeTimesheet::orderBy('created_at')->where('employee_id',$employeeId)->get();
 
-        return view('employees.employeeTimeSheet',
+        return view('employeeTimesheet.index',
             [
                 'employeeId' => $employeeId,
+                'timesheets'=>$timesheets,
 
             ]);
     }
@@ -108,6 +110,7 @@ class EmployeeTimesheetController extends Controller
             $nonBillableDays['sunday'] = $request->sundayNonBillable;
             $timesheet->nonBillableWeeklyTimeSheet = $nonBillableDays;
 
+            $timesheet->isApproved=0;
             $timesheet->save();
         }
 

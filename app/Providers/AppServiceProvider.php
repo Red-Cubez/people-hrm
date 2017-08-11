@@ -40,22 +40,25 @@ class AppServiceProvider extends ServiceProvider {
 
 		$this->app->bind(
 			'People\Services\Interfaces\ICompanyProjectService', 'People\Services\CompanyProjectService');
-        
-        $this->app->bind(
+
+		$this->app->bind(
 			'People\Services\Interfaces\IProjectResourceService', 'People\Services\ProjectResourceService');
 
-        $this->app->bind(
-            'People\Services\Interfaces\IProjectService', 'People\Services\ProjectService');
-        $this->app->bind(
-            'People\Services\Interfaces\IJobTitleService', 'People\Services\JobTitleService');
+		$this->app->bind(
+			'People\Services\Interfaces\IProjectService', 'People\Services\ProjectService');
+		$this->app->bind(
+			'People\Services\Interfaces\IJobTitleService', 'People\Services\JobTitleService');
 
-        $this->app->bind(
-            'People\Services\Interfaces\ICompanyHolidayService', 'People\Services\CompanyHolidayService');
+		$this->app->bind(
+			'People\Services\Interfaces\ICompanyHolidayService', 'People\Services\CompanyHolidayService');
 
-        $this->app->bind(
-            'People\Services\Interfaces\IProjectGrapher', 'People\Services\ProjectGrapher');
-        $this->app->bind(
-            'People\Services\Interfaces\IResourceFormValidator', 'People\Services\ResourceFormValidator');
+		$this->app->bind(
+			'People\Services\Interfaces\IProjectGrapher', 'People\Services\ProjectGrapher');
+		$this->app->bind(
+			'People\Services\Interfaces\IResourceFormValidator', 'People\Services\ResourceFormValidator');
+
+		$this->app->bind(
+			'People\Services\Interfaces\IEmployeeTimesheetService', 'People\Services\EmployeeTimesheetService');
 	}
 
 }

@@ -9,6 +9,7 @@
         </h3>
         <input type="week" name="timesheetDate" id="timesheetDate" class="" required>Select Date
     </div>
+    <input type="hidden" name="employeeId" value="{{$employeeId}}">
     <table class="table table-bordered">
         <thead>
         <tr>

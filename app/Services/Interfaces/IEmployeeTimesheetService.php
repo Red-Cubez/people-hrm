@@ -8,5 +8,7 @@ interface IEmployeeTimesheetService {
 	public function getDatesOfWeek($timesheetDate);
 	public function storeTimesheet($request);
 	public function validateTimesheet($request);
+	public function getTimesheetsOfEmployee($employeeId);
+	public function getWeekStartAndEndDate($timesheetDate);
 
 }

@@ -3,7 +3,6 @@
 namespace People\Http\Controllers;
 
 use Illuminate\Http\Request;
-use People\Models\EmployeeTimesheet;
 use People\Services\Interfaces\IEmployeeTimesheetService;
 
 class EmployeeTimesheetController extends Controller {
@@ -45,8 +44,9 @@ class EmployeeTimesheetController extends Controller {
 	}
 
 	public function showTimesheetForm($employeeId) {
-		$timesheets = EmployeeTimesheet::orderBy('created_at')->where('employee_id', $employeeId)->get();
-
+		$timesheets = $this->EmployeeTimesheetService->getTimesheetsOfEmployee($employeeId);
+		dd($timesheets);
+		$weekStartAndEndDate = $this->EmployeeTimesheetService->getWeekStartAndEndDate();
 		return view('employeeTimesheet.index',
 			[
 				'employeeId' => $employeeId,

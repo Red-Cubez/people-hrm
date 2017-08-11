@@ -13,15 +13,13 @@
                 Week No and Year
             </th>
             <th>
-               Billable
+               Week Start Date
             </th>
-            <th>
-               Non Billable
+           <th>
+               Week End Date
             </th>
 
-            <th>
-                Operations
-            </th>
+
             </thead>
             <!-- Table Body -->
             <tbody>
@@ -35,7 +33,21 @@
                 </td>
                 <td class="table-text">
                     <div>
-                        <?php  $billableDays = $timesheet->billableWeeklyTimeSheet; ?>
+                        {{ $timesheet->nonBillableWeeklyTimesheet }}
+                    </div>
+                </td>
+                <td>
+                <td class="table-text">
+                    <div>
+                        {{ $timesheet->nonBillableWeeklyTimesheet }}
+                    </div>
+                </td>
+                <td>
+
+
+                {{-- <td class="table-text">
+                    <div>
+                        <?php $billableDays = $timesheet->billableWeeklyTimeSheet;?>
                         {{$billableDays['friday']}}
                     </div>
                 </td>
@@ -44,7 +56,7 @@
                         {{ $timesheet->nonBillableWeeklyTimesheet }}
                     </div>
                 </td>
-                <td>
+                <td> --}}
 
                     <form action="{{ url('companyprojects/')}}" method="POST">
                         {{ csrf_field() }}

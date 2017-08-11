@@ -96,4 +96,8 @@ class EmployeeTimesheetService implements IEmployeeTimesheetService {
 
 		return $errors;
 	}
+	public function getTimesheetsOfEmployee($employeeId) {
+		$timesheets = EmployeeTimesheet::orderBy('created_at')->where('employee_id', $employeeId)->get();
+		return $timesheets;
+	}
 }

@@ -108,20 +108,6 @@
                 Update TimeSheet
             </i>
         </button>
-
-    {{--
-        <a href="/employeetimesheet/store">
-            --}}
-    {{--
-            <button class="btn btn-primary">
-                Add Timesheet--}}
-
-    {{--
-            </button>
-            --}}
-    {{--
-        </a>
-        --}}
     </input>
 </div>
 <script type="text/javascript">

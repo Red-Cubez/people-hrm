@@ -37,11 +37,14 @@
                     <th id="sunDiv">
                         Sun ({{$weekDates['sunday']}})
                     </th>
+                      <th id="sumDiv">
+                        Total
+                    </th>
                 </tr>
             </thead>
             <tbody>
 
-                <tr>
+                <tr id="billable">
                     <th scope="row">
                         Billable
                     </th>
@@ -67,8 +70,10 @@
                         <input class="form-control input-sm " id="sundayBillable" min="0" name="sundayBillable" type="number"
                          @if(isset($timesheet)) value="{{$billableWeeklyTimesheet['sunday']}}" @endif />
                     </td>
+                     <td id="sumBillable">
+                    </td>
                 </tr>
-                <tr>
+                <tr id="nonbillable">
                     <th scope="row">
                         Non Billable
                     </th>
@@ -92,6 +97,8 @@
                     </td>
                     <td>
                         <input class="form-control input-sm " id="sundayNonBillable" min="0" name="sundayNonBillable" type="number" @if(isset($timesheet)) value="{{$nonBillableWeeklyTimesheet['sunday']}}" @endif />
+                    </td>
+                     <td id="sumNonBillable">
                     </td>
                 </tr>
             </tbody>
@@ -119,59 +126,64 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function () {
-        $("#timesheetDate").change(function () {
-            var timesheetDate = $("#timesheetDate").val();
-            var employeeId = $("#employeeId").val();
-            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+        calculateBillableSum();
+        calculateNonBillableSum();
 
-            $.ajax({
-                type: 'POST',
-                url: '/employeetimesheet/timesheet/getweekdates',
-                data: {
-                    '_token': CSRF_TOKEN,
-                    'timesheetDate': timesheetDate,
-                    'employeeId': employeeId,
-                },
-                success: function (data) {
-                    if (data.isAlreadyEntered == true) {
-                        $("#alreadyEnteredMessage").remove();
-                        html = '<div id="alreadyEnteredMessage">You Have already entered timesheet for week ' + timesheetDate + '</div>';
-                        $("#timeSheetDateDiv").before(html);
-                        $("#timesheetDate").val(null);
+         $("#billable").change(function () {
 
-                    }
-                    if (data.isAlreadyEntered == false) {
-                        $("#alreadyEnteredMessage").remove();
-                        var monDiv = 'Mon (' + data.week.monday + ')';
-                        $("#monDiv").html(monDiv);
+                    calculateBillableSum();
 
-                        var tueDiv = 'Tue (' + data.week.tuesday + ')';
-                        $("#tueDiv").html(tueDiv);
-                        var wedDiv = 'Wed (' + data.week.wednesday + ')';
-                        $("#wedDiv").html(wedDiv);
-                        var thurDiv = 'Thur (' + data.week.thursday + ')';
-                        $("#thurDiv").html(thurDiv);
-                        var friDiv = 'Friday (' + data.week.friday + ')';
-                        $("#friDiv").html(friDiv);
-                        //var mon = 'Sat (' + data.week.saturday + ')';
-                        var satDiv = 'Sat (' + data.week.saturday + ')';
-                        $("#satDiv").html(satDiv);
-                        // var mon = 'Mon (' + data.week.monday + ')';
-                        var sunDiv = 'sun (' + data.week.sunday + ')';
-                        $("#sunDiv").html(sunDiv);
-                    }
-
-                },
-                error: function () {
-                    alert("Bad submit ");
-                }
-            });
-
-        });
     });
+         $("#nonbillable").change(function () {
+            calculateNonBillableSum();
+
+    });
+
+    });
+    function calculateBillableSum()
+    {
+        var mondayBillable=$("#mondayBillable").val();
+
+                       var tuesdayBillable = $("#tuesdayBillable").val();
+
+                       var wednesdayBillable =$("#wednesdayBillable").val();
+
+                       var thursdayBillable =$("#thursdayBillable").val();
+
+                       var fridayBillable =$("#fridayBillable").val();
+
+                       var saturdayBillable = $("#saturdayBillable").val();
+
+                       var sunBillableVal = $("#sundayBillable").val();
+                       var sum=Number(mondayBillable)+Number(tuesdayBillable)+Number(wednesdayBillable)+
+                               Number(thursdayBillable)+Number(fridayBillable)+Number(saturdayBillable)+
+                               Number(sunBillableVal);
+                       $("#sumBillable").html(sum);
+    }
+     function calculateNonBillableSum()
+    {
+                       var mondayNonBillable=$("#mondayNonBillable").val();
+
+                       var tuesdayNonBillable = $("#tuesdayNonBillable").val();
+
+                       var wednesdayNonBillable =$("#wednesdayNonBillable").val();
+
+                       var thursdayNonBillable =$("#thursdayNonBillable").val();
+
+                       var fridayNonBillable =$("#fridayNonBillable").val();
+
+                       var saturdayNonBillable = $("#saturdayNonBillable").val();
+
+                       var sunNonBillableVal = $("#sundayNonBillable").val();
+                       var sum=Number(mondayNonBillable)+Number(tuesdayNonBillable)+Number(wednesdayNonBillable)+
+                               Number(thursdayNonBillable)+Number(fridayNonBillable)+Number(saturdayNonBillable)+
+                               Number(sunNonBillableVal);
+                       $("#sumNonBillable").html(sum);
+    }
 </script>
 @section('pageSpecificScripts')
 @endsection
+
 
 
 

@@ -8,8 +8,9 @@
         <h3>
             TimeSheet
         </h3>
+        Select Date
         <input class="" id="timesheetDate" name="timesheetDate" required="" type="week">
-            Select Date
+
         </input>
     </div>
     <input name="employeeId" type="hidden" value="{{$employeeId}}">
@@ -41,7 +42,7 @@
                         Sun
                     </th>
                     <th id="sumDiv">
-                        Sum
+                        Total
                     </th>
                 </tr>
             </thead>
@@ -74,7 +75,7 @@
                     <td id="sumBillable">
                     </td>
                 </tr>
-                <tr nonbillable="">
+                <tr id="nonbillable">
                     <th scope="row">
                         Non Billable
                     </th>
@@ -99,6 +100,8 @@
                     <td>
                         <input class="form-control input-sm " id="sundayNonBillable" min="0" name="sundayNonBillable" type="number"/>
                     </td>
+                     <td id="sumNonBillable">
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -113,6 +116,8 @@
     $(document).ready(function () {
         $("#sumBillable").html(0);
         $("#sumBillable").val(0);
+         $("#sumNonBillable").html(0);
+        $("#sumNonBillable").val(0);
         var sum=0;
         $("#timesheetDate").change(function () {
             var timesheetDate = $("#timesheetDate").val();
@@ -165,25 +170,48 @@
         });
 
          $("#billable").change(function () {
-            // $("#sumBillable").html(0);
-            var sumBillable=$("#sumBillable").val();
-            sum=sum+sumBillable;
 
-                       var monDivVal=$("#monDiv").val();
+                       var mondayBillable=$("#mondayBillable").val();
 
-                       var tueDivVal = $("#tueDiv").val();
+                       var tuesdayBillable = $("#tuesdayBillable").val();
 
-                       var wedDiv = $("#wedDiv").val();
+                       var wednesdayBillable =$("#wednesdayBillable").val();
 
-                       var thurDivVal $("#thurDiv").val();
+                       var thursdayBillable =$("#thursdayBillable").val();
 
-                       var friDivVal =$("#friDiv").val();
+                       var fridayBillable =$("#fridayBillable").val();
 
-                       var satDivVal = $("#satDiv").val();
+                       var saturdayBillable = $("#saturdayBillable").val();
 
-                       var sunDivVal = $("#sunDiv").val();
+                       var sunBillableVal = $("#sundayBillable").val();
+                       var sum=Number(mondayBillable)+Number(tuesdayBillable)+Number(wednesdayBillable)+
+                               Number(thursdayBillable)+Number(fridayBillable)+Number(saturdayBillable)+
+                               Number(sunBillableVal);
+                       $("#sumBillable").html(sum);
 
     });
+         $("#nonbillable").change(function () {
+
+                       var mondayNonBillable=$("#mondayNonBillable").val();
+
+                       var tuesdayNonBillable = $("#tuesdayNonBillable").val();
+
+                       var wednesdayNonBillable =$("#wednesdayNonBillable").val();
+
+                       var thursdayNonBillable =$("#thursdayNonBillable").val();
+
+                       var fridayNonBillable =$("#fridayNonBillable").val();
+
+                       var saturdayNonBillable = $("#saturdayNonBillable").val();
+
+                       var sunNonBillableVal = $("#sundayNonBillable").val();
+                       var sum=Number(mondayNonBillable)+Number(tuesdayNonBillable)+Number(wednesdayNonBillable)+
+                               Number(thursdayNonBillable)+Number(fridayNonBillable)+Number(saturdayNonBillable)+
+                               Number(sunNonBillableVal);
+                       $("#sumNonBillable").html(sum);
+
+    });
+
     });
 </script>
 @section('pageSpecificScripts')

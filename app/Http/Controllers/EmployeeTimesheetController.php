@@ -30,7 +30,7 @@ class EmployeeTimesheetController extends Controller {
 		//using showTimesheetForm function
 	}
 
-	function getWeekDates(Request $request) {
+	public function getWeekDates(Request $request) {
 
 		$isAlreadyEntered = $this->EmployeeTimesheetService->isTimeSheetAlreadyEntered($request->timesheetDate, $request->employeeId);
 		$weekDates = $this->EmployeeTimesheetService->getDatesOfWeek(strtotime($request->timesheetDate));
@@ -43,10 +43,11 @@ class EmployeeTimesheetController extends Controller {
 
 	}
 
-	public function showTimesheetForm($employeeId) {
+	public function createTimesheet($employeeId) {
+		//    dd($employeeId);
 		$timesheets = $this->EmployeeTimesheetService->getTimesheetsOfEmployee($employeeId);
-		dd($timesheets);
-		$weekStartAndEndDate = $this->EmployeeTimesheetService->getWeekStartAndEndDate();
+
+		//$weekStartAndEndDate = $this->EmployeeTimesheetService->getWeekStartAndEndDate();
 		return view('employeeTimesheet.index',
 			[
 				'employeeId' => $employeeId,
@@ -66,6 +67,7 @@ class EmployeeTimesheetController extends Controller {
 			$this->EmployeeTimesheetService->storeTimesheet($request);
 
 		}
+		return back();
 
 	}
 
@@ -76,7 +78,7 @@ class EmployeeTimesheetController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show($id) {
-		//
+
 	}
 
 	/**
@@ -86,7 +88,21 @@ class EmployeeTimesheetController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function edit($id) {
-		//
+
+		$timesheet = $this->EmployeeTimesheetService->getEmployeeTimesheet($id);
+		$billableWeeklyTimesheet = json_decode($timesheet->billableWeeklyTimesheet, true);
+		$nonBillableWeeklyTimesheet = json_decode($timesheet->nonBillableWeeklyTimesheet, true);
+		$weekDates = $this->EmployeeTimesheetService->getDatesOfWeek(strtotime($timesheet->weekNoAndYear));
+
+		return view('employeeTimesheet.edit',
+			[
+
+				'timesheet' => $timesheet,
+				'billableWeeklyTimesheet' => $billableWeeklyTimesheet,
+				'nonBillableWeeklyTimesheet' => $nonBillableWeeklyTimesheet,
+				'weekDates' => $weekDates,
+
+			]);
 	}
 
 	/**
@@ -97,7 +113,17 @@ class EmployeeTimesheetController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function update(Request $request, $id) {
-		//
+		$errors = $this->EmployeeTimesheetService->validateTimesheet($request);
+
+		if ($errors) {
+			return back()->withErrors('Please Enter All Required Fields');
+		} else {
+
+			$employeeId = $this->EmployeeTimesheetService->updateTimesheet($request, $id);
+			return redirect('employeetimesheet/' . $employeeId . '/create');
+
+		}
+
 	}
 
 	/**

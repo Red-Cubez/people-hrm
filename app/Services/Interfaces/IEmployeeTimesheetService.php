@@ -7,8 +7,9 @@ interface IEmployeeTimesheetService {
 	public function isTimeSheetAlreadyEntered($weekAndYear, $employeeId);
 	public function getDatesOfWeek($timesheetDate);
 	public function storeTimesheet($request);
+	public function updateTimesheet($request, $id);
 	public function validateTimesheet($request);
 	public function getTimesheetsOfEmployee($employeeId);
-	public function getWeekStartAndEndDate($timesheetDate);
+	public function getEmployeeTimesheet($timesheetId);
 
 }

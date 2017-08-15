@@ -145,7 +145,7 @@
                             {{--<form class="panel-body" action="{{ url('employeetimeline/') }}" method="POST">--}}
                                 {{--{{ csrf_field() }}--}}
                                 {{--{{ method_field('POST') }}--}}
-                            <a href="/employee/{{$employeeModel->employeeProfile->employeeId}}/employeetimesheet/create">
+                            <a href="/employeetimesheet/{{$employeeModel->employeeProfile->employeeId}}/create">
                                 <button class="btn btn-primary"> Add Timesheet
 
                                 </button></a>

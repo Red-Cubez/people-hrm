@@ -1,0 +1,22 @@
+{
+    "name": "ujaved/timesheet",
+    "description": "my first package",
+    "type": "laravel",
+    "license": "n",
+    "authors": [
+        {
+            "name": "Usman Javed",
+            "email": "usman.4601@gmail.com"
+        }
+    ],
+    "autoload":{
+        "psr-4":{
+            "Usman\\Timesheet\\":"src/"
+        }
+
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "illuminate/support": "~5"
+    }
+}

@@ -1,16 +1,16 @@
 <?php
 
-namespace People\Models;
+// namespace People\Models;
 
-use Illuminate\Database\Eloquent\Model;
+// use Illuminate\Database\Eloquent\Model;
 
-class EmployeeTimesheet extends Model
-{
-    public function employee() {
-        return $this->belongsTo('People\Models\EmployeeTimesheet');
-    }
-    protected $casts = [
-        'billableWeeklyTimeSheet' => 'array',
-        'nonBillableWeeklyTimeSheet' => 'array',
-    ];
-}
+// class EmployeeTimesheet extends Model
+// {
+//     public function employee() {
+//         return $this->belongsTo('People\Models\EmployeeTimesheet');
+//     }
+//     protected $casts = [
+//         'billableWeeklyTimeSheet' => 'array',
+//         'nonBillableWeeklyTimeSheet' => 'array',
+//     ];
+// }

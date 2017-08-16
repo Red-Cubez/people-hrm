@@ -78,9 +78,9 @@ Route::get('/clients/{clientid}/clientprojects', 'ClientProjectController@manage
 Route::resource('departments', 'DepartmentController');
 Route::resource('companies', 'CompanyController');
 
-Route::get('/employeetimesheet/{employeeId}/create/', 'EmployeeTimesheetController@createTimesheet');
-Route::post('/employeetimesheet/timesheet/getweekdates', 'EmployeeTimesheetController@getWeekDates');
-Route::resource('employeetimesheet', 'EmployeeTimesheetController');
+// Route::get('/employeetimesheet/{employeeId}/create/', 'EmployeeTimesheetController@createTimesheet');
+// Route::post('/employeetimesheet/timesheet/getweekdates', 'EmployeeTimesheetController@getWeekDates');
+// Route::resource('employeetimesheet', 'EmployeeTimesheetController');
 
 Route::get('/clientprojects/{clientProjectid}/projectresources', 'ProjectResourceController@manageressources');
 

@@ -22,7 +22,8 @@
             "database"
         ],
         "psr-4": {
-            "People\\": "app/"
+            "People\\": "app/",
+            "Usman\\Timesheet\\": "packages/usman/timesheet/src"
         }
     },
     "autoload-dev": {

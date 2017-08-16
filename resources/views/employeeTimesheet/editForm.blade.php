@@ -1,114 +1,120 @@
 <div class="panel panel-default">
-    @if($errors->any())
-    <h4>
-        {{$errors->first()}}
-    </h4>
+    @if(count($errors)>0)
+    <div class="col-md-12 pull-left">
+        <div class="form-group ">
+            <div class="alert alert-error">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                    <li>
+                        {{ $error }}
+                    </li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+    </div>
     @endif
     <div class="panel-heading" id="timeSheetDateDiv">
         <h3>
             TimeSheet
         </h3>
-
     </div>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>
-                        #
-                    </th>
-                    <th id="monDiv">
-                        Mon ({{$weekDates['monday']}})
-                    </th>
-                    <th id="tueDiv">
-                        Tue ({{$weekDates['tuesday']}})
-                    </th>
-                    <th id="wedDiv">
-                        Wed ({{$weekDates['wednesday']}})
-                    </th>
-                    <th id="thurDiv">
-                        Thur ({{$weekDates['thursday']}})
-                    </th>
-                    <th id="friDiv">
-                        Friday ({{$weekDates['friday']}})
-                    </th>
-                    <th id="satDiv">
-                        Sat ({{$weekDates['saturday']}})
-                    </th>
-                    <th id="sunDiv">
-                        Sun ({{$weekDates['sunday']}})
-                    </th>
-                      <th id="sumDiv">
-                        Total
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-
-                <tr id="billable">
-                    <th scope="row">
-                        Billable
-                    </th>
-                    <td>
-                        <input class="form-control input-sm " id="mondayBillable" min="0" name="mondayBillable" required="" type="number"  @if(isset($timesheet)) value="{{$billableWeeklyTimesheet['monday']}}" @endif/>
-                    </td>
-                    <td>
-                        <input class="form-control input-sm " id="tuesdayBillable" min="0" name="tuesdayBillable" required="" type="number"  @if(isset($timesheet)) value="{{$billableWeeklyTimesheet['tuesday']}}" @endif/>
-                    </td>
-                    <td>
-                        <input class="form-control input-sm " id="wednesdayBillable" min="0" name="wednesdayBillable" required="" type="number"  @if(isset($timesheet)) value="{{$billableWeeklyTimesheet['wednesday']}}" @endif/>
-                    </td>
-                    <td>
-                        <input class="form-control input-sm " id="thursdayBillable" min="0" name="thursdayBillable" required="" type="number"  @if(isset($timesheet)) value="{{$billableWeeklyTimesheet['thursday']}}" @endif/>
-                    </td>
-                    <td>
-                        <input class="form-control input-sm " id="fridayBillable" min="0" name="fridayBillable" required="" type="number"  @if(isset($timesheet)) value="{{$billableWeeklyTimesheet['friday']}}" @endif/>
-                    </td>
-                    <td>
-                        <input class="form-control input-sm " id="saturdayBillable" min="0" name="saturdayBillable" type="number"  @if(isset($timesheet)) value="{{$billableWeeklyTimesheet['saturday']}}" @endif />
-                    </td>
-                    <td>
-                        <input class="form-control input-sm " id="sundayBillable" min="0" name="sundayBillable" type="number"
-                         @if(isset($timesheet)) value="{{$billableWeeklyTimesheet['sunday']}}" @endif />
-                    </td>
-                     <td id="sumBillable">
-                    </td>
-                </tr>
-                <tr id="nonbillable">
-                    <th scope="row">
-                        Non Billable
-                    </th>
-                    <td>
-                        <input class="form-control input-sm " id="mondayNonBillable" min="0" name="mondayNonBillable" type="number"  @if(isset($timesheet)) value="{{$nonBillableWeeklyTimesheet['monday']}}" @endif/>
-                    </td>
-                    <td>
-                        <input class="form-control input-sm " id="tuesdayNonBillable" min="0" name="tuesdayNonBillable" type="number" @if(isset($timesheet)) value="{{$nonBillableWeeklyTimesheet['tuesday']}}" @endif />
-                    </td>
-                    <td>
-                        <input class="form-control input-sm " id="wednesdayNonBillable" min="0" name="wednesdayNonBillable" type="number" @if(isset($timesheet)) value="{{$nonBillableWeeklyTimesheet['wednesday']}}" @endif />
-                    </td>
-                    <td>
-                        <input class="form-control input-sm " id="thursdayNonBillable" min="0" name="thursdayNonBillable" type="number" @if(isset($timesheet)) value="{{$nonBillableWeeklyTimesheet['thursday']}}" @endif />
-                    </td>
-                    <td>
-                        <input class="form-control input-sm " id="fridayNonBillable" min="0" name="fridayNonBillable" type="number" @if(isset($timesheet)) value="{{$nonBillableWeeklyTimesheet['friday']}}" @endif />
-                    </td>
-                    <td>
-                        <input class="form-control input-sm " id="saturdayNonBillable" min="0" name="saturdayNonBillable" type="number" @if(isset($timesheet)) value="{{$nonBillableWeeklyTimesheet['saturday']}}" @endif />
-                    </td>
-                    <td>
-                        <input class="form-control input-sm " id="sundayNonBillable" min="0" name="sundayNonBillable" type="number" @if(isset($timesheet)) value="{{$nonBillableWeeklyTimesheet['sunday']}}" @endif />
-                    </td>
-                     <td id="sumNonBillable">
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <button class="btn btn-primary" type="submit">
-            <i class="fa fa-trash">
-                Update TimeSheet
-            </i>
-        </button>
-    </input>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    #
+                </th>
+                <th id="monDiv">
+                    Mon ({{$weekDates['monday']}})
+                </th>
+                <th id="tueDiv">
+                    Tue ({{$weekDates['tuesday']}})
+                </th>
+                <th id="wedDiv">
+                    Wed ({{$weekDates['wednesday']}})
+                </th>
+                <th id="thurDiv">
+                    Thur ({{$weekDates['thursday']}})
+                </th>
+                <th id="friDiv">
+                    Friday ({{$weekDates['friday']}})
+                </th>
+                <th id="satDiv">
+                    Sat ({{$weekDates['saturday']}})
+                </th>
+                <th id="sunDiv">
+                    Sun ({{$weekDates['sunday']}})
+                </th>
+                <th id="sumDiv">
+                    Total
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr id="billable">
+                <th scope="row">
+                    Billable
+                </th>
+                <td>
+                    <input class="form-control input-sm " id="mondayBillable" min="0" name="mondayBillable" required="" type="number" value="{{$billableWeeklyTimesheet['monday']}}"/>
+                </td>
+                <td>
+                    <input class="form-control input-sm " id="tuesdayBillable" min="0" name="tuesdayBillable" required="" type="number" value="{{$billableWeeklyTimesheet['tuesday']}}"/>
+                </td>
+                <td>
+                    <input class="form-control input-sm " id="wednesdayBillable" min="0" name="wednesdayBillable" required="" type="number" value="{{$billableWeeklyTimesheet['wednesday']}}"/>
+                </td>
+                <td>
+                    <input class="form-control input-sm " id="thursdayBillable" min="0" name="thursdayBillable" required="" type="number" value="{{$billableWeeklyTimesheet['thursday']}}"/>
+                </td>
+                <td>
+                    <input class="form-control input-sm " id="fridayBillable" min="0" name="fridayBillable" required="" type="number" value="{{$billableWeeklyTimesheet['friday']}}"/>
+                </td>
+                <td>
+                    <input class="form-control input-sm " id="saturdayBillable" min="0" name="saturdayBillable" type="number" value="{{$billableWeeklyTimesheet['saturday']}}"/>
+                </td>
+                <td>
+                    <input class="form-control input-sm " id="sundayBillable" min="0" name="sundayBillable" type="number" value="{{$billableWeeklyTimesheet['sunday']}}"/>
+                </td>
+                <td id="sumBillable">
+                </td>
+            </tr>
+            <tr id="nonbillable">
+                <th scope="row">
+                    Non Billable
+                </th>
+                <td>
+                    <input class="form-control input-sm " id="mondayNonBillable" min="0" name="mondayNonBillable" type="number" value="{{$nonBillableWeeklyTimesheet['monday']}}"/>
+                </td>
+                <td>
+                    <input class="form-control input-sm " id="tuesdayNonBillable" min="0" name="tuesdayNonBillable" type="number" value="{{$nonBillableWeeklyTimesheet['tuesday']}}"/>
+                </td>
+                <td>
+                    <input class="form-control input-sm " id="wednesdayNonBillable" min="0" name="wednesdayNonBillable" type="number" value="{{$nonBillableWeeklyTimesheet['wednesday']}}"/>
+                </td>
+                <td>
+                    <input class="form-control input-sm " id="thursdayNonBillable" min="0" name="thursdayNonBillable" type="number" value="{{$nonBillableWeeklyTimesheet['thursday']}}"/>
+                </td>
+                <td>
+                    <input class="form-control input-sm " id="fridayNonBillable" min="0" name="fridayNonBillable" type="number" value="{{$nonBillableWeeklyTimesheet['friday']}}"/>
+                </td>
+                <td>
+                    <input class="form-control input-sm " id="saturdayNonBillable" min="0" name="saturdayNonBillable" type="number" value="{{$nonBillableWeeklyTimesheet['saturday']}}"/>
+                </td>
+                <td>
+                    <input class="form-control input-sm " id="sundayNonBillable" min="0" name="sundayNonBillable" type="number" value="{{$nonBillableWeeklyTimesheet['sunday']}}"/>
+                </td>
+                <td id="sumNonBillable">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <button class="btn btn-primary" type="submit">
+        <i class="fa fa-trash">
+            Update TimeSheet
+        </i>
+    </button>
 </div>
 <script type="text/javascript">
     $(document).ready(function () {
@@ -169,43 +175,3 @@
 </script>
 @section('pageSpecificScripts')
 @endsection
-
-
-
-
-
-
-
-
-
-
-
-
-{{-- @extends('layouts.app')
-
-@section('content')
-<main>
-    <div class="container">
-        @if($timesheet->isApproved==0)
-        <div class="row">
-                <div class="col-sm-12">
-                    <form class="table table-striped task-table" action="{{ url('employeetimesheet/'.$timesheet->id) }}" method="POST">
-
-                        {{ csrf_field() }}
-                        {{ method_field('PUT') }}
-                        @include('employeeTimesheet.create')
-                    </form>
-                </div>
-            </input>
-        </div>
-        @elseif($timesheet->isApproved==1)
-        <div class="row">
-            <div class="col-sm-12">
-                @include('employeeTimesheet.showEmployeeTimesheets')
-            </div>
-        </div>
-        @endif
-    </div>
-</main>
-@endsection
- --}}

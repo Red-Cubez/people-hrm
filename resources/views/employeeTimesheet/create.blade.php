@@ -1,8 +1,16 @@
 <div class="panel panel-default">
-    @if($errors->any())
-    <h4>
-        {{$errors->first()}}
-    </h4>
+    @if(count($errors)>0)
+        <div class="col-md-12 pull-left">
+            <div class="form-group ">
+                <div class="alert alert-error">
+                    <ul>
+                    @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                </div>
+            </div>
+        </div>
     @endif
     <div class="panel-heading" id="timeSheetDateDiv">
         <h3>

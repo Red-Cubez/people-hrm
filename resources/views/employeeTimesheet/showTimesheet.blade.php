@@ -34,9 +34,9 @@ $nonBillableSum = 0;
                 <th id="sunDiv">
                     Sun ({{$weekDates['sunday']}})
                 </th>
-                   <th id="sumDiv">
-                        Total
-                    </th>
+                <th id="sumDiv">
+                    Total
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -45,7 +45,6 @@ $nonBillableSum = 0;
                     Billable
                 </th>
                 <td>
-
                     {{$billableWeeklyTimesheet['monday']}}
                     <?php $billableSum = $billableSum + $billableWeeklyTimesheet['monday'];?>
                 </td>
@@ -73,8 +72,8 @@ $nonBillableSum = 0;
                     {{$billableWeeklyTimesheet['sunday']}}
                     <?php $billableSum = $billableSum + $billableWeeklyTimesheet['sunday'];?>
                 </td>
-                 <td id="sumBillable">
-                    </td>
+                <td id="sumBillable">
+                </td>
             </tr>
             <tr id="nonbillable">
                 <th scope="row">
@@ -82,34 +81,34 @@ $nonBillableSum = 0;
                 </th>
                 <td>
                     {{$nonBillableWeeklyTimesheet['monday']}}
-                     <?php $nonBillableSum = $nonBillableSum + $nonBillableWeeklyTimesheet['monday'];?>
+                    <?php $nonBillableSum = $nonBillableSum + $nonBillableWeeklyTimesheet['monday'];?>
                 </td>
                 <td>
                     {{$nonBillableWeeklyTimesheet['tuesday']}}
-                     <?php $nonBillableSum = $nonBillableSum + $nonBillableWeeklyTimesheet['tuesday'];?>
+                    <?php $nonBillableSum = $nonBillableSum + $nonBillableWeeklyTimesheet['tuesday'];?>
                 </td>
                 <td>
                     {{$nonBillableWeeklyTimesheet['wednesday']}}
-                     <?php $nonBillableSum = $nonBillableSum + $nonBillableWeeklyTimesheet['wednesday'];?>
+                    <?php $nonBillableSum = $nonBillableSum + $nonBillableWeeklyTimesheet['wednesday'];?>
                 </td>
                 <td>
                     {{$nonBillableWeeklyTimesheet['thursday']}}
-                     <?php $nonBillableSum = $nonBillableSum + $nonBillableWeeklyTimesheet['thursday'];?>
+                    <?php $nonBillableSum = $nonBillableSum + $nonBillableWeeklyTimesheet['thursday'];?>
                 </td>
                 <td>
                     {{$nonBillableWeeklyTimesheet['friday']}}
-                     <?php $nonBillableSum = $nonBillableSum + $nonBillableWeeklyTimesheet['friday'];?>
+                    <?php $nonBillableSum = $nonBillableSum + $nonBillableWeeklyTimesheet['friday'];?>
                 </td>
                 <td>
                     {{$nonBillableWeeklyTimesheet['saturday']}}
-                     <?php $nonBillableSum = $nonBillableSum + $nonBillableWeeklyTimesheet['saturday'];?>
+                    <?php $nonBillableSum = $nonBillableSum + $nonBillableWeeklyTimesheet['saturday'];?>
                 </td>
                 <td>
                     {{$nonBillableWeeklyTimesheet['sunday']}}
-                     <?php $nonBillableSum = $nonBillableSum + $nonBillableWeeklyTimesheet['sunday'];?>
+                    <?php $nonBillableSum = $nonBillableSum + $nonBillableWeeklyTimesheet['sunday'];?>
                 </td>
-                 <td id="sumNonBillable">
-                 </td>
+                <td id="sumNonBillable">
+                </td>
             </tr>
         </tbody>
     </table>
@@ -122,8 +121,6 @@ $nonBillableSum = 0;
          var sum= {{$nonBillableSum}}
          $("#sumNonBillable").html(sum);
     });
-
 </script>
 @section('pageSpecificScripts')
 @endsection
-

@@ -132,44 +132,6 @@ class EmployeeTimesheetService implements IEmployeeTimesheetService {
 		return $timesheet->employee_id;
 
 	}
-	public function validateTimesheet($request) {
-		$errors = false;
-		if (isset($request->employeeId)) {
-			if ($request->timesheetDate == null) {
-				$errors = true;
-			}
-		}
-
-		if ($request->mondayBillable == null) {
-			$errors = true;
-		}
-
-		if ($request->tuesdayBillable == null) {
-			$errors = true;
-		}
-
-		if ($request->wednesdayBillable == null) {
-			$errors = true;
-		}
-
-		if ($request->thursdayBillable == null) {
-			$errors = true;
-		}
-
-		if ($request->fridayBillable == null) {
-			$errors = true;
-		}
-
-		// if ($request->saturdayBillable == null) {
-		//     $errors = true;
-		// }
-
-		// if ($request->sundayBillable == null) {
-		//     $errors = true;
-		// }
-
-		return $errors;
-	}
 
 	public function getTimesheetsOfEmployee($employeeId) {
 

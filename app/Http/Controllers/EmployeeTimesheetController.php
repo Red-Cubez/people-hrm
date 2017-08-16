@@ -44,10 +44,9 @@ class EmployeeTimesheetController extends Controller {
 	}
 
 	public function createTimesheet($employeeId) {
-		//    dd($employeeId);
+
 		$timesheets = $this->EmployeeTimesheetService->getTimesheetsOfEmployee($employeeId);
 
-		//$weekStartAndEndDate = $this->EmployeeTimesheetService->getWeekStartAndEndDate();
 		return view('employeeTimesheet.index',
 			[
 				'employeeId' => $employeeId,
@@ -58,15 +57,18 @@ class EmployeeTimesheetController extends Controller {
 
 	public function store(Request $request) {
 
-		$errors = $this->EmployeeTimesheetService->validateTimesheet($request);
+		$this->validate($request, array(
+			'timesheetDate' => 'required',
+			'mondayBillable' => 'required|min:0|max:40',
+			'tuesdayBillable' => 'required|min:0|max:40',
+			'wednesdayBillable' => 'required|min:0|max:40',
+			'thursdayBillable' => 'required|min:0|max:40',
+			'fridayBillable' => 'required|min:0|max:40',
 
-		if ($errors) {
-			return back()->withErrors('Please Enter All Required Fields');
-		} else {
+		));
 
-			$this->EmployeeTimesheetService->storeTimesheet($request);
+		$this->EmployeeTimesheetService->storeTimesheet($request);
 
-		}
 		return back();
 
 	}
@@ -113,16 +115,19 @@ class EmployeeTimesheetController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function update(Request $request, $id) {
-		$errors = $this->EmployeeTimesheetService->validateTimesheet($request);
 
-		if ($errors) {
-			return back()->withErrors('Please Enter All Required Fields');
-		} else {
+		$this->validate($request, array(
 
-			$employeeId = $this->EmployeeTimesheetService->updateTimesheet($request, $id);
-			return redirect('employeetimesheet/' . $employeeId . '/create');
+			'mondayBillable' => 'required|min:0|max:40',
+			'tuesdayBillable' => 'required|min:0|max:40',
+			'wednesdayBillable' => 'required|min:0|max:40',
+			'thursdayBillable' => 'required|min:0|max:40',
+			'fridayBillable' => 'required|min:0|max:40',
 
-		}
+		));
+
+		$employeeId = $this->EmployeeTimesheetService->updateTimesheet($request, $id);
+		return redirect('employeetimesheet/' . $employeeId . '/create');
 
 	}
 

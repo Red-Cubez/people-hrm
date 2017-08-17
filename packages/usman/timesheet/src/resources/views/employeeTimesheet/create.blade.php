@@ -1,19 +1,18 @@
-
 <div class="panel panel-default">
-@if(isset($errors))
     @if(count($errors)>0)
-        <div class="col-md-12 pull-left">
-            <div class="form-group ">
-                <div class="alert alert-error">
-                    <ul>
+    <div class="col-md-12 pull-left">
+        <div class="form-group ">
+            <div class="alert alert-error">
+                <ul>
                     @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
+                    <li>
+                        {{ $error }}
+                    </li>
                     @endforeach
                 </ul>
-                </div>
             </div>
         </div>
-    @endif
+    </div>
     @endif
     <div class="panel-heading" id="timeSheetDateDiv">
         <h3>
@@ -21,7 +20,6 @@
         </h3>
         Select Date
         <input class="" id="timesheetDate" name="timesheetDate" required="" type="week">
-
         </input>
     </div>
     <input name="employeeId" type="hidden" value="{{$employeeId}}">
@@ -111,7 +109,7 @@
                     <td>
                         <input class="form-control input-sm " id="sundayNonBillable" min="0" name="sundayNonBillable" type="number"/>
                     </td>
-                     <td id="sumNonBillable">
+                    <td id="sumNonBillable">
                     </td>
                 </tr>
             </tbody>

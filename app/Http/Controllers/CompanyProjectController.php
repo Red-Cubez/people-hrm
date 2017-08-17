@@ -24,18 +24,16 @@ class CompanyProjectController extends Controller
     public $ProjectService;
     public $ProjectFormValidator;
 
-
     public function __construct(ICompanyProjectService $companyProjectService,
-                                ICompanyProjectResourceService $companyProjectResourceService,
-                                IProjectGrapher $ProjectGrapher, IProjectService $ProjectService,
-                                IResourceFormValidator $projectFormValidator)
-    {
+        ICompanyProjectResourceService $companyProjectResourceService,
+        IProjectGrapher $ProjectGrapher, IProjectService $ProjectService,
+        IResourceFormValidator $projectFormValidator) {
 
-        $this->CompanyProjectService = $companyProjectService;
+        $this->CompanyProjectService         = $companyProjectService;
         $this->CompanyProjectResourceService = $companyProjectResourceService;
-        $this->ProjectGrapher = $ProjectGrapher;
-        $this->ProjectService = $ProjectService;
-        $this->ProjectFormValidator = $projectFormValidator;
+        $this->ProjectGrapher                = $ProjectGrapher;
+        $this->ProjectService                = $ProjectService;
+        $this->ProjectFormValidator          = $projectFormValidator;
     }
 
     public function index()
@@ -72,7 +70,7 @@ class CompanyProjectController extends Controller
         return response()->json(
             [
                 'formErrors' => $formErrors,
-                'action'=> $request->action,
+                'action'     => $request->action,
             ]);
 
     }
@@ -85,7 +83,7 @@ class CompanyProjectController extends Controller
             [
                 'projectId' => $companyProjectId,
             ]);
-      //  return redirect('/companyprojects/' . $companyProjectId);
+        //  return redirect('/companyprojects/' . $companyProjectId);
     }
 
     /**
@@ -101,18 +99,17 @@ class CompanyProjectController extends Controller
 
         $companyProject = $this->CompanyProjectService->viewCompanyProject($companyProjectId);
 
-
         $projectTimeLines = $this->ProjectGrapher->setupProjectCost($companyProject, $currentProjectResources, true);
         $projectTotalCost = $this->ProjectGrapher->calculateProjectTotalCost($projectTimeLines);
         $resourcesDetails = $this->ProjectGrapher->getResourcesTotalCostForProject($companyProject, $currentProjectResources, $projectTotalCost);
 
-        $companyProject->cost = $projectTotalCost;
-        $isOnBudget = $this->ProjectService->isProjectOnBudget($projectTotalCost, $companyProject->budget);
+        $companyProject->cost              = $projectTotalCost;
+        $isOnBudget                        = $this->ProjectService->isProjectOnBudget($projectTotalCost, $companyProject->budget);
         $companyProject->isProjectOnBudget = $isOnBudget;
 
         return view('companyProjects/viewCompanyProject',
             [
-                'project' => $companyProject,
+                'project'          => $companyProject,
                 'projectResources' => $currentProjectResources,
                 'companyProjectId' => $companyProjectId,
                 'projectTimeLines' => $projectTimeLines,

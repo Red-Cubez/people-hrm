@@ -1,6 +1,5 @@
 
 <div class="panel panel-default">
-@if(isset($errors))
     @if(count($errors)>0)
     <div class="col-md-12 pull-left">
         <div class="form-group ">
@@ -16,7 +15,6 @@
         </div>
     </div>
     @endif
-     @endif
     <div class="panel-heading" id="timeSheetDateDiv">
         <h3>
             TimeSheet

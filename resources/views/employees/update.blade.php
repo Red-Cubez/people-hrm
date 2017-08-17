@@ -4,13 +4,14 @@
     <!-- Display Validation Errors -->
     @include('common.errors')
     <!-- New Employee Form -->
-    <form action="{{ url('employees/'.$editEmployeeModel->employeeProfile->employeeId)}}"
-      class="form-horizontal"
-      method="POST">
+    <form id="employeeForm" name="employeeForm" class="form-horizontal">
       {{ csrf_field() }}
-      {{ method_field('PUT') }}
+
+      <input type="hidden" name="action" id="action" value="update">
+      <input type="hidden" name="employeeId" id="employeeId" value="{{$editEmployeeModel->employeeProfile->employeeId}}">
       <!-- Employee Name -->
       @include('employees/employeeForm')
     </form>
+
   </div>
   @endsection

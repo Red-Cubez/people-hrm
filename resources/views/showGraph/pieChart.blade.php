@@ -1,3 +1,4 @@
+
 <canvas id="pieChart" style="height: 30px;"></canvas>
 <script type="text/javascript">
 
@@ -61,6 +62,7 @@
     }
 
 </script>
+
 
 {{--<div id="pieChart"></div>--}}
 {{--<script>--}}

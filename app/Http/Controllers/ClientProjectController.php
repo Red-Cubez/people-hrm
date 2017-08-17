@@ -9,6 +9,7 @@ use People\Services\Interfaces\IClientProjectService;
 use People\Services\Interfaces\IProjectGrapher;
 use People\Services\Interfaces\IProjectService;
 use People\Services\Interfaces\IProjectResourceService;
+use People\Services\Interfaces\IResourceFormValidator;
 
 class ClientProjectController extends Controller
 {
@@ -22,18 +23,22 @@ class ClientProjectController extends Controller
     public $ProjectGrapher;
     public $ProjectService;
     public $ProjectResourceService;
+    public $ProjectFormValidator;
     public function __construct(IClientProjectService $clientProjectService,IProjectGrapher $projectGrapher,
-                                IProjectService $projectService,IProjectResourceService $projectResourceService)
+                                IProjectService $projectService,IProjectResourceService $projectResourceService,
+                                IResourceFormValidator $projectFormValidator)
     {
 
         $this->ClientProjectService = $clientProjectService;
         $this->ProjectGrapher = $projectGrapher;
         $this->ProjectService =$projectService;
         $this->ProjectResourceService =$projectResourceService;
+        $this->ProjectFormValidator = $projectFormValidator;
     }
 
     public function index(Request $request)
     {
+
 
         $clientProjects = $this->ClientProjectService->getClientProjects();
 
@@ -60,12 +65,28 @@ class ClientProjectController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
+    public function validateProjectForm(Request $request)
+    {
+        $formErrors = $this->ProjectFormValidator->validateProjectForm($request);
+
+        return response()->json(
+            [
+                'formErrors' => $formErrors,
+                'action'=> $request->action,
+            ]);
+
+    }
     public function store(Request $request)
     {
 
         $clientProject = $this->ClientProjectService->createClientProject($request);
 
-        return redirect('/clients/' . $clientProject->client_id);
+        return response()->json(
+            [
+                'projectId' => $clientProject->id,
+            ]);
+
+
     }
 
     /**
@@ -80,7 +101,7 @@ class ClientProjectController extends Controller
     {
 
         $clientProjectModel = $this->ClientProjectService->viewClientProject($clientProjectId);
-        $clientProject=$this->ClientProjectService->getClientProjectDetails($clientProjectId);
+        $clientProjects=$this->ClientProjectService->getClientProjectDetails($clientProjectId);
 
 //        $currentProjectResources = ProjectResource::where('client_project_id', $clientProjectId)->orderBy('created_at', 'asc')
 //            ->get();
@@ -89,6 +110,8 @@ class ClientProjectController extends Controller
 
         $projectResources=$this->ProjectService->mapResourcesDetailsToClass($currentProjectResources,false);
         $projectTimeLines = $this->ProjectGrapher->setupProjectCost($clientProjectModel, $projectResources, false);
+
+
         $projectTotalCost = $this->ProjectGrapher->calculateProjectTotalCost($projectTimeLines);
         $resourcesDetails = $this->ProjectGrapher->getResourcesTotalCostForProject($clientProjectModel, $projectResources,$projectTotalCost);
 
@@ -102,6 +125,7 @@ class ClientProjectController extends Controller
                 'projectTimeLines' => $projectTimeLines,
                 'resourcesDetails' => $resourcesDetails,
                 'projectTotalCost' => $projectTotalCost,
+                //'clientProjects'=>$clientProjects,
 
             ]);
 
@@ -131,9 +155,14 @@ class ClientProjectController extends Controller
     public function update(Request $request, ClientProject $clientproject)
     {
 
+
         $clientid = $this->ClientProjectService->updateClientProject($request, $clientproject);
 
-        return redirect('/clientprojects/' . $clientproject->id);
+//        return response()->json(
+//            [
+//                'projectId' => $clientProject->clientproject->id,
+//            ]);
+        //return redirect('/clientprojects/' . $clientproject->id);
 
     }
 

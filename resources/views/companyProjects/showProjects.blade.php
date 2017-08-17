@@ -87,15 +87,19 @@
                                 </button>
                             </input>
                         </form>
-                        <form action="{{ url('companyprojects/'.$project->projectId) }}" method="POST">
-                            {{ csrf_field() }}
-                                {{ method_field('GET') }}
-                            <button class="btn btn-primary" type="submit">
-                                <i class="fa fa-trash">
-                                    View
-                                </i>
-                            </button>
-                        </form>
+                        <a href="/companyprojects/{{$project->projectId}}">
+                            <button class="btn btn-primary"> View
+
+                            </button></a>
+                        {{--<form action="{{ url('companyprojects/'.$project->projectId) }}" method="POST">--}}
+                            {{--{{ csrf_field() }}--}}
+                                {{--{{ method_field('GET') }}--}}
+                            {{--<button class="btn btn-primary" type="submit">--}}
+                                {{--<i class="fa fa-trash">--}}
+                                    {{--View--}}
+                                {{--</i>--}}
+                            {{--</button>--}}
+                        {{--</form>--}}
                     </td>
                 </tr>
                 @endforeach
@@ -105,13 +109,17 @@
             </tbody>
         </table>
     </div>
-    <form action="{{ url('/companies/'.$companyProfileModel->companyId.'/companyprojects') }}" method="POST">
-        {{ csrf_field() }}
-            {{ method_field('GET') }}
-        <button class="btn btn-primary" type="submit">
-            <i class="fa fa-trash">
-                Add New Projects
-            </i>
-        </button>
-    </form>
+    <a href="/companies/{{$companyProfileModel->companyId}}/companyprojects">
+        <button class="btn btn-primary"> Add New Projects
+
+        </button></a>
+    {{--<form action="{{ url('/companies/'.$companyProfileModel->companyId.'/companyprojects') }}" method="POST">--}}
+        {{--{{ csrf_field() }}--}}
+            {{--{{ method_field('GET') }}--}}
+        {{--<button class="btn btn-primary" type="submit">--}}
+            {{--<i class="fa fa-trash">--}}
+                {{--Add New Projects--}}
+            {{--</i>--}}
+        {{--</button>--}}
+    {{--</form>--}}
 </div>

@@ -13,7 +13,7 @@
                     </h4>
                 </div>
                 <input type="hidden" id="toBeUpdatedHoliday">
-                <div class="modal-body">
+                <div id="holidayNameDiv" class="modal-body">
                     <div class="form-group">
                         <label for="usr">
                             Holiday Name:
@@ -32,7 +32,7 @@
                         </input>
                     </div>
                 </div>
-                <div class="modal-body">
+                <div id="endDateDiv" class="modal-body">
                     <div class="form-group">
                         <label for="usr">
                             End Date:

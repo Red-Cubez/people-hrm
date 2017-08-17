@@ -4,9 +4,12 @@ namespace People\Http\Controllers;
 
 use Illuminate\Http\Request;
 use People\Models\Employee;
+use People\Models\Company;
 use People\Services\Interfaces\IDepartmentService;
 use People\Services\Interfaces\IEmployeeService;
 use People\Services\Interfaces\IJobTitleService;
+use People\Services\Interfaces\IResourceFormValidator;
+use People\Services\Interfaces\ICompanyHolidayService;
 
 class EmployeeController extends Controller
 {
@@ -14,35 +17,55 @@ class EmployeeController extends Controller
     public $EmployeeService;
     public $DepartmentService;
     public $JobTitleService;
-
-    public function __construct(IEmployeeService $employeeService, IDepartmentService $departmentService, IJobTitleService $jobTitleService)
+    public $EmployeeFormValidator;
+    public $CompanyHolidayService;
+    public function __construct(IEmployeeService $employeeService, IDepartmentService $departmentService, IJobTitleService $jobTitleService,
+                                IResourceFormValidator $employeeFormValidator,ICompanyHolidayService $companyHolidayService)
     {
 
         $this->EmployeeService = $employeeService;
         $this->DepartmentService = $departmentService;
         $this->JobTitleService = $jobTitleService;
+        $this->EmployeeFormValidator = $employeeFormValidator;
+        $this->CompanyHolidayService=$companyHolidayService;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
+    public function validateEmployeeForm(Request $request)
+    {
+        $formErrors = $this->EmployeeFormValidator->validateEmployeeForm($request);
+
+        return response()->json(
+            [
+                'formErrors' => $formErrors,
+                'action'=> $request->action,
+            ]);
+
+    }
+    public function showEmployeeForm($companyId)
     {
 
         $employees = $this->EmployeeService->getAllEmployees();
         $departments = $this->DepartmentService->getAllDepartments();
-        $jobTitles = $this->JobTitleService->getJobTitlesOfCompany($request->companyId);
+        $jobTitles = $this->JobTitleService->getJobTitlesOfCompany($companyId);
 
         return view('employees.index',
             [
                 'employees' => $employees,
                 'departments' => $departments,
                 'jobTitles' => $jobTitles,
-                'companyId' => $request->companyId,
+                'companyId' => $companyId,
 
             ]);
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+    public function index(Request $request)
+    {
+
     }
 
     /**
@@ -51,8 +74,9 @@ class EmployeeController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function create()
+    public function create($companyId)
     {
+        dd('got here');
 
     }
 
@@ -67,7 +91,12 @@ class EmployeeController extends Controller
 
         $employeeId = $this->EmployeeService->createEmployee($request);
 
-        return redirect('/employees/' . $employeeId);
+        return response()->json(
+            [
+                'employeeId' => $employeeId,
+            ]);
+
+
     }
 
     /**
@@ -78,13 +107,17 @@ class EmployeeController extends Controller
      */
     public function show(Employee $employee)
     {
+        $company= Company::find($employee->company_id);
 
         $employeeModel = $this->EmployeeService->viewEmployee($employee);
-        $departments = $this->EmployeeService->getAllDepartments();
-
+      //  $departments = $this->EmployeeService->getAllDepartments();
+        $companyHolidays=$this->CompanyHolidayService->getCompanyHolidays($employee->company_id);
+        $employeesWithBirthday=$this->EmployeeService->getAllEmployeesWithBirthDayThisMonth($company);
         return view('employees/showEmployee',
-            ['employeeModel' => $employeeModel,
-                'departments' => $departments,
+            [  'employeeModel' => $employeeModel,
+              //  'departments' => $departments,
+                'companyHolidays'=>$companyHolidays,
+                'employeesWithBirthday' => $employeesWithBirthday,
             ]);
     }
 
@@ -100,6 +133,7 @@ class EmployeeController extends Controller
         $editEmployeeModel = $this->EmployeeService->editEmployee($employee);
         $departments = $this->EmployeeService->getAllDepartments();
         $jobTitles = $this->JobTitleService->getJobTitlesOfCompany($employee->company_id);
+
         return view('employees/update',
             ['editEmployeeModel' => $editEmployeeModel,
                 'departments' => $departments,
@@ -120,8 +154,11 @@ class EmployeeController extends Controller
     {
 
         $this->EmployeeService->updateEmployee($request, $employee);
+        return response()->json(
+            [
+                'employeeId' => $employee->id,
+            ]);
 
-        return redirect('/employees/' . $employee->id);
     }
 
     /**

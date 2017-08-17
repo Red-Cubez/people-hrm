@@ -83,6 +83,10 @@ class CompanyService implements ICompanyService {
 
 	public function mapCompanyProfile($company, $companyAddress, $companyJobTitles, $employeesWithBirthday, $companyHolidays,
 		$companyCurrentEmployees, $companyCurrentClients) {
+
+
+//        dd($company);
+
 		$companyProfileModel = new CompanyProfileModel();
 
 		$companyProfileModel->companyName = $company->name;
@@ -94,7 +98,7 @@ class CompanyService implements ICompanyService {
 		$companyProfileModel->country = $companyAddress->country;
 		$companyProfileModel->stateProvince = $companyAddress->stateProvince;
 		$companyProfileModel->city = $companyAddress->city;
-
+//        dd($company);
 		foreach ($companyJobTitles as $jobTitle) {
 			$CompanyJobTitleModel = new CompanyJobTitles();
 			$CompanyJobTitleModel->jobTitle = $jobTitle->title;
@@ -105,7 +109,7 @@ class CompanyService implements ICompanyService {
 			}
 			array_push($companyProfileModel->jobTitles, $CompanyJobTitleModel);
 		}
-
+//        dd($company);
 		foreach ($employeesWithBirthday as $employee) {
 			$employeesBirthdayModel = new EmployeesBirthDayModel();
 			$employeesBirthdayModel->firstName = $employee->firstName;
@@ -117,7 +121,7 @@ class CompanyService implements ICompanyService {
 			}
 			array_push($companyProfileModel->employeesBirthday, $employeesBirthdayModel);
 		}
-
+//        dd($company);
 		foreach ($company->projects as $project) {
 			$companyProjectModel = new CompanyProjectModel();
 			$companyProjectModel->projectId = $project->id;
@@ -138,24 +142,27 @@ class CompanyService implements ICompanyService {
 		//dd($companyClientProjects);
 
 		foreach ($company->clients as $client) {
-			//	dd($client->projects);
-			$companyClientProjectModel = new CompanyClientProjectModel();
-			$companyClientProjectModel->projectId = $client->projects[0]->id;
-			$companyClientProjectModel->clientId = $client->projects[0]->client_id;
-			$companyClientProjectModel->projectName = $client->projects[0]->name;
-			$companyClientProjectModel->expectedStartDate = $client->projects[0]->expectedStartDate;
-			$companyClientProjectModel->expectedEndDate = $client->projects[0]->expectedEndDate;
-			$companyClientProjectModel->actualStartDate = $client->projects[0]->actualStartDate;
-			$companyClientProjectModel->actualEndDate = $client->projects[0]->actualEndDate;
-			$companyClientProjectModel->budget = $client->projects[0]->budget;
-			$companyClientProjectModel->cost = $client->projects[0]->cost;
+            foreach ($client->projects as $project) {
 
-			if (is_null($companyProfileModel->clientProjects)) {
-				$companyProfileModel->clientProjects = [];
-			}
-			array_push($companyProfileModel->clientProjects, $companyClientProjectModel);
-		}
+                $companyClientProjectModel = new CompanyClientProjectModel();
 
+                $companyClientProjectModel->projectId = $project->id;
+                $companyClientProjectModel->clientId = $project->client_id;
+                $companyClientProjectModel->projectName = $project->name;
+                $companyClientProjectModel->expectedStartDate = $project->expectedStartDate;
+                $companyClientProjectModel->expectedEndDate = $project->expectedEndDate;
+                $companyClientProjectModel->actualStartDate = $project->actualStartDate;
+                $companyClientProjectModel->actualEndDate = $project->actualEndDate;
+                $companyClientProjectModel->budget = $project->budget;
+                $companyClientProjectModel->cost = $project->cost;
+
+                if (is_null($companyProfileModel->clientProjects)) {
+                    $companyProfileModel->clientProjects = [];
+                }
+                array_push($companyProfileModel->clientProjects, $companyClientProjectModel);
+            }
+        }
+//        dd($company);
 		foreach ($companyHolidays as $holiday) {
 			$companyHolidayModel = new CompanyHolidayModel();
 			$companyHolidayModel->holidayId = $holiday->id;
@@ -169,7 +176,7 @@ class CompanyService implements ICompanyService {
 			}
 			array_push($companyProfileModel->companyHolidays, $companyHolidayModel);
 		}
-
+//        dd($company);
 		foreach ($companyCurrentEmployees as $currentEmployee) {
 
 			$companyEmployeeModel = new CompanyEmployeeModel();
@@ -183,7 +190,7 @@ class CompanyService implements ICompanyService {
 			}
 			array_push($companyProfileModel->companyEmployees, $companyEmployeeModel);
 		}
-
+//        dd($company);
 		foreach ($companyCurrentClients as $currentClient) {
 			$companyClienteModel = new CompanyClientModel();
 			$companyClienteModel->clientId = $currentClient->id;
@@ -196,7 +203,7 @@ class CompanyService implements ICompanyService {
 			}
 			array_push($companyProfileModel->companyClients, $companyClienteModel);
 		}
-
+//        dd($company);
 		return $companyProfileModel;
 	}
 }

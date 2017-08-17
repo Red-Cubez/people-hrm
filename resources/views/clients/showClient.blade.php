@@ -58,36 +58,44 @@
             </label>
             {{$client->address->country }}
         </div>
-        <form action="{{ url('clients/'.$client->id.'/edit') }}" method="POST">
-            {{ csrf_field() }}
-            {{ method_field('GET') }}
-            <input type="hidden" name="companyId" value="{{$companyId}}">
-            <button class="btn btn-primary" type="submit">
-                <i class="fa fa-trash">
-                    Edit
-                </i>
-            </button>
-        </form>
+        <a href="/clients/{{$client->id}}/edit">
+            <button class="btn btn-primary"> Edit
+
+            </button></a>
+        {{--<form action="{{ url('clients/'.$client->id.'/edit') }}" method="POST">--}}
+            {{--{{ csrf_field() }}--}}
+            {{--{{ method_field('GET') }}--}}
+            {{--<input type="hidden" name="companyId" value="{{$companyId}}">--}}
+            {{--<button class="btn btn-primary" type="submit">--}}
+                {{--<i class="fa fa-trash">--}}
+                    {{--Edit--}}
+                {{--</i>--}}
+            {{--</button>--}}
+        {{--</form>--}}
         <form action="{{ url('clients/'.$client->id) }}" method="POST">
             {{ csrf_field() }}
             {{ method_field('DELETE') }}
             <input name="_method" type="hidden" value="DELETE">
             <button class="btn btn-danger" type="submit">
-                <i class="fa fa-trash">
+
                     Delete
-                </i>
+
             </button>
             </input>
         </form>
-        <form action="{{ url('/clients/'.$client->id.'/clientprojects') }}" method="POST">
-            {{ csrf_field() }}
-            {{ method_field('GET') }}
-            <button class="btn btn-primary" type="submit">
-                <i class="fa fa-trash">
-                    Add New Project
-                </i>
-            </button>
-        </form>
+        <a href="/clients/{{$client->id}}/clientprojects">
+            <button class="btn btn-primary"> Add New Project
+
+            </button></a>
+        {{--<form action="{{ url('/clients/'.$client->id.'/clientprojects') }}" method="POST">--}}
+            {{--{{ csrf_field() }}--}}
+            {{--{{ method_field('GET') }}--}}
+            {{--<button class="btn btn-primary" type="submit">--}}
+                {{--<i class="fa fa-trash">--}}
+                    {{--Add New Project--}}
+                {{--</i>--}}
+            {{--</button>--}}
+        {{--</form>--}}
     </div>
     @include('clientProjects/showProjects')
 

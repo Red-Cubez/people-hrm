@@ -87,15 +87,8 @@
                                 </button>
                             </input>
                         </form>
-                        <form action="{{ url('clientprojects/'.$project->projectId) }}" method="POST">
-                            {{ csrf_field() }}
-                                {{ method_field('GET') }}
-                            <button class="btn btn-primary" type="submit">
-                                <i class="fa fa-trash">
-                                    View
-                                </i>
-                            </button>
-                        </form>
+                        <a href="{{route('clientprojects.show', $project->projectId)}}"> <button class="btn btn-primary"> View </button></a>
+
                     </td>
                 </tr>
                 @endforeach

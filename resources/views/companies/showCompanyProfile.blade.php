@@ -66,14 +66,19 @@
 
         </div>
 
-        <form action="{{ url('companies/'.$companyProfileModel->companyId.'/edit') }}" method="POST">
-            {{ csrf_field() }}
-            {{ method_field('GET') }}
+        <a href="/companies/{{$companyProfileModel->companyId}}/edit">
+            <button class="btn btn-primary"> Edit Companay
 
-            <button type="submit" class="btn btn-primary">
-                <i class="fa fa-trash"> Edit Company</i>
-            </button>
-        </form>
+            </button></a>
+
+        {{--<form action="{{ url('companies/'.$companyProfileModel->companyId.'/edit') }}" method="POST">--}}
+            {{--{{ csrf_field() }}--}}
+            {{--{{ method_field('GET') }}--}}
+
+            {{--<button type="submit" class="btn btn-primary">--}}
+                {{--<i class="fa fa-trash"> Edit Company</i>--}}
+            {{--</button>--}}
+        {{--</form>--}}
     </div>
 
 @endif

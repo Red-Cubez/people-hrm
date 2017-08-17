@@ -51,14 +51,21 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index');
 
+Route::get('/employees/showemployeeform/{companyId}', 'EmployeeController@showEmployeeForm');
+Route::post('/employees/validateform', 'EmployeeController@validateEmployeeForm');
 Route::resource('employees', 'EmployeeController');
+
+Route::get('/clients/showclientform/{companyId}', 'ClientController@showClientForm');
 Route::resource('clients', 'ClientController');
+
+Route::post('/clientprojects/validateform', 'ClientProjectController@validateProjectForm');
 Route::resource('clientprojects', 'ClientProjectController');
+
+Route::post('/companyprojects/validateform', 'CompanyProjectController@validateProjectForm');
 Route::resource('companyprojects', 'CompanyProjectController');
 
 Route::post('/projectresources/validateform', 'ProjectResourceController@validateResourceForm');
 Route::resource('projectresources', 'ProjectResourceController');
-
 
 Route::post('/companyprojectresources/validateform', 'CompanyProjectResourceController@validateResourceForm');
 Route::resource('companyprojectresources', 'CompanyProjectResourceController');
@@ -71,9 +78,11 @@ Route::get('/clients/{clientid}/clientprojects', 'ClientProjectController@manage
 Route::resource('departments', 'DepartmentController');
 Route::resource('companies', 'CompanyController');
 
+Route::get('/employeetimesheet/{employeeId}/create/', 'EmployeeTimesheetController@createTimesheet');
+Route::post('/employeetimesheet/timesheet/getweekdates', 'EmployeeTimesheetController@getWeekDates');
+Route::resource('employeetimesheet', 'EmployeeTimesheetController');
+
 Route::get('/clientprojects/{clientProjectid}/projectresources', 'ProjectResourceController@manageressources');
-
-
 
 Route::get('/projectresources/{projectResourceid}/updateResource', 'ProjectResourceController@updateressources');
 

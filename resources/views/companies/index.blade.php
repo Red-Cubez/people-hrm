@@ -1,87 +1,77 @@
 @extends('layouts.app')
 @section('content')
-<div class="panel-body">
-  <!-- Display Validation Errors -->
-  @include('common.errors')
-  <!-- New Company Form -->
-  <form action="{{url('companies') }}" method="POST" class="form-horizontal">
-   {{ csrf_field() }}
-   @include('companies/companyForm')
 
- </form>
-</div>
+    <a href="{{route('companies.create')}}">
+        <button class="btn btn-primary"> Add Company</button>
+    </a>
+    <!-- Current Companies -->
+    @if(count($companies)>0)
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                {{-- display all Companies --}}
+                <h3>Current Companies</h3>
+            </div>
 
-<!-- Current Companies -->
-@if(count($companies)>0)
-<div class="panel panel-default">
-  <div class="panel-heading">
-    {{-- display all Companies --}}
-    <h3>Current Companies</h3>
-  </div>
+            <div class="panel-body">
+                <table class="table table-striped task-table">
+                    <!-- Table Headings -->
+                    <thead>
+                    <th>Name</th>
+                    <th>Street Line 1</th>
+                    <th>Street Line 2</th>
+                    <th>Country</th>
+                    <th>State / Province</th>
+                    <th>City</th>
 
-  <div class="panel-body">
-   <table class="table table-striped task-table">
-    <!-- Table Headings -->
-    <thead>
-     <th>Name</th>
-     <th>Street Line 1</th>
-     <th>Street Line 2</th>
-      <th>Country</th>
-     <th>State / Province</th>
-     <th>City</th>
+                    <th>Operations</th>
+                    </thead>
+                    <!-- Table Body -->
+                    <tbody>
+                    @foreach($companies as $company)
+                        <tr>
+                            <!-- Companies Names -->
+                            <td class="table-text">{{$company->name}}</td>
 
-     <th>Operations</th>
-     </thead>
-     <!-- Table Body -->
-     <tbody>
-       @foreach($companies as $company)
-       <tr>
-         <!-- Companies Names -->
-         <td class="table-text">{{$company->name}}</td>
-
-         @if(isset($company->address))
+                            @if(isset($company->address))
 
 
-         <td class="table-text">{{$company->address->streetLine1}}</td>
-         <td class="table-text">{{$company->address->streetLine2}}</td>
-         <td class="table-text">{{$company->address->country}}</td>
-         <td class="table-text">{{$company->address->stateProvince}}</td>
-         <td class="table-text">{{$company->address->city}}</td>
-         @else
-         <td class="table-text"></td>
-         <td class="table-text"></td>
-         <td class="table-text"></td>
-         <td class="table-text"></td>
-         <td class="table-text"></td>
-         @endif
-         <td>
-           <!-- Delete Button -->
-           <form action="{{url('companies/'.$company->id) }}" method="POST">
-             {{ csrf_field() }}
-             {{ method_field('DELETE') }}
-             <button type="submit" class="btn btn-danger">
-               Delete
-             </button>
-           </form>
-            <!-- Update Button -->
-           <form action="{{url('companies/'.$company->id) }}" method="POST">
-             {{ csrf_field() }}
-             {{ method_field('GET') }}
-             <button type="submit" class="btn btn-danger">
-               View
-             </button>
-           </form>
-        </td>
+                                <td class="table-text">{{$company->address->streetLine1}}</td>
+                                <td class="table-text">{{$company->address->streetLine2}}</td>
+                                <td class="table-text">{{$company->address->country}}</td>
+                                <td class="table-text">{{$company->address->stateProvince}}</td>
+                                <td class="table-text">{{$company->address->city}}</td>
+                            @else
+                                <td class="table-text"></td>
+                                <td class="table-text"></td>
+                                <td class="table-text"></td>
+                                <td class="table-text"></td>
+                                <td class="table-text"></td>
+                            @endif
+                            <td>
+                                <!-- Delete Button -->
+                                <form action="{{url('companies/'.$company->id) }}" method="POST">
+                                    {{ csrf_field() }}
+                                    {{ method_field('DELETE') }}
+                                    <button type="submit" class="btn btn-danger">
+                                        Delete
+                                    </button>
+                                </form>
+                                <!-- Update Button -->
+                                <a href="{{route('companies.show', $company->id)}}">
+                                    <button class="btn btn-primary"> View</button>
+                                </a>
 
-       </tr>
-       @endforeach
+                            </td>
 
-     </tbody>
-   </table>
+                        </tr>
+                    @endforeach
 
- </div>
-</div>
-@endif
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    @endif
 
 @endsection
 

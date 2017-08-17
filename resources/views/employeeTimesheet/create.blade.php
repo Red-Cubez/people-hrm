@@ -142,10 +142,11 @@
                 },
                 success: function (data) {
                     if (data.isAlreadyEntered == true) {
+                        $("#timesheetDate").val(null);
                         $("#alreadyEnteredMessage").remove();
                         html = '<div id="alreadyEnteredMessage">You Have already entered timesheet for week ' + timesheetDate + '</div>';
                         $("#timeSheetDateDiv").before(html);
-                        $("#timesheetDate").val(null);
+                        
 
                     }
                     if (data.isAlreadyEntered == false) {

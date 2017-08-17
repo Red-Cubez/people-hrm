@@ -59,6 +59,9 @@ class AppServiceProvider extends ServiceProvider {
 
 		$this->app->bind(
 			'People\Services\Interfaces\IEmployeeTimesheetService', 'People\Services\EmployeeTimesheetService');
+
+		$this->app->bind(
+			'People\Services\Interfaces\IEmployeeTimeoffService', 'People\Services\EmployeeTimeoffService');
 	}
 
 }

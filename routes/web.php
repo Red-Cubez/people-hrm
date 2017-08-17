@@ -82,6 +82,10 @@ Route::get('/employeetimesheet/{employeeId}/create/', 'EmployeeTimesheetControll
 Route::post('/employeetimesheet/timesheet/getweekdates', 'EmployeeTimesheetController@getWeekDates');
 Route::resource('employeetimesheet', 'EmployeeTimesheetController');
 
+Route::get('/employeetimeoff/{employeeId}/create/', 'EmployeeTimeoffController@createTimeOff');
+Route::post('/employeetimeoff/timeoff/validatetimeoffdates', 'EmployeeTimeoffController@validateTimeoffDates');
+Route::resource('employeetimeoff', 'EmployeeTimeoffController');
+
 Route::get('/clientprojects/{clientProjectid}/projectresources', 'ProjectResourceController@manageressources');
 
 Route::get('/projectresources/{projectResourceid}/updateResource', 'ProjectResourceController@updateressources');

@@ -142,16 +142,22 @@
                 </div>
                     <div class="row">
                         <div class="col-sm-12">
-                            {{--<form class="panel-body" action="{{ url('employeetimeline/') }}" method="POST">--}}
-                                {{--{{ csrf_field() }}--}}
-                                {{--{{ method_field('POST') }}--}}
                             <a href="/employeetimesheet/{{$employeeModel->employeeProfile->employeeId}}/create">
                                 <button class="btn btn-primary"> Add Timesheet
 
                                 </button></a>
 
-                                {{--@include('employees/employeeTimeSheet')--}}
-                            {{--</form>--}}
+                        </div>
+                    </div>
+                    <br/>
+                       <div class="row">
+                        <div class="col-sm-12">
+                            <a href="/employeetimeoff/{{$employeeModel->employeeProfile->employeeId}}/create">
+                          {{--   <a href="/employeetimeoff/create"> --}}
+                                <button class="btn btn-primary"> Add TimeOff
+
+                                </button></a>
+
                         </div>
                     </div>
                     @include('employees/showEmployeeClientProjects')

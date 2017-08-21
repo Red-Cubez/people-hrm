@@ -12,12 +12,19 @@ class EmployeeTimeoffService implements IEmployeeTimeoffService
         return EmployeeTimeoff::orderBy('created_at', 'asc')->where('employee_id', $employeeId)->get();
 
     }
-    public function isTimeoffAlreadyEntered($startDate, $endDate, $employeeId)
+    public function isTimeoffAlreadyEntered($startDate, $endDate, $employeeId, $timeoffId)
     {
 
         $isAlreadyEntered = false;
+        if (isset($timeoffId)) {
 
-        $employeeTimeoffs = EmployeeTimeoff::where('employee_id', $employeeId)->get();
+            $employeeTimeoffs = EmployeeTimeoff::where('id', '!=', $timeoffId)->where('employee_id', $employeeId)->get();
+
+        } else {
+
+            $employeeTimeoffs = EmployeeTimeoff::where('employee_id', $employeeId)->get();
+        }
+
         foreach ($employeeTimeoffs as $employeeTimeoff) {
             if (($startDate <= $employeeTimeoff->end_date) && ($employeeTimeoff->start_date <= $endDate)
                 && ($startDate <= $endDate) && ($employeeTimeoff->start_date <= $employeeTimeoff->end_date)) {
@@ -47,11 +54,29 @@ class EmployeeTimeoffService implements IEmployeeTimeoffService
         $timeoff->save();
 
     }
+    public function updateTimeoff($totalCount, $request, $id)
+    {
+        $timeoff = EmployeeTimeoff::find($id);
+
+        $timeoff->start_date  = $request->startDate;
+        $timeoff->end_date    = $request->endDate;
+        $timeoff->total_count = $totalCount;
+        $timeoff->is_approved = 0;
+
+        $timeoff->save();
+
+        return $timeoff->employee_id;
+
+    }
+    public function getTimeoff($id)
+    {
+        return EmployeeTimeoff::find($id);
+    }
     public function deleteTimeoff($id)
     {
-    	$timeoff=EmployeeTimeoff::find($id);
+        $timeoff = EmployeeTimeoff::find($id);
 
-    	$timeoff->delete();
+        $timeoff->delete();
     }
 
 }

@@ -59,6 +59,7 @@
                         </div>
                     </td>
                     <td>
+                      @if($timeoff->is_approved==0)
                         <a href="/employeetimeoff/{{$timeoff->id}}/edit">
                             <button class="btn btn-primary">
                                 EDIT
@@ -72,6 +73,7 @@
                                     DELETE
                                 </i>
                             </button>
+                        @endif
                         </form>
                     </td>
                 </tr>

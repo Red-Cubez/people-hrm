@@ -95,7 +95,7 @@
                      $("#endDate").val(null);
                      $("#endDateError").remove();
                      $("#alreadyEnteredMessage").remove();
-                     html = '<div id="endDateError">Start Date Can not be smaller or equal to End Date </div>';
+                     html = '<div id="endDateError">Start Date Can not be Less than or Equal to End Date </div>';
                      $("#timeoffDateDiv").before(html);
           }
         }

@@ -25,4 +25,7 @@ class Employee extends Model {
     public function timeoffs() {
         return $this->hasMany('People\Models\EmployeeTimeoff');
     }
+    public function user() {
+        return $this->hasOne('People\Models\User');
+    }
 }

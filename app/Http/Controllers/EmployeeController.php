@@ -3,13 +3,15 @@
 namespace People\Http\Controllers;
 
 use Illuminate\Http\Request;
-use People\Models\Employee;
+
 use People\Models\Company;
+use People\Models\Employee;
+use People\Services\Interfaces\ICompanyHolidayService;
 use People\Services\Interfaces\IDepartmentService;
 use People\Services\Interfaces\IEmployeeService;
 use People\Services\Interfaces\IJobTitleService;
 use People\Services\Interfaces\IResourceFormValidator;
-use People\Services\Interfaces\ICompanyHolidayService;
+use People\Services\Interfaces\IUserAuthenticationService;
 
 class EmployeeController extends Controller
 {
@@ -19,15 +21,18 @@ class EmployeeController extends Controller
     public $JobTitleService;
     public $EmployeeFormValidator;
     public $CompanyHolidayService;
-    public function __construct(IEmployeeService $employeeService, IDepartmentService $departmentService, IJobTitleService $jobTitleService,
-                                IResourceFormValidator $employeeFormValidator,ICompanyHolidayService $companyHolidayService)
-    {
-
-        $this->EmployeeService = $employeeService;
-        $this->DepartmentService = $departmentService;
-        $this->JobTitleService = $jobTitleService;
-        $this->EmployeeFormValidator = $employeeFormValidator;
-        $this->CompanyHolidayService=$companyHolidayService;
+    public $UserAuthenticationService;
+    public function __construct(IEmployeeService $employeeService, IDepartmentService $departmentService, IJobTitleService $jobTitleService, IUserAuthenticationService $userAuthenticationService,
+        IResourceFormValidator $employeeFormValidator, ICompanyHolidayService $companyHolidayService) {
+        //$this->middleware('auth', ['only' => ['show']]);
+        $this->middleware('auth');
+        // $this->middleware('abc');
+        $this->EmployeeService           = $employeeService;
+        $this->DepartmentService         = $departmentService;
+        $this->JobTitleService           = $jobTitleService;
+        $this->EmployeeFormValidator     = $employeeFormValidator;
+        $this->CompanyHolidayService     = $companyHolidayService;
+        $this->UserAuthenticationService = $userAuthenticationService;
     }
 
     public function validateEmployeeForm(Request $request)
@@ -37,23 +42,23 @@ class EmployeeController extends Controller
         return response()->json(
             [
                 'formErrors' => $formErrors,
-                'action'=> $request->action,
+                'action'     => $request->action,
             ]);
 
     }
     public function showEmployeeForm($companyId)
     {
 
-        $employees = $this->EmployeeService->getAllEmployees();
+        $employees   = $this->EmployeeService->getAllEmployees();
         $departments = $this->DepartmentService->getAllDepartments();
-        $jobTitles = $this->JobTitleService->getJobTitlesOfCompany($companyId);
+        $jobTitles   = $this->JobTitleService->getJobTitlesOfCompany($companyId);
 
         return view('employees.index',
             [
-                'employees' => $employees,
+                'employees'   => $employees,
                 'departments' => $departments,
-                'jobTitles' => $jobTitles,
-                'companyId' => $companyId,
+                'jobTitles'   => $jobTitles,
+                'companyId'   => $companyId,
 
             ]);
     }
@@ -96,7 +101,6 @@ class EmployeeController extends Controller
                 'employeeId' => $employeeId,
             ]);
 
-
     }
 
     /**
@@ -107,20 +111,31 @@ class EmployeeController extends Controller
      */
     public function show(Employee $employee)
     {
-        $company= Company::find($employee->company_id);
+        \Log::info('here0');
+            $isAllowToShow=$this->UserAuthenticationService->isAllowToShow($employee->id);
+            if($isAllowToShow)
+            {
+            $company = Company::find($employee->company_id);
 
-        $employeeModel = $this->EmployeeService->viewEmployee($employee);
-      //  $departments = $this->EmployeeService->getAllDepartments();
-        $companyHolidays=$this->CompanyHolidayService->getCompanyHolidays($employee->company_id);
-        $employeesWithBirthday=$this->EmployeeService->getAllEmployeesWithBirthDayThisMonth($company);
-        return view('employees/showEmployee',
-            [  'employeeModel' => $employeeModel,
-              //  'departments' => $departments,
-                'companyHolidays'=>$companyHolidays,
-                'employeesWithBirthday' => $employeesWithBirthday,
-            ]);
+            $employeeModel = $this->EmployeeService->viewEmployee($employee);
+            //  $departments = $this->EmployeeService->getAllDepartments();
+            $companyHolidays       = $this->CompanyHolidayService->getCompanyHolidays($employee->company_id);
+            $employeesWithBirthday = $this->EmployeeService->getAllEmployeesWithBirthDayThisMonth($company);
+            return view('employees/showEmployee',
+                [
+                    'employeeModel'         => $employeeModel,
+                    'companyHolidays'       => $companyHolidays,
+                    'employeesWithBirthday' => $employeesWithBirthday,
+                ]);
+        } 
+        else if(!$isAllowToShow)
+        {
+            dd("Acces Denied");
+        }
     }
 
+    
+      
     /**
      * Show the form for editing the specified resource.
      *
@@ -131,13 +146,13 @@ class EmployeeController extends Controller
     {
 
         $editEmployeeModel = $this->EmployeeService->editEmployee($employee);
-        $departments = $this->EmployeeService->getAllDepartments();
-        $jobTitles = $this->JobTitleService->getJobTitlesOfCompany($employee->company_id);
+        $departments       = $this->EmployeeService->getAllDepartments();
+        $jobTitles         = $this->JobTitleService->getJobTitlesOfCompany($employee->company_id);
 
         return view('employees/update',
             ['editEmployeeModel' => $editEmployeeModel,
-                'departments' => $departments,
-                'jobTitles' => $jobTitles,
+                'departments'        => $departments,
+                'jobTitles'          => $jobTitles,
             ]);
 
     }

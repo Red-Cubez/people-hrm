@@ -3,7 +3,6 @@
 namespace People\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use People\Models\Company;
 use People\Models\Employee;
 use People\Services\Interfaces\ICompanyHolidayService;
@@ -22,11 +21,13 @@ class EmployeeController extends Controller
     public $EmployeeFormValidator;
     public $CompanyHolidayService;
     public $UserAuthenticationService;
-    public function __construct(IEmployeeService $employeeService, IDepartmentService $departmentService, IJobTitleService $jobTitleService, IUserAuthenticationService $userAuthenticationService,
+    public function __construct(IEmployeeService $employeeService, IDepartmentService $departmentService,
+        IJobTitleService $jobTitleService, IUserAuthenticationService $userAuthenticationService,
         IResourceFormValidator $employeeFormValidator, ICompanyHolidayService $companyHolidayService) {
-        //$this->middleware('auth', ['only' => ['show']]);
-        $this->middleware('auth');
-        // $this->middleware('abc');
+
+        $this->middleware('auth', ['only' => ['show']]);
+
+        $this->middleware('isAuthorizedToView');
         $this->EmployeeService           = $employeeService;
         $this->DepartmentService         = $departmentService;
         $this->JobTitleService           = $jobTitleService;
@@ -109,14 +110,14 @@ class EmployeeController extends Controller
      * @param  \People\Models\Employee $employee
      * @return \Illuminate\Http\Response
      */
-    public function show(Employee $employee)
+    public function show($employeeId)
     {
-        \Log::info('here0');
-            $isAllowToShow=$this->UserAuthenticationService->isAllowToShow($employee->id);
-            if($isAllowToShow)
-            {
-            $company = Company::find($employee->company_id);
 
+        $canEmployeeView = $this->UserAuthenticationService->canEmployeeView($employeeId);
+        if ($canEmployeeView) {
+
+            $employee      = $this->EmployeeService->getEmployee($employeeId);
+            $company       = Company::find($employee->company_id);
             $employeeModel = $this->EmployeeService->viewEmployee($employee);
             //  $departments = $this->EmployeeService->getAllDepartments();
             $companyHolidays       = $this->CompanyHolidayService->getCompanyHolidays($employee->company_id);
@@ -127,32 +128,30 @@ class EmployeeController extends Controller
                     'companyHolidays'       => $companyHolidays,
                     'employeesWithBirthday' => $employeesWithBirthday,
                 ]);
-        } 
-        else if(!$isAllowToShow)
-        {
+        } else if (!$canEmployeeView) {
             dd("Acces Denied");
         }
     }
 
-    
-      
     /**
      * Show the form for editing the specified resource.
      *
      * @param  \People\Models\Employee $employee
      * @return \Illuminate\Http\Response
      */
-    public function edit(Employee $employee)
+    public function edit($employeeId)
     {
 
+        $employee          = $this->EmployeeService->getEmployee($employeeId);
         $editEmployeeModel = $this->EmployeeService->editEmployee($employee);
         $departments       = $this->EmployeeService->getAllDepartments();
         $jobTitles         = $this->JobTitleService->getJobTitlesOfCompany($employee->company_id);
 
         return view('employees/update',
-            ['editEmployeeModel' => $editEmployeeModel,
-                'departments'        => $departments,
-                'jobTitles'          => $jobTitles,
+            [
+                'editEmployeeModel' => $editEmployeeModel,
+                'departments'       => $departments,
+                'jobTitles'         => $jobTitles,
             ]);
 
     }
@@ -165,13 +164,14 @@ class EmployeeController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function update(Request $request, Employee $employee)
+    public function update(Request $request, $employeeId)
     {
 
+        $employee = $this->EmployeeService->getEmployee($employeeId);
         $this->EmployeeService->updateEmployee($request, $employee);
         return response()->json(
             [
-                'employeeId' => $employee->id,
+                'employeeId' => $employeeId,
             ]);
 
     }

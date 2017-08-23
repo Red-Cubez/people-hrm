@@ -4,7 +4,7 @@ namespace People\Services\Interfaces;
 
 interface IUserAuthenticationService {
 
-	public function isAllowToShow($requestId);
+	public function canEmployeeView($requestId);
 
 
 }

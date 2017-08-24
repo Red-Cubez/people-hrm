@@ -154,7 +154,7 @@ class EmployeeService implements IEmployeeService
     }
     public function getAllEmployeesOfCompany($companyId)
     {
-        return Employee::where('company_id', $companyId)->get();
+        return Employee::orderBy('firstName','asc')->where('company_id', $companyId)->get();
     }
 
     public function getAllClientsOfCompany($companyId)

@@ -10,5 +10,7 @@ interface IEmployeeTimesheetService {
 	public function updateTimesheet($request, $id);
 	public function getTimesheetsOfEmployee($employeeId);
 	public function getEmployeeTimesheet($timesheetId);
-
+	public function getNonApprovedTimesheetsOfEmployees();
+	public function approveTimesheets($request);
+	
 }

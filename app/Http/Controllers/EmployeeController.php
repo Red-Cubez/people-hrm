@@ -25,9 +25,9 @@ class EmployeeController extends Controller
         IJobTitleService $jobTitleService, IUserAuthenticationService $userAuthenticationService,
         IResourceFormValidator $employeeFormValidator, ICompanyHolidayService $companyHolidayService) {
 
-        $this->middleware('auth', ['only' => ['show']]);
-
-        $this->middleware('isAuthorizedToView');
+         $this->middleware('auth', ['only' => ['show']]);
+           
+        // $this->middleware('isAuthorizedToView');
         $this->EmployeeService           = $employeeService;
         $this->DepartmentService         = $departmentService;
         $this->JobTitleService           = $jobTitleService;

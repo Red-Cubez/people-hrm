@@ -31,7 +31,7 @@ class EmployeeTimesheetController extends Controller
      */
     public function create()
     {
-        //using showTimesheetForm function
+        //using
     }
 
     public function getWeekDates(Request $request)
@@ -53,7 +53,7 @@ class EmployeeTimesheetController extends Controller
 
         $timesheets = $this->EmployeeTimesheetService->getTimesheetsOfEmployee($employeeId);
 
-        return view('employeeTimesheet.index',
+        return view('employeeTimesheet.create',
             [
                 'employeeId' => $employeeId,
                 'timesheets' => $timesheets,
@@ -100,6 +100,16 @@ class EmployeeTimesheetController extends Controller
     {
 
     }
+    public function showNonApprovedTimesheetsOfEmployees()
+    {
+        $employeesTimesheets = $this->EmployeeTimesheetService->getNonApprovedTimesheetsOfEmployees();
+        
+        return view('employeetimesheet.showNonApprovedTimesheetsOfEmployees',
+            [
+                'employeesTimesheets' => $employeesTimesheets,
+            ]);
+
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -107,8 +117,9 @@ class EmployeeTimesheetController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id,Request $request)
     {
+        dd($request);
 
         $timesheet                  = $this->EmployeeTimesheetService->getEmployeeTimesheet($id);
         $billableWeeklyTimesheet    = json_decode($timesheet->billableWeeklyTimesheet, true);
@@ -159,6 +170,11 @@ class EmployeeTimesheetController extends Controller
         $employeeId = $this->EmployeeTimesheetService->updateTimesheet($request, $id);
         return redirect('employeetimesheet/' . $employeeId . '/create');
 
+    }
+    public function approveTimesheets(Request $request)
+    { 
+        $this->EmployeeTimesheetService->approveTimesheets($request);
+       
     }
 
     /**

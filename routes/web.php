@@ -80,6 +80,8 @@ Route::resource('companies', 'CompanyController');
 
 Route::get('/employeetimesheet/{employeeId}/create/', 'EmployeeTimesheetController@createTimesheet');
 Route::post('/employeetimesheet/timesheet/getweekdates', 'EmployeeTimesheetController@getWeekDates');
+Route::get('/employeetimesheets/', 'EmployeeTimesheetController@showNonApprovedTimesheetsOfEmployees');
+Route::post('/employeetimesheets/approve', 'EmployeeTimesheetController@approveTimesheets');
 Route::resource('employeetimesheet', 'EmployeeTimesheetController');
 
 Route::get('/employeetimeoff/{employeeId}/create/', 'EmployeeTimeoffController@createTimeOff');

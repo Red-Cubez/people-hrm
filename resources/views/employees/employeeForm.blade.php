@@ -140,20 +140,30 @@
                     else if (data.formErrors.hasErrors == true) {
 
                         var htmlError = '<div id="list" class="alert alert-danger">';
-
+                        if (data.formErrors.firstNameNotEntered) {
+                            htmlError = htmlError + "<li>" + data.formErrors.firstNameNotEntered + "</li>";
+                        }
+                        if (data.formErrors.lastNameNotEntered) {
+                            htmlError = htmlError + "<li>" + data.formErrors.lastNameNotEntered + "</li>";
+                        }
+                        if (data.formErrors.hireDateNotEntered) {
+                            htmlError = htmlError + "<li>" + data.formErrors.hireDateNotEntered + "</li>";
+                        }
                         if (data.formErrors.wrongHireDate) {
                             htmlError = htmlError + "<li>" + data.formErrors.wrongHireDate + "</li>";
                         }
                         if (data.formErrors.wrongTerminationDate) {
                             htmlError = htmlError + "<li>" + data.formErrors.wrongTerminationDate + "</li>";
                         }
-                        if (data.formErrors.hireDateNotEntered) {
-                            htmlError = htmlError + "<li>" + data.formErrors.hireDateNotEntered + "</li>";
+                        
+                        if (data.formErrors.jobTitleNotEntered) {
+                            htmlError = htmlError + "<li>" + data.formErrors.jobTitleNotEntered + "</li>";
                         }
 
                         html = htmlError;
                         $("#list").remove();
                         $("#name").before(html);
+                        $(window).scrollTop($('#list').offset().top);
                     }
                 },
                 error: function () {

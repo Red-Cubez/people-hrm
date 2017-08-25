@@ -1,5 +1,5 @@
 
-<div id="name" class="form-group">
+<div id="nameDiv" class="form-group">
     <label for="companyproject" class="col-sm-3 control-label">Name</label>
     <div class="col-sm-6">
         <input type="text" name="name" id="name" class="form-control"
@@ -74,15 +74,16 @@
                 url: '/companyprojects/validateform',
                 data: projectForm.serialize(),
                 success: function (data) {
-
+                     
                     if (data.formErrors.hasErrors == false) {
-                        //form have no errors
                         submitProjectForm(projectForm,action);
                     }
                     else if (data.formErrors.hasErrors == true) {
-
+                       
                         var htmlError = '<div id="list" class="alert alert-danger">';
-
+                        if (data.formErrors.nameNotEntered) {
+                            htmlError = htmlError + "<li>" + data.formErrors.nameNotEntered + "</li>";
+                        }
                         if (data.formErrors.startDateNotEntered) {
                             htmlError = htmlError + "<li>" + data.formErrors.startDateNotEntered + "</li>";
                         }
@@ -92,10 +93,11 @@
                         if (data.formErrors.wrongEndDate) {
                             htmlError = htmlError + "<li>" + data.formErrors.wrongEndDate + "</li>";
                         }
-
+                        
                         html = htmlError;
                         $("#list").remove();
-                        $("#name").before(html);
+                        $("#nameDiv").before(html);
+                        $(window).scrollTop($('#list').offset().top);
                     }
                 },
                 error: function () {
@@ -106,7 +108,7 @@
     });
     function submitProjectForm(projectForm,action) {
         var companyProjectId=$('#companyProjectId').val();
-
+        
         if(action == 'save') {
             $.ajax({
 

@@ -19,12 +19,11 @@ class CompanyController extends Controller
 
     public function __construct(ICompanyService $companyService, IJobTitleService $jobTitleService,
 
-                                IEmployeeService $employeeService, ICompanyHolidayService $companyHolidayService)
-    {
+        IEmployeeService $employeeService, ICompanyHolidayService $companyHolidayService) {
 
-        $this->CompanyService = $companyService;
-        $this->JobTitleService = $jobTitleService;
-        $this->EmployeeService = $employeeService;
+        $this->CompanyService        = $companyService;
+        $this->JobTitleService       = $jobTitleService;
+        $this->EmployeeService       = $employeeService;
         $this->CompanyHolidayService = $companyHolidayService;
     }
 
@@ -60,7 +59,9 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
-
+        $this->validate($request, array(
+            'name'  => 'required|max:255',
+        ));
         $this->CompanyService->createCompany($request);
 
         return redirect('/companies');
@@ -77,10 +78,10 @@ class CompanyController extends Controller
     {
 //dd($company);
         $companyJobTitles = $this->JobTitleService->getJobTitlesOfCompany($company->id);
-        $companyHolidays = $this->CompanyHolidayService->getCompanyHolidays($company->id);
+        $companyHolidays  = $this->CompanyHolidayService->getCompanyHolidays($company->id);
 //        dd($company);
         $companyCurrentEmployees = $this->EmployeeService->getAllEmployeesOfCompany($company->id);
-        $companyCurrentClients = $this->EmployeeService->getAllClientsOfCompany($company->id);
+        $companyCurrentClients   = $this->EmployeeService->getAllClientsOfCompany($company->id);
 //        dd($company);
         $employeesWithBirthday = $this->EmployeeService->getAllEmployeesWithBirthDayThisMonth($company);
 //        dd($company);
@@ -90,11 +91,10 @@ class CompanyController extends Controller
             $companyJobTitles, $employeesWithBirthday, $companyHolidays, $companyCurrentEmployees, $companyCurrentClients);
         $employeesWithBirthday = $companyProfileModel->employeesBirthday;
 
-
         return view('companies/showCompany',
             [
-                'companyProfileModel' => $companyProfileModel,
-                'employeesWithBirthday'=>$employeesWithBirthday,
+                'companyProfileModel'   => $companyProfileModel,
+                'employeesWithBirthday' => $employeesWithBirthday,
             ]);
     }
 
@@ -119,6 +119,9 @@ class CompanyController extends Controller
      */
     public function update(Request $request, Company $company)
     {
+         $this->validate($request, array(
+            'name'  => 'required|max:255',
+        ));
         $this->CompanyService->updateCompany($request, $company);
 
         return redirect('/companies/' . $company->id);

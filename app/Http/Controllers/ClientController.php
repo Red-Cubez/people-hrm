@@ -64,6 +64,9 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, array(
+            'name'  => 'required|max:255',
+        ));
         $clientId = $this->ClientService->createClient($request);
 
         return redirect('/clients/' . $clientId);
@@ -113,6 +116,9 @@ class ClientController extends Controller
      */
     public function update(Request $request, Client $client)
     {
+         $this->validate($request, array(
+            'name'  => 'required|max:255',
+        ));
         $this->ClientService->updateClient($request, $client);
 
         return redirect('/clients/' . $client->id);

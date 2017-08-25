@@ -31,7 +31,7 @@
                         </td>
                         <td>
                             <button
-                                    class="btn btn-primary"
+                                    class="btn btn-primary edit" 
                                     onclick="openJobTitleModal({{$companyJobTitle->jobTitleId}},null);"
                                     type="button">
                                 Edit
@@ -50,7 +50,7 @@
             </tbody>
         </table>
     </div>
-    <button class="btn btn-primary btn-lg" onclick="openJobTitleModal(null,null);" type="button">
+    <button id="test" class="btn btn-primary btn-lg" onclick="openJobTitleModal(null,null);" type="button">
         Add New Job Title
     </button>
 </div>
@@ -58,10 +58,14 @@
 
 @section('page-scripts')
     @parent
+
+
     <script type="text/javascript">
+   
         function initializeJobTitleModal() {
             $('#jobTitleName').val(null);
             $('#toBeUpdatedJobTitle').val(null);
+             $("#jobTitleNotEnteredDiv").remove();
         }
         function setupJobTitleEditValues(jobTitleId, jobTitle) {
 
@@ -74,8 +78,9 @@
             $("#jobTitleName").val(jobTitleValue);
         }
         function openJobTitleModal(jobTitleId, jobTitle) {
-
+ 
             initializeJobTitleModal();
+
             if (jobTitleId !== null) {
                 $('#toBeUpdatedJobTitle').val(jobTitleId);
                 setupJobTitleEditValues(jobTitleId, jobTitle);
@@ -90,7 +95,9 @@
         function addUpdateJobTitle() {
 
             var form = $("#jobTitleModalForm");
-            form.valid();
+            // form.valid();
+            if(validateJobTitle())
+            {
 
             var jobTitleId = $('#toBeUpdatedJobTitle').val();
 
@@ -101,7 +108,34 @@
                 updateJobTitle();
             }
         }
+        if(validateJobTitle())
+        {
+           
+             $("#jobTitleNotEnteredDiv").remove();
+               
+                var html = '<div id="jobTitleNotEnteredDiv" class="alert alert-danger">Please Enter Job Title</div>';
 
+                $("#jobTitleName").before(html);
+                $(window).scrollTop($('#jobTitleNotEnteredDiv').offset().top);
+        }
+        }
+
+        function validateJobTitle()
+        {
+            jobTitleName=$('#jobTitleName').val();
+
+            if(jobTitleName!='' || jobTitleName!=' ' || jobTitleName != null)
+            {
+
+                return true;
+            }
+            else if(jobTitleName=='' || jobTitleName==' ' || jobTitleName == null)
+            {
+                
+                return false;
+            }
+
+        }
         function deleteJobTitle(jobTitleId) {
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $.ajax({

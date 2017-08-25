@@ -67,6 +67,7 @@ class CompanyProjectController extends Controller
      */
     public function validateProjectForm(Request $request)
     {
+    
         $formErrors = $this->ProjectFormValidator->validateProjectForm($request);
 
         return response()->json(
@@ -79,7 +80,6 @@ class CompanyProjectController extends Controller
 
     public function store(Request $request)
     {
-
         $companyProjectId = $this->CompanyProjectService->saveCompanyProject($request);
         return response()->json(
             [

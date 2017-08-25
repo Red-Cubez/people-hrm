@@ -3,7 +3,7 @@
 @section('content')
 <main>
     <div class="container">
-        @if($timesheet->isApproved==0)
+        @if(($timesheet->isApproved==0) && (!isset($showReadOnly)))
         <div class="row">
                 <div class="col-sm-12">
                     <form action="{{ url('employeetimesheet/'.$timesheet->id) }}" class="table table-striped task-table"  method="POST">
@@ -14,7 +14,7 @@
                 </div>
             </input>
         </div>
-        @elseif($timesheet->isApproved==1)
+        @elseif($timesheet->isApproved==1 || isset($showReadOnly)) 
         <div class="row">
             <div class="col-sm-12">
                 @include('employeeTimesheet.showTimesheet')

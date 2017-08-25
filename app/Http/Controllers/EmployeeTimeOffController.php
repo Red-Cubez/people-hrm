@@ -7,7 +7,7 @@ use People\Services\Interfaces\IEmployeeTimeoffService;
 
 class EmployeeTimeoffController extends Controller
 {
-    
+
     public $EmployeeTimeoffService;
     public function __construct(IEmployeeTimeoffService $employeeTimeoffService)
     {
@@ -62,7 +62,7 @@ class EmployeeTimeoffController extends Controller
         ));
 
         $totalCount = $this->EmployeeTimeoffService->countTimeOffs($request->endDate, $request->startDate);
-
+        $totalCount = $totalCount + 1;
         $this->EmployeeTimeoffService->storeTimeoff($totalCount, $request);
 
         return back();
@@ -74,9 +74,19 @@ class EmployeeTimeoffController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    ////
     public function show($id)
     {
         //
+    }
+    public function showNonApprovedTimeoffsOfEmployees()
+    {
+        $employeesTimeoffs = $this->EmployeeTimeoffService->getNonApprovedTimeoffsOfEmployees();
+         
+        return view('employeeTimeoff.showNonApprovedTimeoffsOfEmployees',
+            [
+                'employeesTimeoffs' => $employeesTimeoffs,
+            ]);
     }
 
     /**
@@ -87,6 +97,7 @@ class EmployeeTimeoffController extends Controller
      */
     public function edit($timeoffId)
     {
+
         $timeoff = $this->EmployeeTimeoffService->getTimeoff($timeoffId);
         if ($timeoff->is_approved == 0) {
             return view('employeeTimeoff.edit',
@@ -112,7 +123,7 @@ class EmployeeTimeoffController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+
         $this->validate($request, array(
 
             'startDate' => 'required|date',
@@ -121,7 +132,7 @@ class EmployeeTimeoffController extends Controller
         ));
 
         $totalCount = $this->EmployeeTimeoffService->countTimeOffs($request->endDate, $request->startDate);
-
+        $totalCount = $totalCount + 1;
         $employeeId = $this->EmployeeTimeoffService->updateTimeoff($totalCount, $request, $id);
 
         return redirect('employeetimeoff/' . $employeeId . '/create');
@@ -157,4 +168,11 @@ class EmployeeTimeoffController extends Controller
             ]);
 
     }
+    public function approveTimeoffs(Request $request)
+    {
+
+        $this->EmployeeTimeoffService->approveTimeoffs($request);
+        return back();
+    }
+
 }

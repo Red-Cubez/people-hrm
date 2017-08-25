@@ -6,14 +6,14 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3>
-                    All UnApproved Timesheets
+                    All UnApproved Time Offs
                 </h3>
             </div>
             <div class="panel-body">
 
 
-             @if(count($employeesTimesheets)>0)
-                 <form class="" action="{{ url('/employeestimesheets/approve/') }}" method="POST">
+             @if(count($employeesTimeoffs)>0)
+                 <form class="" action="{{ url('/employeestimeoffs/approve/') }}" method="POST">
                         {{ csrf_field() }}
                       
  
@@ -24,20 +24,15 @@
                            Employee Name
                         </th>
                         <th>
-                            Year And Week No
+                            Start Date
                         </th>
                         <th>
-                            Week Start Date
+                            End Date
                         </th>
                         <th>
-                            Week End Date
+                            # Of Days
                         </th>
-                         <th>
-                            Billabale Hours
-                        </th>
-                        <th>
-                            Non Billabale Hours
-                        </th>
+                         
                          <th>
                             Approve
                         </th>
@@ -47,57 +42,45 @@
                      </thead>
                     
                      <tbody>
-                            @foreach($employeesTimesheets as $timesheet)
+                            @foreach($employeesTimeoffs as $timeoff)
                                  <tr>
                                  <td class="table-text">
                                    <div>
-                                     <a href="/employees/{{$timesheet->employeeId}}" >
-                                        {{$timesheet->employeeName}}
+                                     <a href="/employees/{{$timeoff->employeeId}}" >
+                                        {{$timeoff->employeeName}}
                                   </a>
                                    </div>
                                  </td>
                                  <td class="table-text">
                                    <div>
                                     
-                                        {{$timesheet->weekNoAndYear}}
+                                        {{$timeoff->startDate}}
                                     
                                    </div>
                                  </td>
                                  <td class="table-text">
                                      <div>
-                                         {{$timesheet->weekStartDate}}
+                                         {{$timeoff->endDate}}
                                      </div>
                                  </td>
                                  <td class="table-text">
                                     <div>
-                                         {{$timesheet->weekEndDate}}
+                                         {{$timeoff->totalCount}}
                                     </div>
                                  </td>
+                                 
                                  <td class="table-text">
                                     <div>
-                                        {{$timesheet->billableWeeklyHours}}
-                                    </div>
-                                 </td>
-                                 <td class="table-text">
-                                    <div>
-                                        {{$timesheet->nonBillableWeeklyHours}}
-                                    </div>
-                                 </td>
-                                 <td class="table-text">
-                                    <div>
-                                    <input type="checkbox" name="areApproved[]" value="{{$timesheet->id}}" />
+                                    <input type="checkbox" name="areApproved[]" value="{{$timeoff->timeoffId}}" />
                                     </div>
                                  </td>
                                
                                 <td>
-                                
-                                <a href="/employeetimesheet/{{$timesheet->id}}">
-                        
-                                    <button type="button" class="btn btn-primary"> View </button>
-                                </a>
-                               
-                                <a href="/employeetimesheet/{{$timesheet->id}}/edit">
-                                    <button type="button" class="btn btn-primary"> Edit </button>
+                                   
+                                <a href="/employeetimeoff/{{$timeoff->timeoffId}}/edit">
+                                  <button type="button" class="btn btn-primary">
+                                        EDIT
+                                  </button>
                                 </a>
 
                               </td>

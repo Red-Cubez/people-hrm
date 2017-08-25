@@ -96,15 +96,32 @@ class EmployeeTimesheetController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
+    ////view readonly to admin
     public function show($id)
     {
+        
+        $timesheet                  = $this->EmployeeTimesheetService->getEmployeeTimesheet($id);
+        $billableWeeklyTimesheet    = json_decode($timesheet->billableWeeklyTimesheet, true);
+        $nonBillableWeeklyTimesheet = json_decode($timesheet->nonBillableWeeklyTimesheet, true);
+        $weekDates                  = $this->EmployeeTimesheetService->getDatesOfWeek(strtotime($timesheet->weekNoAndYear));
+        $showReadOnly               = true;
+
+        return view('employeeTimesheet.edit',
+            [
+
+                'timesheet'                  => $timesheet,
+                'billableWeeklyTimesheet'    => $billableWeeklyTimesheet,
+                'nonBillableWeeklyTimesheet' => $nonBillableWeeklyTimesheet,
+                'weekDates'                  => $weekDates,
+                'showReadOnly'               => $showReadOnly,
+            ]);
 
     }
     public function showNonApprovedTimesheetsOfEmployees()
     {
         $employeesTimesheets = $this->EmployeeTimesheetService->getNonApprovedTimesheetsOfEmployees();
-        
-        return view('employeetimesheet.showNonApprovedTimesheetsOfEmployees',
+  
+        return view('employeeTimesheet.showNonApprovedTimesheetsOfEmployees',
             [
                 'employeesTimesheets' => $employeesTimesheets,
             ]);
@@ -117,9 +134,8 @@ class EmployeeTimesheetController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id,Request $request)
+    public function edit($id)
     {
-        dd($request);
 
         $timesheet                  = $this->EmployeeTimesheetService->getEmployeeTimesheet($id);
         $billableWeeklyTimesheet    = json_decode($timesheet->billableWeeklyTimesheet, true);
@@ -172,9 +188,9 @@ class EmployeeTimesheetController extends Controller
 
     }
     public function approveTimesheets(Request $request)
-    { 
+    {
         $this->EmployeeTimesheetService->approveTimesheets($request);
-       
+
     }
 
     /**

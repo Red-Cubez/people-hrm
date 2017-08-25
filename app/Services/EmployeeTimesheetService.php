@@ -16,6 +16,8 @@ class EmployeeTimesheetModel
     public $isApproved;
     public $employeeName;
     public $employeeId;
+    public $billableWeeklyHours;
+    public $nonBillableWeeklyHours;
 }
 
 class EmployeeTimesheetService implements IEmployeeTimesheetService
@@ -37,17 +39,26 @@ class EmployeeTimesheetService implements IEmployeeTimesheetService
             $employeeTimesheetModel                = new EmployeeTimesheetModel;
             $employeeTimesheetModel->id            = $employeeTimesheet->id;
             $employeeTimesheetModel->weekNoAndYear = $employeeTimesheet->weekNoAndYear;
-
             $employeeTimesheetModel->weekStartDate = $this->getWeekStartDate($employeeTimesheet->weekNoAndYear);
             $employeeTimesheetModel->weekEndDate   = $this->getWeekEndDate($employeeTimesheet->weekNoAndYear);
             $employeeTimesheetModel->isApproved    = $employeeTimesheet->isApproved;
             $employeeTimesheetModel->employeeName  = $employeeTimesheet->employee->firstName . ' ' . $employeeTimesheet->employee->lastName;
-            $employeeTimesheetModel->employeeId  = $employeeTimesheet->employee->id;
+            $employeeTimesheetModel->employeeId    = $employeeTimesheet->employee->id;
+
+            $employeeTimesheetModel->billableWeeklyHours = $this->calculateTimesheetHours($employeeTimesheet->billableWeeklyTimesheet);
+            $employeeTimesheetModel->nonBillableWeeklyHours = $this->calculateTimesheetHours($employeeTimesheet->nonBillableWeeklyTimesheet);
 
             array_push($timehseets, $employeeTimesheetModel);
         }
         return $timehseets;
 
+    }
+    public function calculateTimesheetHours($weeklyTimesheet)
+    {
+        $timesheet  = json_decode($weeklyTimesheet, true);
+        $totalHours = $timesheet['friday'] + $timesheet['monday'] + $timesheet['sunday'] + $timesheet['tuesday'] +
+            $timesheet['saturday'] + $timesheet['thursday'] + $timesheet['wednesday'];
+        return $totalHours;
     }
 
     public function isTimeSheetAlreadyEntered($weekAndYear, $employeeId)

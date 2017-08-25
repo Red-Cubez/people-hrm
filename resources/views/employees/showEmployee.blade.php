@@ -144,8 +144,8 @@
                     <br/>
                     <div class="row">
                         <div class="col-sm-12">
-                            <a href="/employeetimesheets/">
-                          {{--   <a href="/employeetimeoff/create"> --}}
+                            <a href="/employeestimesheets/">
+                        
                                 <button class="btn btn-primary"> Approve Timesheets
 
                                 </button></a>
@@ -157,13 +157,25 @@
                         <div class="col-sm-12">
                             <a href="/employeetimeoff/{{$employeeModel->employeeProfile->employeeId}}/create">
                           {{--   <a href="/employeetimeoff/create"> --}}
-                                <button class="btn btn-primary"> Add TimeOff
+                                <button class="btn btn-primary"> Add Time Off
 
                                 </button></a>
 
                         </div>
+                            </div>
+                        <br/>
+                        <div class="row">
+                        <div class="col-sm-12">
+             
+                            <a href="/employeestimeoffs/">
+                                <button class="btn btn-primary"> Approve Time Offs
 
-                    </div>
+                                </button></a>
+
+                      </div>
+                      </div>
+
+                
                     @include('employees/showEmployeeClientProjects')
                     @include('employees/showEmployeeCompanyProjects')
 

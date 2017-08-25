@@ -16,7 +16,7 @@
                     End Date
                 </th>
                 <th>
-                    Total Count
+                    # Of Days
                 </th>
                 <th>
                     Aprroved

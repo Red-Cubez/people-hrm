@@ -132,6 +132,7 @@ class ClientController extends Controller
 
     public function destroy(Client $client)
     {
+
         $this->ClientService->deleteClient($client);
 
         return redirect('/companies/' . $client->company_id);

@@ -111,7 +111,7 @@
                                   method="POST">
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
-                                <button class="btn btn-danger" type="submit">
+                                <button class="btn btn-danger" data-toggle="confirmation" data-singleton="true" type="submit">
                                     <i c="" lass="fa fa-trash">
                                         DELETE
                                     </i>
@@ -184,4 +184,10 @@
             </div>
         </div>
     </main>
+    <script type="text/javascript">
+$('[data-toggle=confirmation]').confirmation({
+  rootSelector: '[data-toggle=confirmation]',
+  
+});
+</script>
 @endsection

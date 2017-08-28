@@ -136,6 +136,7 @@ class CompanyController extends Controller
     public function destroy(Company $company)
     {
         //TODO: HG - check for company dependencies before deleting a company
+    
         $this->CompanyService->deleteCompany($company);
 
         return redirect('/companies');

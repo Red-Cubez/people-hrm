@@ -5,7 +5,7 @@
         </h3>
     </div>
     <div class="panel-body">
-
+<a data-href="http://google.com" class="btn" data-toggle="confirmation">Confirmation</a>
         <table id="jobTitleTable" class="table table-striped task-table">
 
 
@@ -61,7 +61,6 @@
 
 
     <script type="text/javascript">
-   
         function initializeJobTitleModal() {
             // $('#jobTitleName').val(null);
             // $('#toBeUpdatedJobTitle').val(null);

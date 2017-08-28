@@ -52,7 +52,7 @@
                                 <form action="{{url('companies/'.$company->id) }}" method="POST">
                                     {{ csrf_field() }}
                                     {{ method_field('DELETE') }}
-                                    <button type="submit" class="btn btn-danger">
+                                    <button type="submit" class="btn btn-danger" data-toggle="confirmation" data-singleton="true">
                                         Delete
                                     </button>
                                 </form>
@@ -72,6 +72,11 @@
             </div>
         </div>
     @endif
-
+<script type="text/javascript">
+$('[data-toggle=confirmation]').confirmation({
+  rootSelector: '[data-toggle=confirmation]',
+  
+});
+</script>
 @endsection
 

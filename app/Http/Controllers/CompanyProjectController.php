@@ -80,6 +80,7 @@ class CompanyProjectController extends Controller
 
     public function store(Request $request)
     {
+
         $companyProjectId = $this->CompanyProjectService->saveCompanyProject($request);
         return response()->json(
             [

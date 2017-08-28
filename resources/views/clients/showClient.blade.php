@@ -76,7 +76,7 @@
             {{ csrf_field() }}
             {{ method_field('DELETE') }}
             <input name="_method" type="hidden" value="DELETE">
-            <button class="btn btn-danger" type="submit">
+            <button class="btn btn-danger" data-toggle="confirmation" data-singleton="true" type="submit">
 
                     Delete
 
@@ -87,16 +87,13 @@
             <button class="btn btn-primary"> Add New Project
 
             </button></a>
-        {{--<form action="{{ url('/clients/'.$client->id.'/clientprojects') }}" method="POST">--}}
-            {{--{{ csrf_field() }}--}}
-            {{--{{ method_field('GET') }}--}}
-            {{--<button class="btn btn-primary" type="submit">--}}
-                {{--<i class="fa fa-trash">--}}
-                    {{--Add New Project--}}
-                {{--</i>--}}
-            {{--</button>--}}
-        {{--</form>--}}
+       
     </div>
     @include('clientProjects/showProjects')
-
+<script type="text/javascript">
+$('[data-toggle=confirmation]').confirmation({
+  rootSelector: '[data-toggle=confirmation]',
+  
+});
+</script>
 @endsection

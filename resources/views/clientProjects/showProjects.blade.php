@@ -50,19 +50,12 @@
                                 <button class="btn btn-primary"> View
 
                                 </button></a>
-                            {{--<form action="{{ url('clientprojects/'.$clientProject->id) }}" method="POST">--}}
-                                {{--{{ csrf_field() }}--}}
-                                {{--{{ method_field('GET') }}--}}
-
-                                {{--<button type="submit" class="btn btn-primary">--}}
-                                    {{--<i class="fa fa-trash"> View</i>--}}
-                                {{--</button>--}}
-                            {{--</form>--}}
+                           
 
                             <form action="{{ url('clientprojects/'.$clientProject->id) }}" method="POST">
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
-                                <button type="submit" class="btn btn-danger">
+                                <button type="submit" class="btn btn-danger" data-toggle="confirmation" data-singleton="true">
                                     <i class="fa fa-trash"> Delete </i>
                                 </button>
                             </form>
@@ -70,15 +63,7 @@
                                 <button class="btn btn-primary"> Manage Resource
 
                                 </button></a>
-                            {{--<form action="{{ url('clientprojects/'.$clientProject->id.'/projectresources') }}"--}}
-                                  {{--method="POST">--}}
-                                {{--{{ csrf_field() }}--}}
-                                {{--{{ method_field('GET') }}--}}
-
-                                {{--<button type="submit" class="btn btn-danger">--}}
-                                    {{--<i class="fa fa-trash"> Manage Resource</i>--}}
-                                {{--</button>--}}
-                            {{--</form>--}}
+                           
                         </td>
                     </tr>
                 @endforeach
@@ -86,3 +71,9 @@
             </table>
         </div>
 @endif
+<script type="text/javascript">
+$('[data-toggle=confirmation]').confirmation({
+  rootSelector: '[data-toggle=confirmation]',
+  
+});
+</script>

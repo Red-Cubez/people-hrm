@@ -80,7 +80,7 @@
                             {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
                             <input name="_method" type="hidden" value="DELETE">
-                                <button class="btn btn-danger" type="submit">
+                                <button class="btn btn-danger" data-toggle="confirmation" data-singleton="true"  type="submit">
                                     <i class="fa fa-trash">
                                         Delete
                                     </i>
@@ -98,28 +98,11 @@
                 No Record Found
         @endif
     </div>
-    {{--
-    <form action="{{ url('/clientprojects/') }}" method="POST">
-        {{ csrf_field() }}
-            {{ method_field('GET') }}
-        <input name="companyId" type="hidden" value="{{$companyProfileModel->companyId}}">
-            <button class="btn btn-danger" type="submit">
-                <i class="fa fa-trash">
-                    Add New Projects
-                </i>
-            </button>
-        </input>
-    </form>
-    --}}
-        {{--
-    <form action="{{ url('/companies/'.$companyProfileModel->companyId.'/clientprojects') }}" method="POST">
-        {{ csrf_field() }}
-            {{ method_field('GET') }}
-        <button class="btn btn-danger" type="submit">
-            <i class="fa fa-trash">
-                Add New Projects
-            </i>
-        </button>
-    </form>
-    --}}
+   
 </div>
+<script type="text/javascript">
+$('[data-toggle=confirmation]').confirmation({
+  rootSelector: '[data-toggle=confirmation]',
+  
+});
+</script>

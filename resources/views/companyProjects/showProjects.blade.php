@@ -80,27 +80,19 @@
                             {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
                             <input name="_method" type="hidden" value="DELETE">
-                                <button class="btn btn-danger" type="submit">
+                                <button class="btn btn-danger" data-toggle="confirmation" data-singleton="true" type="submit">
                                     <i class="fa fa-trash">
                                         Delete
                                     </i>
                                 </button>
+                                
                             </input>
                         </form>
                         <a href="/companyprojects/{{$project->projectId}}">
                             <button class="btn btn-primary"> View
 
                             </button></a>
-                        {{--<form action="{{ url('companyprojects/'.$project->projectId) }}" method="POST">--}}
-                            {{--{{ csrf_field() }}--}}
-                                {{--{{ method_field('GET') }}--}}
-                            {{--<button class="btn btn-primary" type="submit">--}}
-                                {{--<i class="fa fa-trash">--}}
-                                    {{--View--}}
-                                {{--</i>--}}
-                            {{--</button>--}}
-                        {{--</form>--}}
-                    </td>
+                                         </td>
                 </tr>
                 @endforeach
                 @else
@@ -113,13 +105,11 @@
         <button class="btn btn-primary"> Add New Projects
 
         </button></a>
-    {{--<form action="{{ url('/companies/'.$companyProfileModel->companyId.'/companyprojects') }}" method="POST">--}}
-        {{--{{ csrf_field() }}--}}
-            {{--{{ method_field('GET') }}--}}
-        {{--<button class="btn btn-primary" type="submit">--}}
-            {{--<i class="fa fa-trash">--}}
-                {{--Add New Projects--}}
-            {{--</i>--}}
-        {{--</button>--}}
-    {{--</form>--}}
+  
 </div>
+<script type="text/javascript">
+$('[data-toggle=confirmation]').confirmation({
+  rootSelector: '[data-toggle=confirmation]',
+  // other options
+});
+</script>

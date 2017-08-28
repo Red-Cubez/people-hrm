@@ -64,8 +64,9 @@
 
                         </td>
                         <td>
-                            <button class="btn btn-danger" onclick="deleteHoliday({{$companyHoliday->holidayId}})"
-                                    type="button">
+                    {{--     onclick="deleteHoliday({{$companyHoliday->holidayId}})" --}}
+                            <button class="btn btn-danger" 
+                                    type="button"  data-toggle="confirmation" data-singleton="true">
                                 <i class="fa fa-trash">
                                     Delete
                                 </i>
@@ -91,10 +92,6 @@
 
         function initializeHolidayModal() {
             $("#list").remove();
-            // $('#holidayName').val(null);
-            // $('#startDate').val(null);
-            // $('#endDate').val(null);
-            //$('#jobTitleId').val(null);
             $('#toBeUpdatedHoliday').val(null);
              $('#holidayModalForm')[0].reset();
         }
@@ -374,4 +371,13 @@
             });
         }
     </script>
+<script type="text/javascript">
+$('[data-toggle=confirmation]').confirmation({
+  rootSelector: '[data-toggle=confirmation]',
+  onConfirm: function() {
+    alert();
+  },
+  
+});
+</script>
 @endsection

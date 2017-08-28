@@ -110,9 +110,16 @@
                     else if (data.formErrors.hasErrors == true) {
 
                         var htmlError = '<div id="list" class="alert alert-danger">';
+                        if (data.formErrors.typeOfResourceNotSelected) {
+                            htmlError = htmlError + "<li>" + data.formErrors.typeOfResourceNotSelected + "</li>";
+                        }
                         if (data.formErrors.employeeNotSelected) {
                             htmlError = htmlError + "<li>" + data.formErrors.employeeNotSelected + "</li>";
                         }
+                         if (data.formErrors.titleNotEntered) {
+                            htmlError = htmlError + "<li>" + data.formErrors.titleNotEntered + "</li>";
+                        }
+                        
                         if (data.formErrors.startDateNotEntered) {
                             htmlError = htmlError + "<li>" + data.formErrors.startDateNotEntered + "</li>";
                         }
@@ -122,10 +129,12 @@
                         if (data.formErrors.wrongEndDate) {
                             htmlError = htmlError + "<li>" + data.formErrors.wrongEndDate + "</li>";
                         }
+                        
 
                         html = htmlError;
                         $("#list").remove();
                         $("#main").before(html);
+                        $(window).scrollTop($('#list').offset().top);
                     }
                 },
                 error: function () {

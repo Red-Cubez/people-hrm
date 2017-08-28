@@ -4,6 +4,7 @@ namespace People\Http\Controllers;
 
 use Illuminate\Http\Request;
 use People\Services\Interfaces\IJobTitleService;
+use People\Services\Interfaces\IResourceFormValidator;
 
 class JobTitleController extends Controller
 {
@@ -14,11 +15,13 @@ class JobTitleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public $JobTitleService;
+    public $ResourceFormValidator;
 
-    public function __construct(IJobTitleService $jobTitleService)
+    public function __construct(IJobTitleService $jobTitleService, IResourceFormValidator $resourceFormValidator)
     {
 
-        $this->JobTitleService = $jobTitleService;
+        $this->JobTitleService       = $jobTitleService;
+        $this->ResourceFormValidator = $resourceFormValidator;
     }
 
     public function index()
@@ -44,14 +47,25 @@ class JobTitleController extends Controller
      */
     public function store(Request $request)
     {
-        $jobTitle = $this->JobTitleService->saveJobTitle($request);
+        $isFormValid = $this->ResourceFormValidator->validateJobTitleForm($request->name);
 
-        return response()->json(
-            [
-                'jobTitle' => $jobTitle->title,
-                'jobTitleId' => $jobTitle->id,
-            ]);
+        if ($isFormValid) {
+            $jobTitle = $this->JobTitleService->saveJobTitle($request);
 
+            return response()->json(
+                [
+                    'jobTitle'    => $jobTitle->title,
+                    'jobTitleId'  => $jobTitle->id,
+                    'isFormValid' => $isFormValid,
+                ]);
+        }
+        if (!$isFormValid) {
+            return response()->json(
+                [
+
+                    'isFormValid' => $isFormValid,
+                ]);
+        }
     }
 
     /**
@@ -67,7 +81,7 @@ class JobTitleController extends Controller
 
         return view('jobTitles/index',
             ['companyId' => $companyId,
-                'jobTitles' => $jobTitles,
+                'jobTitles'  => $jobTitles,
 
             ]);
     }
@@ -98,15 +112,27 @@ class JobTitleController extends Controller
 
     public function update(Request $request, $jobTitleid)
     {
+        $isFormValid = $this->ResourceFormValidator->validateJobTitleForm($request->name);
 
-        $jobTitle = $this->JobTitleService->updateJobTitle($request, $jobTitleid);
+        if ($isFormValid) {
+            $jobTitle = $this->JobTitleService->updateJobTitle($request, $jobTitleid);
 
-        return response()->json(
-            [
-                'jobTitle' => $request->name,
-                'jobTitleId' => $jobTitle->id,
+            return response()->json(
+                [
+                    'jobTitle'   => $request->name,
+                    'jobTitleId' => $jobTitle->id,
+                    'isFormValid' => $isFormValid,
 
-            ]);
+                ]);
+
+        }
+        if (!$isFormValid) {
+            return response()->json(
+                [
+
+                    'isFormValid' => $isFormValid,
+                ]);
+        }
 
     }
 

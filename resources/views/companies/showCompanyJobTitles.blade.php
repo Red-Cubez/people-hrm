@@ -63,9 +63,10 @@
     <script type="text/javascript">
    
         function initializeJobTitleModal() {
-            $('#jobTitleName').val(null);
-            $('#toBeUpdatedJobTitle').val(null);
+            // $('#jobTitleName').val(null);
+            // $('#toBeUpdatedJobTitle').val(null);
              $("#jobTitleNotEnteredDiv").remove();
+             $('#jobTitleModalForm')[0].reset();
         }
         function setupJobTitleEditValues(jobTitleId, jobTitle) {
 
@@ -95,9 +96,10 @@
         function addUpdateJobTitle() {
 
             var form = $("#jobTitleModalForm");
-            // form.valid();
-            if(validateJobTitle())
+            if(form.valid())
             {
+            // if(validateJobTitle())
+            // {
 
             var jobTitleId = $('#toBeUpdatedJobTitle').val();
 
@@ -108,34 +110,36 @@
                 updateJobTitle();
             }
         }
-        if(validateJobTitle())
-        {
+    }
+        //}
+        // if(validateJobTitle())
+        // {
            
-             $("#jobTitleNotEnteredDiv").remove();
+        //      $("#jobTitleNotEnteredDiv").remove();
                
-                var html = '<div id="jobTitleNotEnteredDiv" class="alert alert-danger">Please Enter Job Title</div>';
+        //         var html = '<div id="jobTitleNotEnteredDiv" class="alert alert-danger">Please Enter Job Title</div>';
 
-                $("#jobTitleName").before(html);
-                $(window).scrollTop($('#jobTitleNotEnteredDiv').offset().top);
-        }
-        }
+        //         $("#jobTitleName").before(html);
+            
+        // }
+        //}
 
-        function validateJobTitle()
-        {
-            jobTitleName=$('#jobTitleName').val();
+        // function validateJobTitle()
+        // {
+        //     jobTitleName=$('#jobTitleName').val();
 
-            if(jobTitleName!='' || jobTitleName!=' ' || jobTitleName != null)
-            {
+        //     if(jobTitleName!='' || jobTitleName!=' ' || jobTitleName != null)
+        //     {
 
-                return true;
-            }
-            else if(jobTitleName=='' || jobTitleName==' ' || jobTitleName == null)
-            {
+        //         return true;
+        //     }
+        //     else if(jobTitleName=='' || jobTitleName==' ' || jobTitleName == null)
+        //     {
                 
-                return false;
-            }
+        //         return false;
+        //     }
 
-        }
+        // }
         function deleteJobTitle(jobTitleId) {
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
@@ -150,7 +154,7 @@
                         $('.error').removeClass('hidden');
                         $('.error').text(data.errors.name);
                     } else {
-
+ 
                         $('#jobTitle_' + jobTitleId).remove();
                     }
                 },
@@ -168,11 +172,22 @@
                     'name': newValue
                 },
                 success: function (data) {
+      
                     if ((data.errors)) {
                         alert('errors');
                         $('.error').removeClass('hidden');
                         $('.error').text(data.errors.name);
-                    } else {
+                    } 
+                    if(!data.isFormValid)
+                    {
+                      
+                         $("#jobTitleNotEnteredDiv").remove();
+               
+                          var html = '<div id="jobTitleNotEnteredDiv" class="alert alert-danger">Please Enter Job Title</div>';
+
+                          $("#jobTitleName").before(html);
+                    }
+                    else {
                         $('#jobTitleModal').modal('toggle');
                         $('#jobTitleName').val(null);
                         $('#jobTitleId').val(null);
@@ -218,7 +233,17 @@
                         alert('errors');
                         $('.error').removeClass('hidden');
                         $('.error').text(data.errors.name);
-                    } else {
+                    }
+                    if(!data.isFormValid)
+                    {
+
+                         $("#jobTitleNotEnteredDiv").remove();
+               
+                          var html = '<div id="jobTitleNotEnteredDiv" class="alert alert-danger">Please Enter Job Title</div>';
+
+                          $("#jobTitleName").before(html);
+                    }
+                     else {
 
                         $('#jobTitleModal').modal('toggle');
                         $('#jobTitleName').val(null);

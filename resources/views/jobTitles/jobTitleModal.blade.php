@@ -18,7 +18,7 @@
                     <label for="usr">
                         Job Title Name:
                     </label>
-                    <input class="form-control" id="jobTitleName" type="text" required>
+                    <input class="form-control" id="jobTitleName" name="jobTitleName" type="text" required>
                     </input>
                 </div>
             </div>

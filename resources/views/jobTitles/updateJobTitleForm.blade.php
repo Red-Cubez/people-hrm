@@ -12,7 +12,7 @@
 
             {{ csrf_field() }}
             {{ method_field('PUT') }}
-            <!-Name -->
+           
             @include('jobTitles/addJobTitleForm')
         </form>
     </div>

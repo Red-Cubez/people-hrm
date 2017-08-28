@@ -39,39 +39,6 @@
 
 <script type="text/javascript">
 
-//function formSubmit()
-//{
-//    var areDatesValid = this.areDatesValid();
-//    if(areDatesValid)
-//    {
-//        var formValid = $('#saveForm').validate();
-//         if (formValid) {
-//            $("#saveForm").submit();
-//         }
-//         else
-//         {
-//            alert('form has errors');
-//         }
-//    }
-//    else
-//    {
-//        html = 'sdsd';
-//
-//        $("#endDateDiv").before(html);
-////
-////
-////         alert("Enter Corrrect End Date");
-//    }
-//}
-//function areDatesValid()
-//{
-//     var startDate = $("#startDate").value;
-//    var endDate = $("#endDate").value;
-//    if(endDate<startDate)
-//    {
-//     return false;
-//    }
-//    return true;
-//}
+
 </script>
 @endsection

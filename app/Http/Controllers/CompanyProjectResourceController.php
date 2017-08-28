@@ -50,6 +50,7 @@ class CompanyProjectResourceController extends Controller
      */
     public function validateResourceForm(Request $request)
     {
+
         $formErrors = $this->ResourceFormValidator->validateForm($request);
 
         return response()->json(
@@ -61,6 +62,7 @@ class CompanyProjectResourceController extends Controller
 
     public function store(Request $request)
     {
+      
         $this->CompanyProjectResourceService->saveOrUpdateCompanyProjectResource($request);
         return response()->json(
             [

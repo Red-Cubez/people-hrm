@@ -91,13 +91,12 @@
 
         function initializeHolidayModal() {
             $("#list").remove();
-            $('#holidayName').val(null);
-            $('#startDate').val(null);
-            $('#endDate').val(null);
-            $("#startDateNotEnteredDiv").remove();
-            $("#nameNotEnteredDiv").remove();
+            // $('#holidayName').val(null);
+            // $('#startDate').val(null);
+            // $('#endDate').val(null);
             //$('#jobTitleId').val(null);
             $('#toBeUpdatedHoliday').val(null);
+             $('#holidayModalForm')[0].reset();
         }
         function setupHolidayEditValues(holidayId, holidayName, startDate, endDate) {
 
@@ -145,36 +144,16 @@
             if (endDate < startDate) {
                 return false;
             }
-            if(startDate=='' || startDate==null)
-            {
             return 1;
-        }
-        }
-        function isHolidayNameEntered()
-        {
-            holidayName=$('#holidayName').val();
-
-            if(holidayName=='' || holidayName==null)
-            {
-                return false;
-            }
-            else if(holidayName!=null || holidayName!='')
-            {
-                return true;
-            }
         }
         function addUpdateHoliday() {
 
             var areDatesValid = this.areDatesValid();
-            var isHolidayNameEntered=this.isHolidayNameEntered();
+
             if (areDatesValid) {
-                 $("#nameNotEnteredDiv").remove();
-                 $("#startDateNotEnteredDiv").remove();
                 var form = $("#holidayModalForm");
 
                 if (form.valid()) {
-                     if(isHolidayNameEntered)
-                    {
 
                     var holidayId = $('#toBeUpdatedHoliday').val();
 
@@ -185,37 +164,13 @@
                         updateHoliday();
                     }
                 }
-                }
-            }
-             if(!isHolidayNameEntered)
-            {
-                $("#nameNotEnteredDiv").remove();
-               
-                var html = '<div id="nameNotEnteredDiv" class="alert alert-danger">Please Enter Holiday Name </div>';
-
-                $("#holidayNameDiv").before(html);
-                $(window).scrollTop($('#nameNotEnteredDiv').offset().top);
-
-            }
-            if(areDatesValid==1)
-            {
-                $("#startDateNotEnteredDiv").remove();
-                var html = '<div id="startDateNotEnteredDiv" class="alert alert-danger">Please Entered Start Date </div>';
-
-                $("#holidayNameDiv").before(html);
-                $(window).scrollTop($('#startDateNotEnteredDiv').offset().top);
-            }
-            if(!areDatesValid) {
+           }
+            else if(!areDatesValid) {
                 $("#list").remove();
-                var html = '<div id="list" class="alert alert-danger">End Date Can not be Smaller Than Start Date </div>';
+                var html = '<div id="list" class="alert alert-danger">End Date Can not be Less Than Start Date </div>';
 
                 $("#holidayNameDiv").before(html);
-                  $(window).scrollTop($('#list').offset().top);
-
-              //  alert(wrongEndDate);
-                //alert("Enter Corrrect End Date");
             }
-
         }
         function updateHoliday() {
 
@@ -239,7 +194,26 @@
                         alert('errors');
                         $('.error').removeClass('hidden');
                         $('.error').text(data.errors.name);
-                    } else {
+                    }
+                     if(data.formErrors.hasErrors)
+                    {
+                        var htmlError = '<div id="list" class="alert alert-danger">';
+                        if (data.formErrors.nameNotEntered) {
+                            htmlError = htmlError + "<li>" + data.formErrors.nameNotEntered + "</li>";
+                        }
+                        if (data.formErrors.startDateNotEntered) {
+                            htmlError = htmlError + "<li>" + data.formErrors.startDateNotEntered + "</li>";
+                        }
+                         if (data.formErrors.endDateIsLessThanStartDate) {
+                            htmlError = htmlError + "<li>" + data.formErrors.endDateIsLessThanStartDate + "</li>";
+                        }
+                        
+                        html = htmlError;
+                        $("#list").remove();
+                        $("#holidayNameDiv").before(html);
+                        // $(window).scrollTop($('#list').offset().top);
+                    }
+                     else {
 
                         // $('#holiday_' + data.holidayId).remove();
                         $('#holidayModal').modal('toggle');
@@ -314,7 +288,26 @@
                         alert('errors');
                         $('.error').removeClass('hidden');
                         $('.error').text(data.errors.name);
-                    } else {
+                    }
+                    if(data.formErrors.hasErrors)
+                    {
+                        var htmlError = '<div id="list" class="alert alert-danger">';
+                        if (data.formErrors.nameNotEntered) {
+                            htmlError = htmlError + "<li>" + data.formErrors.nameNotEntered + "</li>";
+                        }
+                        if (data.formErrors.startDateNotEntered) {
+                            htmlError = htmlError + "<li>" + data.formErrors.startDateNotEntered + "</li>";
+                        }
+                         if (data.formErrors.endDateIsLessThanStartDate) {
+                            htmlError = htmlError + "<li>" + data.formErrors.endDateIsLessThanStartDate + "</li>";
+                        }
+                        
+                        html = htmlError;
+                        $("#list").remove();
+                        $("#holidayNameDiv").before(html);
+                        // $(window).scrollTop($('#list').offset().top);
+                    }
+                     else {
 
                         $('#holidayModal').modal('toggle');
                         $('#holidayName').val(null);

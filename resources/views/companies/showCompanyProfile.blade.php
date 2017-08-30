@@ -67,7 +67,7 @@
         </div>
 
         <a href="/companies/{{$companyProfileModel->companyId}}/edit">
-            <button class="btn btn-primary"> Edit Companay
+            <button class="btn btn-primary"> Edit Company
 
             </button></a>
 

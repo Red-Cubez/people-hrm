@@ -13,5 +13,6 @@ interface IResourceFormValidator
     public function validateJobTitleForm($jobTitleName);
 
     public function validateHolidayForm($request);
+    public function validateDepartmentForm($departmentName);
 
 }

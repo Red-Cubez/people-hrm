@@ -27,6 +27,9 @@
         <div class="col-sm-6">
             @include('employees/showEmployeesWithBirthdayThisMonth')
         </div>
+        <div class="col-sm-5">
+            @include('companyDepartments/showDepartments')
+        </div>
     </div>
     <div class="row">
         <div class="col-sm-5">

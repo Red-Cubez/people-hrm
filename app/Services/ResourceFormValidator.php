@@ -139,6 +139,18 @@ class ResourceFormValidator implements IResourceFormValidator
 
         return $formErrors;
     }
+    public function validateDepartmentForm($departmentName)
+    {
+         if($departmentName == null || $departmentName =='' || $departmentName ==' ')
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+
+    }
 
     public function validateEmployeeForm($request)
 

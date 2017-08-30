@@ -8,6 +8,7 @@ use People\Services\Interfaces\ICompanyHolidayService;
 use People\Services\Interfaces\ICompanyService;
 use People\Services\Interfaces\IEmployeeService;
 use People\Services\Interfaces\IJobTitleService;
+use People\Services\Interfaces\IDepartmentService;
 
 class CompanyController extends Controller
 {
@@ -16,15 +17,18 @@ class CompanyController extends Controller
     public $JobTitleService;
     public $EmployeeService;
     public $CompanyHolidayService;
+    public $DepartmentService;
 
     public function __construct(ICompanyService $companyService, IJobTitleService $jobTitleService,
 
-        IEmployeeService $employeeService, ICompanyHolidayService $companyHolidayService) {
+        IEmployeeService $employeeService, ICompanyHolidayService $companyHolidayService,
+        IDepartmentService $departmentService) {
 
         $this->CompanyService        = $companyService;
         $this->JobTitleService       = $jobTitleService;
         $this->EmployeeService       = $employeeService;
         $this->CompanyHolidayService = $companyHolidayService;
+        $this->DepartmentService     = $departmentService;
     }
 
     /**
@@ -60,7 +64,7 @@ class CompanyController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, array(
-            'name'  => 'required|max:255',
+            'name' => 'required|max:255',
         ));
         $this->CompanyService->createCompany($request);
 
@@ -76,21 +80,23 @@ class CompanyController extends Controller
      */
     public function show(Company $company)
     {
-//dd($company);
+
         $companyJobTitles = $this->JobTitleService->getJobTitlesOfCompany($company->id);
         $companyHolidays  = $this->CompanyHolidayService->getCompanyHolidays($company->id);
-//        dd($company);
+
         $companyCurrentEmployees = $this->EmployeeService->getAllEmployeesOfCompany($company->id);
         $companyCurrentClients   = $this->EmployeeService->getAllClientsOfCompany($company->id);
-//        dd($company);
-        $employeesWithBirthday = $this->EmployeeService->getAllEmployeesWithBirthDayThisMonth($company);
-//        dd($company);
-        list($company, $companyAddress) = $this->CompanyService->getCompanyAddressAndCompanyProjects($company);
-//        dd($company);
-        $companyProfileModel = $this->CompanyService->mapCompanyProfile($company, $companyAddress,
-            $companyJobTitles, $employeesWithBirthday, $companyHolidays, $companyCurrentEmployees, $companyCurrentClients);
-        $employeesWithBirthday = $companyProfileModel->employeesBirthday;
 
+        $employeesWithBirthday = $this->EmployeeService->getAllEmployeesWithBirthDayThisMonth($company);
+      
+        list($company, $companyAddress) = $this->CompanyService->getCompanyAddressAndCompanyProjects($company);
+
+        $companyDepartments=$this->DepartmentService->getDepartmentsOfCompany($company->id);
+
+        $companyProfileModel = $this->CompanyService->mapCompanyProfile($company, $companyAddress,
+            $companyJobTitles, $employeesWithBirthday, $companyHolidays, $companyCurrentEmployees, $companyCurrentClients,
+            $companyDepartments);
+        $employeesWithBirthday = $companyProfileModel->employeesBirthday;
         return view('companies/showCompany',
             [
                 'companyProfileModel'   => $companyProfileModel,
@@ -119,8 +125,8 @@ class CompanyController extends Controller
      */
     public function update(Request $request, Company $company)
     {
-         $this->validate($request, array(
-            'name'  => 'required|max:255',
+        $this->validate($request, array(
+            'name' => 'required|max:255',
         ));
         $this->CompanyService->updateCompany($request, $company);
 
@@ -136,7 +142,7 @@ class CompanyController extends Controller
     public function destroy(Company $company)
     {
         //TODO: HG - check for company dependencies before deleting a company
-    
+
         $this->CompanyService->deleteCompany($company);
 
         return redirect('/companies');

@@ -12,6 +12,7 @@ use People\PresentationModels\Company\CompanyJobTitles;
 use People\PresentationModels\Company\CompanyProfileModel;
 use People\PresentationModels\Company\CompanyProjectModel;
 use People\PresentationModels\Company\EmployeesBirthDayModel;
+use People\PresentationModels\Company\CompanyDepartmetsModel;
 use People\Services\Interfaces\ICompanyService;
 
 class CompanyService implements ICompanyService
@@ -90,7 +91,7 @@ class CompanyService implements ICompanyService
     }
 
     public function mapCompanyProfile($company, $companyAddress, $companyJobTitles, $employeesWithBirthday, $companyHolidays,
-        $companyCurrentEmployees, $companyCurrentClients) {
+        $companyCurrentEmployees, $companyCurrentClients,$companyDepartments) {
 
 //        dd($company);
 
@@ -107,7 +108,7 @@ class CompanyService implements ICompanyService
             $companyProfileModel->stateProvince = $companyAddress->stateProvince;
             $companyProfileModel->city          = $companyAddress->city;
         }
-//        dd($company);
+
         foreach ($companyJobTitles as $jobTitle) {
             $CompanyJobTitleModel             = new CompanyJobTitles();
             $CompanyJobTitleModel->jobTitle   = $jobTitle->title;
@@ -117,6 +118,16 @@ class CompanyService implements ICompanyService
                 $companyProfileModel->jobTitles = [];
             }
             array_push($companyProfileModel->jobTitles, $CompanyJobTitleModel);
+        }
+        foreach ($companyDepartments as $department) {
+            $CompanyDepartmentModel             = new CompanyDepartmetsModel();
+            $CompanyDepartmentModel->departmentName   = $department->name;
+            $CompanyDepartmentModel->departmentId = $department->id;
+
+            if (is_null($companyProfileModel->departments)) {
+                $companyProfileModel->departments = [];
+            }
+            array_push($companyProfileModel->departments, $CompanyDepartmentModel);
         }
 //        dd($company);
         foreach ($employeesWithBirthday as $employee) {

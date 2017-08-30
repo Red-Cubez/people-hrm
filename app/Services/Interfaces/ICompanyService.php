@@ -10,7 +10,8 @@ interface ICompanyService {
 	public function getCompanyAddressAndCompanyProjects($company);
     public function mapCompanyProfile($company,$CompanyAddress,$companyJobTitles,
                                       $employeesWithBirthday,$companyHolidays,
-                                      $companyCurrentEmployees,$companyCurrentClients);
+                                      $companyCurrentEmployees,$companyCurrentClients,
+                                      $companyDepartments);
 
 
 }

@@ -26,4 +26,6 @@ class CompanyProfileModel {
 	public $employeesBirthday;
 	public $jobTitles;
 
+	public $departments;
+
 }

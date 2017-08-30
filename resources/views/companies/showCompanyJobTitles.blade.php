@@ -43,10 +43,7 @@
                                         Delete
                                     </button>
                             </form>
-                            {{-- <button class="btn btn-danger" onsubmit="deleteJobTitle({{$companyJobTitle->jobTitleId}});"
-                                   data-toggle="confirmation" data-singleton="true" type="submit">
-                                Delete
-                            </button> --}}
+                           
                         </td>
                     </tr>
                 @endforeach
@@ -66,6 +63,7 @@
     @parent
     <script type="text/javascript">
         function initializeJobTitleModal() {
+            $("#jobTitleNotEnteredDiv").remove();
             $('#jobTitleName').val(null);
             $('#toBeUpdatedJobTitle').val(null);
         }
@@ -96,8 +94,8 @@
         function addUpdateJobTitle() {
 
             var form = $("#jobTitleModalForm");
-            form.valid();
-
+            
+            if(form.valid()){
             var jobTitleId = $('#toBeUpdatedJobTitle').val();
 
             if (jobTitleId == '' || jobTitleId === null) {
@@ -106,6 +104,7 @@
             else {
                 updateJobTitle();
             }
+        }
         }
 
         function deleteJobTitle(jobTitleId) {
@@ -144,7 +143,17 @@
                         alert('errors');
                         $('.error').removeClass('hidden');
                         $('.error').text(data.errors.name);
-                    } else {
+                    } 
+                    if(!data.isFormValid)
+                    {
+                         
+                         $("#jobTitleNotEnteredDiv").remove();
+               
+                          var html = '<div id="jobTitleNotEnteredDiv" class="alert alert-danger">Please Enter Job Title</div>';
+
+                          $("#jobTitleName").before(html);
+                    }
+                     else {
                         $('#jobTitleModal').modal('toggle');
                         $('#jobTitleName').val(null);
                         $('#jobTitleId').val(null);
@@ -202,7 +211,17 @@
                         alert('errors');
                         $('.error').removeClass('hidden');
                         $('.error').text(data.errors.name);
-                    } else {
+                    } 
+                    if(!data.isFormValid)
+                    {
+
+                         $("#jobTitleNotEnteredDiv").remove();
+               
+                          var html = '<div id="jobTitleNotEnteredDiv" class="alert alert-danger">Please Enter Job Title</div>';
+
+                          $("#jobTitleName").before(html);
+                    }
+                     else {
 
                         $('#jobTitleModal').modal('toggle');
                         $('#jobTitleName').val(null);

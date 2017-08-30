@@ -75,7 +75,7 @@ Route::resource('companyholidays', 'CompanyHolidayController');
 
 Route::get('/clients/{clientid}/clientprojects', 'ClientProjectController@manageProject');
 
-Route::resource('departments', 'DepartmentController');
+Route::resource('company/department', 'CompanyDepartmentController');
 Route::resource('companies', 'CompanyController');
 
 Route::get('/employeetimesheet/{employeeId}/create/', 'EmployeeTimesheetController@createTimesheet');

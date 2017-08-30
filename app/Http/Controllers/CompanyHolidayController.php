@@ -133,10 +133,11 @@ class CompanyHolidayController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($holidayId, Request $request)
+    public function destroy($holidayId)
     {
+        
         $this->CompanyHolidayService->deleteHoliday($holidayId);
 
-        return $holidayId;
+        return back();
     }
 }

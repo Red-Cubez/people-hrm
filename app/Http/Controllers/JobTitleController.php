@@ -142,12 +142,12 @@ class JobTitleController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($jobTitleId, Request $request)
+    public function destroy($jobTitleId)
     {
 
         $this->JobTitleService->deleteJobTitle($jobTitleId);
-
-        return response()->json(['jobTitleId' => $jobTitleId]);
+        return back();
+        // return response()->json(['jobTitleId' => $jobTitleId]);
 
     }
 }

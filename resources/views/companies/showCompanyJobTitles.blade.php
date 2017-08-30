@@ -5,7 +5,7 @@
         </h3>
     </div>
     <div class="panel-body">
-<a data-href="http://google.com" class="btn" data-toggle="confirmation">Confirmation</a>
+
         <table id="jobTitleTable" class="table table-striped task-table">
 
 
@@ -31,16 +31,22 @@
                         </td>
                         <td>
                             <button
-                                    class="btn btn-primary edit" 
+                                    class="btn btn-primary"
                                     onclick="openJobTitleModal({{$companyJobTitle->jobTitleId}},null);"
                                     type="button">
                                 Edit
                             </button>
-
-                            <button class="btn btn-danger" onclick="deleteJobTitle({{$companyJobTitle->jobTitleId}});"
-                                    type="submit">
-                                DELETE
-                            </button>
+                             <form action="{{url('jobtitle/'.$companyJobTitle->jobTitleId) }}" method="POST">
+                                    {{ csrf_field() }}
+                                    {{ method_field('DELETE') }}
+                                    <button type="submit" class="btn btn-danger" data-toggle="confirmation" data-singleton="true">
+                                        Delete
+                                    </button>
+                            </form>
+                            {{-- <button class="btn btn-danger" onsubmit="deleteJobTitle({{$companyJobTitle->jobTitleId}});"
+                                   data-toggle="confirmation" data-singleton="true" type="submit">
+                                Delete
+                            </button> --}}
                         </td>
                     </tr>
                 @endforeach
@@ -50,7 +56,7 @@
             </tbody>
         </table>
     </div>
-    <button id="test" class="btn btn-primary btn-lg" onclick="openJobTitleModal(null,null);" type="button">
+    <button class="btn btn-primary btn-lg" onclick="openJobTitleModal(null,null);" type="button">
         Add New Job Title
     </button>
 </div>
@@ -58,14 +64,10 @@
 
 @section('page-scripts')
     @parent
-
-
     <script type="text/javascript">
         function initializeJobTitleModal() {
-            // $('#jobTitleName').val(null);
-            // $('#toBeUpdatedJobTitle').val(null);
-             $("#jobTitleNotEnteredDiv").remove();
-             $('#jobTitleModalForm')[0].reset();
+            $('#jobTitleName').val(null);
+            $('#toBeUpdatedJobTitle').val(null);
         }
         function setupJobTitleEditValues(jobTitleId, jobTitle) {
 
@@ -78,9 +80,8 @@
             $("#jobTitleName").val(jobTitleValue);
         }
         function openJobTitleModal(jobTitleId, jobTitle) {
- 
-            initializeJobTitleModal();
 
+            initializeJobTitleModal();
             if (jobTitleId !== null) {
                 $('#toBeUpdatedJobTitle').val(jobTitleId);
                 setupJobTitleEditValues(jobTitleId, jobTitle);
@@ -95,10 +96,7 @@
         function addUpdateJobTitle() {
 
             var form = $("#jobTitleModalForm");
-            if(form.valid())
-            {
-            // if(validateJobTitle())
-            // {
+            form.valid();
 
             var jobTitleId = $('#toBeUpdatedJobTitle').val();
 
@@ -109,36 +107,7 @@
                 updateJobTitle();
             }
         }
-    }
-        //}
-        // if(validateJobTitle())
-        // {
-           
-        //      $("#jobTitleNotEnteredDiv").remove();
-               
-        //         var html = '<div id="jobTitleNotEnteredDiv" class="alert alert-danger">Please Enter Job Title</div>';
 
-        //         $("#jobTitleName").before(html);
-            
-        // }
-        //}
-
-        // function validateJobTitle()
-        // {
-        //     jobTitleName=$('#jobTitleName').val();
-
-        //     if(jobTitleName!='' || jobTitleName!=' ' || jobTitleName != null)
-        //     {
-
-        //         return true;
-        //     }
-        //     else if(jobTitleName=='' || jobTitleName==' ' || jobTitleName == null)
-        //     {
-                
-        //         return false;
-        //     }
-
-        // }
         function deleteJobTitle(jobTitleId) {
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
@@ -153,7 +122,7 @@
                         $('.error').removeClass('hidden');
                         $('.error').text(data.errors.name);
                     } else {
- 
+
                         $('#jobTitle_' + jobTitleId).remove();
                     }
                 },
@@ -171,27 +140,27 @@
                     'name': newValue
                 },
                 success: function (data) {
-      
                     if ((data.errors)) {
                         alert('errors');
                         $('.error').removeClass('hidden');
                         $('.error').text(data.errors.name);
-                    } 
-                    if(!data.isFormValid)
-                    {
-                      
-                         $("#jobTitleNotEnteredDiv").remove();
-               
-                          var html = '<div id="jobTitleNotEnteredDiv" class="alert alert-danger">Please Enter Job Title</div>';
-
-                          $("#jobTitleName").before(html);
-                    }
-                    else {
+                    } else {
                         $('#jobTitleModal').modal('toggle');
                         $('#jobTitleName').val(null);
                         $('#jobTitleId').val(null);
-
-                        var html = '\
+                        var html=null;
+                        html = createJobTitleHtmlRow(data);
+                        
+                        $('#jobTitle_' + jobTitleId).html(html);
+                        initializeConfirmationBox();
+                    }
+                },
+            });
+        }
+        function createJobTitleHtmlRow(data)
+        {
+                 var htmlRow=null;
+                 htmlRow= '\
                     <td class="table-text">\
                         <div id="jobTitleName_' + data.jobTitleId + ' ">\
                             ' + data.jobTitle + '\
@@ -204,15 +173,16 @@
                         type="button"> \
                         Edit \
                         </button> \
-                        <button class="btn btn-danger" onclick="deleteJobTitle(\'' + data.jobTitleId + '\')" type="submit"> \
-                            <i class="fa fa-trash">DELETE</i> \
-                        </button> \
+                        <form action="{{url('jobtitle')}}/' + data.jobTitleId + ' " method="POST">\
+                                    {{ csrf_field() }}\
+                                    {{ method_field('DELETE') }}\
+                                    <button type="submit" class="btn btn-danger" data-toggle="confirmation"\ data-singleton="true">\
+                                        Delete\
+                                    </button>\
+                            </form>\
                     </td> \
                     </tr>';
-                        $('#jobTitle_' + jobTitleId).html(html);
-                    }
-                },
-            });
+                    return htmlRow;
         }
 
         function addJobTitle() {
@@ -232,54 +202,29 @@
                         alert('errors');
                         $('.error').removeClass('hidden');
                         $('.error').text(data.errors.name);
-                    }
-                    if(!data.isFormValid)
-                    {
-
-                         $("#jobTitleNotEnteredDiv").remove();
-               
-                          var html = '<div id="jobTitleNotEnteredDiv" class="alert alert-danger">Please Enter Job Title</div>';
-
-                          $("#jobTitleName").before(html);
-                    }
-                     else {
+                    } else {
 
                         $('#jobTitleModal').modal('toggle');
                         $('#jobTitleName').val(null);
 
-                        var jobTitle = data.jobTitle;
-                        var editButton = $('<button>Edit</button>').click(function () {
-
-                            openJobTitleModal(data.jobTitleId);
-                        });
-                        var deleteButton = $('<button>Delete</button>').click(function () {
-
-                            deleteJobTitle(data.jobTitleId);
-                        });
-
-                        var html = '\
-                 <tr id="jobTitle_' + data.jobTitleId + '">\
-                    <td class="table-text">\
-                        <div id="jobTitleName_' + data.jobTitleId + ' ">\
-                            ' + data.jobTitle + '\
-                        </div>\
-                    </td>\
-                    <td >\
-                        <button \
-                        class="btn btn-primary" \
-                        onclick="openJobTitleModal(\'' + data.jobTitleId + '\',\'' + data.jobTitle + '\');" \
-                        type="button"> \
-                        Edit \
-                        </button> \
-                        <button class="btn btn-danger" onclick="deleteJobTitle(\'' + data.jobTitleId + '\')" type="submit"> \
-                            <i class="fa fa-trash">DELETE</i> \
-                        </button> \
-                    </td> \
-                    </tr>';
+                        var html=null;
+                        html = '\
+                                   <tr id="jobTitle_' + data.jobTitleId + '">\
+                                    '+ createJobTitleHtmlRow(data);'\
+                                   </tr>';
                         $("#jobTitleTableBody").append(html);
+                        initializeConfirmationBox();
                     }
                 }
             });
         }
     </script>
+    <script type="text/javascript">
+function initializeConfirmationBox()
+{
+    $('[data-toggle=confirmation]').confirmation({
+  rootSelector: '[data-toggle=confirmation]',
+    });
+}
+</script>
 @endsection

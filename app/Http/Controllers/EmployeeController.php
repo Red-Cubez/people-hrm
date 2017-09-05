@@ -25,7 +25,7 @@ class EmployeeController extends Controller
         IJobTitleService $jobTitleService, IUserAuthenticationService $userAuthenticationService,
         IResourceFormValidator $employeeFormValidator, ICompanyHolidayService $companyHolidayService) {
 
-         $this->middleware('auth', ['only' => ['show']]);
+        $this->middleware('auth', ['only' => ['show']]);
            
         // $this->middleware('isAuthorizedToView');
         $this->EmployeeService           = $employeeService;
@@ -112,8 +112,9 @@ class EmployeeController extends Controller
      */
     public function show($employeeId)
     {
-
+        
         $canEmployeeView = $this->UserAuthenticationService->canEmployeeView($employeeId);
+
         if ($canEmployeeView) {
 
             $employee      = $this->EmployeeService->getEmployee($employeeId);
@@ -129,7 +130,7 @@ class EmployeeController extends Controller
                     'employeesWithBirthday' => $employeesWithBirthday,
                 ]);
         } else if (!$canEmployeeView) {
-            dd("Acces Denied");
+            return view('notAuthorize');
         }
     }
 

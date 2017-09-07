@@ -100,33 +100,42 @@ class ClientProjectController extends Controller
 
     public function show($clientProjectId)
     {
+        $isManager = $this->UserAuthenticationService->isManager();
 
-        $clientProjectModel = $this->ClientProjectService->viewClientProject($clientProjectId);
-        $clientProjects     = $this->ClientProjectService->getClientProjectDetails($clientProjectId);
+        if ($isManager) {
+            $clientProjectModel = $this->ClientProjectService->viewClientProject($clientProjectId);
+            $clientProjects     = $this->ClientProjectService->getClientProjectDetails($clientProjectId);
 
 //        $currentProjectResources = ProjectResource::where('client_project_id', $clientProjectId)->orderBy('created_at', 'asc')
-        //            ->get();
-        list($currentProjectResources, $availableEmployees) = $this->ProjectResourceService->showClientProjectResources($clientProjectId);
+            //            ->get();
+            list($currentProjectResources, $availableEmployees) = $this->ProjectResourceService->showClientProjectResources($clientProjectId);
 
-        $projectResources = $this->ProjectService->mapResourcesDetailsToClass($currentProjectResources, false);
-        $projectTimeLines = $this->ProjectGrapher->setupProjectCost($clientProjectModel, $projectResources, false);
+            $projectResources = $this->ProjectService->mapResourcesDetailsToClass($currentProjectResources, false);
+            $projectTimeLines = $this->ProjectGrapher->setupProjectCost($clientProjectModel, $projectResources, false);
 
-        $projectTotalCost = $this->ProjectGrapher->calculateProjectTotalCost($projectTimeLines);
-        $resourcesDetails = $this->ProjectGrapher->getResourcesTotalCostForProject($clientProjectModel, $projectResources, $projectTotalCost);
+            $projectTotalCost = $this->ProjectGrapher->calculateProjectTotalCost($projectTimeLines);
+            $resourcesDetails = $this->ProjectGrapher->getResourcesTotalCostForProject($clientProjectModel, $projectResources, $projectTotalCost);
 
-        $clientProjectModel->cost              = $projectTotalCost;
-        $isOnBudget                            = $this->ProjectService->isProjectOnBudget($projectTotalCost, $clientProjectModel->budget);
-        $clientProjectModel->isProjectOnBudget = $isOnBudget;
+            $clientProjectModel->cost              = $projectTotalCost;
+            $isOnBudget                            = $this->ProjectService->isProjectOnBudget($projectTotalCost, $clientProjectModel->budget);
+            $clientProjectModel->isProjectOnBudget = $isOnBudget;
 
-        return view('clientProjects/viewClientProject',
-            [
-                'project'          => $clientProjectModel,
-                'projectTimeLines' => $projectTimeLines,
-                'resourcesDetails' => $resourcesDetails,
-                'projectTotalCost' => $projectTotalCost,
-                //'clientProjects'=>$clientProjects,
+            return view('clientProjects/viewClientProject',
+                [
+                    'project'          => $clientProjectModel,
+                    'projectTimeLines' => $projectTimeLines,
+                    'resourcesDetails' => $resourcesDetails,
+                    'projectTotalCost' => $projectTotalCost,
+                    //'clientProjects'=>$clientProjects,
 
-            ]);
+                ]);
+        } else {
+            return view('notAuthorize',
+                [
+                    'message' => 'You are Not Authorize to view this Page !!',
+                ]
+            );
+        }
 
     }
 
@@ -138,9 +147,18 @@ class ClientProjectController extends Controller
      */
     public function edit($clientProjectId)
     {
+        $isManager = $this->UserAuthenticationService->isManager();
 
-        $clientProject = $this->ClientProjectService->getClientProjectDetails($clientProjectId);
-        return view('clientProjects/clientProjectEditForm', ['clientProject' => $clientProject]);
+        if ($isManager) {
+            $clientProject = $this->ClientProjectService->getClientProjectDetails($clientProjectId);
+            return view('clientProjects/clientProjectEditForm', ['clientProject' => $clientProject]);
+        } else {
+            return view('notAuthorize',
+                [
+                    'message' => 'You are Not Authorize to view this Page !!',
+                ]
+            );
+        }
     }
 
     /**
@@ -165,30 +183,38 @@ class ClientProjectController extends Controller
      */
     public function destroy(ClientProject $clientproject)
     {
-        $clientid = $this->ClientProjectService->deleteClientProject($clientproject);
+        $isManager = $this->UserAuthenticationService->isManager();
 
-        return redirect('/clients/' . $clientid);
+        if ($isManager) {
+            $clientid = $this->ClientProjectService->deleteClientProject($clientproject);
+
+            return redirect('/clients/' . $clientid);
+        } else {
+            return view('notAuthorize',
+                [
+                    'message' => 'You are Not Authorize to view this Page !!',
+                ]
+            );
+
+        }
     }
 
     public function manageProject($clientId)
     {
-        $isManager=$this->UserAuthenticationService->isManager();
-        if($isManager)
-        {
+        $isManager = $this->UserAuthenticationService->isManager();
+        if ($isManager) {
 
-        $clientProjects = $this->ClientProjectService->manageClientProjects($clientId);
+            $clientProjects = $this->ClientProjectService->manageClientProjects($clientId);
 
-        return view('clientprojects.index',
-            ['clientProjects' => $clientProjects,
-                'clientId'        => $clientId,
-            ]);
-    }
-    else
-    {
-         return view('notAuthorize',
+            return view('clientprojects.index',
+                ['clientProjects' => $clientProjects,
+                    'clientId'        => $clientId,
+                ]);
+        } else {
+            return view('notAuthorize',
                 [
                     'message' => 'You are Not Authorize to view this Page !!',
                 ]);
-    }
+        }
     }
 }

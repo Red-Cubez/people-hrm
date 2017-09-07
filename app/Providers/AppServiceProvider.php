@@ -65,6 +65,12 @@ class AppServiceProvider extends ServiceProvider {
 
 		$this->app->bind(
 			'People\Services\Interfaces\IUserAuthenticationService', 'People\Services\UserAuthenticationService');
+
+		$this->app->bind(
+			'People\Services\Interfaces\IRoleService', 'People\Services\RoleService');
+
+		$this->app->bind(
+			'People\Services\Interfaces\IUserRolesService', 'People\Services\UserRolesService');
 	}
 
 }

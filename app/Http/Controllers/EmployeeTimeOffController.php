@@ -4,15 +4,20 @@ namespace People\Http\Controllers;
 
 use Illuminate\Http\Request;
 use People\Services\Interfaces\IEmployeeTimeoffService;
+use People\Services\Interfaces\IUserAuthenticationService;
 
 class EmployeeTimeoffController extends Controller
 {
 
     public $EmployeeTimeoffService;
-    public function __construct(IEmployeeTimeoffService $employeeTimeoffService)
-    {
+    public $UserAuthenticationService;
+    
+    public function __construct(IEmployeeTimeoffService $employeeTimeoffService, IUserAuthenticationService
+         $userAuthenticationService) {
+        $this->middleware('auth');
+        $this->EmployeeTimeoffService    = $employeeTimeoffService;
+        $this->UserAuthenticationService = $userAuthenticationService;
 
-        $this->EmployeeTimeoffService = $employeeTimeoffService;
     }
     /**
      * Display a listing of the resource.
@@ -35,15 +40,29 @@ class EmployeeTimeoffController extends Controller
     }
     public function createTimeoff($employeeId)
     {
+        $isManager = $this->UserAuthenticationService->isManager();
 
-        $timeoffs = $this->EmployeeTimeoffService->getTimeoffsOfEmployee($employeeId);
+        $isEmployee      = $this->UserAuthenticationService->isEmployee();
+        $canEmployeeView = false;
+        if ($isEmployee) {
+            $canEmployeeView = $this->UserAuthenticationService->canEmployeeView($employeeId);
 
-        return view('employeeTimeoff.index',
-            [
-                'employeeId' => $employeeId,
-                'timeoffs'   => $timeoffs,
+        }
+        if ($isManager || $canEmployeeView) {
+            $timeoffs = $this->EmployeeTimeoffService->getTimeoffsOfEmployee($employeeId);
 
-            ]);
+            return view('employeeTimeoff.index',
+                [
+                    'employeeId' => $employeeId,
+                    'timeoffs'   => $timeoffs,
+
+                ]);
+        } else {
+            return view('notAuthorize',
+                [
+                    'message' => 'You are Not Authorize to view this Page !!',
+                ]);
+        }
     }
 
     /**
@@ -54,6 +73,7 @@ class EmployeeTimeoffController extends Controller
      */
     public function store(Request $request)
     {
+
         $this->validate($request, array(
 
             'startDate' => 'required|date',
@@ -81,12 +101,20 @@ class EmployeeTimeoffController extends Controller
     }
     public function showNonApprovedTimeoffsOfEmployees()
     {
-        $employeesTimeoffs = $this->EmployeeTimeoffService->getNonApprovedTimeoffsOfEmployees();
-         
-        return view('employeeTimeoff.showNonApprovedTimeoffsOfEmployees',
-            [
-                'employeesTimeoffs' => $employeesTimeoffs,
-            ]);
+        $isManager = $this->UserAuthenticationService->isManager();
+        if ($isManager) {
+            $employeesTimeoffs = $this->EmployeeTimeoffService->getNonApprovedTimeoffsOfEmployees();
+
+            return view('employeeTimeoff.showNonApprovedTimeoffsOfEmployees',
+                [
+                    'employeesTimeoffs' => $employeesTimeoffs,
+                ]);
+        } else {
+            return view('notAuthorize',
+                [
+                    'message' => 'You are Not Authorize to view this Page !!',
+                ]);
+        }
     }
 
     /**
@@ -97,19 +125,41 @@ class EmployeeTimeoffController extends Controller
      */
     public function edit($timeoffId)
     {
+        $isManager = $this->UserAuthenticationService->isManager();
 
-        $timeoff = $this->EmployeeTimeoffService->getTimeoff($timeoffId);
-        if ($timeoff->is_approved == 0) {
-            return view('employeeTimeoff.edit',
+        $isEmployee      = $this->UserAuthenticationService->isEmployee();
+        $canEmployeeView = false;
+         if ($isEmployee) {
+            $timesheet = $this->EmployeeTimeoffService->getTimeoff($timeoffId);
+            if (isset($timesheet)) {
+                $canEmployeeView = $this->UserAuthenticationService->canEmployeeView($timesheet->employee->id);
+            } else {
+                return view('notAuthorize',
+                    [
+                        'message' => 'You are Not Authorize to view this Page !!',
+                    ]);
+            }
+
+        }
+        if ($isManager || $canEmployeeView) {
+            $timeoff = $this->EmployeeTimeoffService->getTimeoff($timeoffId);
+            if ($timeoff->is_approved == 0) {
+                return view('employeeTimeoff.edit',
+                    [
+                        'employeeId' => $timeoff->employee_id,
+                        'timeoff'    => $timeoff,
+
+                    ]);
+
+            } elseif ($timeoff->is_approved == 1) {
+
+                return back();
+            }
+        } else {
+            return view('notAuthorize',
                 [
-                    'employeeId' => $timeoff->employee_id,
-                    'timeoff'    => $timeoff,
-
+                    'message' => 'You are Not Authorize to view this Page !!',
                 ]);
-
-        } elseif ($timeoff->is_approved == 1) {
-
-            return back();
         }
 
     }
@@ -147,6 +197,7 @@ class EmployeeTimeoffController extends Controller
      */
     public function destroy($id)
     {
+
         $this->EmployeeTimeoffService->deleteTimeoff($id);
 
         return back();
@@ -170,9 +221,19 @@ class EmployeeTimeoffController extends Controller
     }
     public function approveTimeoffs(Request $request)
     {
+        $isManager = $this->UserAuthenticationService->isManager();
 
-        $this->EmployeeTimeoffService->approveTimeoffs($request);
-        return back();
+        $isEmployee      = $this->UserAuthenticationService->isEmployee();
+        $canEmployeeView = false;
+        if ($isEmployee) {
+            $canEmployeeView = $this->UserAuthenticationService->canEmployeeView($employeeId);
+
+        }
+        if ($isManager || $canEmployeeView) {
+
+            $this->EmployeeTimeoffService->approveTimeoffs($request);
+            return back();
+        }
     }
 
 }

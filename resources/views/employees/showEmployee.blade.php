@@ -100,12 +100,16 @@
                                 @endif
                                 Working Over Time.
                             </div>
+                            @role('admin')
+   
+
                             <br>
                             <a href="/employees/{{$employeeModel->employeeProfile->employeeId}}/edit">
                                 <button class="btn btn-primary"> Edit
 
                                 </button>
                             </a>
+                            
                             
                             <form action="{{ url('employees/'.$employeeModel->employeeProfile->employeeId) }}"
                                   method="POST">
@@ -117,6 +121,7 @@
                                     </i>
                                 </button>
                             </form>
+                            @endrole
 
                         </div>
                         <div class="col-sm-5">
@@ -132,6 +137,7 @@
                     </div>
                 </div>
                 </div>
+                  @role(['manager','employee'])
                     <div class="row">
                         <div class="col-sm-12">
                             <a href="/employeetimesheet/{{$employeeModel->employeeProfile->employeeId}}/create">
@@ -141,7 +147,9 @@
 
                         </div>
                     </div>
+                    @endrole
                     <br/>
+                     @role('manager')
                     <div class="row">
                         <div class="col-sm-12">
                             <a href="/employeestimesheets/">
@@ -152,7 +160,9 @@
 
                       </div>
                       </div>
+                      @endrole
                     <br/>
+                     @role(['manager','employee'])
                        <div class="row">
                         <div class="col-sm-12">
                             <a href="/employeetimeoff/{{$employeeModel->employeeProfile->employeeId}}/create">
@@ -163,7 +173,9 @@
 
                         </div>
                             </div>
+                     @endrole
                         <br/>
+                        @role('manager')
                         <div class="row">
                         <div class="col-sm-12">
              
@@ -174,6 +186,7 @@
 
                       </div>
                       </div>
+                      @endrole
 
                 
                     @include('employees/showEmployeeClientProjects')

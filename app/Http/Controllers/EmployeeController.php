@@ -25,8 +25,8 @@ class EmployeeController extends Controller
         IJobTitleService $jobTitleService, IUserAuthenticationService $userAuthenticationService,
         IResourceFormValidator $employeeFormValidator, ICompanyHolidayService $companyHolidayService) {
 
-        $this->middleware('auth', ['only' => ['show']]);
-           
+        $this->middleware('auth');
+
         // $this->middleware('isAuthorizedToView');
         $this->EmployeeService           = $employeeService;
         $this->DepartmentService         = $departmentService;
@@ -50,18 +50,27 @@ class EmployeeController extends Controller
     public function showEmployeeForm($companyId)
     {
 
-        $employees   = $this->EmployeeService->getAllEmployees();
-        $departments = $this->DepartmentService->getAllDepartments();
-        $jobTitles   = $this->JobTitleService->getJobTitlesOfCompany($companyId);
+        $isAdmin = $this->UserAuthenticationService->isAdmin();
+        if ($isAdmin) {
+            $employees   = $this->EmployeeService->getAllEmployees();
+            $departments = $this->DepartmentService->getAllDepartments();
+            $jobTitles   = $this->JobTitleService->getJobTitlesOfCompany($companyId);
 
-        return view('employees.index',
-            [
-                'employees'   => $employees,
-                'departments' => $departments,
-                'jobTitles'   => $jobTitles,
-                'companyId'   => $companyId,
+            return view('employees.index',
+                [
+                    'employees'   => $employees,
+                    'departments' => $departments,
+                    'jobTitles'   => $jobTitles,
+                    'companyId'   => $companyId,
 
-            ]);
+                ]);
+        } else {
+            return view('notAuthorize',
+                [
+                    'message' => 'The Page You are looking for is not found !!',
+                ]
+            );
+        }
     }
     /**
      * Display a listing of the resource.
@@ -94,13 +103,22 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
+        $isAdmin = $this->UserAuthenticationService->isAdmin();
+        if ($isAdmin) {
+            $employeeId = $this->EmployeeService->createEmployee($request);
 
-        $employeeId = $this->EmployeeService->createEmployee($request);
+            return response()->json(
+                [
+                    'employeeId' => $employeeId,
+                ]);
+        } else {
+            return view('notAuthorize',
+                [
+                    'message' => 'The Page You are looking for is not found !!',
+                ]
+            );
 
-        return response()->json(
-            [
-                'employeeId' => $employeeId,
-            ]);
+        }
 
     }
 
@@ -112,12 +130,22 @@ class EmployeeController extends Controller
      */
     public function show($employeeId)
     {
-        
-        $canEmployeeView = $this->UserAuthenticationService->canEmployeeView($employeeId);
 
-        if ($canEmployeeView) {
+        // $canEmployeeView = $this->UserAuthenticationService->canEmployeeView($employeeId);
 
-            $employee      = $this->EmployeeService->getEmployee($employeeId);
+        // if ($canEmployeeView) {
+        $isAdmin    = $this->UserAuthenticationService->isAdmin();
+        $isManager  = $this->UserAuthenticationService->isManager();
+        $isEmployee = $this->UserAuthenticationService->isEmployee();
+
+        if ($isEmployee) {
+            $canEmployeeView = $this->UserAuthenticationService->canEmployeeView($employeeId);
+
+        }
+    
+    if ($isAdmin || $isManager || $canEmployeeView) {
+        $employee = $this->EmployeeService->getEmployee($employeeId);
+        if (isset($employee)) {
             $company       = Company::find($employee->company_id);
             $employeeModel = $this->EmployeeService->viewEmployee($employee);
             //  $departments = $this->EmployeeService->getAllDepartments();
@@ -129,20 +157,38 @@ class EmployeeController extends Controller
                     'companyHolidays'       => $companyHolidays,
                     'employeesWithBirthday' => $employeesWithBirthday,
                 ]);
-        } else if (!$canEmployeeView) {
-            return view('notAuthorize');
+        } else {
+            return view('notAuthorize',
+                [
+                    'message' => 'The Page You are looking for is not found !!',
+                ]
+            );
         }
+    } else {
+        return view('notAuthorize',
+            [
+                'message' => 'You are Not Authorize to view this Page !!',
+            ]);
     }
+    // } else if (!$canEmployeeView) {
+    //     return view('notAuthorize',
+    //         [
+    //             'message' => 'You are Not Authorize to view this Page !!',
+    //         ]
+    //     );
+    // }
+}
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \People\Models\Employee $employee
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($employeeId)
-    {
-
+/**
+ * Show the form for editing the specified resource.
+ *
+ * @param  \People\Models\Employee $employee
+ * @return \Illuminate\Http\Response
+ */
+function edit($employeeId)
+{
+    $isAdmin = $this->UserAuthenticationService->isAdmin();
+    if ($isAdmin) {
         $employee          = $this->EmployeeService->getEmployee($employeeId);
         $editEmployeeModel = $this->EmployeeService->editEmployee($employee);
         $departments       = $this->EmployeeService->getAllDepartments();
@@ -154,39 +200,64 @@ class EmployeeController extends Controller
                 'departments'       => $departments,
                 'jobTitles'         => $jobTitles,
             ]);
-
+    } else {
+        return view('notAuthorize',
+            [
+                'message' => 'You are Not Authorize to view this Page !!',
+            ]
+        );
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \People\Models\Employee $employee
-     * @return \Illuminate\Http\Response
-     */
+}
 
-    public function update(Request $request, $employeeId)
-    {
+/**
+ * Update the specified resource in storage.
+ *
+ * @param  \Illuminate\Http\Request $request
+ * @param  \People\Models\Employee $employee
+ * @return \Illuminate\Http\Response
+ */
 
+function update(Request $request, $employeeId)
+{
+    $isAdmin = $this->UserAuthenticationService->isAdmin();
+    if ($isAdmin) {
         $employee = $this->EmployeeService->getEmployee($employeeId);
         $this->EmployeeService->updateEmployee($request, $employee);
         return response()->json(
             [
                 'employeeId' => $employeeId,
             ]);
-
+    } else {
+        return view('notAuthorize',
+            [
+                'message' => 'You are Not Authorize to view this Page !!',
+            ]
+        );
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \People\Models\Employee $employee
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Employee $employee)
-    {
+}
+
+/**
+ * Remove the specified resource from storage.
+ *
+ * @param  \People\Models\Employee $employee
+ * @return \Illuminate\Http\Response
+ */
+function destroy(Employee $employee)
+{
+    $isAdmin = $this->UserAuthenticationService->isAdmin();
+    if ($isAdmin) {
         $this->EmployeeService->deleteEmployee($employee);
 
         return redirect('/companies/' . $employee->company_id);
+    } else {
+        return view('notAuthorize',
+            [
+                'message' => 'You are Not Authorize to view this Page !!',
+            ]
+        );
     }
+
+}
 }

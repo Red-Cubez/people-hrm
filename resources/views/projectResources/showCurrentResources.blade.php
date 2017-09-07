@@ -38,7 +38,7 @@
 
                                     <button type="submit" class="btn">
 
-                                        <i class="fa fa-trash"> EDIT </i>
+                                        <i class="fa fa-trash"> Edit </i>
                                     </button>
                                 </form>
                                 <form action="{{ url('projectresources/'.$projectResource->resourceId) }}"
@@ -46,10 +46,12 @@
                                     {{ csrf_field() }}
                                     {{ method_field('DELETE') }}
 
-
-                                    <button type="submit" class="btn btn-danger">
-                                        <i class="fa fa-trash"> Delete </i>
-                                    </button>
+                                    <button class="btn btn-danger" data-toggle="confirmation" data-singleton="true" type="submit">
+                                    <i class="fa fa-trash">
+                                        Delete
+                                    </i>
+                                     </button>
+                                   
                                 </form>
                             </td>
                         </tr>
@@ -61,3 +63,12 @@
 </div>
 
 @endif
+<script type="text/javascript">
+$(document).ready(function(){ 
+
+$('[data-toggle=confirmation]').confirmation({
+  rootSelector: '[data-toggle=confirmation]',
+  
+});
+    });
+</script>

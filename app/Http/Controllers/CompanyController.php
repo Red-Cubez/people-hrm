@@ -6,9 +6,10 @@ use Illuminate\Http\Request;
 use People\Models\Company;
 use People\Services\Interfaces\ICompanyHolidayService;
 use People\Services\Interfaces\ICompanyService;
+use People\Services\Interfaces\IDepartmentService;
 use People\Services\Interfaces\IEmployeeService;
 use People\Services\Interfaces\IJobTitleService;
-use People\Services\Interfaces\IDepartmentService;
+use People\Services\Interfaces\IUserAuthenticationService;
 
 class CompanyController extends Controller
 {
@@ -18,17 +19,19 @@ class CompanyController extends Controller
     public $EmployeeService;
     public $CompanyHolidayService;
     public $DepartmentService;
+    public $UserAuthenticationService;
 
     public function __construct(ICompanyService $companyService, IJobTitleService $jobTitleService,
 
-        IEmployeeService $employeeService, ICompanyHolidayService $companyHolidayService,
+        IEmployeeService $employeeService, ICompanyHolidayService $companyHolidayService, IUserAuthenticationService $userAuthenticationService,
         IDepartmentService $departmentService) {
-
-        $this->CompanyService        = $companyService;
-        $this->JobTitleService       = $jobTitleService;
-        $this->EmployeeService       = $employeeService;
-        $this->CompanyHolidayService = $companyHolidayService;
-        $this->DepartmentService     = $departmentService;
+        $this->middleware('auth');
+        $this->CompanyService            = $companyService;
+        $this->JobTitleService           = $jobTitleService;
+        $this->EmployeeService           = $employeeService;
+        $this->CompanyHolidayService     = $companyHolidayService;
+        $this->DepartmentService         = $departmentService;
+        $this->UserAuthenticationService = $userAuthenticationService;
     }
 
     /**
@@ -37,11 +40,21 @@ class CompanyController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
+    { 
+        $isManager = $this->UserAuthenticationService->isManager();
+         $isAdmin = $this->UserAuthenticationService->isAdmin();
+        if ($isManager || $isAdmin) {
+            $companies = $this->CompanyService->getAllCompanies();
 
-        $companies = $this->CompanyService->getAllCompanies();
+            return view('companies.index', ['companies' => $companies]);
+        } else {
+            return view('notAuthorize',
+                [
+                    'message' => 'You are Not Authorize to view this Page !!',
+                ]
+            );
 
-        return view('companies.index', ['companies' => $companies]);
+        }
     }
 
     /**
@@ -52,7 +65,16 @@ class CompanyController extends Controller
 
     public function create()
     {
-        return view('companies.addNewCompany');
+        $isManager = $this->UserAuthenticationService->isManager();
+        if ($isManager) {
+            return view('companies.addNewCompany');
+        } else {
+            return view('notAuthorize',
+                [
+                    'message' => 'You are Not Authorize to view this Page !!',
+                ]
+            );
+        }
     }
 
     /**
@@ -63,13 +85,21 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, array(
-            'name' => 'required|max:255',
-        ));
-        $this->CompanyService->createCompany($request);
+        $isAdmin = $this->UserAuthenticationService->isAdmin();
+        if ($isAdmin) {
+            $this->validate($request, array(
+                'name' => 'required|max:255',
+            ));
+            $this->CompanyService->createCompany($request);
 
-        return redirect('/companies');
-
+            return redirect('/companies');
+        } else {
+            return view('notAuthorize',
+                [
+                    'message' => 'You are Not Authorize to view this Page !!',
+                ]
+            );
+        }
     }
 
     /**
@@ -80,28 +110,39 @@ class CompanyController extends Controller
      */
     public function show(Company $company)
     {
+        $isManager = $this->UserAuthenticationService->isManager();
+        $isAdmin = $this->UserAuthenticationService->isAdmin();
 
-        $companyJobTitles = $this->JobTitleService->getJobTitlesOfCompany($company->id);
-        $companyHolidays  = $this->CompanyHolidayService->getCompanyHolidays($company->id);
+        if ($isManager || $isAdmin) {
+            $companyJobTitles = $this->JobTitleService->getJobTitlesOfCompany($company->id);
+            $companyHolidays  = $this->CompanyHolidayService->getCompanyHolidays($company->id);
 
-        $companyCurrentEmployees = $this->EmployeeService->getAllEmployeesOfCompany($company->id);
-        $companyCurrentClients   = $this->EmployeeService->getAllClientsOfCompany($company->id);
+            $companyCurrentEmployees = $this->EmployeeService->getAllEmployeesOfCompany($company->id);
+            $companyCurrentClients   = $this->EmployeeService->getAllClientsOfCompany($company->id);
 
-        $employeesWithBirthday = $this->EmployeeService->getAllEmployeesWithBirthDayThisMonth($company);
-      
-        list($company, $companyAddress) = $this->CompanyService->getCompanyAddressAndCompanyProjects($company);
+            $employeesWithBirthday = $this->EmployeeService->getAllEmployeesWithBirthDayThisMonth($company);
 
-        $companyDepartments=$this->DepartmentService->getDepartmentsOfCompany($company->id);
+            list($company, $companyAddress) = $this->CompanyService->getCompanyAddressAndCompanyProjects($company);
 
-        $companyProfileModel = $this->CompanyService->mapCompanyProfile($company, $companyAddress,
-            $companyJobTitles, $employeesWithBirthday, $companyHolidays, $companyCurrentEmployees, $companyCurrentClients,
-            $companyDepartments);
-        $employeesWithBirthday = $companyProfileModel->employeesBirthday;
-        return view('companies/showCompany',
-            [
-                'companyProfileModel'   => $companyProfileModel,
-                'employeesWithBirthday' => $employeesWithBirthday,
-            ]);
+            $companyDepartments = $this->DepartmentService->getDepartmentsOfCompany($company->id);
+
+            $companyProfileModel = $this->CompanyService->mapCompanyProfile($company, $companyAddress,
+                $companyJobTitles, $employeesWithBirthday, $companyHolidays, $companyCurrentEmployees, $companyCurrentClients,
+                $companyDepartments);
+            $employeesWithBirthday = $companyProfileModel->employeesBirthday;
+            return view('companies/showCompany',
+                [
+                    'companyProfileModel'   => $companyProfileModel,
+                    'employeesWithBirthday' => $employeesWithBirthday,
+                ]);
+        } else {
+            return view('notAuthorize',
+                [
+                    'message' => 'You are Not Authorize to view this Page !!',
+                ]
+            );
+
+        }
     }
 
     /**
@@ -112,7 +153,17 @@ class CompanyController extends Controller
      */
     public function edit(Company $company)
     {
-        return view('companies/companyEditForm', ['company' => $company]);
+
+        $isAdmin = $this->UserAuthenticationService->isAdmin();
+        if ($isAdmin) {
+            return view('companies/companyEditForm', ['company' => $company]);
+        } else {
+            return view('notAuthorize',
+                [
+                    'message' => 'You are Not Authorize to view this Page !!',
+                ]
+            );
+        }
 
     }
 
@@ -125,12 +176,21 @@ class CompanyController extends Controller
      */
     public function update(Request $request, Company $company)
     {
-        $this->validate($request, array(
-            'name' => 'required|max:255',
-        ));
-        $this->CompanyService->updateCompany($request, $company);
+        $isAdmin = $this->UserAuthenticationService->isAdmin();
+        if ($isAdmin) {
+            $this->validate($request, array(
+                'name' => 'required|max:255',
+            ));
+            $this->CompanyService->updateCompany($request, $company);
 
-        return redirect('/companies/' . $company->id);
+            return redirect('/companies/' . $company->id);
+        } else {
+            return view('notAuthorize',
+                [
+                    'message' => 'You are Not Authorize to view this Page !!',
+                ]
+            );
+        }
     }
 
     /**
@@ -142,9 +202,18 @@ class CompanyController extends Controller
     public function destroy(Company $company)
     {
         //TODO: HG - check for company dependencies before deleting a company
+        $isManager = $this->UserAuthenticationService->isManager();
+        if ($isManager) {
+            $this->CompanyService->deleteCompany($company);
 
-        $this->CompanyService->deleteCompany($company);
+            return redirect('/companies');
+        } else {
+            return view('notAuthorize',
+                [
+                    'message' => 'You are Not Authorize to view this Page !!',
+                ]
+            );
+        }
 
-        return redirect('/companies');
     }
 }

@@ -9,6 +9,7 @@ use People\Services\Interfaces\ICompanyProjectService;
 use People\Services\Interfaces\IProjectGrapher;
 use People\Services\Interfaces\IProjectService;
 use People\Services\Interfaces\IResourceFormValidator;
+use People\Services\Interfaces\IUserAuthenticationService;
 
 class CompanyProjectController extends Controller
 {
@@ -23,19 +24,20 @@ class CompanyProjectController extends Controller
     public $ProjectGrapher;
     public $ProjectService;
     public $ProjectFormValidator;
-
+    public $UserAuthenticationService;
 
     public function __construct(ICompanyProjectService $companyProjectService,
-                                ICompanyProjectResourceService $companyProjectResourceService,
-                                IProjectGrapher $ProjectGrapher, IProjectService $ProjectService,
-                                IResourceFormValidator $projectFormValidator)
-    {
+        ICompanyProjectResourceService $companyProjectResourceService,
+        IProjectGrapher $ProjectGrapher, IProjectService $ProjectService,
+        IResourceFormValidator $projectFormValidator, IUserAuthenticationService $userAuthenticationService) {
 
-        $this->CompanyProjectService = $companyProjectService;
+        $this->middleware('auth');
+        $this->CompanyProjectService         = $companyProjectService;
         $this->CompanyProjectResourceService = $companyProjectResourceService;
-        $this->ProjectGrapher = $ProjectGrapher;
-        $this->ProjectService = $ProjectService;
-        $this->ProjectFormValidator = $projectFormValidator;
+        $this->ProjectGrapher                = $ProjectGrapher;
+        $this->ProjectService                = $ProjectService;
+        $this->ProjectFormValidator          = $projectFormValidator;
+        $this->UserAuthenticationService     = $userAuthenticationService;
     }
 
     public function index()
@@ -67,26 +69,33 @@ class CompanyProjectController extends Controller
      */
     public function validateProjectForm(Request $request)
     {
-    
+
         $formErrors = $this->ProjectFormValidator->validateProjectForm($request);
 
         return response()->json(
             [
                 'formErrors' => $formErrors,
-                'action'=> $request->action,
+                'action'     => $request->action,
             ]);
 
     }
 
     public function store(Request $request)
     {
-
-        $companyProjectId = $this->CompanyProjectService->saveCompanyProject($request);
-        return response()->json(
-            [
-                'projectId' => $companyProjectId,
-            ]);
-      //  return redirect('/companyprojects/' . $companyProjectId);
+        $isManager = false;
+        $isManager = $this->UserAuthenticationService->isManager();
+        if ($isManager) {
+            $companyProjectId = $this->CompanyProjectService->saveCompanyProject($request);
+            return response()->json(
+                [
+                    'projectId' => $companyProjectId,
+                ]);
+        } else {
+            return view('notAuthorize',
+                [
+                    'message' => 'You are Not Authorize to view this Page !!',
+                ]);
+        }
     }
 
     /**
@@ -97,30 +106,37 @@ class CompanyProjectController extends Controller
      */
     public function show($companyProjectId)
     {
+        $isManager = false;
+        $isManager = $this->UserAuthenticationService->isManager();
+        if ($isManager) {
+            list($currentProjectResources) = $this->CompanyProjectResourceService->showCompanyProjectResources($companyProjectId);
 
-        list($currentProjectResources) = $this->CompanyProjectResourceService->showCompanyProjectResources($companyProjectId);
+            $companyProject = $this->CompanyProjectService->viewCompanyProject($companyProjectId);
 
-        $companyProject = $this->CompanyProjectService->viewCompanyProject($companyProjectId);
+            $projectTimeLines = $this->ProjectGrapher->setupProjectCost($companyProject, $currentProjectResources, true);
+            $projectTotalCost = $this->ProjectGrapher->calculateProjectTotalCost($projectTimeLines);
+            $resourcesDetails = $this->ProjectGrapher->getResourcesTotalCostForProject($companyProject, $currentProjectResources, $projectTotalCost);
 
+            $companyProject->cost              = $projectTotalCost;
+            $isOnBudget                        = $this->ProjectService->isProjectOnBudget($projectTotalCost, $companyProject->budget);
+            $companyProject->isProjectOnBudget = $isOnBudget;
 
-        $projectTimeLines = $this->ProjectGrapher->setupProjectCost($companyProject, $currentProjectResources, true);
-        $projectTotalCost = $this->ProjectGrapher->calculateProjectTotalCost($projectTimeLines);
-        $resourcesDetails = $this->ProjectGrapher->getResourcesTotalCostForProject($companyProject, $currentProjectResources, $projectTotalCost);
+            return view('companyProjects/viewCompanyProject',
+                [
+                    'project'          => $companyProject,
+                    'projectResources' => $currentProjectResources,
+                    'companyProjectId' => $companyProjectId,
+                    'projectTimeLines' => $projectTimeLines,
+                    'resourcesDetails' => $resourcesDetails,
+                    'projectTotalCost' => $projectTotalCost,
 
-        $companyProject->cost = $projectTotalCost;
-        $isOnBudget = $this->ProjectService->isProjectOnBudget($projectTotalCost, $companyProject->budget);
-        $companyProject->isProjectOnBudget = $isOnBudget;
-
-        return view('companyProjects/viewCompanyProject',
-            [
-                'project' => $companyProject,
-                'projectResources' => $currentProjectResources,
-                'companyProjectId' => $companyProjectId,
-                'projectTimeLines' => $projectTimeLines,
-                'resourcesDetails' => $resourcesDetails,
-                'projectTotalCost' => $projectTotalCost,
-
-            ]);
+                ]);
+        } else {
+            return view('notAuthorize',
+                [
+                    'message' => 'You are Not Authorize to view this Page !!',
+                ]);
+        }
 
     }
 
@@ -132,7 +148,16 @@ class CompanyProjectController extends Controller
      */
     public function edit(CompanyProject $companyproject)
     {
-        return view('companyProjects/companyProjectEditForm', ['companyproject' => $companyproject]);
+        $isManager = false;
+        $isManager = $this->UserAuthenticationService->isManager();
+        if ($isManager) {
+            return view('companyProjects/companyProjectEditForm', ['companyproject' => $companyproject]);
+        } else {
+            return view('notAuthorize',
+                [
+                    'message' => 'You are Not Authorize to view this Page !!',
+                ]);
+        }
     }
 
     /**
@@ -144,12 +169,20 @@ class CompanyProjectController extends Controller
      */
     public function update(Request $request, CompanyProject $companyproject)
     {
-
-        $this->CompanyProjectService->updateCompanyProject($request, $companyproject);
-        return response()->json(
-            [
-                'projectId' => $companyproject->id,
-            ]);
+        $isManager = false;
+        $isManager = $this->UserAuthenticationService->isManager();
+        if ($isManager) {
+            $this->CompanyProjectService->updateCompanyProject($request, $companyproject);
+            return response()->json(
+                [
+                    'projectId' => $companyproject->id,
+                ]);
+        } else {
+            return view('notAuthorize',
+                [
+                    'message' => 'You are Not Authorize to view this Page !!',
+                ]);
+        }
 
     }
 
@@ -161,18 +194,34 @@ class CompanyProjectController extends Controller
      */
     public function destroy(CompanyProject $companyproject)
     {
+        $isManager = false;
+        $isManager = $this->UserAuthenticationService->isManager();
+        if ($isManager) {
+            $this->CompanyProjectService->deleteCompanyProject($companyproject);
 
-        $this->CompanyProjectService->deleteCompanyProject($companyproject);
-
-        return redirect('/companies/' . $companyproject->company_id);
+            return redirect('/companies/' . $companyproject->company_id);
+        } else {
+            return view('notAuthorize',
+                [
+                    'message' => 'You are Not Authorize to view this Page !!',
+                ]);
+        }
     }
 
     public function manageProject($companyid)
     {
+        $isManager = false;
+        $isManager = $this->UserAuthenticationService->isManager();
+        if ($isManager) {
+            $companyProjects = $this->CompanyProjectService->manageProject($companyid);
 
-        $companyProjects = $this->CompanyProjectService->manageProject($companyid);
-
-        return view('companyprojects.index', ['companyProjects' => $companyProjects, 'companyid' => $companyid]);
+            return view('companyprojects.index', ['companyProjects' => $companyProjects, 'companyid' => $companyid]);
+        } else {
+            return view('notAuthorize',
+                [
+                    'message' => 'You are Not Authorize to view this Page !!',
+                ]);
+        }
     }
 
 }

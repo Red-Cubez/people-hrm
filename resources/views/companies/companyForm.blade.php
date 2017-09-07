@@ -1,3 +1,4 @@
+@role('admin')
 <div class="form-group">
     <label for="name" class="col-sm-3 control-label">Name</label>
     <div class="col-sm-6">
@@ -36,6 +37,7 @@
         </button>
     </div>
 </div>
+@endrole
 
 
 

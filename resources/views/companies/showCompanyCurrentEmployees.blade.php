@@ -47,17 +47,7 @@
                                 <button class="btn btn-primary"> View
 
                                 </button></a>
-                            {{--<form action="{{ url('employees/'.$employee->employeeId) }}" method="POST">--}}
-                                {{--{{ csrf_field() }}--}}
-                                {{--{{ method_field('GET') }}--}}
-                                {{--<input name="companyId" type="hidden" value="{{$companyProfileModel->companyId}}">--}}
-                                {{--<button class="btn btn-primary" type="submit">--}}
-                                    {{--<i class="fa fa-trash">--}}
-                                        {{--View--}}
-                                    {{--</i>--}}
-                                {{--</button>--}}
-                                {{--</input>--}}
-                            {{--</form>--}}
+                           
                         </td>
                     </tr>
                 @endforeach
@@ -67,20 +57,10 @@
             No Record Found
         @endif
     </div>
-
+  @role('admin')
     <a href="/employees/showemployeeform/{{$companyProfileModel->companyId}}">
         <button class="btn btn-primary"> Add New Employee
 
         </button></a>
-    {{--<form action="{{ url('employees/') }}" method="POST">--}}
-        {{--{{ csrf_field() }}--}}
-        {{--{{ method_field('GET') }}--}}
-        {{--<input name="companyId" type="hidden" value="{{$companyProfileModel->companyId}}">--}}
-        {{--<button class="btn btn-primary" type="submit">--}}
-            {{--<i class="fa fa-trash">--}}
-                {{--Add new Employee--}}
-            {{--</i>--}}
-        {{--</button>--}}
-        {{--</input>--}}
-    {{--</form>--}}
+  @endrole
 </div>

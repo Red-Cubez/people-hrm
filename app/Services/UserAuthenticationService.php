@@ -7,24 +7,62 @@ use People\Services\Interfaces\IUserAuthenticationService;
 //use Zizaco\Entrust\Entrust;
 class UserAuthenticationService implements IUserAuthenticationService
 {
+    // public function canEmployeeView($requestId)
+    // {
+
+    //     $isAdmin = \Entrust::hasRole('admin');
+
+    //     $user = Auth::user();
+    //     //$role = Role::findOrFail($user->id);
+
+    //     if ($user->employee->id == $requestId) {
+
+    //         return true;
+    //     }
+
+    //     if ($isAdmin) {
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // }
     public function canEmployeeView($requestId)
     {
+        $canEmployeeView = false;
+        $logedInUser     = $this->getCurrrentLogedInUserDetails();
 
-        $isAdmin = \Entrust::hasRole('admin');
+        if ($logedInUser->employee->id == $requestId) {
+            $canEmployeeView = true;
+        }
+        return $canEmployeeView;
 
+    }
+
+    public function getCurrrentLogedInUserDetails()
+    {
         $user = Auth::user();
-        //$role = Role::findOrFail($user->id);
+        return $user;
+    }
 
-        if ($user->employee->id == $requestId) {
+    public function isAdmin()
+    {
+        $isAdmin = \Entrust::hasRole('admin');
+        return $isAdmin;
 
-            return true;
-        }
+    }
 
-        if ($isAdmin) {
-            return true;
-        } else {
-            return false;
-        }
+    public function isManager()
+    {
+
+        $isManager = \Entrust::hasRole('manager');
+        return $isManager;
+
+    }
+    public function isEmployee()
+    {
+        $isEmployee = \Entrust::hasRole('employee');
+        return $isEmployee;
+
     }
 
 }

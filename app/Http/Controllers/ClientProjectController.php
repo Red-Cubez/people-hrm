@@ -4,12 +4,12 @@ namespace People\Http\Controllers;
 
 use Illuminate\Http\Request;
 use People\Models\ClientProject;
-use People\Models\ProjectResource;
 use People\Services\Interfaces\IClientProjectService;
 use People\Services\Interfaces\IProjectGrapher;
-use People\Services\Interfaces\IProjectService;
 use People\Services\Interfaces\IProjectResourceService;
+use People\Services\Interfaces\IProjectService;
 use People\Services\Interfaces\IResourceFormValidator;
+use People\Services\Interfaces\IUserAuthenticationService;
 
 class ClientProjectController extends Controller
 {
@@ -24,28 +24,31 @@ class ClientProjectController extends Controller
     public $ProjectService;
     public $ProjectResourceService;
     public $ProjectFormValidator;
-    public function __construct(IClientProjectService $clientProjectService,IProjectGrapher $projectGrapher,
-                                IProjectService $projectService,IProjectResourceService $projectResourceService,
-                                IResourceFormValidator $projectFormValidator)
-    {
+    public $UserAuthenticationService;
 
-        $this->ClientProjectService = $clientProjectService;
-        $this->ProjectGrapher = $projectGrapher;
-        $this->ProjectService =$projectService;
-        $this->ProjectResourceService =$projectResourceService;
-        $this->ProjectFormValidator = $projectFormValidator;
+    public function __construct(IClientProjectService $clientProjectService, IProjectGrapher $projectGrapher,
+        IProjectService $projectService, IProjectResourceService $projectResourceService,
+        IResourceFormValidator $projectFormValidator, IUserAuthenticationService
+         $userAuthenticationService) {
+
+        $this->middleware('auth');
+        $this->ClientProjectService      = $clientProjectService;
+        $this->ProjectGrapher            = $projectGrapher;
+        $this->ProjectService            = $projectService;
+        $this->ProjectResourceService    = $projectResourceService;
+        $this->ProjectFormValidator      = $projectFormValidator;
+        $this->UserAuthenticationService = $userAuthenticationService;
     }
 
     public function index(Request $request)
     {
-
 
         $clientProjects = $this->ClientProjectService->getClientProjects();
 
         return view('clientprojects.index',
             [
                 'clientProjects' => $clientProjects,
-                'companyId' => $request->companyId,
+                'companyId'      => $request->companyId,
             ]);
     }
 
@@ -72,7 +75,7 @@ class ClientProjectController extends Controller
         return response()->json(
             [
                 'formErrors' => $formErrors,
-                'action'=> $request->action,
+                'action'     => $request->action,
             ]);
 
     }
@@ -86,7 +89,6 @@ class ClientProjectController extends Controller
                 'projectId' => $clientProject->id,
             ]);
 
-
     }
 
     /**
@@ -96,32 +98,29 @@ class ClientProjectController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-
     public function show($clientProjectId)
     {
 
         $clientProjectModel = $this->ClientProjectService->viewClientProject($clientProjectId);
-        $clientProjects=$this->ClientProjectService->getClientProjectDetails($clientProjectId);
+        $clientProjects     = $this->ClientProjectService->getClientProjectDetails($clientProjectId);
 
 //        $currentProjectResources = ProjectResource::where('client_project_id', $clientProjectId)->orderBy('created_at', 'asc')
-//            ->get();
-        list($currentProjectResources,$availableEmployees)=$this->ProjectResourceService->showClientProjectResources($clientProjectId);
+        //            ->get();
+        list($currentProjectResources, $availableEmployees) = $this->ProjectResourceService->showClientProjectResources($clientProjectId);
 
-
-        $projectResources=$this->ProjectService->mapResourcesDetailsToClass($currentProjectResources,false);
+        $projectResources = $this->ProjectService->mapResourcesDetailsToClass($currentProjectResources, false);
         $projectTimeLines = $this->ProjectGrapher->setupProjectCost($clientProjectModel, $projectResources, false);
 
-
         $projectTotalCost = $this->ProjectGrapher->calculateProjectTotalCost($projectTimeLines);
-        $resourcesDetails = $this->ProjectGrapher->getResourcesTotalCostForProject($clientProjectModel, $projectResources,$projectTotalCost);
+        $resourcesDetails = $this->ProjectGrapher->getResourcesTotalCostForProject($clientProjectModel, $projectResources, $projectTotalCost);
 
-        $clientProjectModel->cost = $projectTotalCost;
-        $isOnBudget=$this->ProjectService->isProjectOnBudget($projectTotalCost, $clientProjectModel->budget);
-        $clientProjectModel->isProjectOnBudget=$isOnBudget;
+        $clientProjectModel->cost              = $projectTotalCost;
+        $isOnBudget                            = $this->ProjectService->isProjectOnBudget($projectTotalCost, $clientProjectModel->budget);
+        $clientProjectModel->isProjectOnBudget = $isOnBudget;
 
         return view('clientProjects/viewClientProject',
             [
-                'project' => $clientProjectModel,
+                'project'          => $clientProjectModel,
                 'projectTimeLines' => $projectTimeLines,
                 'resourcesDetails' => $resourcesDetails,
                 'projectTotalCost' => $projectTotalCost,
@@ -140,7 +139,6 @@ class ClientProjectController extends Controller
     public function edit($clientProjectId)
     {
 
-
         $clientProject = $this->ClientProjectService->getClientProjectDetails($clientProjectId);
         return view('clientProjects/clientProjectEditForm', ['clientProject' => $clientProject]);
     }
@@ -155,14 +153,7 @@ class ClientProjectController extends Controller
     public function update(Request $request, ClientProject $clientproject)
     {
 
-
         $clientid = $this->ClientProjectService->updateClientProject($request, $clientproject);
-
-//        return response()->json(
-//            [
-//                'projectId' => $clientProject->clientproject->id,
-//            ]);
-        //return redirect('/clientprojects/' . $clientproject->id);
 
     }
 
@@ -181,11 +172,23 @@ class ClientProjectController extends Controller
 
     public function manageProject($clientId)
     {
+        $isManager=$this->UserAuthenticationService->isManager();
+        if($isManager)
+        {
+
         $clientProjects = $this->ClientProjectService->manageClientProjects($clientId);
 
         return view('clientprojects.index',
             ['clientProjects' => $clientProjects,
-                'clientId' => $clientId,
+                'clientId'        => $clientId,
             ]);
+    }
+    else
+    {
+         return view('notAuthorize',
+                [
+                    'message' => 'You are Not Authorize to view this Page !!',
+                ]);
+    }
     }
 }

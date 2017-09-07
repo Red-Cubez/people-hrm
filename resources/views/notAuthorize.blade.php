@@ -1,1 +1,1 @@
-<h1 class="danger" style="text-align: center;"> You are not Authorize To View This Page !!</h1>
+<h1 class="danger" style="text-align: center;"> @if(isset($message)){{$message}}@endif</h1>

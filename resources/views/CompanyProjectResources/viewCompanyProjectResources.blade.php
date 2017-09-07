@@ -29,25 +29,20 @@
 
                             <td>
                                 <a href="/companyprojectresources/{{$projectResource->resourceId}}/edit">
-                                    <button class="btn btn-primary"> EDIT
+                                    <button class="btn btn-primary"> Edit
 
                                     </button></a>
-                                {{--<form action=" {{ url('companyprojectresources/'.$projectResource->resourceId.'/edit') }}"--}}
-                                      {{--method="POST">--}}
-                                    {{--{{ csrf_field() }}--}}
-                                    {{--{{ method_field('GET') }}--}}
-                                    {{--<button type="submit" class="btn">--}}
-                                        {{--<i class="fa fa-trash"> EDIT </i>--}}
-                                    {{--</button>--}}
-                                {{--</form>--}}
+                              
                                 <form action="{{ url('companyprojectresources/'.$projectResource->resourceId) }}" method="POST">
                                     {{ csrf_field() }}
                                     {{ method_field('DELETE') }}
                                     <input type="hidden" name="companyProjectId"
                                            value="{{$projectResource->projectId}}">
-                                    <button type="submit" class="btn btn-danger">
-                                        <i class="fa fa-trash"> Delete </i>
-                                    </button>
+                                    <button class="btn btn-danger" data-toggle="confirmation" data-singleton="true" type="submit">
+                                    <i class="fa fa-trash">
+                                        Delete
+                                    </i>
+                                     </button>
                                 </form>
                             </td>
                         </tr>
@@ -59,3 +54,12 @@
 </div>
 
 @endif
+<script type="text/javascript">
+$(document).ready(function(){ 
+
+$('[data-toggle=confirmation]').confirmation({
+  rootSelector: '[data-toggle=confirmation]',
+  
+});
+    });
+</script>

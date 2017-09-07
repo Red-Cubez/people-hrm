@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+@role(['manager','admin'])
 <div class="container">
     <div class="row">
         <div class="col-sm-3">
@@ -40,4 +41,5 @@
         </div>
     </div>
 </div>
+@endrole
 @endsection

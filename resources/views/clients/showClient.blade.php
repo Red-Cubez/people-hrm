@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-
+@role(['manager','admin'])
     <div class="panel-body">
         @include('common.errors')
         <div>
@@ -58,20 +58,12 @@
             </label>
             {{$client->address->country }}
         </div>
+        @role('admin')
         <a href="/clients/{{$client->id}}/edit">
             <button class="btn btn-primary"> Edit
 
             </button></a>
-        {{--<form action="{{ url('clients/'.$client->id.'/edit') }}" method="POST">--}}
-            {{--{{ csrf_field() }}--}}
-            {{--{{ method_field('GET') }}--}}
-            {{--<input type="hidden" name="companyId" value="{{$companyId}}">--}}
-            {{--<button class="btn btn-primary" type="submit">--}}
-                {{--<i class="fa fa-trash">--}}
-                    {{--Edit--}}
-                {{--</i>--}}
-            {{--</button>--}}
-        {{--</form>--}}
+      
         <form action="{{ url('clients/'.$client->id) }}" method="POST">
             {{ csrf_field() }}
             {{ method_field('DELETE') }}
@@ -83,6 +75,7 @@
             </button>
             </input>
         </form>
+         @endrole
         <a href="/clients/{{$client->id}}/clientprojects">
             <button class="btn btn-primary"> Add New Project
 
@@ -96,4 +89,5 @@ $('[data-toggle=confirmation]').confirmation({
   
 });
 </script>
+@endrole
 @endsection

@@ -1,9 +1,11 @@
 @extends('layouts.app')
 @section('content')
-
+   @role('admin')
     <a href="{{route('companies.create')}}">
         <button class="btn btn-primary"> Add Company</button>
     </a>
+   @endrole
+   @role(['manager','admin'])
     <!-- Current Companies -->
     @if(count($companies)>0)
         <div class="panel panel-default">
@@ -48,7 +50,7 @@
                                 <td class="table-text"></td>
                             @endif
                             <td>
-                                <!-- Delete Button -->
+                                @role('admin')
                                 <form action="{{url('companies/'.$company->id) }}" method="POST">
                                     {{ csrf_field() }}
                                     {{ method_field('DELETE') }}
@@ -56,6 +58,7 @@
                                         Delete
                                     </button>
                                 </form>
+                                @endrole
                                 <!-- Update Button -->
                                 <a href="{{route('companies.show', $company->id)}}">
                                     <button class="btn btn-primary"> View</button>
@@ -78,5 +81,6 @@ $('[data-toggle=confirmation]').confirmation({
   
 });
 </script>
+  @endrole
 @endsection
 

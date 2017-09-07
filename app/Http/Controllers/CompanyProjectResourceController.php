@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use People\Models\CompanyProjectResource;
 use People\Services\Interfaces\ICompanyProjectResourceService;
 use People\Services\Interfaces\IResourceFormValidator;
+use People\Services\Interfaces\IUserAuthenticationService;
 
 class CompanyProjectResourceController extends Controller
 {
@@ -17,13 +18,15 @@ class CompanyProjectResourceController extends Controller
      */
     public $CompanyProjectResourceService;
     public $ResourceFormValidator;
+    public $UserAuthenticationService;
 
     public function __construct(ICompanyProjectResourceService $companyProjectResourceService,
-                                IResourceFormValidator $resourceFormValidator)
-    {
-
+        IResourceFormValidator $resourceFormValidator, IUserAuthenticationService
+         $userAuthenticationService) {
+        $this->middleware('auth');
         $this->CompanyProjectResourceService = $companyProjectResourceService;
-        $this->ResourceFormValidator = $resourceFormValidator;
+        $this->ResourceFormValidator         = $resourceFormValidator;
+        $this->UserAuthenticationService     = $userAuthenticationService;
 
     }
 
@@ -62,11 +65,11 @@ class CompanyProjectResourceController extends Controller
 
     public function store(Request $request)
     {
-      
+
         $this->CompanyProjectResourceService->saveOrUpdateCompanyProjectResource($request);
         return response()->json(
             [
-                'projectId' =>  $request->companyProjectId,
+                'projectId' => $request->companyProjectId,
             ]);
 
 //        return redirect('/companyprojects/'. $request->companyProjectId);
@@ -79,17 +82,23 @@ class CompanyProjectResourceController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public
-    function show($companyProjectId)
+    public function show($companyProjectId)
     {
+        $isManager = $this->UserAuthenticationService->isManager();
+        if ($isManager) {
+            list($currentProjectResources, $availableEmployees) = $this->CompanyProjectResourceService->showCompanyProjectResources($companyProjectId);
+            return view('CompanyProjectResources.index', [
+                'projectResources'   => $currentProjectResources,
+                'availableEmployees' => $availableEmployees,
+                'companyProjectId'   => $companyProjectId,
 
-        list($currentProjectResources, $availableEmployees) = $this->CompanyProjectResourceService->showCompanyProjectResources($companyProjectId);
-        return view('CompanyProjectResources.index', [
-            'projectResources' => $currentProjectResources,
-            'availableEmployees' => $availableEmployees,
-            'companyProjectId' => $companyProjectId,
-
-        ]);
+            ]);
+        } else {
+            return view('notAuthorize',
+                [
+                    'message' => 'You are Not Authorize to view this Page !!',
+                ]);
+        }
 
     }
 
@@ -99,17 +108,23 @@ class CompanyProjectResourceController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public
-    function edit($companyProjectId)
+    public function edit($companyProjectId)
     {
+        $isManager = $this->UserAuthenticationService->isManager();
+        if ($isManager) {
+            $resource = $this->CompanyProjectResourceService->showEditForm($companyProjectId);
 
-        $resource = $this->CompanyProjectResourceService->showEditForm($companyProjectId);
+            return view('CompanyProjectResources.updateResource', [
+                'projectresources' => $resource,
+                'companyProjectId' => $companyProjectId,
 
-        return view('CompanyProjectResources.updateResource', [
-            'projectresources' => $resource,
-            'companyProjectId'=>$companyProjectId,
-
-        ]);
+            ]);
+        } else {
+            return view('notAuthorize',
+                [
+                    'message' => 'You are Not Authorize to view this Page !!',
+                ]);
+        }
 
     }
 
@@ -120,8 +135,7 @@ class CompanyProjectResourceController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public
-    function update(Request $request, $id)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -133,8 +147,7 @@ class CompanyProjectResourceController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public
-    function destroy(CompanyProjectResource $companyprojectresource, Request $request)
+    public function destroy(CompanyProjectResource $companyprojectresource, Request $request)
     {
 
         $this->CompanyProjectResourceService->deleteCompanyProjectResource($companyprojectresource);

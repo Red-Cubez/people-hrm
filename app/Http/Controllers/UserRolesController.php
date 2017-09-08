@@ -14,7 +14,7 @@ class UserRolesController extends Controller
     public function __construct(IUserRolesService $userRolesService, IRoleService $roleService)
     {
 
-        $this->middleware('auth');
+       // $this->middleware('auth');
 
         // $this->middleware('isAuthorizedToView');
         $this->UserRolesService = $userRolesService;

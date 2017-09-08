@@ -9,7 +9,7 @@
     @if (count($usersWithRoles)>0 )
         <div class="panel panel-default">
             <div class="panel-heading">
-               <h1> Current Users With Roles </h1>
+               <h1> Current Users With their Roles </h1>
             </div>
            {{--  <div class="panel-heading">
                   <a href="/roles/create/">
@@ -61,7 +61,7 @@
 
                             <td>
                                 <a href="/user-roles/{{$userWithRoles->id}}/edit">
-                                    <button type="button" class="btn btn-primary"> Edit </button>
+                                    <button type="button" class="btn btn-primary"> Change Roles </button>
                                 </a>
 
                                 <form action="{{ url('user-roles/'.$userWithRoles->id) }}"

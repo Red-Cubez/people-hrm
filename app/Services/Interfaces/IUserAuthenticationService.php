@@ -12,5 +12,6 @@ interface IUserAuthenticationService
     public function isManager();
     public function isEmployee();
     public function canEmployeeView($requestId);
+    public function belongsToSameCompany($requestId);
 
 }

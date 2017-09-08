@@ -43,7 +43,7 @@ class ProjectGrapher implements IProjectGrapher
 
     public function getResourcesTotalCostForProject($projectDetails, $projectResources, $projectTotalCost)
     {
-
+ 
         $resourceDetails = array();
         foreach ($projectResources as $projectResource) {
             $totalCost = 0;

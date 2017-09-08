@@ -137,13 +137,15 @@ class EmployeeController extends Controller
         $isAdmin    = $this->UserAuthenticationService->isAdmin();
         $isManager  = $this->UserAuthenticationService->isManager();
         $isEmployee = $this->UserAuthenticationService->isEmployee();
-
+        $canEmployeeView=false; 
+        $belongsToSameCompany=false;
+        $belongsToSameCompany=   $this->UserAuthenticationService->belongsToSameCompany($employeeId);
         if ($isEmployee) {
             $canEmployeeView = $this->UserAuthenticationService->canEmployeeView($employeeId);
-
+            
         }
-    
-    if ($isAdmin || $isManager || $canEmployeeView) {
+   
+    if (($isAdmin || $isManager || $canEmployeeView) && $belongsToSameCompany) {
         $employee = $this->EmployeeService->getEmployee($employeeId);
         if (isset($employee)) {
             $company       = Company::find($employee->company_id);

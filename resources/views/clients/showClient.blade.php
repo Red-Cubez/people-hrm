@@ -59,22 +59,23 @@
             {{$client->address->country }}
         </div>
         @role('admin')
+        <div>
         <a href="/clients/{{$client->id}}/edit">
             <button class="btn btn-primary"> Edit
 
             </button></a>
-      
+        </div>
+        <div>
         <form action="{{ url('clients/'.$client->id) }}" method="POST">
             {{ csrf_field() }}
             {{ method_field('DELETE') }}
             <input name="_method" type="hidden" value="DELETE">
-            <button class="btn btn-danger" data-toggle="confirmation" data-singleton="true" type="submit">
-
+            <button class="btn btn-danger " data-toggle="confirmation" data-singleton="true" type="submit">
                     Delete
-
             </button>
             </input>
         </form>
+        </div>
          @endrole
         <a href="/clients/{{$client->id}}/clientprojects">
             <button class="btn btn-primary"> Add New Project

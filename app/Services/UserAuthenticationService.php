@@ -1,6 +1,7 @@
 <?php
 namespace People\Services;
 
+use People\Models\Employee;
 use Illuminate\Support\Facades\Auth;
 use People\Services\Interfaces\IUserAuthenticationService;
 
@@ -26,6 +27,18 @@ class UserAuthenticationService implements IUserAuthenticationService
     //         return false;
     //     }
     // }
+    public function belongsToSameCompany($requestId)
+    {
+        $employee             = Employee::find($requestId);
+        $logedInUser          = $this->getCurrrentLogedInUserDetails();
+        $belongsToSameCompany = false;
+    
+        if ($logedInUser->employee->company_id == $employee->company_id) {
+            $belongsToSameCompany = true;
+        }
+        return $belongsToSameCompany;
+
+    }
     public function canEmployeeView($requestId)
     {
         $canEmployeeView = false;

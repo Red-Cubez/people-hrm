@@ -12,7 +12,7 @@
                <h1> Current Roles </h1>
             </div>
             <div class="panel-heading">
-                  <a href="/roles/create/">
+                  <a href="/roles/create">
                     <button type="button" class="btn btn-primary"> Add New Role </button>
                   </a>
 

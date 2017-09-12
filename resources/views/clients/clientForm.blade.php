@@ -1,4 +1,4 @@
-@role('admin')
+@role(['manager','admin','client-manager'])
 <div class="form-group">
     <label for="name" class="col-sm-3 control-label">Name</label>
 

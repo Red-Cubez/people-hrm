@@ -30,17 +30,13 @@
                             </td>
 
                             <td>
-                                <form action=" {{ url('projectresources/'.$projectResource->resourceId.'/updateResource') }}"
-                                      method="POST">
-
-                                    {{ csrf_field() }}
-                                    {{ method_field('GET') }}
-
-                                    <button type="submit" class="btn">
-
-                                        <i class="fa fa-trash"> Edit </i>
+                             
+                               
+                                  <a href="/projectresources/{{$projectResource->resourceId}}/updateResource"> 
+                                  <button class="btn btn-primary">
+                                   Edit
                                     </button>
-                                </form>
+                                  </a>
                                 <form action="{{ url('projectresources/'.$projectResource->resourceId) }}"
                                       method="POST">
                                     {{ csrf_field() }}

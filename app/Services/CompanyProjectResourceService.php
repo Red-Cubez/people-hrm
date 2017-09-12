@@ -4,6 +4,7 @@ namespace People\Services;
 
 use People\Models\CompanyProjectResource;
 use People\Models\Employee;
+use People\Models\CompanyProject;
 use People\Services\Interfaces\ICompanyProjectResourceService;
 use People\Services\Interfaces\IProjectService;
 
@@ -18,13 +19,13 @@ class CompanyProjectResourceService implements ICompanyProjectResourceService
 
     public function showCompanyProjectResources($companyProjectId)
     {
-
+        $companyProject=CompanyProject::find($companyProjectId);
         $currentProjectResources = CompanyProjectResource::where('company_project_id', $companyProjectId)->orderBy('created_at', 'asc')
             ->get();
 
         $projectResources=$this->ProjectService->mapResourcesDetailsToClass($currentProjectResources,true);
-
-        $availableEmployees= Employee::all();
+       
+         $availableEmployees= Employee::where('company_id',$companyProject->company->id)->get();
 
         return array($projectResources,$availableEmployees);
     }

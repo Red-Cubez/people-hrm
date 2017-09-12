@@ -3,6 +3,7 @@
 namespace People\Services;
 
 use People\Models\Employee;
+use People\Models\ClientProject;
 use People\Models\ProjectResource;
 use People\Services\Interfaces\IProjectResourceService;
 use People\Services\Interfaces\IProjectService;
@@ -23,9 +24,9 @@ class ProjectResourceService implements IProjectResourceService
             ->get();
 
        // $projectResources=$this->ProjectService->mapResourcesDetailsToClass($currentProjectResources);
-
-        $availableEmployees= Employee::all();
-
+        $clientProject=ClientProject::find($clientProjectId);
+        $availableEmployees= Employee::where('company_id',$clientProject->client->company->id)->get();
+       
         return array($currentProjectResources,$availableEmployees);
     }
     public function saveOrUpdateProjectResource($request)
@@ -63,11 +64,23 @@ class ProjectResourceService implements IProjectResourceService
             $projectResource->save();
         }
     }
+       public function getProjectResource($projectResourceId)
+       {
+        $resource=ProjectResource::find($projectResourceId);
+        if(isset($resource))
+        {
+            return $resource;
+        }
+        else
+        {
+            return null;
+        }
 
+       }
     public function updateProjectRessources($clientid)
     {
-        $Resource = ProjectResource::where('id', $clientid)->orderBy('created_at', 'asc')->get();
-        return $Resource;
+        $resource = ProjectResource::where('id', $clientid)->orderBy('created_at', 'asc')->get();
+        return $resource;
     }
 
     public function manageProjectResources($clientProjectid)
@@ -89,7 +102,7 @@ class ProjectResourceService implements IProjectResourceService
 
     public function getClientProjectResourcesOnActiveProjects($employeeId)
     {
-
+         
         $currentDate = date("Y-m-d");
         return ProjectResource::where('employee_id', $employeeId)
             ->where('actualEndDate', '>=', $currentDate)

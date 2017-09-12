@@ -100,7 +100,7 @@ class RoleController extends Controller
         ));
 
         $this->RoleService->updateRole($request, $id);
-
+      
         return redirect('roles');
     }
 

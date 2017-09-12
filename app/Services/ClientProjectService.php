@@ -35,7 +35,15 @@ class ClientProjectService implements IClientProjectService {
 	}
 	public function getClientProjectDetails($clientProjectId) {
 
-		return ClientProject::find($clientProjectId);
+		$project= ClientProject::find($clientProjectId);
+		if(isset($project))
+		{
+			return $project;
+		}
+		else
+		{
+			return null;
+		}
 	}
 
 	public function manageClientProjects($clientid) {

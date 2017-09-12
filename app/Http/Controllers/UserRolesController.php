@@ -14,7 +14,7 @@ class UserRolesController extends Controller
     public function __construct(IUserRolesService $userRolesService, IRoleService $roleService)
     {
 
-       // $this->middleware('auth');
+        // $this->middleware('auth');
 
         // $this->middleware('isAuthorizedToView');
         $this->UserRolesService = $userRolesService;
@@ -106,8 +106,8 @@ class UserRolesController extends Controller
         $user = $this->UserRolesService->getUser($userId);
         $user->roles()->detach();
         $user->attachRole($request->roles);
-
-        return redirect('user-roles');
+        return back();
+        // return redirect('user-roles');
 
     }
 

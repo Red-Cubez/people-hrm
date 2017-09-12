@@ -30,9 +30,11 @@
                 <th>
                     Cost
                 </th>
+                 @role(['admin','manager','client-manager'])
                 <th>
                     Operations
                 </th>
+                @endrole
             </thead>
             <!-- Table Body -->
             <tbody>
@@ -74,8 +76,9 @@
                             {{ $project->cost }}
                         </div>
                     </td>
-                    <!-- Delete Button -->
+               
                     <td>
+                             @role(['admin','manager'])
                         <form action="{{ url('clientprojects/'.$project->projectId) }}" method="POST">
                             {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
@@ -87,9 +90,12 @@
                                 </button>
                             </input>
                         </form>
+                        @endrole
+                      @role(['admin','manager','client-manager'])
                         <a href="{{route('clientprojects.show', $project->projectId)}}"> <button class="btn btn-primary"> View </button></a>
 
                     </td>
+                        @endrole
                 </tr>
                 @endforeach
             </tbody>

@@ -40,9 +40,11 @@ class CompanyController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    { 
+    {
+
         $isManager = $this->UserAuthenticationService->isManager();
-         $isAdmin = $this->UserAuthenticationService->isAdmin();
+        $isAdmin   = $this->UserAuthenticationService->isAdmin();
+
         if ($isManager || $isAdmin) {
             $companies = $this->CompanyService->getAllCompanies();
 
@@ -50,7 +52,7 @@ class CompanyController extends Controller
         } else {
             return view('notAuthorize',
                 [
-                    'message' => 'You are Not Authorize to view this Page !!',
+                    'message' => 'You are not Authorized to view this Page!',
                 ]
             );
 
@@ -66,7 +68,8 @@ class CompanyController extends Controller
     public function create()
     {
         $isManager = $this->UserAuthenticationService->isManager();
-        if ($isManager) {
+        $isAdmin   = $this->UserAuthenticationService->isAdmin();
+        if ($isManager || $isAdmin) {
             return view('companies.addNewCompany');
         } else {
             return view('notAuthorize',
@@ -85,8 +88,9 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
-        $isAdmin = $this->UserAuthenticationService->isAdmin();
-        if ($isAdmin) {
+        $isManager = $this->UserAuthenticationService->isManager();
+        $isAdmin   = $this->UserAuthenticationService->isAdmin();
+        if ($isManager || $isAdmin) {
             $this->validate($request, array(
                 'name' => 'required|max:255',
             ));
@@ -108,12 +112,16 @@ class CompanyController extends Controller
      * @param  \People\Models\Company $company
      * @return \Illuminate\Http\Responseo
      */
-    public function show(Company $company)
+    public function show($companyId)
     {
-        $isManager = $this->UserAuthenticationService->isManager();
-        $isAdmin = $this->UserAuthenticationService->isAdmin();
+        $isManager                           = $this->UserAuthenticationService->isManager();
+        $isAdmin                             = $this->UserAuthenticationService->isAdmin();
+        $isHrManager                         = $this->UserAuthenticationService->isHrManager();
+        $isClientManager                     = $this->UserAuthenticationService->isClientManager();
+        $isRequestedCompanyBelongsToEmployee = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($companyId);
 
-        if ($isManager || $isAdmin) {
+        if (($isManager || $isAdmin || $isHrManager || $isClientManager) && $isRequestedCompanyBelongsToEmployee) {
+            $company          = $this->CompanyService->getCompanyDetails($companyId);
             $companyJobTitles = $this->JobTitleService->getJobTitlesOfCompany($company->id);
             $companyHolidays  = $this->CompanyHolidayService->getCompanyHolidays($company->id);
 
@@ -151,12 +159,19 @@ class CompanyController extends Controller
      * @param  \People\Models\Company $company
      * @return \Illuminate\Http\Response
      */
-    public function edit(Company $company)
+    public function edit($companyId)
     {
 
-        $isAdmin = $this->UserAuthenticationService->isAdmin();
-        if ($isAdmin) {
-            return view('companies/companyEditForm', ['company' => $company]);
+        $isManager                           = $this->UserAuthenticationService->isManager();
+        $isAdmin                             = $this->UserAuthenticationService->isAdmin();
+        $isRequestedCompanyBelongsToEmployee = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($companyId);
+
+        if (($isManager || $isAdmin) && $isRequestedCompanyBelongsToEmployee) {
+            $company = $this->CompanyService->getCompanyDetails($companyId);
+            return view('companies/companyEditForm',
+                [
+                    'company' => $company,
+                ]);
         } else {
             return view('notAuthorize',
                 [
@@ -176,8 +191,9 @@ class CompanyController extends Controller
      */
     public function update(Request $request, Company $company)
     {
-        $isAdmin = $this->UserAuthenticationService->isAdmin();
-        if ($isAdmin) {
+        $isManager = $this->UserAuthenticationService->isManager();
+        $isAdmin   = $this->UserAuthenticationService->isAdmin();
+        if ($isManager || $isAdmin) {
             $this->validate($request, array(
                 'name' => 'required|max:255',
             ));
@@ -203,7 +219,8 @@ class CompanyController extends Controller
     {
         //TODO: HG - check for company dependencies before deleting a company
         $isManager = $this->UserAuthenticationService->isManager();
-        if ($isManager) {
+        $isAdmin   = $this->UserAuthenticationService->isAdmin();
+        if ($isManager || $isAdmin) {
             $this->CompanyService->deleteCompany($company);
 
             return redirect('/companies');

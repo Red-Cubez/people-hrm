@@ -220,6 +220,15 @@ class EmployeeTimesheetService implements IEmployeeTimesheetService
     }
     public function getEmployeeTimesheet($timesheetId)
     {
-        return EmployeeTimesheet::find($timesheetId);
+
+        $employeeTimesheet= EmployeeTimesheet::find($timesheetId);
+        if($employeeTimesheet)
+        {
+            return $employeeTimesheet;
+        }
+        else
+        {
+            return null;
+        }
     }
 }

@@ -13,7 +13,9 @@
                 <th>Start Date</th>
                 <th>End Date</th>
                 <th>Hours Per Week</th>
-
+                 @role(['manager','admin'])
+                              <th>Operations</th>
+                 @endrole
                 </thead>
                 <!-- Table Body -->
                 <tbody>
@@ -36,6 +38,17 @@
                             <td class="table-text">
                                 <div>{{ $companyProject->hoursPerWeek }}</div>
                             </td>
+                             @role(['manager','admin'])
+                                    <td>
+         
+                                         <a href="/companyprojects/{{$companyProject->projectId}}">
+                                         <button class="btn btn-primary"> View
+
+                                         </button></a>
+                                    </td>
+
+                                    @endrole
+                                    
 
                         </tr>
                 @endforeach

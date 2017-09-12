@@ -106,9 +106,14 @@ class CompanyProjectController extends Controller
      */
     public function show($companyProjectId)
     {
+
         $isManager = false;
         $isManager = $this->UserAuthenticationService->isManager();
-        if ($isManager) {
+        $isAdmin = $this->UserAuthenticationService->isAdmin();
+        //$isClientManager = $this->UserAuthenticationService->isClientManager();
+        //$isHrManager = $this->UserAuthenticationService->isHrManager();
+
+        if ($isManager || $isAdmin) {
             list($currentProjectResources) = $this->CompanyProjectResourceService->showCompanyProjectResources($companyProjectId);
 
             $companyProject = $this->CompanyProjectService->viewCompanyProject($companyProjectId);
@@ -193,10 +198,13 @@ class CompanyProjectController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(CompanyProject $companyproject)
-    {
+    { 
+
         $isManager = false;
         $isManager = $this->UserAuthenticationService->isManager();
-        if ($isManager) {
+        $isAdmin = $this->UserAuthenticationService->isAdmin();
+        if ($isManager || $isAdmin) {
+   
             $this->CompanyProjectService->deleteCompanyProject($companyproject);
 
             return redirect('/companies/' . $companyproject->company_id);

@@ -154,7 +154,7 @@ class EmployeeService implements IEmployeeService
     }
     public function getAllEmployeesOfCompany($companyId)
     {
-        return Employee::orderBy('firstName','asc')->where('company_id', $companyId)->get();
+        return Employee::orderBy('firstName', 'asc')->where('company_id', $companyId)->get();
     }
 
     public function getAllClientsOfCompany($companyId)
@@ -164,7 +164,7 @@ class EmployeeService implements IEmployeeService
     }
     public function getEmployee($employeeId)
     {
-        
+
         return Employee::find($employeeId);
 
     }
@@ -188,6 +188,7 @@ class EmployeeService implements IEmployeeService
         $clientProjectResources = $this->ClientProjectResourceService->getClientProjectResourcesOnActiveProjects($employee->id);
 
         foreach ($clientProjectResources as $clientProjectResource) {
+
             $projectModel = new EmployeeProjectModel();
 
             $projectModel->clientName       = $clientProjectResource->clientProject->client->name;
@@ -202,9 +203,13 @@ class EmployeeService implements IEmployeeService
             $totalHoursOnClientProjects = $totalHoursOnClientProjects + $clientProjectResource->hoursPerWeek;
 
             if (is_null($employeeModel->clientProjects)) {
-                $employeeModel->clientProjects[] = new EmployeeProjectModel;
+                $employeeModel->clientProjects = array();
                 array_push($employeeModel->clientProjects, $projectModel);
             }
+            // if (is_null($employeeModel->clientProjects)) {
+            //      $employeeModel->clientProjects[] = new EmployeeProjectModel;
+            //      array_push($employeeModel->clientProjects, $projectModel);
+            //  }
         }
 
         $employeeModel->totalHoursOnClientProjects = $totalHoursOnClientProjects;
@@ -225,9 +230,13 @@ class EmployeeService implements IEmployeeService
             $totalHoursOnCompanyProjects = $totalHoursOnCompanyProjects + $companyProjectResource->hoursPerWeek;
 
             if (is_null($employeeModel->companyProjects)) {
-                $employeeModel->companyProjects[] = new EmployeeProjectModel;
+                $employeeModel->companyProjects = array();
                 array_push($employeeModel->companyProjects, $projectModel);
             }
+            // if (is_null($employeeModel->companyProjects)) {
+            //     $employeeModel->companyProjects[] = new EmployeeProjectModel;
+            //     array_push($employeeModel->companyProjects, $projectModel);
+            // }
         }
         $employeeModel->totalHoursOnCompanyProjects = $totalHoursOnCompanyProjects;
 
@@ -236,6 +245,7 @@ class EmployeeService implements IEmployeeService
         } else {
             $employeeModel->isWorkingOverTime = null;
         }
+
         return $employeeModel;
     }
 

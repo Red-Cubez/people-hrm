@@ -1,4 +1,4 @@
-@role('admin')
+@role(['hr-manager','manager','admin'])
 <div id="name" class="form-group">
     <label for="name" class="col-sm-3 control-label">First Name</label>
     <div class="col-sm-6">

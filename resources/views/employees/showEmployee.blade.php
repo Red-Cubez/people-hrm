@@ -8,6 +8,7 @@
                     @include('common.errors')
                     <div class="row">
                         <div class="col-sm-3">
+                        <div class="panel panel-default">
                             <div>
                                 <label class="control-label" for="name">
                                     First Name :
@@ -100,8 +101,8 @@
                                 @endif
                                 Working Over Time.
                             </div>
-                            @role('admin')
-   
+                            @role(['hr-manager','manager','admin'])
+                               
 
                             <br>
                             <a href="/employees/{{$employeeModel->employeeProfile->employeeId}}/edit">
@@ -124,6 +125,7 @@
                             @endrole
 
                         </div>
+                        </div>
                         <div class="col-sm-5">
 
                             @include('employees/showCompanyHolidays')
@@ -137,7 +139,7 @@
                     </div>
                 </div>
                 </div>
-                  @role(['manager','employee'])
+                  @role(['manager','hr-manager','admin','employee'])
                     <div class="row">
                         <div class="col-sm-12">
                             <a href="/employeetimesheet/{{$employeeModel->employeeProfile->employeeId}}/create">
@@ -149,7 +151,7 @@
                     </div>
                     @endrole
                     <br/>
-                     @role('manager')
+                    @role(['manager','hr-manager','admin'])
                     <div class="row">
                         <div class="col-sm-12">
                             <a href="/employeestimesheets/">
@@ -162,7 +164,7 @@
                       </div>
                       @endrole
                     <br/>
-                     @role(['manager','employee'])
+                     @role(['manager','employee','hr-manager','admin'])
                        <div class="row">
                         <div class="col-sm-12">
                             <a href="/employeetimeoff/{{$employeeModel->employeeProfile->employeeId}}/create">
@@ -175,7 +177,7 @@
                             </div>
                      @endrole
                         <br/>
-                        @role('manager')
+                        @role(['manager','hr-manager','admin'])
                         <div class="row">
                         <div class="col-sm-12">
              
@@ -186,7 +188,7 @@
 
                       </div>
                       </div>
-                      @endrole
+                       @endrole
 
                 
                     @include('employees/showEmployeeClientProjects')

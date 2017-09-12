@@ -54,7 +54,10 @@ class EmployeeTimesheetController extends Controller
     public function createTimesheet($employeeId)
     {
 
-        $isManager = $this->UserAuthenticationService->isManager();
+        $isManager                               = $this->UserAuthenticationService->isManager();
+        $isAdmin                                 = $this->UserAuthenticationService->isAdmin();
+        $isHrManager                             = $this->UserAuthenticationService->isHrManager();
+        $isRequestedEmployeeBelongsToSameCompany = $this->UserAuthenticationService->isRequestedEmployeeBelongsToSameCompany($employeeId);
 
         $isEmployee      = $this->UserAuthenticationService->isEmployee();
         $canEmployeeView = false;
@@ -62,7 +65,7 @@ class EmployeeTimesheetController extends Controller
             $canEmployeeView = $this->UserAuthenticationService->canEmployeeView($employeeId);
 
         }
-        if ($isManager || $canEmployeeView) {
+        if (($isManager || $isAdmin || $isHrManager || $canEmployeeView) && $isRequestedEmployeeBelongsToSameCompany) {
             $timesheets = $this->EmployeeTimesheetService->getTimesheetsOfEmployee($employeeId);
 
             return view('employeeTimesheet.create',
@@ -82,14 +85,17 @@ class EmployeeTimesheetController extends Controller
     public function store(Request $request)
     {
 
-        $isManager         = $this->UserAuthenticationService->isManager();
+        $isManager   = $this->UserAuthenticationService->isManager();
+        $isAdmin     = $this->UserAuthenticationService->isAdmin();
+        $isHrManager = $this->UserAuthenticationService->isHrManager();
+
         $isEmployee      = $this->UserAuthenticationService->isEmployee();
         $canEmployeeView = false;
         if ($isEmployee) {
             $canEmployeeView = $this->UserAuthenticationService->canEmployeeView($request->employeeId);
 
         }
-        if ($isManager || $canEmployeeView) {
+        if ($isManager || $isAdmin || $isHrManager || $canEmployeeView) {
 
             $this->validate($request, array(
                 'timesheetDate'        => 'required',
@@ -133,25 +139,38 @@ class EmployeeTimesheetController extends Controller
     ////view readonly to admin
     public function show($id)
     {
-       
-        $isManager       = $this->UserAuthenticationService->isManager();
-        
-        if ($isManager) {
-            $timesheet                  = $this->EmployeeTimesheetService->getEmployeeTimesheet($id);
-            $billableWeeklyTimesheet    = json_decode($timesheet->billableWeeklyTimesheet, true);
-            $nonBillableWeeklyTimesheet = json_decode($timesheet->nonBillableWeeklyTimesheet, true);
-            $weekDates                  = $this->EmployeeTimesheetService->getDatesOfWeek(strtotime($timesheet->weekNoAndYear));
-            $showReadOnly               = true;
+        $timesheet = $this->EmployeeTimesheetService->getEmployeeTimesheet($id);
 
-            return view('employeeTimesheet.edit',
-                [
+        if (isset($timesheet)) {
+            $isTimesheetBelongsToEmployeeOfCompany = $this->UserAuthenticationService->isRequestedEmployeeBelongsToSameCompany($timesheet->employee_id);
 
-                    'timesheet'                  => $timesheet,
-                    'billableWeeklyTimesheet'    => $billableWeeklyTimesheet,
-                    'nonBillableWeeklyTimesheet' => $nonBillableWeeklyTimesheet,
-                    'weekDates'                  => $weekDates,
-                    'showReadOnly'               => $showReadOnly,
-                ]);
+            $isManager   = $this->UserAuthenticationService->isManager();
+            $isAdmin     = $this->UserAuthenticationService->isAdmin();
+            $isHrManager = $this->UserAuthenticationService->isHrManager();
+
+            if (($isManager || $isAdmin || $isHrManager) && $isTimesheetBelongsToEmployeeOfCompany) {
+
+                $billableWeeklyTimesheet    = json_decode($timesheet->billableWeeklyTimesheet, true);
+                $nonBillableWeeklyTimesheet = json_decode($timesheet->nonBillableWeeklyTimesheet, true);
+                $weekDates                  = $this->EmployeeTimesheetService->getDatesOfWeek(strtotime($timesheet->weekNoAndYear));
+                $showReadOnly               = true;
+
+                return view('employeeTimesheet.edit',
+                    [
+
+                        'timesheet'                  => $timesheet,
+                        'billableWeeklyTimesheet'    => $billableWeeklyTimesheet,
+                        'nonBillableWeeklyTimesheet' => $nonBillableWeeklyTimesheet,
+                        'weekDates'                  => $weekDates,
+                        'showReadOnly'               => $showReadOnly,
+                    ]);
+
+            } else {
+                return view('notAuthorize',
+                    [
+                        'message' => 'You are Not Authorize to view this Page !!',
+                    ]);
+            }
         } else {
             return view('notAuthorize',
                 [
@@ -163,9 +182,11 @@ class EmployeeTimesheetController extends Controller
     }
     public function showNonApprovedTimesheetsOfEmployees()
     {
-        $isManager = $this->UserAuthenticationService->isManager();
+        $isManager   = $this->UserAuthenticationService->isManager();
+        $isAdmin     = $this->UserAuthenticationService->isAdmin();
+        $isHrManager = $this->UserAuthenticationService->isHrManager();
 
-        if ($isManager) {
+        if ($isManager || $isAdmin || $isHrManager || $canEmployeeView) {
             $employeesTimesheets = $this->EmployeeTimesheetService->getNonApprovedTimesheetsOfEmployees();
 
             return view('employeeTimesheet.showNonApprovedTimesheetsOfEmployees',
@@ -193,35 +214,49 @@ class EmployeeTimesheetController extends Controller
 
         $isManager       = $this->UserAuthenticationService->isManager();
         $isEmployee      = $this->UserAuthenticationService->isEmployee();
+        $isAdmin         = $this->UserAuthenticationService->isAdmin();
         $canEmployeeView = false;
-        if ($isEmployee) {
-            $timesheet = $this->EmployeeTimesheetService->getEmployeeTimesheet($id);
-            if (isset($timesheet)) {
-                $canEmployeeView = $this->UserAuthenticationService->canEmployeeView($timesheet->employee->id);
+        $timesheet       = $this->EmployeeTimesheetService->getEmployeeTimesheet($id);
+
+        if (isset($timesheet)) {
+            $isTimesheetBelongsToEmployeeOfCompany = $this->UserAuthenticationService->isRequestedEmployeeBelongsToSameCompany($timesheet->employee_id);
+
+            if ($isEmployee) {
+
+                if (isset($timesheet)) {
+                    $canEmployeeView = $this->UserAuthenticationService->canEmployeeView($timesheet->employee->id);
+                } else {
+
+                    return view('notAuthorize',
+                        [
+                            'message' => 'You are Not Authorize to view this Page !!',
+                        ]);
+                }
+
+            }
+            if (($isManager || $isAdmin || $canEmployeeView) && $isTimesheetBelongsToEmployeeOfCompany) {
+
+                $billableWeeklyTimesheet    = json_decode($timesheet->billableWeeklyTimesheet, true);
+                $nonBillableWeeklyTimesheet = json_decode($timesheet->nonBillableWeeklyTimesheet, true);
+                $weekDates                  = $this->EmployeeTimesheetService->getDatesOfWeek(strtotime($timesheet->weekNoAndYear));
+
+                return view('employeeTimesheet.edit',
+                    [
+
+                        'timesheet'                  => $timesheet,
+                        'billableWeeklyTimesheet'    => $billableWeeklyTimesheet,
+                        'nonBillableWeeklyTimesheet' => $nonBillableWeeklyTimesheet,
+                        'weekDates'                  => $weekDates,
+
+                    ]);
             } else {
                 return view('notAuthorize',
                     [
                         'message' => 'You are Not Authorize to view this Page !!',
                     ]);
             }
-
-        }
-        if ($isManager || $canEmployeeView) {
-            $timesheet                  = $this->EmployeeTimesheetService->getEmployeeTimesheet($id);
-            $billableWeeklyTimesheet    = json_decode($timesheet->billableWeeklyTimesheet, true);
-            $nonBillableWeeklyTimesheet = json_decode($timesheet->nonBillableWeeklyTimesheet, true);
-            $weekDates                  = $this->EmployeeTimesheetService->getDatesOfWeek(strtotime($timesheet->weekNoAndYear));
-
-            return view('employeeTimesheet.edit',
-                [
-
-                    'timesheet'                  => $timesheet,
-                    'billableWeeklyTimesheet'    => $billableWeeklyTimesheet,
-                    'nonBillableWeeklyTimesheet' => $nonBillableWeeklyTimesheet,
-                    'weekDates'                  => $weekDates,
-
-                ]);
         } else {
+
             return view('notAuthorize',
                 [
                     'message' => 'You are Not Authorize to view this Page !!',

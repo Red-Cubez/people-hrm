@@ -30,9 +30,11 @@
                 <th>
                     Cost
                 </th>
+                 @role(['manager','admin'])
                 <th>
                     Operations
                 </th>
+                @endrole
             </thead>
             <!-- Table Body -->
             <tbody>
@@ -76,6 +78,7 @@
                     </td>
                     <!-- Delete Button -->
                     <td>
+                       @role(['manager','admin'])
                         <form action="{{ url('companyprojects/'.$project->projectId) }}" method="POST">
                             {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
@@ -88,10 +91,12 @@
                                 
                             </input>
                         </form>
+                      
                         <a href="/companyprojects/{{$project->projectId}}">
                             <button class="btn btn-primary"> View
 
                             </button></a>
+                              @endrole
                                          </td>
                 </tr>
                 @endforeach
@@ -101,11 +106,12 @@
             </tbody>
         </table>
     </div>
+    @role(['admin','manager'])
     <a href="/companies/{{$companyProfileModel->companyId}}/companyprojects">
         <button class="btn btn-primary"> Add New Projects
 
         </button></a>
-  
+    @endrole
 </div>
 <script type="text/javascript">
 $('[data-toggle=confirmation]').confirmation({

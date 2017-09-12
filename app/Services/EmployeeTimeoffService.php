@@ -134,7 +134,15 @@ class EmployeeTimeoffService implements IEmployeeTimeoffService
     }
     public function getTimeoff($id)
     {
-        return EmployeeTimeoff::find($id);
+        $timeoff= EmployeeTimeoff::find($id);
+        if(isset($timeoff))
+        {
+            return $timeoff;
+        }
+        else
+        {
+            return null;
+        }
     }
     public function deleteTimeoff($id)
     {

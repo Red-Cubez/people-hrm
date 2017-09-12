@@ -44,14 +44,12 @@
                             <div>{{ $clientProject->cost }}</div>
                         </td>
 
-                        <!-- Delete Button -->
                         <td>
                             <a href="/clientprojects/{{$clientProject->id}}">
                                 <button class="btn btn-primary"> View
 
                                 </button></a>
-                           
-
+                           @role(['admin','manager','client-manager'])
                             <form action="{{ url('clientprojects/'.$clientProject->id) }}" method="POST">
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
@@ -63,6 +61,7 @@
                                 <button class="btn btn-primary"> Manage Resource
 
                                 </button></a>
+                            @endrole    
                            
                         </td>
                     </tr>

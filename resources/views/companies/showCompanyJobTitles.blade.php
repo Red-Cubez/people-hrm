@@ -29,6 +29,7 @@
                                 {{$companyJobTitle->jobTitle }}
                             </div>
                         </td>
+                        @role(['hr-manager','manager','admin'])
                         <td>
                             <button
                                     class="btn btn-primary"
@@ -45,6 +46,7 @@
                             </form>
                            
                         </td>
+                        @endrole
                     </tr>
                 @endforeach
 
@@ -53,12 +55,17 @@
             </tbody>
         </table>
     </div>
+    @role(['hr-manager','manager','admin'])
+    <div>
     <button class="btn btn-primary btn-lg" onclick="openJobTitleModal(null,null);" type="button">
         Add New Job Title
     </button>
+    </div>
+    @endrole
 </div>
+@role(['hr-manager','manager','admin'])
 @include('jobTitles/jobTitleModal')
-
+@endrole
 @section('page-scripts')
     @parent
     <script type="text/javascript">

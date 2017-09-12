@@ -19,7 +19,7 @@ class JobTitleController extends Controller
 
     public function __construct(IJobTitleService $jobTitleService, IResourceFormValidator $resourceFormValidator)
     {
-
+        $this->middleware('auth');
         $this->JobTitleService       = $jobTitleService;
         $this->ResourceFormValidator = $resourceFormValidator;
     }
@@ -119,8 +119,8 @@ class JobTitleController extends Controller
 
             return response()->json(
                 [
-                    'jobTitle'   => $request->name,
-                    'jobTitleId' => $jobTitle->id,
+                    'jobTitle'    => $request->name,
+                    'jobTitleId'  => $jobTitle->id,
                     'isFormValid' => $isFormValid,
 
                 ]);

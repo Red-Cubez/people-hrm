@@ -12,9 +12,11 @@
             <th>
                 Department Name
             </th>
+            @role(['hr-manager','manager','admin'])
             <th>
                 Operations
-            </th>  
+            </th> 
+            @endrole 
             </thead>
             <!-- Table Body -->
             <tbody id="departmentTableBody">
@@ -27,7 +29,7 @@
                                 {{ $department->departmentName }}
                             </div>
                         </td>
-                        
+                        @role(['hr-manager','manager','admin'])
                         <td>
                             <button class="btn btn-primary"
                                     onclick="openDepartmentModal({{$department->departmentId}},null);"
@@ -45,6 +47,7 @@
                                     </button>
                             </form>
                         </td>
+                        @endrole
                     </tr>
                 @endforeach
 
@@ -52,13 +55,16 @@
             </tbody>
         </table>
     </div>
-
+@role(['hr-manager','manager','admin'])
     <button class="btn btn-primary btn-lg" onclick="openDepartmentModal(null,null);" type="button">
         Add Department
     </button>
+ @endrole   
 
 </div>
-@include('companyDepartments/companyDepartmentModal')
+@role(['hr-manager','manager','admin'])
+ @include('companyDepartments/companyDepartmentModal')
+@endrole 
 @section('page-scripts')
     @parent
     <script type="text/javascript">

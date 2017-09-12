@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-@role(['manager','admin'])
+@role(['manager','admin','client-manager'])
     <div class="panel-body">
         @include('common.errors')
         <div>
@@ -32,33 +32,43 @@
             <label class="control-label" for="contactPerson">
                 Street Line 1 :
             </label>
+            @if(isset($client->address->streetLine1))
             {{$client->address->streetLine1 }}
+            @endif
         </div>
         <div>
             <label class="control-label" for="contactPerson">
                 Street Line 2 :
             </label>
+            @if(isset($client->address->streetLine2))
             {{$client->address->streetLine2 }}
+            @endif
         </div>
         <div>
             <label class="control-label" for="contactPerson">
                 City
             </label>
+             @if(isset($client->address->city))
             {{$client->address->city }}
+            @endif
         </div>
         <div>
             <label class="control-label" for="contactPerson">
                 State / Province :
             </label>
+              @if(isset($client->address->province))
             {{$client->address->stateProvince }}
+            @endif
         </div>
         <div>
             <label class="control-label" for="contactPerson">
                 Country:
             </label>
+              @if(isset($client->address->country))
             {{$client->address->country }}
+            @endif
         </div>
-        @role('admin')
+        @role(['manager','client-manager','admin'])
         <div>
         <a href="/clients/{{$client->id}}/edit">
             <button class="btn btn-primary"> Edit

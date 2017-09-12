@@ -1,4 +1,4 @@
-@role(['manager','admin'])
+@role(['client-manager','manager','admin'])
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3>
@@ -58,7 +58,7 @@
             No Record Found
         @endif
     </div>
-    @role('admin')
+    @role(['client-manager','manager','admin'])
     <a href="/clients/showclientform/{{$companyProfileModel->companyId}}">
         <button class="btn btn-primary"> Add New Client
 

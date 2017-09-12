@@ -83,7 +83,7 @@ class CompanyProjectResourceController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($companyProjectId)
-    {
+    { 
         $isManager = $this->UserAuthenticationService->isManager();
         if ($isManager) {
             list($currentProjectResources, $availableEmployees) = $this->CompanyProjectResourceService->showCompanyProjectResources($companyProjectId);

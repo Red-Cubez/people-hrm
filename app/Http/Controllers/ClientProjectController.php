@@ -100,35 +100,47 @@ class ClientProjectController extends Controller
 
     public function show($clientProjectId)
     {
-        $isManager = $this->UserAuthenticationService->isManager();
 
-        if ($isManager) {
-            $clientProjectModel = $this->ClientProjectService->viewClientProject($clientProjectId);
-            $clientProjects     = $this->ClientProjectService->getClientProjectDetails($clientProjectId);
+        $isManager       = $this->UserAuthenticationService->isManager();
+        $isAdmin         = $this->UserAuthenticationService->isAdmin();
+        $isClientManager = $this->UserAuthenticationService->isClientManager();
+        $clientProject   = $this->ClientProjectService->getClientProjectDetails($clientProjectId);
 
-//        $currentProjectResources = ProjectResource::where('client_project_id', $clientProjectId)->orderBy('created_at', 'asc')
-            //            ->get();
-            list($currentProjectResources, $availableEmployees) = $this->ProjectResourceService->showClientProjectResources($clientProjectId);
+        if (isset($clientProject)) {
+            $isRequestedClientProjectBelongsToSameCompany = $this->UserAuthenticationService->isRequestedClientBelongsToSameCompany($clientProject->client_id);
+            if (($isManager || $isAdmin || $isClientManager) && $isRequestedClientProjectBelongsToSameCompany) {
 
-            $projectResources = $this->ProjectService->mapResourcesDetailsToClass($currentProjectResources, false);
-            $projectTimeLines = $this->ProjectGrapher->setupProjectCost($clientProjectModel, $projectResources, false);
+                $clientProjectModel = $this->ClientProjectService->viewClientProject($clientProjectId);
+                $clientProjects     = $this->ClientProjectService->getClientProjectDetails($clientProjectId);
 
-            $projectTotalCost = $this->ProjectGrapher->calculateProjectTotalCost($projectTimeLines);
-            $resourcesDetails = $this->ProjectGrapher->getResourcesTotalCostForProject($clientProjectModel, $projectResources, $projectTotalCost);
+                list($currentProjectResources, $availableEmployees) = $this->ProjectResourceService->showClientProjectResources($clientProjectId);
 
-            $clientProjectModel->cost              = $projectTotalCost;
-            $isOnBudget                            = $this->ProjectService->isProjectOnBudget($projectTotalCost, $clientProjectModel->budget);
-            $clientProjectModel->isProjectOnBudget = $isOnBudget;
+                $projectResources = $this->ProjectService->mapResourcesDetailsToClass($currentProjectResources, false);
+                $projectTimeLines = $this->ProjectGrapher->setupProjectCost($clientProjectModel, $projectResources, false);
 
-            return view('clientProjects/viewClientProject',
-                [
-                    'project'          => $clientProjectModel,
-                    'projectTimeLines' => $projectTimeLines,
-                    'resourcesDetails' => $resourcesDetails,
-                    'projectTotalCost' => $projectTotalCost,
-                    //'clientProjects'=>$clientProjects,
+                $projectTotalCost = $this->ProjectGrapher->calculateProjectTotalCost($projectTimeLines);
+                $resourcesDetails = $this->ProjectGrapher->getResourcesTotalCostForProject($clientProjectModel, $projectResources, $projectTotalCost);
 
-                ]);
+                $clientProjectModel->cost              = $projectTotalCost;
+                $isOnBudget                            = $this->ProjectService->isProjectOnBudget($projectTotalCost, $clientProjectModel->budget);
+                $clientProjectModel->isProjectOnBudget = $isOnBudget;
+
+                return view('clientProjects/viewClientProject',
+                    [
+                        'project'          => $clientProjectModel,
+                        'projectTimeLines' => $projectTimeLines,
+                        'resourcesDetails' => $resourcesDetails,
+                        'projectTotalCost' => $projectTotalCost,
+                        //'clientProjects'=>$clientProjects,
+
+                    ]);
+            } else {
+                return view('notAuthorize',
+                    [
+                        'message' => 'You are Not Authorize to view this Page !!',
+                    ]
+                );
+            }
         } else {
             return view('notAuthorize',
                 [
@@ -136,22 +148,33 @@ class ClientProjectController extends Controller
                 ]
             );
         }
-
     }
 
     /**
-     * Show the form for editing the specified resource.
+    cified resource.
      *
      * @param  \People\Models\ClientProject $clientProject
      * @return \Illuminate\Http\Response
      */
     public function edit($clientProjectId)
     {
-        $isManager = $this->UserAuthenticationService->isManager();
 
-        if ($isManager) {
-            $clientProject = $this->ClientProjectService->getClientProjectDetails($clientProjectId);
-            return view('clientProjects/clientProjectEditForm', ['clientProject' => $clientProject]);
+        $isManager     = $this->UserAuthenticationService->isManager();
+        $isAdmin       = $this->UserAuthenticationService->isAdmin();
+        $clientProject = $this->ClientProjectService->getClientProjectDetails($clientProjectId);
+
+        if (isset($clientProject)) {
+            $isRequestedClientProjectBelongsToSameCompany = $this->UserAuthenticationService->isRequestedClientBelongsToSameCompany($clientProject->client_id);
+            if (($isManager || $isAdmin) && $isRequestedClientProjectBelongsToSameCompany) {
+
+                return view('clientProjects/clientProjectEditForm', ['clientProject' => $clientProject]);
+            } else {
+                return view('notAuthorize',
+                    [
+                        'message' => 'You are Not Authorize to view this Page !!',
+                    ]
+                );
+            }
         } else {
             return view('notAuthorize',
                 [
@@ -184,8 +207,9 @@ class ClientProjectController extends Controller
     public function destroy(ClientProject $clientproject)
     {
         $isManager = $this->UserAuthenticationService->isManager();
+        $isAdmin   = $this->UserAuthenticationService->isAdmin();
 
-        if ($isManager) {
+        if ($isManager || $isAdmin) {
             $clientid = $this->ClientProjectService->deleteClientProject($clientproject);
 
             return redirect('/clients/' . $clientid);
@@ -201,8 +225,11 @@ class ClientProjectController extends Controller
 
     public function manageProject($clientId)
     {
-        $isManager = $this->UserAuthenticationService->isManager();
-        if ($isManager) {
+
+        $isManager                             = $this->UserAuthenticationService->isManager();
+        $isAdmin                               = $this->UserAuthenticationService->isAdmin();
+        $isRequestedClientBelongsToSameCompany = $this->UserAuthenticationService->isRequestedClientBelongsToSameCompany($clientId);
+        if (($isManager || $isAdmin) && $isRequestedClientBelongsToSameCompany) {
 
             $clientProjects = $this->ClientProjectService->manageClientProjects($clientId);
 
@@ -217,4 +244,5 @@ class ClientProjectController extends Controller
                 ]);
         }
     }
+
 }

@@ -65,7 +65,7 @@
             </table>
 
         </div>
-        @role('admin')
+        @role(['manager','admin'])
         <a href="/companies/{{$companyProfileModel->companyId}}/edit">
             <button class="btn btn-primary"> Edit Company
 

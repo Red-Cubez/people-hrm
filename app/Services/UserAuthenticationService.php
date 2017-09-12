@@ -1,42 +1,49 @@
 <?php
 namespace People\Services;
 
-use People\Models\Employee;
 use Illuminate\Support\Facades\Auth;
+use People\Models\Employee;
+use People\Models\Client;
 use People\Services\Interfaces\IUserAuthenticationService;
 
 //use Zizaco\Entrust\Entrust;
 class UserAuthenticationService implements IUserAuthenticationService
 {
-    // public function canEmployeeView($requestId)
-    // {
 
-    //     $isAdmin = \Entrust::hasRole('admin');
-
-    //     $user = Auth::user();
-    //     //$role = Role::findOrFail($user->id);
-
-    //     if ($user->employee->id == $requestId) {
-
-    //         return true;
-    //     }
-
-    //     if ($isAdmin) {
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-    // }
-    public function belongsToSameCompany($requestId)
+    public function isRequestedEmployeeBelongsToSameCompany($requestId)
     {
         $employee             = Employee::find($requestId);
         $logedInUser          = $this->getCurrrentLogedInUserDetails();
         $belongsToSameCompany = false;
-    
-        if ($logedInUser->employee->company_id == $employee->company_id) {
-            $belongsToSameCompany = true;
+        if (isset($employee)) {
+            if ($logedInUser->employee->company_id == $employee->company_id) {
+                $belongsToSameCompany = true;
+            }
         }
         return $belongsToSameCompany;
+
+    }
+    public function isRequestedClientBelongsToSameCompany($requestedClientId)
+    {
+        $client             = Client::find($requestedClientId);
+        $logedInUser          = $this->getCurrrentLogedInUserDetails();
+        $belongsToSameCompany = false;
+        if (isset($client)) {
+            if ($logedInUser->employee->company_id == $client->company_id) {
+                $belongsToSameCompany = true;
+            }
+        }
+        return $belongsToSameCompany;
+    }
+    public function isRequestedCompanyBelongsToEmployee($requestedCompanyId)
+    {
+        $logedInUser = $this->getCurrrentLogedInUserDetails();
+
+        if ($logedInUser->employee->company_id == $requestedCompanyId) {
+            return true;
+        } else {
+            return false;
+        }
 
     }
     public function canEmployeeView($requestId)
@@ -75,6 +82,20 @@ class UserAuthenticationService implements IUserAuthenticationService
     {
         $isEmployee = \Entrust::hasRole('employee');
         return $isEmployee;
+
+    }
+
+    public function isClientManager()
+    {
+        $isClientManager = \Entrust::hasRole('client-manager');
+        return $isClientManager;
+
+    }
+
+    public function isHrManager()
+    {
+        $isHrManager = \Entrust::hasRole('hr-manager');
+        return $isHrManager;
 
     }
 

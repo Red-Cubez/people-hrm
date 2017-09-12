@@ -57,7 +57,7 @@
             No Record Found
         @endif
     </div>
-  @role('admin')
+  @role(['hr-manager','manager','admin'])
     <a href="/employees/showemployeeform/{{$companyProfileModel->companyId}}">
         <button class="btn btn-primary"> Add New Employee
 

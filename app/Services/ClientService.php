@@ -30,6 +30,19 @@ class ClientService implements IClientService {
 		}
 		$client->delete();
 	}
+		public function getClientDetails($clientId)
+		{
+			$client=Client::find($clientId);
+
+			if(isset($client))
+			{
+				return $client;
+			}
+			else
+			{
+				return null;
+			}
+		}
 
 	public function createClient($createRequest) {
 		$client = new Client();

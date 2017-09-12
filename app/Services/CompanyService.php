@@ -22,6 +22,10 @@ class CompanyService implements ICompanyService
         $companyAddress = $company->address;
         return array($company, $companyAddress);
     }
+    public function getCompanyDetails($companyId)
+    {
+        return Company::find($companyId);
+    }
 
     public function createCompany($request)
     {

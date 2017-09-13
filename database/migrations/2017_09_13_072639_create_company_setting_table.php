@@ -16,6 +16,7 @@ class CreateCompanySettingTable extends Migration
         Schema::create('company_settings', function (Blueprint $table) {
             $table->increments('id');
             $table->string('currencyName');
+            $table->string('currencySymbol');
             $table->integer('company_id')->unsigned()->nullable();
             $table->foreign('company_id')->references('id')->on('companies');
             $table->timestamps();

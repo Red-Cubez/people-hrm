@@ -9,5 +9,6 @@ interface ICompanyProjectService {
 	public function saveCompanyProject($request);
 	public function updateCompanyProject($request, $companyproject);
 	public function viewCompanyProject($companyProjectId);
+	public function getCompanyProject($companyProjectId);
 
 }

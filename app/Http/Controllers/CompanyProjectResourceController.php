@@ -5,6 +5,7 @@ namespace People\Http\Controllers;
 use Illuminate\Http\Request;
 use People\Models\CompanyProjectResource;
 use People\Services\Interfaces\ICompanyProjectResourceService;
+use People\Services\Interfaces\ICompanyProjectService;
 use People\Services\Interfaces\IResourceFormValidator;
 use People\Services\Interfaces\IUserAuthenticationService;
 
@@ -19,14 +20,15 @@ class CompanyProjectResourceController extends Controller
     public $CompanyProjectResourceService;
     public $ResourceFormValidator;
     public $UserAuthenticationService;
-
+    public $CompanyProjectService;
     public function __construct(ICompanyProjectResourceService $companyProjectResourceService,
         IResourceFormValidator $resourceFormValidator, IUserAuthenticationService
-         $userAuthenticationService) {
+         $userAuthenticationService, ICompanyProjectService $companyProjectService) {
         $this->middleware('auth');
         $this->CompanyProjectResourceService = $companyProjectResourceService;
         $this->ResourceFormValidator         = $resourceFormValidator;
         $this->UserAuthenticationService     = $userAuthenticationService;
+        $this->CompanyProjectService         = $companyProjectService;
 
     }
 
@@ -83,16 +85,29 @@ class CompanyProjectResourceController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($companyProjectId)
-    { 
-        $isManager = $this->UserAuthenticationService->isManager();
-        if ($isManager) {
-            list($currentProjectResources, $availableEmployees) = $this->CompanyProjectResourceService->showCompanyProjectResources($companyProjectId);
-            return view('CompanyProjectResources.index', [
-                'projectResources'   => $currentProjectResources,
-                'availableEmployees' => $availableEmployees,
-                'companyProjectId'   => $companyProjectId,
+    {
 
-            ]);
+        $isManager = $this->UserAuthenticationService->isManager();
+        $isAdmin   = $this->UserAuthenticationService->isAdmin();
+        $project   = $this->CompanyProjectService->getCompanyProject($companyProjectId);
+
+        if (isset($project)) {
+
+            $isRequestedCompanyProjectBelongsToSameCompany = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($project->company_id);
+            if (($isManager || $isAdmin) && $isRequestedCompanyProjectBelongsToSameCompany) {
+                list($currentProjectResources, $availableEmployees) = $this->CompanyProjectResourceService->showCompanyProjectResources($companyProjectId);
+                return view('CompanyProjectResources.index', [
+                    'projectResources'   => $currentProjectResources,
+                    'availableEmployees' => $availableEmployees,
+                    'companyProjectId'   => $companyProjectId,
+
+                ]);
+            } else {
+                return view('notAuthorize',
+                    [
+                        'message' => 'You are Not Authorize to view this Page !!',
+                    ]);
+            }
         } else {
             return view('notAuthorize',
                 [
@@ -108,17 +123,28 @@ class CompanyProjectResourceController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($companyProjectId)
+    public function edit($companyProjectResourceId)
     {
-        $isManager = $this->UserAuthenticationService->isManager();
-        if ($isManager) {
-            $resource = $this->CompanyProjectResourceService->showEditForm($companyProjectId);
 
-            return view('CompanyProjectResources.updateResource', [
-                'projectresources' => $resource,
-                'companyProjectId' => $companyProjectId,
+        $isManager       = $this->UserAuthenticationService->isManager();
+        $isAdmin         = $this->UserAuthenticationService->isAdmin();
+        $projectResource = $this->CompanyProjectResourceService->getCompanyProjectResource($companyProjectResourceId);
+        if (isset($projectResource)) {
+            $isRequestedCompanyProjectResourceBelongsToSameCompany = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($projectResource->companyProject->company_id);
+            if (($isManager || $isAdmin) && $isRequestedCompanyProjectResourceBelongsToSameCompany) {
 
-            ]);
+                $resource = $this->CompanyProjectResourceService->showEditForm($companyProjectResourceId);
+
+                return view('CompanyProjectResources.updateResource', [
+                    'projectresources' => $resource,
+
+                ]);
+            } else {
+                return view('notAuthorize',
+                    [
+                        'message' => 'You are Not Authorize to view this Page !!',
+                    ]);
+            }
         } else {
             return view('notAuthorize',
                 [

@@ -2,9 +2,9 @@
 
 namespace People\Services;
 
+use People\Models\CompanyProject;
 use People\Models\CompanyProjectResource;
 use People\Models\Employee;
-use People\Models\CompanyProject;
 use People\Services\Interfaces\ICompanyProjectResourceService;
 use People\Services\Interfaces\IProjectService;
 
@@ -12,22 +12,23 @@ class CompanyProjectResourceService implements ICompanyProjectResourceService
 {
     public $ProjectService;
 
-    public function __construct(IProjectService $projectService) {
+    public function __construct(IProjectService $projectService)
+    {
 
         $this->ProjectService = $projectService;
     }
 
     public function showCompanyProjectResources($companyProjectId)
     {
-        $companyProject=CompanyProject::find($companyProjectId);
+        $companyProject          = CompanyProject::find($companyProjectId);
         $currentProjectResources = CompanyProjectResource::where('company_project_id', $companyProjectId)->orderBy('created_at', 'asc')
             ->get();
 
-        $projectResources=$this->ProjectService->mapResourcesDetailsToClass($currentProjectResources,true);
-       
-         $availableEmployees= Employee::where('company_id',$companyProject->company->id)->get();
+        $projectResources = $this->ProjectService->mapResourcesDetailsToClass($currentProjectResources, true);
 
-        return array($projectResources,$availableEmployees);
+        $availableEmployees = Employee::where('company_id', $companyProject->company->id)->get();
+
+        return array($projectResources, $availableEmployees);
     }
 
     public function saveOrUpdateCompanyProjectResource($request)
@@ -42,36 +43,49 @@ class CompanyProjectResourceService implements ICompanyProjectResourceService
 
         if (isset($request->projectResourceId)) {
             //update
-            $companyProjectResource->title = $request->title;
+            $companyProjectResource->title             = $request->title;
             $companyProjectResource->expectedStartDate = $request->expectedStartDate;
-            $companyProjectResource->expectedEndDate = $request->expectedEndDate;
-            $companyProjectResource->actualStartDate = $request->actualStartDate;
-            $companyProjectResource->actualEndDate = $request->actualEndDate;
+            $companyProjectResource->expectedEndDate   = $request->expectedEndDate;
+            $companyProjectResource->actualStartDate   = $request->actualStartDate;
+            $companyProjectResource->actualEndDate     = $request->actualEndDate;
             $companyProjectResource->hourlyBillingRate = $request->hourlyBillingRate;
-            $companyProjectResource->hoursPerWeek = $request->hoursPerWeek;
+            $companyProjectResource->hoursPerWeek      = $request->hoursPerWeek;
 
             $companyProjectResource->save();
 
         } elseif (!isset($request->projectResourceId)) {
             //save
-            $companyProjectResource->title = $request->title;
-            $companyProjectResource->expectedStartDate = $request->expectedStartDate;
-            $companyProjectResource->expectedEndDate = $request->expectedEndDate;
-            $companyProjectResource->actualStartDate = $request->actualStartDate;
-            $companyProjectResource->actualEndDate = $request->actualEndDate;
-            $companyProjectResource->hourlyBillingRate = $request->hourlyBillingRate;
-            $companyProjectResource->hoursPerWeek = $request->hoursPerWeek;
-            $companyProjectResource->employee_id = $request->employee_id;
+            $companyProjectResource->title              = $request->title;
+            $companyProjectResource->expectedStartDate  = $request->expectedStartDate;
+            $companyProjectResource->expectedEndDate    = $request->expectedEndDate;
+            $companyProjectResource->actualStartDate    = $request->actualStartDate;
+            $companyProjectResource->actualEndDate      = $request->actualEndDate;
+            $companyProjectResource->hourlyBillingRate  = $request->hourlyBillingRate;
+            $companyProjectResource->hoursPerWeek       = $request->hoursPerWeek;
+            $companyProjectResource->employee_id        = $request->employee_id;
             $companyProjectResource->company_project_id = $request->companyProjectId;
 
             $companyProjectResource->save();
         }
     }
+    public function getCompanyProjectResource($companyProjectResourceId)
+    {
+       $resource=CompanyProjectResource::find($companyProjectResourceId);
+       if(isset($resource))
+       {
+        return $resource;
+       }
+       else
+       {
+        return null;
+       }
+    }
 
-    public function showEditForm($companyProjectId)
+    public function showEditForm($companyProjectResourceId)
     {
 
-        $resource = CompanyProjectResource::where('id', $companyProjectId)->orderBy('created_at', 'asc')->get();
+        $resource = CompanyProjectResource::find($companyProjectResourceId);
+
         return $resource;
 
     }

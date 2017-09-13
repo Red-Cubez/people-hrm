@@ -45,6 +45,18 @@ class CompanyProjectService implements ICompanyProjectService {
 
 		return $companyProject->id;
 	}
+		public function getCompanyProject($companyProjectId)
+		{
+			$project=CompanyProject::find($companyProjectId);
+			if(isset($project))
+			{
+				return $project;
+			}
+			else
+			{
+				return null;
+			}
+		}
 
 	public function updateCompanyProject($request, $companyproject) {
 		$companyproject->name = $request->name;

@@ -109,33 +109,43 @@ class CompanyProjectController extends Controller
 
         $isManager = false;
         $isManager = $this->UserAuthenticationService->isManager();
-        $isAdmin = $this->UserAuthenticationService->isAdmin();
+        $isAdmin   = $this->UserAuthenticationService->isAdmin();
+        $project   = $this->CompanyProjectService->getCompanyProject($companyProjectId);
+
         //$isClientManager = $this->UserAuthenticationService->isClientManager();
         //$isHrManager = $this->UserAuthenticationService->isHrManager();
+        if (isset($project)) {
 
-        if ($isManager || $isAdmin) {
-            list($currentProjectResources) = $this->CompanyProjectResourceService->showCompanyProjectResources($companyProjectId);
+            $isRequestedCompanyProjectBelongsToSameCompany = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($project->company_id);
+            if (($isManager || $isAdmin) && $isRequestedCompanyProjectBelongsToSameCompany) {
+                list($currentProjectResources) = $this->CompanyProjectResourceService->showCompanyProjectResources($companyProjectId);
 
-            $companyProject = $this->CompanyProjectService->viewCompanyProject($companyProjectId);
+                $companyProject = $this->CompanyProjectService->viewCompanyProject($companyProjectId);
 
-            $projectTimeLines = $this->ProjectGrapher->setupProjectCost($companyProject, $currentProjectResources, true);
-            $projectTotalCost = $this->ProjectGrapher->calculateProjectTotalCost($projectTimeLines);
-            $resourcesDetails = $this->ProjectGrapher->getResourcesTotalCostForProject($companyProject, $currentProjectResources, $projectTotalCost);
+                $projectTimeLines = $this->ProjectGrapher->setupProjectCost($companyProject, $currentProjectResources, true);
+                $projectTotalCost = $this->ProjectGrapher->calculateProjectTotalCost($projectTimeLines);
+                $resourcesDetails = $this->ProjectGrapher->getResourcesTotalCostForProject($companyProject, $currentProjectResources, $projectTotalCost);
 
-            $companyProject->cost              = $projectTotalCost;
-            $isOnBudget                        = $this->ProjectService->isProjectOnBudget($projectTotalCost, $companyProject->budget);
-            $companyProject->isProjectOnBudget = $isOnBudget;
+                $companyProject->cost              = $projectTotalCost;
+                $isOnBudget                        = $this->ProjectService->isProjectOnBudget($projectTotalCost, $companyProject->budget);
+                $companyProject->isProjectOnBudget = $isOnBudget;
 
-            return view('companyProjects/viewCompanyProject',
-                [
-                    'project'          => $companyProject,
-                    'projectResources' => $currentProjectResources,
-                    'companyProjectId' => $companyProjectId,
-                    'projectTimeLines' => $projectTimeLines,
-                    'resourcesDetails' => $resourcesDetails,
-                    'projectTotalCost' => $projectTotalCost,
+                return view('companyProjects/viewCompanyProject',
+                    [
+                        'project'          => $companyProject,
+                        'projectResources' => $currentProjectResources,
+                        'companyProjectId' => $companyProjectId,
+                        'projectTimeLines' => $projectTimeLines,
+                        'resourcesDetails' => $resourcesDetails,
+                        'projectTotalCost' => $projectTotalCost,
 
-                ]);
+                    ]);
+            } else {
+                return view('notAuthorize',
+                    [
+                        'message' => 'You are Not Authorize to view this Page !!',
+                    ]);
+            }
         } else {
             return view('notAuthorize',
                 [
@@ -151,12 +161,25 @@ class CompanyProjectController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(CompanyProject $companyproject)
+    public function edit($companyProjectId)
     {
-        $isManager = false;
+
         $isManager = $this->UserAuthenticationService->isManager();
-        if ($isManager) {
-            return view('companyProjects/companyProjectEditForm', ['companyproject' => $companyproject]);
+        $isAdmin   = $this->UserAuthenticationService->isAdmin();
+        $project   = $this->CompanyProjectService->getCompanyProject($companyProjectId);
+
+        if (isset($project)) {
+
+            $isRequestedCompanyProjectBelongsToSameCompany = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($project->company_id);
+            if (($isManager || $isAdmin) && $isRequestedCompanyProjectBelongsToSameCompany) {
+                return view('companyProjects/companyProjectEditForm', ['companyproject' => $project]);
+            } else {
+                return view('notAuthorize',
+                    [
+                        'message' => 'You are Not Authorize to view this Page !!',
+                    ]);
+            }
+
         } else {
             return view('notAuthorize',
                 [
@@ -198,13 +221,13 @@ class CompanyProjectController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(CompanyProject $companyproject)
-    { 
+    {
 
         $isManager = false;
         $isManager = $this->UserAuthenticationService->isManager();
-        $isAdmin = $this->UserAuthenticationService->isAdmin();
+        $isAdmin   = $this->UserAuthenticationService->isAdmin();
         if ($isManager || $isAdmin) {
-   
+
             $this->CompanyProjectService->deleteCompanyProject($companyproject);
 
             return redirect('/companies/' . $companyproject->company_id);
@@ -218,12 +241,17 @@ class CompanyProjectController extends Controller
 
     public function manageProject($companyid)
     {
-        $isManager = false;
-        $isManager = $this->UserAuthenticationService->isManager();
-        if ($isManager) {
-            $companyProjects = $this->CompanyProjectService->manageProject($companyid);
 
-            return view('companyprojects.index', ['companyProjects' => $companyProjects, 'companyid' => $companyid]);
+        $isManager                                     = false;
+        $isManager                                     = $this->UserAuthenticationService->isManager();
+        $isAdmin                                       = $this->UserAuthenticationService->isAdmin();
+        $isRequestedCompanyProjectBelongsToSameCompany = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($companyid);
+        if (($isManager || $isAdmin) && $isRequestedCompanyProjectBelongsToSameCompany) {
+
+            return view('companyprojects.index',
+                [
+                    'companyid' => $companyid,
+                ]);
         } else {
             return view('notAuthorize',
                 [

@@ -9,5 +9,6 @@ interface ICompanyProjectResourceService
     public function deleteCompanyProjectResource($companyprojectresource);
     public function showEditForm($companyProjectId);
     public function getCompanyProjectResource($companyProjectResourceId);
+  
 
 }

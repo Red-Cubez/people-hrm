@@ -61,7 +61,7 @@
                         display: true,
                         scaleLabel: {
                             display: true,
-                            labelString: '@if(isset($currencyName)){{$currencyName}}@endif'
+                            labelString: '@if(isset($currencyName)){{$currencyName.' '.$currencySymbol}}@endif'
                         },
 
                     }]

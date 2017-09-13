@@ -25,12 +25,12 @@
 
     <div>
         <label for="contactPerson" class="control-label">budget : </label>
-            {{$project->budget}}
+            {{$project->budget.' '.$currencySymbol}}
     </div>
 
     <div>
         <label for="contactPerson" class="control-label">Cost : </label>
-            {{$project->cost}}
+            {{$project->cost.' '.$currencySymbol}}
     </div>
     <div>
             Project is {{$project->isProjectOnTime }}

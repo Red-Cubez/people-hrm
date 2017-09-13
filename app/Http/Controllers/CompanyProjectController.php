@@ -130,8 +130,9 @@ class CompanyProjectController extends Controller
                 $companyProject->cost              = $projectTotalCost;
                 $isOnBudget                        = $this->ProjectService->isProjectOnBudget($projectTotalCost, $companyProject->budget);
                 $companyProject->isProjectOnBudget = $isOnBudget;
-                $currencyName                    = $this->CompanySettingService->getCurrencyName($project->company_id);
-           
+                $currencyName                      = $this->CompanySettingService->getCurrencyName($project->company_id);
+                $currencySymbol                    = $this->CompanySettingService->getCurrencySymbol($project->company_id);
+
                 return view('companyProjects/viewCompanyProject',
                     [
                         'project'          => $companyProject,
@@ -141,6 +142,7 @@ class CompanyProjectController extends Controller
                         'resourcesDetails' => $resourcesDetails,
                         'projectTotalCost' => $projectTotalCost,
                         'currencyName'     => $currencyName,
+                        'currencySymbol'   => $currencySymbol,
 
                     ]);
             } else {

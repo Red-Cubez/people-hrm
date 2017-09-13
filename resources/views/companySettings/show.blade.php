@@ -4,11 +4,22 @@
     @include('common.errors')
     <div class="form-group">
         <label class="col-sm-3 control-label" for="role Name">
-            Currency Name
+            Currency Name:
         </label>
         <div class="col-sm-6">
             @if(isset($companySetting->currencyName))
             {{$companySetting->currencyName}}
+            @endif
+        </div>
+    </div>
+    <br/>
+     <div class="form-group">
+        <label class="col-sm-3 control-label" for="role Name">
+            Currency Symbol:
+        </label>
+        <div class="col-sm-6">
+            @if(isset($companySetting->currencySymbol))
+            {{$companySetting->currencySymbol}}
             @endif
         </div>
     </div>

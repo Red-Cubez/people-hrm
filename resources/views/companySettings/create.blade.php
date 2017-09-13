@@ -5,7 +5,7 @@
     @include('common.errors')
     <!-- New Employee Form -->
         <!-- New Employee Form -->
-        <form id="employeeForm" action="{{url('company-settings') }}"  name="employeeForm" class="form-horizontal" method="POST">
+        <form  action="{{url('company-settings') }}"  name="employeeForm" class="form-horizontal" method="POST">
             {{ csrf_field() }}
             
             @include('companySettings/companySettingsForm')

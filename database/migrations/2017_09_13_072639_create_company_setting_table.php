@@ -30,6 +30,6 @@ class CreateCompanySettingTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('company_setting');
+        Schema::dropIfExists('company_settings');
     }
 }

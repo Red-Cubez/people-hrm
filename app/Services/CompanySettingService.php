@@ -18,6 +18,21 @@ class CompanySettingService implements ICompanySettingService
             return null;
         }
     }
+    public function getCurrencySymbol($companyId)
+    {
+         $setting = $this->getCompanySetting($companyId);
+        if (isset($setting)) {
+            $currencySymbol = null;
+            $currencySymbol = $setting->currencySymbol;
+            if (isset($currencySymbol)) {
+                return $currencySymbol;
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
 
     public function getCurrencyName($companyId)
     {
@@ -49,8 +64,9 @@ class CompanySettingService implements ICompanySettingService
     }
     public function updateCompanySettings($request, $settingId)
     {
-        $setting               = CompanySetting::find($settingId);
-        $setting->currencyName = $request->currencyName;
+        $setting                 = CompanySetting::find($settingId);
+        $setting->currencyName   = $request->currencyName;
+        $setting->currencySymbol = $request->currencySymbol;
         $setting->save();
 
         return $setting;
@@ -60,10 +76,12 @@ class CompanySettingService implements ICompanySettingService
     {
         $setting = new CompanySetting();
 
-        $setting->currencyName = $request->currencyName;
-        $setting->company_id   = $request->companyId;
+        $setting->currencyName   = $request->currencyName;
+        $setting->currencySymbol = $request->currencySymbol;
+        $setting->company_id     = $request->companyId;
 
         $setting->save();
     }
+
 
 }

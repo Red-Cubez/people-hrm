@@ -10,6 +10,7 @@ use People\Services\Interfaces\IProjectResourceService;
 use People\Services\Interfaces\IProjectService;
 use People\Services\Interfaces\IResourceFormValidator;
 use People\Services\Interfaces\IUserAuthenticationService;
+use People\Services\Interfaces\ICompanySettingService;
 
 class ClientProjectController extends Controller
 {
@@ -25,11 +26,12 @@ class ClientProjectController extends Controller
     public $ProjectResourceService;
     public $ProjectFormValidator;
     public $UserAuthenticationService;
+    public $CompanySettingService;
 
     public function __construct(IClientProjectService $clientProjectService, IProjectGrapher $projectGrapher,
         IProjectService $projectService, IProjectResourceService $projectResourceService,
         IResourceFormValidator $projectFormValidator, IUserAuthenticationService
-         $userAuthenticationService) {
+         $userAuthenticationService,ICompanySettingService $companySettingService) {
 
         $this->middleware('auth');
         $this->ClientProjectService      = $clientProjectService;
@@ -38,6 +40,7 @@ class ClientProjectController extends Controller
         $this->ProjectResourceService    = $projectResourceService;
         $this->ProjectFormValidator      = $projectFormValidator;
         $this->UserAuthenticationService = $userAuthenticationService;
+        $this->CompanySettingService     = $companySettingService;
     }
 
     public function index(Request $request)
@@ -124,14 +127,18 @@ class ClientProjectController extends Controller
                 $clientProjectModel->cost              = $projectTotalCost;
                 $isOnBudget                            = $this->ProjectService->isProjectOnBudget($projectTotalCost, $clientProjectModel->budget);
                 $clientProjectModel->isProjectOnBudget = $isOnBudget;
-
+                $currencyName                          = $this->CompanySettingService->
+                                                         getCurrencyName($clientProject->client->company_id);
+                $currencySymbol                        = $this->CompanySettingService->
+                                                         getCurrencySymbol($clientProject->client->company_id);
                 return view('clientProjects/viewClientProject',
                     [
                         'project'          => $clientProjectModel,
                         'projectTimeLines' => $projectTimeLines,
                         'resourcesDetails' => $resourcesDetails,
                         'projectTotalCost' => $projectTotalCost,
-                        //'clientProjects'=>$clientProjects,
+                        'currencyName'     => $currencyName,
+                        'currencySymbol'   => $currencySymbol,
 
                     ]);
             } else {

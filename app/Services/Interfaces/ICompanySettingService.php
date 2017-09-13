@@ -9,6 +9,6 @@ interface ICompanySettingService
     public function getCompanySettingDetails($settingId);
     public function updateCompanySettings($request, $settingId);
     public function saveCompanySettings($request);
-  
+    public function getCurrencySymbol($companyId);
 
 }

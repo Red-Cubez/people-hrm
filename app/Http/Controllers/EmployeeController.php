@@ -69,11 +69,7 @@ class EmployeeController extends Controller
 
                 ]);
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'The Page You are looking for is not found !!',
-                ]
-            );
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         }
     }
     /**
@@ -120,11 +116,7 @@ class EmployeeController extends Controller
                     'employeeId' => $employeeId,
                 ]);
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'The Page You are looking for is not found !!',
-                ]
-            );
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
 
         }
 
@@ -168,17 +160,10 @@ class EmployeeController extends Controller
                         'employeesWithBirthday' => $employeesWithBirthday,
                     ]);
             } else {
-                return view('notAuthorize',
-                    [
-                        'message' => 'The Page You are looking for is not found !!',
-                    ]
-                );
+                return $this->UserAuthenticationService->redirectToErrorMessageView(null);
             }
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]);
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         }
      
     }
@@ -209,11 +194,7 @@ class EmployeeController extends Controller
                     'jobTitles'         => $jobTitles,
                 ]);
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]
-            );
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         }
 
     }
@@ -240,11 +221,7 @@ class EmployeeController extends Controller
                     'employeeId' => $employeeId,
                 ]);
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]
-            );
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         }
 
     }
@@ -267,11 +244,7 @@ class EmployeeController extends Controller
 
             return redirect('/companies/' . $employee->company_id);
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]
-            );
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         }
 
     }

@@ -50,11 +50,7 @@ class CompanyController extends Controller
 
             return view('companies.index', ['companies' => $companies]);
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are not Authorized to view this Page!',
-                ]
-            );
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
 
         }
     }
@@ -72,11 +68,7 @@ class CompanyController extends Controller
         if ($isManager || $isAdmin) {
             return view('companies.addNewCompany');
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]
-            );
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         }
     }
 
@@ -98,11 +90,7 @@ class CompanyController extends Controller
 
             return redirect('/companies');
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]
-            );
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         }
     }
 
@@ -114,6 +102,7 @@ class CompanyController extends Controller
      */
     public function show($companyId)
     {
+
         $isManager                           = $this->UserAuthenticationService->isManager();
         $isAdmin                             = $this->UserAuthenticationService->isAdmin();
         $isHrManager                         = $this->UserAuthenticationService->isHrManager();
@@ -144,12 +133,7 @@ class CompanyController extends Controller
                     'employeesWithBirthday' => $employeesWithBirthday,
                 ]);
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]
-            );
-
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         }
     }
 
@@ -173,11 +157,7 @@ class CompanyController extends Controller
                     'company' => $company,
                 ]);
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]
-            );
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         }
 
     }
@@ -201,11 +181,7 @@ class CompanyController extends Controller
 
             return redirect('/companies/' . $company->id);
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]
-            );
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         }
     }
 
@@ -225,11 +201,7 @@ class CompanyController extends Controller
 
             return redirect('/companies');
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]
-            );
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         }
 
     }

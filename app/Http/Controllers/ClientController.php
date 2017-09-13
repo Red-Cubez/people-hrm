@@ -40,11 +40,7 @@ class ClientController extends Controller
 
                 ]);
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]
-            );
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         }
     }
     public function index(Request $request)
@@ -91,11 +87,7 @@ class ClientController extends Controller
 
             return redirect('/clients/' . $clientId);
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]
-            );
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         }
     }
 
@@ -124,18 +116,10 @@ class ClientController extends Controller
                         'companyId'      => $client->company_id,
                     ]);
             } else {
-                return view('notAuthorize',
-                    [
-                        'message' => 'You are Not Authorize to view this Page !!',
-                    ]
-                );
+                return $this->UserAuthenticationService->redirectToErrorMessageView(null);
             }
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]
-            );
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         }
     }
 
@@ -163,18 +147,10 @@ class ClientController extends Controller
 
                     ]);
             } else {
-                return view('notAuthorize',
-                    [
-                        'message' => 'You are Not Authorize to view this Page !!',
-                    ]
-                );
+                return $this->UserAuthenticationService->redirectToErrorMessageView(null);
             }
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]
-            );
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
 
         }
     }
@@ -200,11 +176,7 @@ class ClientController extends Controller
 
             return redirect('/clients/' . $client->id);
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]
-            );
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         }
     }
     /**
@@ -226,11 +198,7 @@ class ClientController extends Controller
 
             return redirect('/companies/' . $client->company_id);
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]
-            );
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         }
     }
 }

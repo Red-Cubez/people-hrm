@@ -135,18 +135,10 @@ class ClientProjectController extends Controller
 
                     ]);
             } else {
-                return view('notAuthorize',
-                    [
-                        'message' => 'You are Not Authorize to view this Page !!',
-                    ]
-                );
+                return $this->UserAuthenticationService->redirectToErrorMessageView(null);
             }
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]
-            );
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         }
     }
 
@@ -169,18 +161,10 @@ class ClientProjectController extends Controller
 
                 return view('clientProjects/clientProjectEditForm', ['clientProject' => $clientProject]);
             } else {
-                return view('notAuthorize',
-                    [
-                        'message' => 'You are Not Authorize to view this Page !!',
-                    ]
-                );
+                return $this->UserAuthenticationService->redirectToErrorMessageView(null);
             }
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]
-            );
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         }
     }
 
@@ -214,11 +198,7 @@ class ClientProjectController extends Controller
 
             return redirect('/clients/' . $clientid);
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]
-            );
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
 
         }
     }
@@ -238,10 +218,7 @@ class ClientProjectController extends Controller
                     'clientId'        => $clientId,
                 ]);
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]);
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         }
     }
 

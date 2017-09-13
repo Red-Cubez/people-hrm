@@ -105,11 +105,16 @@ class ProjectGrapher implements IProjectGrapher
         } else {
             $projectEndDate = $project->expectedEndDate;
         }
+        if ($project->actualStartDate != null) {
+            $projectStartDate = $project->actualStartDate;
+        } else {
+            $projectStartDate = $project->expectedStartDate;
+        }
 
-        $totalMonths     = $this->calculateMonthsBetweenTwoDates($project->actualStartDate, $projectEndDate);
+        $totalMonths     = $this->calculateMonthsBetweenTwoDates($projectStartDate, $projectEndDate);
         $projectTimeLine = array();
 
-        $projectStartDate = date("Y-m-d", strtotime($project->actualStartDate));
+        $projectStartDate = date("Y-m-d", strtotime($projectStartDate));
 
         $projectStartInDateTime = new \DateTime($projectStartDate);
 
@@ -140,6 +145,7 @@ class ProjectGrapher implements IProjectGrapher
             array_push($projectTimeLine, $projectDetails);
 
         }
+
         $projectTimeLines = $this->calculateResourcesCost($projectResources, $projectTimeLine);
 
         return $projectTimeLines;

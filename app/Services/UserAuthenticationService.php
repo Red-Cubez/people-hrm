@@ -2,8 +2,8 @@
 namespace People\Services;
 
 use Illuminate\Support\Facades\Auth;
-use People\Models\Employee;
 use People\Models\Client;
+use People\Models\Employee;
 use People\Services\Interfaces\IUserAuthenticationService;
 
 //use Zizaco\Entrust\Entrust;
@@ -25,7 +25,7 @@ class UserAuthenticationService implements IUserAuthenticationService
     }
     public function isRequestedClientBelongsToSameCompany($requestedClientId)
     {
-        $client             = Client::find($requestedClientId);
+        $client               = Client::find($requestedClientId);
         $logedInUser          = $this->getCurrrentLogedInUserDetails();
         $belongsToSameCompany = false;
         if (isset($client)) {
@@ -97,6 +97,17 @@ class UserAuthenticationService implements IUserAuthenticationService
         $isHrManager = \Entrust::hasRole('hr-manager');
         return $isHrManager;
 
+    }
+    public function redirectToErrorMessageView($message)
+    {
+    
+        if (!isset($message)) {
+            $message = "You are not Authorized to view this page !!";
+        }
+        return view('notAuthorized',
+            [
+                'message' => $message,
+            ]);
     }
 
 }

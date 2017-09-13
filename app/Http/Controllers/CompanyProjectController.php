@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use People\Models\CompanyProject;
 use People\Services\Interfaces\ICompanyProjectResourceService;
 use People\Services\Interfaces\ICompanyProjectService;
+use People\Services\Interfaces\ICompanySettingService;
 use People\Services\Interfaces\IProjectGrapher;
 use People\Services\Interfaces\IProjectService;
 use People\Services\Interfaces\IResourceFormValidator;
@@ -25,11 +26,14 @@ class CompanyProjectController extends Controller
     public $ProjectService;
     public $ProjectFormValidator;
     public $UserAuthenticationService;
+    public $CompanySettingService;
 
     public function __construct(ICompanyProjectService $companyProjectService,
         ICompanyProjectResourceService $companyProjectResourceService,
         IProjectGrapher $ProjectGrapher, IProjectService $ProjectService,
-        IResourceFormValidator $projectFormValidator, IUserAuthenticationService $userAuthenticationService) {
+        IResourceFormValidator $projectFormValidator, IUserAuthenticationService $userAuthenticationService,
+        ICompanySettingService $companySettingService
+    ) {
 
         $this->middleware('auth');
         $this->CompanyProjectService         = $companyProjectService;
@@ -38,6 +42,7 @@ class CompanyProjectController extends Controller
         $this->ProjectService                = $ProjectService;
         $this->ProjectFormValidator          = $projectFormValidator;
         $this->UserAuthenticationService     = $userAuthenticationService;
+        $this->CompanySettingService         = $companySettingService;
     }
 
     public function index()
@@ -91,10 +96,7 @@ class CompanyProjectController extends Controller
                     'projectId' => $companyProjectId,
                 ]);
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]);
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         }
     }
 
@@ -112,8 +114,6 @@ class CompanyProjectController extends Controller
         $isAdmin   = $this->UserAuthenticationService->isAdmin();
         $project   = $this->CompanyProjectService->getCompanyProject($companyProjectId);
 
-        //$isClientManager = $this->UserAuthenticationService->isClientManager();
-        //$isHrManager = $this->UserAuthenticationService->isHrManager();
         if (isset($project)) {
 
             $isRequestedCompanyProjectBelongsToSameCompany = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($project->company_id);
@@ -123,13 +123,15 @@ class CompanyProjectController extends Controller
                 $companyProject = $this->CompanyProjectService->viewCompanyProject($companyProjectId);
 
                 $projectTimeLines = $this->ProjectGrapher->setupProjectCost($companyProject, $currentProjectResources, true);
+
                 $projectTotalCost = $this->ProjectGrapher->calculateProjectTotalCost($projectTimeLines);
                 $resourcesDetails = $this->ProjectGrapher->getResourcesTotalCostForProject($companyProject, $currentProjectResources, $projectTotalCost);
 
                 $companyProject->cost              = $projectTotalCost;
                 $isOnBudget                        = $this->ProjectService->isProjectOnBudget($projectTotalCost, $companyProject->budget);
                 $companyProject->isProjectOnBudget = $isOnBudget;
-
+                $currencyName                    = $this->CompanySettingService->getCurrencyName($project->company_id);
+           
                 return view('companyProjects/viewCompanyProject',
                     [
                         'project'          => $companyProject,
@@ -138,19 +140,14 @@ class CompanyProjectController extends Controller
                         'projectTimeLines' => $projectTimeLines,
                         'resourcesDetails' => $resourcesDetails,
                         'projectTotalCost' => $projectTotalCost,
+                        'currencyName'     => $currencyName,
 
                     ]);
             } else {
-                return view('notAuthorize',
-                    [
-                        'message' => 'You are Not Authorize to view this Page !!',
-                    ]);
+                return $this->UserAuthenticationService->redirectToErrorMessageView(null);
             }
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]);
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         }
 
     }
@@ -174,17 +171,11 @@ class CompanyProjectController extends Controller
             if (($isManager || $isAdmin) && $isRequestedCompanyProjectBelongsToSameCompany) {
                 return view('companyProjects/companyProjectEditForm', ['companyproject' => $project]);
             } else {
-                return view('notAuthorize',
-                    [
-                        'message' => 'You are Not Authorize to view this Page !!',
-                    ]);
+                return $this->UserAuthenticationService->redirectToErrorMessageView(null);
             }
 
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]);
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         }
     }
 
@@ -206,10 +197,7 @@ class CompanyProjectController extends Controller
                     'projectId' => $companyproject->id,
                 ]);
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]);
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         }
 
     }
@@ -232,10 +220,7 @@ class CompanyProjectController extends Controller
 
             return redirect('/companies/' . $companyproject->company_id);
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]);
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         }
     }
 
@@ -253,10 +238,7 @@ class CompanyProjectController extends Controller
                     'companyid' => $companyid,
                 ]);
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]);
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         }
     }
 

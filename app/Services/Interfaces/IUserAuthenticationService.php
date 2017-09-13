@@ -17,5 +17,6 @@ interface IUserAuthenticationService
     public function isRequestedEmployeeBelongsToSameCompany($requestId);
     public function isRequestedCompanyBelongsToEmployee($requestedCompanyId);
     public function isRequestedClientBelongsToSameCompany($requestedClientId);
+    public function redirectToErrorMessageView($message);
 
 }

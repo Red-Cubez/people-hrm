@@ -103,16 +103,10 @@ class CompanyProjectResourceController extends Controller
 
                 ]);
             } else {
-                return view('notAuthorize',
-                    [
-                        'message' => 'You are Not Authorize to view this Page !!',
-                    ]);
+                return $this->UserAuthenticationService->redirectToErrorMessageView(null);
             }
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]);
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         }
 
     }
@@ -140,16 +134,10 @@ class CompanyProjectResourceController extends Controller
 
                 ]);
             } else {
-                return view('notAuthorize',
-                    [
-                        'message' => 'You are Not Authorize to view this Page !!',
-                    ]);
+                return $this->UserAuthenticationService->redirectToErrorMessageView(null);
             }
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]);
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         }
 
     }

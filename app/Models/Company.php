@@ -30,5 +30,8 @@ class Company extends Model
     {
         return $this->hasMany('People\Models\Department');
     }
+    public function companySetting() {
+        return $this->hasOne('People\Models\CompanySetting');
+    }
 
 }

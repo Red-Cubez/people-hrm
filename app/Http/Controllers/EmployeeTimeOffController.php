@@ -62,10 +62,7 @@ class EmployeeTimeoffController extends Controller
 
                 ]);
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]);
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         }
     }
 
@@ -118,10 +115,7 @@ class EmployeeTimeoffController extends Controller
                     'employeesTimeoffs' => $employeesTimeoffs,
                 ]);
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]);
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         }
     }
 
@@ -164,16 +158,10 @@ class EmployeeTimeoffController extends Controller
                     return back();
                 }
             } else {
-                return view('notAuthorize',
-                    [
-                        'message' => 'You are Not Authorize to view this Page !!',
-                    ]);
+                return $this->UserAuthenticationService->redirectToErrorMessageView(null);
             }
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]);
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         }
 
     }

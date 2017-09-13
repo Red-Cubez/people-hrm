@@ -1,1 +1,0 @@
-<h1 class="danger" style="text-align: center;"> @if(isset($message)){{$message}}@endif</h1>

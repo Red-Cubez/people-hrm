@@ -70,6 +70,10 @@
             <button class="btn btn-primary"> Edit Company
 
             </button></a>
+         <a href="/company-settings/{{$companyProfileModel->companyId}}">
+            <button class="btn btn-primary"> Company Settings
+
+            </button></a>   
         @endrole
     
     </div>

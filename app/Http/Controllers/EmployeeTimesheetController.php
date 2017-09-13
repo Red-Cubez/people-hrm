@@ -75,10 +75,7 @@ class EmployeeTimesheetController extends Controller
 
                 ]);
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]);
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         }
     }
 
@@ -121,10 +118,7 @@ class EmployeeTimesheetController extends Controller
 
             return back();
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]);
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
 
         }
 
@@ -166,16 +160,10 @@ class EmployeeTimesheetController extends Controller
                     ]);
 
             } else {
-                return view('notAuthorize',
-                    [
-                        'message' => 'You are Not Authorize to view this Page !!',
-                    ]);
+                return $this->UserAuthenticationService->redirectToErrorMessageView(null);
             }
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]);
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
 
         }
 
@@ -194,10 +182,7 @@ class EmployeeTimesheetController extends Controller
                     'employeesTimesheets' => $employeesTimesheets,
                 ]);
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]);
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
 
         }
 
@@ -227,10 +212,7 @@ class EmployeeTimesheetController extends Controller
                     $canEmployeeView = $this->UserAuthenticationService->canEmployeeView($timesheet->employee->id);
                 } else {
 
-                    return view('notAuthorize',
-                        [
-                            'message' => 'You are Not Authorize to view this Page !!',
-                        ]);
+                    return $this->UserAuthenticationService->redirectToErrorMessageView(null);
                 }
 
             }
@@ -250,17 +232,11 @@ class EmployeeTimesheetController extends Controller
 
                     ]);
             } else {
-                return view('notAuthorize',
-                    [
-                        'message' => 'You are Not Authorize to view this Page !!',
-                    ]);
+                return $this->UserAuthenticationService->redirectToErrorMessageView(null);
             }
         } else {
 
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]);
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
 
         }
     }
@@ -284,10 +260,7 @@ class EmployeeTimesheetController extends Controller
             if (isset($timesheet)) {
                 $canEmployeeView = $this->UserAuthenticationService->canEmployeeView($timesheet->employee->id);
             } else {
-                return view('notAuthorize',
-                    [
-                        'message' => 'You are Not Authorize to view this Page !!',
-                    ]);
+                return $this->UserAuthenticationService->redirectToErrorMessageView(null);
             }
 
         }
@@ -315,10 +288,7 @@ class EmployeeTimesheetController extends Controller
             $employeeId = $this->EmployeeTimesheetService->updateTimesheet($request, $id);
             return redirect('employeetimesheet/' . $employeeId . '/create');
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'You are Not Authorize to view this Page !!',
-                ]);
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
 
         }
 

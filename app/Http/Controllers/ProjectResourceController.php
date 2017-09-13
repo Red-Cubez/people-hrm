@@ -96,19 +96,11 @@ class ProjectResourceController extends Controller
                     'clientProjectid'    => $clientProjectId,
                 ]);
             } else {
-                return view('notAuthorize',
-                    [
-                        'message' => 'The Page You are looking for is not found !!',
-                    ]
-                );
+                return $this->UserAuthenticationService->redirectToErrorMessageView(null);
 
             }
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'The Page You are looking for is not found !!',
-                ]
-            );
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
 
         }
 
@@ -181,18 +173,10 @@ class ProjectResourceController extends Controller
 
                 ]);
             } else {
-                return view('notAuthorize',
-                    [
-                        'message' => 'The Page You are looking for is not found !!',
-                    ]
-                );
+                return $this->UserAuthenticationService->redirectToErrorMessageView(null);
             }
         } else {
-            return view('notAuthorize',
-                [
-                    'message' => 'The Page You are looking for is not found !!',
-                ]
-            );
+           return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         }
     }
 

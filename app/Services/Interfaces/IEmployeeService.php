@@ -26,5 +26,9 @@ interface IEmployeeService
 
     public function getEmployee($employeeId);
 
+    public function getNonRegisteredEmployees($companyId);
+
+    public function attachUserIdToEmployee($userId,$employeeId);
+
 
 }

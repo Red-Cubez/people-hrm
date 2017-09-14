@@ -75,7 +75,11 @@
 
             </button></a>   
         @endrole
-    
+        <a href="/register-user/{{$companyProfileModel->companyId}}">
+            <button class="btn btn-primary"> Setup New User
+
+            </button>
+         </a>   
     </div>
 
 @endif

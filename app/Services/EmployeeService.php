@@ -56,6 +56,23 @@ class EmployeeService implements IEmployeeService
         return $employee->id;
 
     }
+    public function getNonRegisteredEmployees($companyId)
+    {
+        $nonRegisteredEmployees = Employee::where('company_id', $companyId)->where('user_id', null)->get();
+        if (isset($nonRegisteredEmployees)) {
+            return $nonRegisteredEmployees;
+        } else {
+            return null;
+        }
+    }
+    public function attachUserIdToEmployee($userId, $employeeId)
+    {
+       $employee=Employee::find($employeeId);
+         
+       $employee->user_id=$userId;
+
+       $employee->save();
+    }
 
     public function createOrUpdateEmployee($request, $employee)
     {

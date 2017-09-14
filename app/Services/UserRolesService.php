@@ -10,8 +10,7 @@ class UserRolesService implements IUserRolesService
 
     public function getUsersWithRoles()
     {
-
-        $usersWithRoles = User::with('roles')->get();
+        $usersWithRoles = User::orderBy('created_at','desc')->with('roles')->get();
         return $usersWithRoles;
 
     }

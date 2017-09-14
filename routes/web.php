@@ -101,3 +101,7 @@ Route::get('/companies/{companyid}/companyprojects', 'CompanyProjectController@m
 
 Route::resource('roles', 'RoleController');
 Route::resource('user-roles', 'UserRolesController');
+
+Route::get('register-user/{companyid}', 'RegisterUserController@createUser');
+Route::post('register-user', 'RegisterUserController@register');
+//Route::resource('register-user', 'RegisterUserController');

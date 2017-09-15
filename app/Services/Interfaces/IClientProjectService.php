@@ -11,5 +11,6 @@ interface IClientProjectService {
 	public function manageClientProjects($clientid);
 	public function viewClientProject($clientProjectId);
 	public function getClientProjectDetails($clientProjectId);
+	public function getAllClientsOfCompanyWithProjects($companyId);
 
 }

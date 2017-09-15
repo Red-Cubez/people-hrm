@@ -77,6 +77,9 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(
             'People\Services\Interfaces\ICompanySettingService', 'People\Services\CompanySettingService');
+
+        $this->app->bind(
+            'People\Services\Interfaces\IReportService', 'People\Services\ReportService');
     }
 
 }

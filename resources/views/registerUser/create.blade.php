@@ -6,6 +6,7 @@
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
                 <div class="panel-heading">Register</div>
+                @if(count($nonRegisteredEmployees)>0)
                 <div class="panel-body">
                     <form class="form-horizontal" role="form" method="POST" action="{{url('register-user') }}">
                         {{ csrf_field() }}
@@ -89,6 +90,11 @@
                         </div>
                     </form>
                 </div>
+                @else
+                <div class="panel-body">
+                No Employees To Show
+                </div>
+                @endif
             </div>
         </div>
     </div>

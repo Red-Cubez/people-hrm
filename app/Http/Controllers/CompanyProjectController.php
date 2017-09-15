@@ -190,17 +190,12 @@ class CompanyProjectController extends Controller
      */
     public function update(Request $request, CompanyProject $companyproject)
     {
-        $isManager = false;
-        $isManager = $this->UserAuthenticationService->isManager();
-        if ($isManager) {
-            $this->CompanyProjectService->updateCompanyProject($request, $companyproject);
-            return response()->json(
-                [
-                    'projectId' => $companyproject->id,
-                ]);
-        } else {
-            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
-        }
+
+        $this->CompanyProjectService->updateCompanyProject($request, $companyproject);
+        return response()->json(
+            [
+                'projectId' => $companyproject->id,
+            ]);
 
     }
 

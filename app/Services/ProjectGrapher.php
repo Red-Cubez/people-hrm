@@ -43,11 +43,11 @@ class ProjectGrapher implements IProjectGrapher
 
     public function getResourcesTotalCostForProject($projectDetails, $projectResources, $projectTotalCost)
     {
- 
+
         $resourceDetails = array();
         foreach ($projectResources as $projectResource) {
             $totalCost = 0;
-
+        //end date
             if ($projectResource->actualEndDate == null) {
                 $projectResourceEndDate = $projectResource->expectedEndDate;
             } else {
@@ -59,11 +59,24 @@ class ProjectGrapher implements IProjectGrapher
             } else {
                 $projectEndDate = $projectDetails->expectedEndDate;
             }
+            //
+            //start date
+             if ($projectResource->actualStartDate == null) {
+                $projectResourceStartDate = $projectResource->expectedStartDate;
+            } else {
+                $projectResourceStartDate = $projectResource->actualStartDate;
 
-            if ($projectResource->actualStartDate >= $projectDetails->actualStartDate && $projectResourceEndDate <= $projectEndDate) {
+            }
+            if ($projectDetails->actualStartDate != null) {
+                $projectStartDate = $projectDetails->actualStartDate;
+            } else {
+                $projectStartDate = $projectDetails->expectedStartDate;
+            }
+            //
+            if ($projectResourceStartDate >= $projectStartDate && $projectResourceEndDate <= $projectEndDate) {
 
-                $difference = $this->calculateDiffernceBetweenTwoDates(date("Y-m-d", strtotime($projectResource->actualStartDate)), date("Y-m-d", strtotime($projectResourceEndDate)));
-
+                $difference = $this->calculateDiffernceBetweenTwoDates(date("Y-m-d", strtotime($projectResourceStartDate)), date("Y-m-d", strtotime($projectResourceEndDate)));
+                //dd($difference);
                 $weeksWorked = ($difference->days + 1) / 7;
 
                 $cost      = $weeksWorked * ($projectResource->hourlyBillingRate) * ($projectResource->hoursPerWeek);
@@ -229,7 +242,7 @@ class ProjectGrapher implements IProjectGrapher
                     }
 
                     $resourceDetails = $this->setupResourceTimeline($firstDateOfCurrentMonth, $lastDateOfCurrentMonth);
-
+                
                     array_push($resourceTimeLines, $resourceDetails);
                 }
 

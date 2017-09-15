@@ -25,8 +25,11 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-10">
+        <div class="col-sm-8">
             @include('companyProjects/showClientProjectsOfCompany')
+        </div>
+        <div class="col-sm-3">
+            @include('companies/companyReports')
         </div>
     </div>
 

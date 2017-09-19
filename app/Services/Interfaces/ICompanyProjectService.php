@@ -11,6 +11,7 @@ interface ICompanyProjectService {
 	public function viewCompanyProject($companyProjectId);
 	public function getCompanyProject($companyProjectId);
 	public function getAllInternalProjectsOfCompany($companyId);
+	public function getProjectStartAndEndDate($project);
 
 
 }

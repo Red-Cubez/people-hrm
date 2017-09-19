@@ -2,6 +2,7 @@
 
 namespace People\Http\Controllers;
 
+use Illuminate\Http\Request;
 use People\Services\Interfaces\IReportService;
 
 class ReportsController extends Controller
@@ -31,12 +32,23 @@ class ReportsController extends Controller
         $internalProjectsTimeLines = $this->ReportService->getInternalProjectsTimeLines($companyId);
 
         $clientProjectsTimeLines = $this->ReportService->getClientProjectsTimeLines($companyId);
-        
+
     }
-    public function showInternalProjectsReport($companyId)
+    public function showInternalProjectsReport(Request $request, $companyId)
     {
-        $projectsTimeLines = $this->ReportService->getInternalProjectsTimeLines($companyId);
-        dd($projectsTimeLines);
+        $this->validate($request, [
+            'startDate' => 'required|date|before:endDate',
+
+            'endDate'   => 'required|date|after:startDate',
+        ]);
+
+        $projectsTimelines = $this->ReportService->getInternalProjectsTimeLines($companyId,$request->startDate,$request->endDate);
+        
+        return view
+            ('reports/internalProjectsGraphs/showProjectsGraphs',
+            [
+                'projectsTimelines' => $projectsTimelines,
+            ]);
     }
     public function showClientProjectsReport($companyId)
     {
@@ -45,4 +57,3 @@ class ReportsController extends Controller
     }
 
 }
-\

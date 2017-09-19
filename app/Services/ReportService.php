@@ -31,20 +31,27 @@ class ReportService implements IReportService
 
     }
 
-    public function getInternalProjectsTimeLines($companyId)
+    public function getInternalProjectsTimeLines($companyId, $startDate, $endDate)
     {
         $companyInternalProjectsTimeLines = array();
-        $companyInternalProjects          = $this->CompanyProjectService->getAllInternalProjectsOfCompany($companyId);
+        $companyInternalProjects          = $this->CompanyProjectService->getAllInternalProjectsOfCompany($companyId, $startDate, $endDate);
 
         foreach ($companyInternalProjects as $companyInternalProject) {
 
-            $projectsTimeLines = $this->getInternalProjectTimeLines($companyInternalProject->id);
+            list($projectStartDate, $projectEndDate) = $this->CompanyProjectService->getProjectStartAndEndDate($companyInternalProject);
+        
+            if (($startDate <= $projectEndDate) && ($projectStartDate <= $endDate)
+                && ($startDate <= $endDate) && ($projectStartDate <= $projectEndDate)) {
+            
+                $projectsTimeLines = $this->getInternalProjectTimeLines($companyInternalProject->id,$startDate,$endDate);
 
-            array_push($companyInternalProjectsTimeLines, $projectsTimeLines);
+                array_push($companyInternalProjectsTimeLines, $projectsTimeLines);
+            }
         }
+        d
         return $companyInternalProjectsTimeLines;
     }
-    public function getInternalProjectTimeLines($companyProjectId)
+    public function getInternalProjectTimeLines($companyProjectId,$startDate,$endDate)
     {
         list($currentProjectResources) = $this->CompanyProjectResourceService->showCompanyProjectResources($companyProjectId);
 
@@ -68,17 +75,17 @@ class ReportService implements IReportService
                 array_push($clientProjectsTimeLines, $projectsTimeLines);
             }
         }
- 
+
         return $clientProjectsTimeLines;
 
     }
 
     public function getClientProjectTimeLines($clientProjectId)
     {
-        $clientProjects = $this->ClientProjectService->getClientProjectDetails($clientProjectId);
-        $clientProjectModel = $this->ClientProjectService->viewClientProject($clientProjectId);
+        $clientProjects                                     = $this->ClientProjectService->getClientProjectDetails($clientProjectId);
+        $clientProjectModel                                 = $this->ClientProjectService->viewClientProject($clientProjectId);
         list($currentProjectResources, $availableEmployees) = $this->ProjectResourceService->showClientProjectResources($clientProjectId);
-        
+
         $projectResources = $this->ProjectService->mapResourcesDetailsToClass($currentProjectResources, false);
         $projectTimeLines = $this->ProjectGrapher->setupProjectCost($clientProjectModel, $projectResources, false);
 

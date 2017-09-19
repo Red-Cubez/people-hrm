@@ -6,7 +6,8 @@ interface IReportService
 {
 
  
-   public function getInternalProjectsTimeLines($companyId);
+   public function getInternalProjectsTimeLines($companyId,$startDate,$endDate);
+
    public function getClientProjectsTimeLines($companyId);
    
 

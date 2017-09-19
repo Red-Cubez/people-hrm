@@ -1,39 +1,25 @@
 
-<?php $sumOfCost = 0; $profit=$project->budget;?>
+<?php $sumOfCost = 0; $i=0; ?>
 <canvas id="lineChart"></canvas>
 <script type="text/javascript">
 
     $(document).ready(function () {
         data = {
+           
+            
             datasets: [
                 {
-                    label: "Cost Per Month",
+                    label: "Cost {{$i}} project per Month",
                     data: getMonthlyCost(),
                     fill: false,
                     backgroundColor: "#991d31",
                     borderColor: "#991d31",
                     pointHitRadius: 20
                 },
-
-                {
-                    label: "Monthly Cost Sum",
-                    data: getMonthlySumOfCost(),
-                    fill: false,
-                    backgroundColor: "#9966FF",
-                    borderColor: "#9966FF",
-                    pointHitRadius: 20
-                },
-                {
-                    label: "Profit",
-                    data: getProfit(),
-                    fill: false,
-                    backgroundColor: "#44AC0F",
-                    borderColor: "#44AC0F",
-                    pointHitRadius: 20
-                }
-
-
+               
             ],
+            
+            
             labels: getChartMonthLabel()
         };
         var ctx = document.getElementById("lineChart");
@@ -73,44 +59,42 @@
             }
         });
     });
-    function getProfit() {
-
-       return  [{{$profit}},
-           @foreach ($projectTimeLines as $projectTimeline)
-           "{{$profit=$profit-($sumOfCost+$projectTimeline->cost)}}",
-           @endforeach
-
-       ];
-    }
+   
     function getMonthlySumOfCost() {
         return [0,
-                @foreach ($projectTimeLines as $projectTimeline)
+                @foreach ($projectsTimelines as $projectTimelines)
+                @foreach($projectTimelines as $projectTimeline)
             {
 
                 y: "{{$sumOfCost=$sumOfCost+$projectTimeline->cost}}"
     },
+        @endforeach
         @endforeach
     ]
         ;
     }
     function getMonthlyCost() {
         return [0,
-                @foreach ($projectTimeLines as $projectTimeline)
+                @foreach ($projectsTimelines as $projectTimelines)
+                @foreach($projectTimelines as $projectTimeline)
             {
 
                 y: "{{$projectTimeline->cost}}"
             },
+            @endforeach
             @endforeach
         ]
             ;
     }
     function getChartMonthLabel() {
         return [0,
-        @foreach ($projectTimeLines as $projectTimeline)
-    "{{$projectTimeline->monthName}}",
+         @foreach ($projectsTimelines as $projectTimelines)
+                @foreach($projectTimelines as $projectTimeline)
+          "{{$projectTimeline->monthName}}",
+        @endforeach
         @endforeach
     ]
-        ;
+        
     }
 
    </script>

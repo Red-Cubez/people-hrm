@@ -2,7 +2,7 @@
 @extends('layouts.app')
 
 @section('content')
-
+@if(count($projectsTimelines) > 0)
     <div class="container">
         <div class="row">
             <div class="col-sm-8">
@@ -12,8 +12,8 @@
         </div>
         <div class="row">
             <div class="col-sm-8">
-              {{--   @include('reports/monthlyProfitGraph')
- --}}
+                @include('reports/monthlyProfitGraph')
+
             </div>
         </div>
         <div class="row">
@@ -25,6 +25,9 @@
 
     
     </div>
+    @else
+No Record Found    
+@endif
 @endsection
 @section('page-scripts')
     @parent

@@ -31,7 +31,7 @@ class ReportService implements IReportService
 
     }
 
-    public function getClientProjectsTimeLines($companyId, $startDate, $endDate)
+    public function getClientProjectsTimelines($companyId, $startDate, $endDate)
     {
 
         $clientProjectsTimeLines = array();
@@ -45,7 +45,7 @@ class ReportService implements IReportService
                 if (($startDate <= $projectEndDate) && ($projectStartDate <= $endDate)
                     && ($startDate <= $endDate) && ($projectStartDate <= $projectEndDate)) {
 
-                    $projectsTimeLines = $this->getClientProjectTimelines($companyClientProject->id, $startDate, $endDate);
+                    $projectsTimeLines = $this->getClientProjectTimelines($companyClientProject, $startDate, $endDate);
 
                     array_push($clientProjectsTimeLines, $projectsTimeLines);
                 }
@@ -57,18 +57,18 @@ class ReportService implements IReportService
 
     }
 
-    public function getClientProjectTimelines($clientProjectId)
+    public function getClientProjectTimelines($clientProject)
     {
-        list($currentProjectResources) = $this->ProjectResourceService->showClientProjectResources($clientProjectId);
+        list($currentProjectResources) = $this->ProjectResourceService->showClientProjectResources($clientProject->id);
 
-        $clientProject = $this->ClientProjectService->viewClientProject($clientProjectId);
+        // $clientProject = $this->ClientProjectService->viewClientProject($clientProjectId);
 
         $projectTimelines = $this->ProjectGrapher->setupProjectCost($clientProject, $currentProjectResources, false);
-         if(count($projectTimelines)>0)
-        {
+        if (count($projectTimelines) > 0) {
 
-          $projectTimelines[0]->projectName=$clientProject->name;
+            $projectTimelines[0]->project = $clientProject;
         }
+
         return $projectTimelines;
     }
 
@@ -84,7 +84,7 @@ class ReportService implements IReportService
             if (($startDate <= $projectEndDate) && ($projectStartDate <= $endDate)
                 && ($startDate <= $endDate) && ($projectStartDate <= $projectEndDate)) {
 
-                $projectsTimeLines = $this->getInternalProjectTimelines($companyInternalProject->id, $startDate, $endDate);
+                $projectsTimeLines = $this->getInternalProjectTimelines($companyInternalProject, $startDate, $endDate);
 
                 array_push($companyInternalProjectsTimeLines, $projectsTimeLines);
             }
@@ -93,17 +93,16 @@ class ReportService implements IReportService
         return $companyInternalProjectsTimeLines;
     }
 
-    public function getInternalProjectTimelines($companyProjectId)
+    public function getInternalProjectTimelines($companyProject)
     {
-        list($currentProjectResources) = $this->CompanyProjectResourceService->showCompanyProjectResources($companyProjectId);
+        list($currentProjectResources) = $this->CompanyProjectResourceService->showCompanyProjectResources($companyProject->id);
 
-        $companyProject = $this->CompanyProjectService->viewCompanyProject($companyProjectId);
+        //$companyProject = $this->CompanyProjectService->viewCompanyProject($companyProjectId);
 
         $projectTimelines = $this->ProjectGrapher->setupProjectCost($companyProject, $currentProjectResources, true);
-        if(count($projectTimelines)>0)
-        {
+        if (count($projectTimelines) > 0) {
 
-          $projectTimelines[0]->projectName=$companyProject->name;
+            $projectTimelines[0]->project = $companyProject;
         }
         return $projectTimelines;
     }
@@ -168,10 +167,10 @@ class ReportService implements IReportService
         return $monthlyCostArray;
     }
 
-    public function mapMonthlyCostToStartAndEndDateTimelines($startAndEndDateTimelines, $projectsTimelines,$projectBudget)
+    public function mapMonthlyCostToStartAndEndDateTimelines($startAndEndDateTimelines, $projectsTimelines)
     {
         $sumOfCost = 0;
-       // $profit    = $projectBudget;
+        // $profit    = $projectBudget;
         foreach ($startAndEndDateTimelines as $startAndEndDateTimeline) {
             {
                 foreach ($projectsTimelines as $projectTimelines) {
@@ -179,21 +178,44 @@ class ReportService implements IReportService
                     foreach ($projectTimelines as $projectTimeline) {
                         if ($startAndEndDateTimeline->monthName == $projectTimeline->monthName) {
 
-                            $sumOfCost                       = $sumOfCost + $projectTimeline->cost;
-                            $startAndEndDateTimeline->cost   = $sumOfCost;
-                            //$startAndEndDateTimeline->profit   = $sumOfCost;
-                           // $profit                          = $profit - $sumOfCost + $projectTimeline->cost;
-                            //$startAndEndDateTimeline->profit = $profit;
+                            $sumOfCost                     = $sumOfCost + $projectTimeline->cost;
+                            $startAndEndDateTimeline->cost = $sumOfCost;
+                           
                         } else {
-                            $startAndEndDateTimeline->cost   = $sumOfCost;
-                           // $startAndEndDateTimeline->profit = $profit;
+                            $startAndEndDateTimeline->cost = $sumOfCost;
+                            
                         }
                     }
                 }
             }
+        }
+
+        return $startAndEndDateTimelines;
+    }
+    public function getMonthlyProfit($startAndEndDateTimelines, $projectsTimelines)
+    {
+
+        $profit    = 0;
+        $sumOfCost = 0;
+
+        foreach ($projectsTimelines as $projectTimelines) {
+
+            if (count($projectTimelines) > 0) {
+                $profit = $profit + $projectTimelines[0]->project->budget;
+            }
+        }
+        foreach ($startAndEndDateTimelines as $startAndEndDateTimeline) {
+
+            if ($sumOfCost != $startAndEndDateTimeline->cost) {
+                $sumOfCost = $startAndEndDateTimeline->cost;
+
+                $profit = $profit - ($sumOfCost);
+            }
+
+            $startAndEndDateTimeline->profit = $profit;
 
         }
-        
+
         return $startAndEndDateTimelines;
     }
 }

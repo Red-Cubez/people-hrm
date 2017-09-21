@@ -1,10 +1,10 @@
-@if(count($projectsTimelines) > 0)
-<?php $sumOfCost = 0; $monthlyCostArray = array(); $i=0; $colors; ?>
+
+<?php $i=0; ?>
 
  <div class="panel panel-default">
         <div class="panel-body">
             <div style="width: 600px; height: 400px;display: block;">
-                <canvas id="myChart"></canvas>
+                <canvas id="myChartWithCost"></canvas>
             </div>
         </div>
     </div>
@@ -16,7 +16,7 @@
                  @foreach($projectsTimelines as $projectTimelines)
                         {
                           <?php $i++; ?>
-                          label: "@if(count($projectTimelines)>0) {{$projectTimelines[0]->projectName}}  @endif",
+                          label: "@if(count($projectTimelines)>0) {{$projectTimelines[0]->project->name}}  @endif",
                           data:  [
                                 @foreach($startAndEndDateTimelines as $startAndEndDateTimeline)
                                 @foreach ($projectTimelines as $projectTimeline)
@@ -53,7 +53,7 @@
                     };
 
 
-            var ctx = document.getElementById("myChart");
+            var ctx = document.getElementById("myChartWithCost");
             var myLineChart = new Chart(ctx, {
                 type: 'line',
                 data: data,
@@ -117,6 +117,3 @@
         
     
     </script>
-@else
-No Record Found    
-@endif

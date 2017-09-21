@@ -10,7 +10,7 @@
     </div>
 
  <script type="text/javascript">
-        $(document).ready(function () {
+        
             data = {
                 datasets: [
                  @foreach($projectsTimelines as $projectTimelines)
@@ -87,7 +87,7 @@
                     }
                 }
             });
-        });
+      
 
         
         function getChartMonthLabel() {

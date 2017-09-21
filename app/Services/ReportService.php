@@ -170,7 +170,7 @@ class ReportService implements IReportService
     public function mapMonthlyCostToStartAndEndDateTimelines($startAndEndDateTimelines, $projectsTimelines)
     {
         $sumOfCost = 0;
-        // $profit    = $projectBudget;
+        $profit    = 0;
         foreach ($startAndEndDateTimelines as $startAndEndDateTimeline) {
             {
                 foreach ($projectsTimelines as $projectTimelines) {
@@ -180,10 +180,10 @@ class ReportService implements IReportService
 
                             $sumOfCost                     = $sumOfCost + $projectTimeline->cost;
                             $startAndEndDateTimeline->cost = $sumOfCost;
-                           
+
                         } else {
                             $startAndEndDateTimeline->cost = $sumOfCost;
-                            
+
                         }
                     }
                 }
@@ -195,7 +195,9 @@ class ReportService implements IReportService
     public function getMonthlyProfit($startAndEndDateTimelines, $projectsTimelines)
     {
 
+
         $profit    = 0;
+        $profit1    = 0;
         $sumOfCost = 0;
 
         foreach ($projectsTimelines as $projectTimelines) {
@@ -205,15 +207,30 @@ class ReportService implements IReportService
             }
         }
         foreach ($startAndEndDateTimelines as $startAndEndDateTimeline) {
+            foreach ($projectsTimelines as $projectTimelines) {
 
-            if ($sumOfCost != $startAndEndDateTimeline->cost) {
-                $sumOfCost = $startAndEndDateTimeline->cost;
+                foreach ($projectTimelines as $projectTimeline) {
+                    if ($startAndEndDateTimeline->monthName == $projectTimeline->monthName) {
 
-                $profit = $profit - ($sumOfCost);
+                      //  if ($sumOfCost != $startAndEndDateTimeline->cost) {
+                            $sumOfCost = $startAndEndDateTimeline->cost;
+
+                            $profit = $profit - ($sumOfCost);
+                       // }
+                            $profit1=1;
+                        $startAndEndDateTimeline->profit = $profit;
+                    }
+                    else
+                    {
+                        if($profit1>0)
+                        $startAndEndDateTimeline->profit=$profit;
+                    else
+                         $startAndEndDateTimeline->profit=0;
+                    }
+
+
+                }
             }
-
-            $startAndEndDateTimeline->profit = $profit;
-
         }
 
         return $startAndEndDateTimelines;

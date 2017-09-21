@@ -1,22 +1,24 @@
+
 <?php $i=0; ?>
+
  <div class="panel panel-default">
         <div class="panel-body">
             <div style="width: 600px; height: 400px;display: block;">
-                <canvas id="myChartWithProfit"></canvas>
+                <canvas id="myInternalProjectsChartWithCost"></canvas>
             </div>
         </div>
     </div>
 
  <script type="text/javascript">
-        
+       
             data = {
                 datasets: [
-                 @foreach($projectsTimelines as $projectTimelines)
+                 @foreach($internalProjectsTimelines as $projectTimelines)
                         {
                           <?php $i++; ?>
                           label: "@if(count($projectTimelines)>0) {{$projectTimelines[0]->project->name}}  @endif",
                           data:  [
-                                @foreach($startAndEndDateTimelines as $startAndEndDateTimeline)
+                                @foreach($internalProjectsStartAndEndDateTimelines as $startAndEndDateTimeline)
                                 @foreach ($projectTimelines as $projectTimeline)
                                   @if($startAndEndDateTimeline->monthName==$projectTimeline->monthName)
                                     {
@@ -37,11 +39,11 @@
                          
                 @endforeach
                     {
-                          label: "Monthly Profit",
-                          data:  getMonthlyProfit(),
+                          label: "Monthly Cost",
+                          data:  getMonthlyCost(),
                           fill: false,
-                          backgroundColor: "blue",
-                          borderColor: "blue",
+                          backgroundColor: "orange",
+                          borderColor: "orange",
                           pointHitRadius: 20,  
                         },
 
@@ -51,7 +53,7 @@
                     };
 
 
-            var ctx = document.getElementById("myChartWithProfit");
+            var ctx = document.getElementById("myInternalProjectsChartWithCost");
             var myLineChart = new Chart(ctx, {
                 type: 'line',
                 data: data,
@@ -81,7 +83,7 @@
                     },
                     title: {
                         display: true,
-                        text: 'Projects Monthly Profit'
+                        text: 'Projects Monthly Cost'
                     }
                 }
             });
@@ -91,18 +93,18 @@
         function getChartMonthLabel() {
 
             return [0,
-                @foreach ($startAndEndDateTimelines as $startAndEndDateTimeline)
+                @foreach ($internalProjectsStartAndEndDateTimelines as $startAndEndDateTimeline)
                     "{{$startAndEndDateTimeline->monthName}}",
                 @endforeach
             ];
         }
-         function getMonthlyProfit()
+         function getMonthlyCost()
          {
 
-           return [0, @foreach($startAndEndDateTimelines as $startAndEndDateTimeline )
+           return [0, @foreach($internalProjectsStartAndEndDateTimelines as $startAndEndDateTimeline )
                      
                       
-                                           "{{$startAndEndDateTimeline->profit}}",
+                                           "{{$startAndEndDateTimeline->cost}}",
                                  
                     
                       @endforeach

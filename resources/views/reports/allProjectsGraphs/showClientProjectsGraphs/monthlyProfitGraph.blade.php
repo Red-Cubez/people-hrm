@@ -2,21 +2,21 @@
  <div class="panel panel-default">
         <div class="panel-body">
             <div style="width: 600px; height: 400px;display: block;">
-                <canvas id="myChartWithProfit"></canvas>
+                <canvas id="myClientProjectsChartWithProfit"></canvas>
             </div>
         </div>
     </div>
 
  <script type="text/javascript">
-        
+       
             data = {
                 datasets: [
-                 @foreach($projectsTimelines as $projectTimelines)
+                 @foreach($clientProjectsTimelines as $projectTimelines)
                         {
                           <?php $i++; ?>
                           label: "@if(count($projectTimelines)>0) {{$projectTimelines[0]->project->name}}  @endif",
                           data:  [
-                                @foreach($startAndEndDateTimelines as $startAndEndDateTimeline)
+                                @foreach($clientProjectsStartAndEndDateTimelines as $startAndEndDateTimeline)
                                 @foreach ($projectTimelines as $projectTimeline)
                                   @if($startAndEndDateTimeline->monthName==$projectTimeline->monthName)
                                     {
@@ -51,7 +51,7 @@
                     };
 
 
-            var ctx = document.getElementById("myChartWithProfit");
+            var ctx = document.getElementById("myClientProjectsChartWithProfit");
             var myLineChart = new Chart(ctx, {
                 type: 'line',
                 data: data,
@@ -85,13 +85,12 @@
                     }
                 }
             });
-        
-
+  
         
         function getChartMonthLabel() {
 
             return [0,
-                @foreach ($startAndEndDateTimelines as $startAndEndDateTimeline)
+                @foreach ($clientProjectsStartAndEndDateTimelines as $startAndEndDateTimeline)
                     "{{$startAndEndDateTimeline->monthName}}",
                 @endforeach
             ];
@@ -99,7 +98,7 @@
          function getMonthlyProfit()
          {
 
-           return [0, @foreach($startAndEndDateTimelines as $startAndEndDateTimeline )
+           return [0, @foreach($clientProjectsStartAndEndDateTimelines as $startAndEndDateTimeline )
                      
                       
                                            "{{$startAndEndDateTimeline->profit}}",

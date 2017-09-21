@@ -1,18 +1,28 @@
 @extends('layouts.app')
 
 @section('content')
-@if(count($projectsTimelines) > 0)
+@if(isset($isAllProjectsGraphs) )
 <div class="container">
     <div class="row">
         Internal Projects Graphs
         <div class="col-sm-8">
-            @include('reports/allProjectsGraphs/showInternalProjectsGraphs')
+            @include('reports/allProjectsGraphs/showInternalProjectsGraphs/showInternalProjectsGraphs',
+                [
+                    'internalProjectsTimelines'        => $internalProjectsTimelines,
+                    'internalProjectsStartAndEndDateTimelines' =>$internalProjectsStartAndEndDateTimelinesWithCostAndProfit
+
+                    ])
         </div>
     </div>
     <div class="row">
         Client Projects Graphs
         <div class="col-sm-8">
-            @include('reports/allProjectsGraphs/showClientProjectsGraphs')
+            @include('reports/allProjectsGraphs/showClientProjectsGraphs/showClientProjectsGraphs',
+                [
+                    'clientProjectsTimelines'        => $clientProjectsTimelines,
+                    'clientProjectsStartAndEndDateTimelines' =>$clientProjectsStartAndEndDateTimelinesWithCostAndProfit
+
+                    ])
         </div>
     </div>
 </div>

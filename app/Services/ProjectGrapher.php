@@ -109,7 +109,7 @@ class ProjectGrapher implements IProjectGrapher
         $diff  = date_diff($date1, $date2);
         return $diff;
     }
-
+     
     public function setupProjectCost($project, $projectResources, $isCompanyProject)
     {
 

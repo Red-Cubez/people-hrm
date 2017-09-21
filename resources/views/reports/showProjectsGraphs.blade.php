@@ -6,19 +6,19 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-8">
-                @include('reports/internalProjectsGraphs/monthlyCostGraph')
+                @include('reports/monthlyCostGraph')
 
             </div>
         </div>
         <div class="row">
             <div class="col-sm-8">
-              {{--   @include('internalProjectGraphs/monthlyProfitGraph')
+              {{--   @include('reports/monthlyProfitGraph')
  --}}
             </div>
         </div>
         <div class="row">
             <div class="col-sm-8">
-               {{--  @include('internalProjectGraphs/netTotalGraph')
+               {{--  @include('reports/netTotalGraph')
  --}}
             </div>
         </div>

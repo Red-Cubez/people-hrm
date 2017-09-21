@@ -5,11 +5,11 @@ namespace People\Services\Interfaces;
 interface IReportService
 {
 
- 
-   public function getInternalProjectsTimeLines($companyId,$startDate,$endDate);
+    public function getInternalProjectsTimelines($companyId, $startDate, $endDate);
 
-   public function getClientProjectsTimeLines($companyId);
-   
-
+    public function getClientProjectsTimelines($companyId, $startDate, $endDate);
+    public function getStartAndEndDateTimelines($startDate, $endDate);
+    public function calculateMonthlyCost($projectsTimelines, $months);
+    public function mapMonthlyCostToStartAndEndDateTimelines($startAndEndDateTimelines,$projectsTimelines,$projectBudget);
 
 }

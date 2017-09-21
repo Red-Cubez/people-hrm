@@ -106,4 +106,45 @@ class ClientProjectService implements IClientProjectService
             return null;
         }
     }
+
+ public function getProjectStartAndEndDate($project)
+    {
+        $startDate=null;
+        $endDate=null;
+        if(isset($project->actualStartDate))
+        {
+
+            $startDate=$project->actualStartDate;
+        }
+        else
+        {
+            $startDate=$project->expectedStartDate;
+
+        }
+
+        if(isset($project->actualEndDate))
+        {
+
+            $endDate=$project->actualEndDate;
+        }
+        else
+        {
+            $endDate=$project->expectedEndDate;
+
+        }
+
+        return array($startDate, $endDate);
+    }
+        public function getAllClientProjectsOfCompany($companyId, $startDate, $endDate)
+        {
+             $company=Company::find($companyId); 
+             $clients = $company->clients;
+             dd($clients);
+        
+        if (isset($companyProjects)) {
+            return $companyProjects;
+        } else {
+            return null;
+        }
+        }
 }

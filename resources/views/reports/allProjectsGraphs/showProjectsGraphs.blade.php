@@ -9,7 +9,7 @@
             @include('reports/allProjectsGraphs/showInternalProjectsGraphs/showInternalProjectsGraphs',
                 [
                     'internalProjectsTimelines'        => $internalProjectsTimelines,
-                    'internalProjectsStartAndEndDateTimelines' =>$internalProjectsStartAndEndDateTimelinesWithCostAndProfit
+                    'internalProjectsStartAndEndDateTimelines' =>$internalProjectsStartAndEndDateTimelines
 
                     ])
         </div>
@@ -20,7 +20,7 @@
             @include('reports/allProjectsGraphs/showClientProjectsGraphs/showClientProjectsGraphs',
                 [
                     'clientProjectsTimelines'        => $clientProjectsTimelines,
-                    'clientProjectsStartAndEndDateTimelines' =>$clientProjectsStartAndEndDateTimelinesWithCostAndProfit
+                    'clientProjectsStartAndEndDateTimelines' =>$clientProjectsStartAndEndDateTimelines
 
                     ])
         </div>

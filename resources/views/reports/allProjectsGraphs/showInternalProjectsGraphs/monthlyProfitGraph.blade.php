@@ -83,7 +83,7 @@
                     },
                     title: {
                         display: true,
-                        text: 'Projects Monthly Profit'
+                        text: 'Internal Projects Monthly Profit'
                     }
                 }
             });

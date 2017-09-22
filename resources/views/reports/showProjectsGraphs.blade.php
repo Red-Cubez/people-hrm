@@ -18,8 +18,8 @@
         </div>
         <div class="row">
             <div class="col-sm-8">
-               {{--  @include('reports/netTotalGraph')
- --}}
+                @include('reports/netTotalGraph')
+
             </div>
         </div>
 

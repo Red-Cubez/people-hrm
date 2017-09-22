@@ -195,44 +195,92 @@ class ReportService implements IReportService
     public function getMonthlyProfit($startAndEndDateTimelines, $projectsTimelines)
     {
 
-
+        $budget    = 0;
+        $profit1   = 0;
         $profit    = 0;
-        $profit1    = 0;
         $sumOfCost = 0;
 
         foreach ($projectsTimelines as $projectTimelines) {
 
             if (count($projectTimelines) > 0) {
-                $profit = $profit + $projectTimelines[0]->project->budget;
+                $budget = $budget + $projectTimelines[0]->project->budget;
             }
         }
+
         foreach ($startAndEndDateTimelines as $startAndEndDateTimeline) {
+
             foreach ($projectsTimelines as $projectTimelines) {
 
                 foreach ($projectTimelines as $projectTimeline) {
                     if ($startAndEndDateTimeline->monthName == $projectTimeline->monthName) {
 
-                      //  if ($sumOfCost != $startAndEndDateTimeline->cost) {
-                            $sumOfCost = $startAndEndDateTimeline->cost;
+                        $cost = $startAndEndDateTimeline->cost;
 
-                            $profit = $profit - ($sumOfCost);
-                       // }
-                            $profit1=1;
+                        $profit = $budget - ($cost);
+
+                        $profit1                         = 1;
+                        $startAndEndDateTimeline->profit = $profit;
+                    } else {
                         $startAndEndDateTimeline->profit = $profit;
                     }
-                    else
-                    {
-                        if($profit1>0)
-                        $startAndEndDateTimeline->profit=$profit;
-                    else
-                         $startAndEndDateTimeline->profit=0;
-                    }
-
 
                 }
+
             }
         }
 
         return $startAndEndDateTimelines;
+    }
+    public function getNetTotal($startAndEndDateTimelines, $projectsTimelines)
+    {
+        $profit  = 0;
+        $profit1 = 0;
+        $budget  = 0;
+        foreach ($projectsTimelines as $projectTimelines) {
+
+            if (count($projectTimelines) > 0) {
+                $budget = $budget + $projectTimelines[0]->project->budget;
+            }
+        }
+
+        foreach ($startAndEndDateTimelines as $startAndEndDateTimeline) {
+            $startAndEndDateTimeline->netTotal = 0;
+            foreach ($projectsTimelines as $projectTimelines) {
+
+                foreach ($projectTimelines as $projectTimeline) {
+                    if ($startAndEndDateTimeline->monthName == $projectTimeline->monthName) {
+
+                        //  if ($sumOfCost != $startAndEndDateTimeline->cost) {
+                        //$profit = $startAndEndDateTimeline->profit;
+                        ///
+
+                        $startAndEndDateTimeline->netTotal = $budget;
+                    }
+                }
+                //  }
+
+                // } else {
+                //   if ($profit1 > 0) {
+
+                //  }
+
+                //      }
+
+                // }
+            }
+            // dd($startAndEndDateTimeline);
+
+            // foreach ($startAndEndDateTimelines as $startAndEndDateTimeline) {
+            //     $profitSum = $profitSum + $profit;
+            //     $profit    = $startAndEndDateTimeline->profit;
+            //     if ($startAndEndDateTimeline->profit == $profit) {
+            //         $startAndEndDateTimeline->netTotal = $profitSum;
+
+            //     }
+
+            // dd($startAndEndDateTimelines);
+        }
+        return $startAndEndDateTimelines;
+
     }
 }

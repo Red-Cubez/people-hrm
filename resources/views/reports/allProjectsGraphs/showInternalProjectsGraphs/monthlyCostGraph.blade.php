@@ -83,7 +83,7 @@
                     },
                     title: {
                         display: true,
-                        text: 'Projects Monthly Cost'
+                        text: 'Internal Projects Monthly Cost'
                     }
                 }
             });

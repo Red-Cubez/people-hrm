@@ -81,7 +81,7 @@
                     },
                     title: {
                         display: true,
-                        text: 'Projects Monthly Profit'
+                        text: 'Client Projects Monthly Profit'
                     }
                 }
             });

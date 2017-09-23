@@ -147,25 +147,6 @@ class ReportService implements IReportService
 
         return $timeLine;
     }
-    public function calculateMonthlyCost($projectsTimelines, $months)
-    {
-        $monthlyCostArray = array();
-        $sumOfCost        = 0;
-        foreach ($months as $monthName) {
-            foreach ($projectsTimelines as $projectTimelines) {
-                foreach ($projectTimelines as $projectTimeline) {
-
-                    if ($monthName == $projectTimeline->monthName) {
-                        $sumOfCost = $sumOfCost + $projectTimeline->cost;
-                        array_push($monthlyCostArray, $sumOfCost);
-                    }
-
-                }
-            }
-        }
-
-        return $monthlyCostArray;
-    }
 
     public function mapMonthlyCostToStartAndEndDateTimelines($startAndEndDateTimelines, $projectsTimelines)
     {
@@ -233,53 +214,62 @@ class ReportService implements IReportService
     }
     public function getNetTotal($startAndEndDateTimelines, $projectsTimelines)
     {
-        $profit  = 0;
-        $profit1 = 0;
-        $budget  = 0;
-        foreach ($projectsTimelines as $projectTimelines) {
 
-            if (count($projectTimelines) > 0) {
-                $budget = $budget + $projectTimelines[0]->project->budget;
-            }
-        }
-
+        $netTotal = 0;
+       
         foreach ($startAndEndDateTimelines as $startAndEndDateTimeline) {
             $startAndEndDateTimeline->netTotal = 0;
+            //$flag=0;
             foreach ($projectsTimelines as $projectTimelines) {
 
                 foreach ($projectTimelines as $projectTimeline) {
+
                     if ($startAndEndDateTimeline->monthName == $projectTimeline->monthName) {
+                        if (isset($projectTimeline->project)) {
 
-                        //  if ($sumOfCost != $startAndEndDateTimeline->cost) {
-                        //$profit = $startAndEndDateTimeline->profit;
-                        ///
+                            $netTotal = $startAndEndDateTimeline->netTotal + $projectTimeline->project->budget;
 
-                        $startAndEndDateTimeline->netTotal = $budget;
+                        }
+
+                        $startAndEndDateTimeline->netTotal = $netTotal;
+                    }
+                    else
+                    {
+                        
+                        $startAndEndDateTimeline->netTotal = $netTotal;
                     }
                 }
-                //  }
 
-                // } else {
-                //   if ($profit1 > 0) {
-
-                //  }
-
-                //      }
-
-                // }
             }
-            // dd($startAndEndDateTimeline);
 
-            // foreach ($startAndEndDateTimelines as $startAndEndDateTimeline) {
-            //     $profitSum = $profitSum + $profit;
-            //     $profit    = $startAndEndDateTimeline->profit;
-            //     if ($startAndEndDateTimeline->profit == $profit) {
-            //         $startAndEndDateTimeline->netTotal = $profitSum;
-
-            //     }
-
-            // dd($startAndEndDateTimelines);
         }
+
+//dd($startAndEndDateTimelines);
+        ////////////////////////////////////////////////////////////////////
+        // $profit  = 0;
+        // $profit1 = 0;
+        // $budget  = 0;
+        // foreach ($projectsTimelines as $projectTimelines) {
+
+        //     if (count($projectTimelines) > 0) {
+        //         $budget = $budget + $projectTimelines[0]->project->budget;
+        //     }
+        // }
+
+        // foreach ($startAndEndDateTimelines as $startAndEndDateTimeline) {
+        //     $startAndEndDateTimeline->netTotal = 0;
+        //     foreach ($projectsTimelines as $projectTimelines) {
+
+        //         foreach ($projectTimelines as $projectTimeline) {
+        //             if ($startAndEndDateTimeline->monthName == $projectTimeline->monthName) {
+
+        //                 $startAndEndDateTimeline->netTotal = $budget;
+        //             }
+        //         }
+
+        //     }
+
+        // }
         return $startAndEndDateTimelines;
 
     }

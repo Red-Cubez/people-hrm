@@ -23,7 +23,7 @@
                                     {
 
                                          x: "{{$projectTimeline->monthName}}",
-                                         y: "{{$projectTimeline->cost}}",
+                                         y: "@if(count($projectTimelines)>0) {{$projectTimelines[0]->project->budget}}  @endif",
 
                                    },
                                    @endif
@@ -104,7 +104,7 @@
            return [0, @foreach($internalProjectsStartAndEndDateTimelines as $startAndEndDateTimeline )
                      
                                            
-                                           {{$startAndEndDateTimeline->netTotal}},
+                                           {{$startAndEndDateTimeline->revenue}},
          
                     
                       @endforeach

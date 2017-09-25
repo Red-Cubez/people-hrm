@@ -4,28 +4,42 @@ namespace People\Http\Controllers;
 
 use Illuminate\Http\Request;
 use People\Services\Interfaces\IReportService;
+use People\Services\Interfaces\IUserAuthenticationService;
 
 class ReportsController extends Controller
 {
     public $ReportService;
+    public $UserAuthenticationService;
 
-    public function __construct(IReportService $reportService)
+    public function __construct(IReportService $reportService, IUserAuthenticationService $userAuthenticationService)
     {
 
         $this->middleware('auth');
 
-        $this->ReportService = $reportService;
+        $this->ReportService             = $reportService;
+        $this->UserAuthenticationService = $userAuthenticationService;
 
     }
 
     public function showOptions($companyId)
     {
-        return view
-            ('reports/index',
-            [
-                'companyId' => $companyId,
-            ]);
+        $isManager = $this->UserAuthenticationService->isManager();
+        $isAdmin   = $this->UserAuthenticationService->isAdmin();
+        $isRequestedCompanyBelongsToEmployee = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($companyId);
+
+        if (($isManager || $isAdmin) && $isRequestedCompanyBelongsToEmployee) {
+            
+            return view
+                ('reports/index',
+                [
+                    'companyId' => $companyId,
+                ]);
+        } else {
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+
+        }
     }
+
     public function showAllProjectsReport(Request $request, $companyId)
     {
         $this->validate($request, [
@@ -40,33 +54,30 @@ class ReportsController extends Controller
 
         $internalProjectsStartAndEndDateTimelinesWithCost = $this->ReportService->mapMonthlyCostToStartAndEndDateTimelines($internalProjectsStartAndEndDateTimelines, $internalProjectsTimelines, true);
 
-        $internalProjectsStartAndEndDateTimelinesWithCostAndProfit = $this->ReportService->getMonthlyProfit($internalProjectsStartAndEndDateTimelinesWithCost, $internalProjectsTimelines);
-         $internalProjectsStartAndEndDateTimelinesWithCostProfitAndNetTotal =
-        $this->ReportService->getNetTotal($internalProjectsStartAndEndDateTimelinesWithCost,$internalProjectsTimelines);
-
+        $internalProjectsStartAndEndDateTimelinesWithCostAndProfit         = $this->ReportService->getMonthlyProfit($internalProjectsStartAndEndDateTimelinesWithCost, $internalProjectsTimelines);
+        $internalProjectsStartAndEndDateTimelinesWithCostProfitAndNetTotal =
+        $this->ReportService->getTotalRevenue($internalProjectsStartAndEndDateTimelinesWithCost, $internalProjectsTimelines);
 
         //client projects
 
-        $clientProjectsTimelines                                 = $this->ReportService->getClientProjectsTimelines($companyId, $request->startDate, $request->endDate);
-        $clientProjectsStartAndEndDateTimelines                  = $this->ReportService->getStartAndEndDateTimelines($request->startDate, $request->endDate);
-        $clientProjectsStartAndEndDateTimelinesWithCost          = $this->ReportService->mapMonthlyCostToStartAndEndDateTimelines($clientProjectsStartAndEndDateTimelines, $clientProjectsTimelines, null);
-        $clientProjectsStartAndEndDateTimelinesWithCostAndProfit = $this->ReportService->getMonthlyProfit($clientProjectsStartAndEndDateTimelinesWithCost, $clientProjectsTimelines);
-         $clientProjectsStartAndEndDateTimelinesWithCostProfitAndNetTotal =
-        $this->ReportService->getNetTotal($clientProjectsStartAndEndDateTimelinesWithCostAndProfit,$clientProjectsTimelines);
-
-
+        $clientProjectsTimelines                                         = $this->ReportService->getClientProjectsTimelines($companyId, $request->startDate, $request->endDate);
+        $clientProjectsStartAndEndDateTimelines                          = $this->ReportService->getStartAndEndDateTimelines($request->startDate, $request->endDate);
+        $clientProjectsStartAndEndDateTimelinesWithCost                  = $this->ReportService->mapMonthlyCostToStartAndEndDateTimelines($clientProjectsStartAndEndDateTimelines, $clientProjectsTimelines, null);
+        $clientProjectsStartAndEndDateTimelinesWithCostAndProfit         = $this->ReportService->getMonthlyProfit($clientProjectsStartAndEndDateTimelinesWithCost, $clientProjectsTimelines);
+        $clientProjectsStartAndEndDateTimelinesWithCostProfitAndNetTotal =
+        $this->ReportService->getTotalRevenue($clientProjectsStartAndEndDateTimelinesWithCostAndProfit, $clientProjectsTimelines);
 
 //dd($internalProjectsStartAndEndDateTimelinesWithCostAndProfit);
         // $clientProjectsTimeLines = $this->ReportService->getClientProjectsTimeLines($companyId);
         return view
             ('reports/allProjectsGraphs/showProjectsGraphs',
             [
-                'internalProjectsTimelines'                                 => $internalProjectsTimelines,
+                'internalProjectsTimelines'                => $internalProjectsTimelines,
 
                 'internalProjectsStartAndEndDateTimelines' => $internalProjectsStartAndEndDateTimelinesWithCostProfitAndNetTotal,
-                'clientProjectsTimelines'                                   => $clientProjectsTimelines,
+                'clientProjectsTimelines'                  => $clientProjectsTimelines,
                 'clientProjectsStartAndEndDateTimelines'   => $clientProjectsStartAndEndDateTimelinesWithCostProfitAndNetTotal,
-                'isAllProjectsGraphs'                                       => true,
+                'isAllProjectsGraphs'                      => true,
 
             ]);
     }
@@ -91,7 +102,7 @@ class ReportsController extends Controller
         $this->ReportService->getMonthlyProfit($startAndEndDateTimelinesWithCost, $projectsTimelines);
 
         $startAndEndDateTimelinesWithCostProfitAndNetTotal =
-        $this->ReportService->getNetTotal($startAndEndDateTimelinesWithCostAndProfit,$projectsTimelines);
+        $this->ReportService->getTotalRevenue($startAndEndDateTimelinesWithCostAndProfit, $projectsTimelines);
 
         return view
             ('reports/showProjectsGraphs',
@@ -117,7 +128,7 @@ class ReportsController extends Controller
         $startAndEndDateTimelinesWithCostAndProfit = $this->ReportService->getMonthlyProfit($startAndEndDateTimelinesWithCost, $projectsTimelines);
 
         $startAndEndDateTimelinesWithCostProfitAndNetTotal =
-        $this->ReportService->getNetTotal($startAndEndDateTimelinesWithCostAndProfit,$projectsTimelines);
+        $this->ReportService->getTotalRevenue($startAndEndDateTimelinesWithCostAndProfit, $projectsTimelines);
         // dd($startAndEndDateTimelinesWithCostAndProfit);
 
         return view

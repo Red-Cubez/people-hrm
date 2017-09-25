@@ -6,6 +6,12 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-8">
+                @include('reports/netTotalGraph')
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-8">
                 @include('reports/monthlyCostGraph')
 
             </div>
@@ -16,12 +22,7 @@
 
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-8">
-                @include('reports/netTotalGraph')
-
-            </div>
-        </div>
+        
 
     
     </div>

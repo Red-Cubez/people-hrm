@@ -2,7 +2,7 @@
  <div class="panel panel-default">
         <div class="panel-body">
             <div style="width: 600px; height: 400px;display: block;">
-                <canvas id="myChartWithNetTotal"></canvas>
+                <canvas id="myChartWithTotalRevenue"></canvas>
             </div>
         </div>
     </div>
@@ -22,7 +22,7 @@
                                     {
                       
                                          x: "{{$projectTimeline->monthName}}",
-                                         y: "{{$projectTimeline->cost}}",
+                                         y: "@if(count($projectTimelines)>0) {{$projectTimelines[0]->project->budget}}  @endif",
 
                                    },
                                    @endif
@@ -37,8 +37,8 @@
                          
                 @endforeach
                     {
-                          label: "Net Total",
-                          data:  getNetTotal(),
+                          label: "Total Revenue",
+                          data:  getTotalRevenue(),
                           fill: false,
                           backgroundColor: "gray",
                           borderColor: "gray",
@@ -51,7 +51,7 @@
                     };
 
 
-            var ctx = document.getElementById("myChartWithNetTotal");
+            var ctx = document.getElementById("myChartWithTotalRevenue");
             var myLineChart = new Chart(ctx, {
                 type: 'line',
                 data: data,
@@ -81,7 +81,7 @@
                     },
                     title: {
                         display: true,
-                        text: 'Projects Net Total'
+                        text: 'Projects Total Revenue'
                     }
                 }
             });
@@ -96,13 +96,13 @@
                 @endforeach
             ];
         }
-         function getNetTotal()
+         function getTotalRevenue()
          {
 
            return [0, @foreach($startAndEndDateTimelines as $startAndEndDateTimeline )
                      
                       
-                                           "{{$startAndEndDateTimeline->netTotal}}",
+                                           "{{$startAndEndDateTimeline->revenue}}",
                                  
                     
                       @endforeach

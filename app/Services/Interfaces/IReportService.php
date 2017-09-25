@@ -12,6 +12,6 @@ interface IReportService
     
     public function mapMonthlyCostToStartAndEndDateTimelines($startAndEndDateTimelines, $projectsTimelines);
     public function getMonthlyProfit($startAndEndDateTimelines,$projectsTimelines);
-    public function getNetTotal($startAndEndDateTimelines,$projectsTimelines);
+    public function getTotalRevenue($startAndEndDateTimelines,$projectsTimelines);
 
 }

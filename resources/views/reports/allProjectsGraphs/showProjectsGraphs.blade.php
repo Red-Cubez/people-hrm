@@ -5,25 +5,39 @@
 <div class="container">
     <div class="row">
         Internal Projects Graphs
+           @if(count($internalProjectsTimelines)>0)
         <div class="col-sm-8">
+    
+         
             @include('reports/allProjectsGraphs/showInternalProjectsGraphs/showInternalProjectsGraphs',
                 [
                     'internalProjectsTimelines'        => $internalProjectsTimelines,
                     'internalProjectsStartAndEndDateTimelines' =>$internalProjectsStartAndEndDateTimelines
 
                     ])
+             
         </div>
+         @else
+            No Record Found    
+         @endif  
     </div>
     <div class="row">
         Client Projects Graphs
+         @if(count($clientProjectsTimelines)>0)
         <div class="col-sm-8">
-            @include('reports/allProjectsGraphs/showClientProjectsGraphs/showClientProjectsGraphs',
+
+             
+              @include('reports/allProjectsGraphs/showClientProjectsGraphs/showClientProjectsGraphs',
                 [
                     'clientProjectsTimelines'        => $clientProjectsTimelines,
                     'clientProjectsStartAndEndDateTimelines' =>$clientProjectsStartAndEndDateTimelines
 
                     ])
+                      
         </div>
+          @else
+               No Record Found    
+          @endif 
     </div>
 </div>
 @else

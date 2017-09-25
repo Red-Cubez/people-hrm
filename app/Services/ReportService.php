@@ -215,18 +215,10 @@ class ReportService implements IReportService
     public function getTotalRevenue($startAndEndDateTimelines, $projectsTimelines)
     {
            
-        $budget  = 0;
-        foreach ($projectsTimelines as $projectTimelines) {
-
-            if (count($projectTimelines) > 0) {
-                $budget = $budget + $projectTimelines[0]->project->budget;
-            }
-        }
-
-        $revenue = 0;
+    $revenue = 0;
        
         foreach ($startAndEndDateTimelines as $startAndEndDateTimeline) {
-            $startAndEndDateTimeline->revenue = 0;
+          //  $startAndEndDateTimeline->revenue = 0;
             //$flag=0;
             foreach ($projectsTimelines as $projectTimelines) {
 
@@ -234,13 +226,9 @@ class ReportService implements IReportService
 
                     if ($startAndEndDateTimeline->monthName == $projectTimeline->monthName) {
                         if (isset($projectTimeline->project)) {
-
-                        //  if ($sumOfCost != $startAndEndDateTimeline->cost) {
-                        //$profit = $startAndEndDateTimeline->profit;
-                        ///
-                            $revenue = $startAndEndDateTimeline->revenue + $projectTimeline->project->budget;
-
-                        $startAndEndDateTimeline->revenue = $budget;
+                           $profit= $startAndEndDateTimeline->profit;
+                            $profit1 =$projectTimeline->project->budget-$profit;
+                             
                         }
 
                         $startAndEndDateTimeline->revenue = $revenue;
@@ -251,97 +239,15 @@ class ReportService implements IReportService
                         $startAndEndDateTimeline->revenue = $revenue;
                     }
                 }
-                //  }
 
-                // } else {
-                //   if ($profit1 > 0) {
             }
 
-                //  }
         }
 
-                //      }
-//dd($startAndEndDateTimelines);
-        ////////////////////////////////////////////////////////////////////
-        // $profit  = 0;
-        // $profit1 = 0;
-        // $budget  = 0;
-        // foreach ($projectsTimelines as $projectTimelines) {
 
-                // }
-          //  }
-            // dd($startAndEndDateTimeline);
-        //     if (count($projectTimelines) > 0) {
-        //         $budget = $budget + $projectTimelines[0]->project->budget;
-        //     }
-        // }
-
-            // foreach ($startAndEndDateTimelines as $startAndEndDateTimeline) {
-            //     $profitSum = $profitSum + $profit;
-            //     $profit    = $startAndEndDateTimeline->profit;
-            //     if ($startAndEndDateTimeline->profit == $profit) {
-            //         $startAndEndDateTimeline->netTotal = $profitSum;
-        // foreach ($startAndEndDateTimelines as $startAndEndDateTimeline) {
-        //     $startAndEndDateTimeline->netTotal = 0;
-        //     foreach ($projectsTimelines as $projectTimelines) {
-
-            //     }
-        //         foreach ($projectTimelines as $projectTimeline) {
-        //             if ($startAndEndDateTimeline->monthName == $projectTimeline->monthName) {
-
-            // dd($startAndEndDateTimelines);
-        //}
-        //                 $startAndEndDateTimeline->netTotal = $budget;
-        //             }
-        //         }
-
-        //     }
-
-        // }
+//dd("ER");
         return $startAndEndDateTimelines;
 
     }
-
-
-//         $revenue = 0;
-
-//         foreach ($startAndEndDateTimelines as $startAndEndDateTimeline) {
-//             $startAndEndDateTimeline->revenue = 0;
-//             //$flag=0;
-//             foreach ($projectsTimelines as $projectTimelines) {
-
-//                 foreach ($projectTimelines as $projectTimeline) {
-
-//                     if ($startAndEndDateTimeline->monthName == $projectTimeline->monthName) {
-//                         if (count($projectTimelines) > 0) {
-
-//                             $revenue =$projectTimelines[0]->project->budget;
-  
-
-//                         }
-//                         else
-//                         {
-//                             $revenue=$startAndEndDateTimeline->revenue;
-//                         }
-
-//                             $startAndEndDateTimeline->revenue=$revenue;
-                        
-//                         //$startAndEndDateTimeline->revenue = $revenue;
-
-//                     }
-//                     // else {
-  
-//                     //     $startAndEndDateTimeline->revenue = $startAndEndDateTimeline->revenue;
-//                     // }
-
-//                 }
-
-//             }
-
-//         }
-// //dd("ER");
-//         return $startAndEndDateTimelines;
-
-//     }
 
 }

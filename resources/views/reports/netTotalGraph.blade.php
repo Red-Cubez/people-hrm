@@ -101,7 +101,7 @@
 
            return [0, @foreach($startAndEndDateTimelines as $startAndEndDateTimeline )
                      
-                      
+                                           
                                            "{{$startAndEndDateTimeline->revenue}}",
                                  
                     

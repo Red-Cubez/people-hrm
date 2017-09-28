@@ -160,7 +160,7 @@ class ProjectGrapher implements IProjectGrapher
 
         }
 
-        dd($currentMonth);
+
 
         $projectTimeLines = $this->calculateResourcesCost($projectResources, $projectTimeLine);
 
@@ -266,6 +266,7 @@ class ProjectGrapher implements IProjectGrapher
             }
 
         }
+        
         return $projectTimeLines;
     }
 

@@ -12,5 +12,7 @@ interface IDateTimeService
 
     public function calculateDifferenceBetweenTwoDates($d1, $d2);
 
+      public function getMonthNameAndYear($currentMonthStartDate);
+
 
 }

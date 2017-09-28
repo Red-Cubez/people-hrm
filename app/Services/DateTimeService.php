@@ -66,6 +66,16 @@ class DateTimeService implements IDateTimeService
         // return $projectDetails;
     }
 
+    public function getMonthNameAndYear($currentMonthStartDate)
+    {   
+
+        $currentMonthStartDate=new \DateTime($currentMonthStartDate);
+        $currentMonthStartDate = $currentMonthStartDate->format("Y-m-d");
+        $currentMonthName      = date("Y-M", strtotime($currentMonthStartDate));
+
+        return $currentMonthName;
+    }
+
     public function calculateMonthsBetweenTwoDates($startDate, $endDate)
     {
         $timeSpan1 = strtotime($startDate);

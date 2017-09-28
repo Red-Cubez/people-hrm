@@ -243,10 +243,12 @@ class ReportService implements IReportService
 /////////////////////////////////////////////////New//////////////////////////////////////////////////
     public function startAndEndDateTimelinesWithCostProfitAndNetTotal($startDate, $endDate, $companyId)
     {
+
         //$this->DateTimeService->getStartAndEndDateTimelines($startDate, $endDate, $companyId);
 
-        $totalMonths = $this->DateTimeService->calculateMonthsBetweenTwoDates($startDate, $endDate);
-        $timeLine    = array();
+        $totalMonths      = $this->DateTimeService->calculateMonthsBetweenTwoDates($startDate, $endDate);
+        $timeLine         = array();
+        $monthlyTimelines = array();
 
         $startDate = date("Y-m-d", strtotime($startDate));
 
@@ -256,29 +258,35 @@ class ReportService implements IReportService
 
             list($firstDateOfCurrentMonth, $lastDateOfCurrentMonth) = $this->DateTimeService->getFirstAndLastDateCurrentOfMonth($monthCounter, $totalMonths, $startDateInDateTime, $endDate);
 
-            // $test=new \DateTime($lastDateOfCurrentMonth);
-            // dd($test->format('Y-m'));
-            $timelineDetails = $this->setupTimeline($firstDateOfCurrentMonth, $lastDateOfCurrentMonth, $companyId);
+            $monthlyTimeline = new monthlyTimeline();
+            // dd($lastDateOfCurrentMonth);
+
+            $currentMonthName           = $this->DateTimeService->getMonthNameAndYear($firstDateOfCurrentMonth->format("Y-m-d"), $lastDateOfCurrentMonth);
+            $monthlyTimeline->monthName = $currentMonthName;
+
+            $projectsMonthlyTimeLine = $this->setupTimeline($firstDateOfCurrentMonth, $lastDateOfCurrentMonth, $companyId);
+
+            $monthlyTimeline->monthlyTimelineItems = array();
+
+            foreach ($projectsMonthlyTimeLine as $projectMonthlyTimeLine) {
+                $monthlyTimeline->totalCost = $monthlyTimeline->totalCost + $projectMonthlyTimeLine->totalCost;
+                array_push($monthlyTimeline->monthlyTimelineItems, $projectMonthlyTimeLine);
+
+            }
+
+            array_push($monthlyTimelines, $monthlyTimeline);
+
         }
 
-        array_push($timeLine, $timelineDetails);
+        dd($monthlyTimelines);
 
     }
 
     public function setupTimeline($currentMonthStartDate, $currentMonthEndDate, $companyId)
     {
-        //      public $monthName;
-        // public $startDate;
-        // public $endDate;
-        // public $noOfDays;
-        // public $totalCost;
-        // public $totalRevenue;
-        // public $totalProfit;
-        //dd($currentMonthEndDate);
+
         $currentMonthStartDate = $currentMonthStartDate->format("Y-m-d");
         $currentMonthName      = date("M-Y", strtotime($currentMonthStartDate));
-
-        //$dateDiff = $this->DateTimeService->calculateDiffernceBetweenTwoDates($currentMonthStartDate, $currentMonthEndDate);
 
         $timeline = new MOnthlyTimeline();
 
@@ -286,23 +294,16 @@ class ReportService implements IReportService
         $timeline->startDate = $currentMonthStartDate;
         $timeline->endDate   = $currentMonthEndDate;
 
-        //  dd($projects);
         $timeline->timelineItems = array();
-        $projects                = $this->getInternalProjectsWithIn($companyId, $currentMonthStartDate, $currentMonthEndDate);
+        $projectsMonthlyTimeLine = $this->getProjectsMonthlyTimeLine($companyId, $currentMonthStartDate, $currentMonthEndDate);
 
-        dd($projects);
-        foreach ($projects as $project) {
-            array_push();
-        }
-
-        // $projects=
-
-        return $projectDetails;
+        return $projectsMonthlyTimeLine;
     }
 
-    public function getInternalProjectsWithIn($companyId, $currentMonthStartDate, $currentMonthEndDate)
+    public function getProjectsMonthlyTimeLine($companyId, $currentMonthStartDate, $currentMonthEndDate)
     {
-        $projects                = array();
+        $projectsMonthlyTimeLine = array();
+
         $companyInternalProjects = $this->CompanyProjectService->getAllInternalProjectsOfCompany($companyId);
 
         foreach ($companyInternalProjects as $companyInternalProject) {
@@ -313,127 +314,119 @@ class ReportService implements IReportService
                 && ($currentMonthStartDate <= $currentMonthEndDate) && ($projectStartDate <= $projectEndDate)) {
 
                 $projectWithInStartAndEndDate = $this->projectTimeline($companyInternalProject, $currentMonthStartDate, $currentMonthEndDate, $projectStartDate, $projectEndDate);
-                //$projectTimeLine = $this->getInternalProjectTimelines($companyInternalProject, $currentMonthStartDate, $currentMonthEndDate);
 
-                array_push($projects, $companyInternalProject);
+                $currentMonthName = $this->DateTimeService->getMonthNameAndYear($currentMonthStartDate);
+
+                $projectMonthlyTimeLine = new ProjectMonthlyTimeLine();
+
+                $projectMonthlyTimeLine->totalCost     = $projectWithInStartAndEndDate;
+                $projectMonthlyTimeLine->monthName     = $currentMonthName;
+                $projectMonthlyTimeLine->projectName   = $companyInternalProject->name;
+                $projectMonthlyTimeLine->projectId     = $companyInternalProject->id;
+                $projectMonthlyTimeLine->projectBudget = $companyInternalProject->budget;
+                $projectMonthlyTimeLine->startDate     = $projectStartDate;
+                $projectMonthlyTimeLine->endDate       = $projectEndDate;
+
+                array_push($projectsMonthlyTimeLine, $projectMonthlyTimeLine);
             }
         }
-       // dd($projects);
 
-        return $projects;
+        return $projectsMonthlyTimeLine;
 
     }
-  
 
     public function projectTimeline($project, $currentMonthStartDate, $currentMonthEndDate, $projectStartDate, $projectEndDate)
     {
 
-        // $totalMonths     = $this->calculateMonthsBetweenTwoDates($projectStartDate, $projectEndDate);
-        // $projectTimeLine = array();
-
-        // $projectStartDate = date("Y-m-d", strtotime($projectStartDate));
-
-        // $projectStartInDateTime = new \DateTime($projectStartDate);
-
-        
-
         list($projectCurrentMonthStartDate, $projectCurrentMonthEndDate) =
         $this->getCurrentMonthStartAndEndDates($currentMonthStartDate, $currentMonthEndDate, $projectStartDate, $projectEndDate);
-         
 
-         $resources=$project->resources;
-          if(count($resources)>0)
-          {
-            $monthlyCost=$this->getResourcesCost($resources,$projectCurrentMonthStartDate,$projectCurrentMonthEndDate);
+        $resources = $project->resources;
+        if (count($resources) > 0) {
+            $monthlyCostSum = $this->getMonthlyCostProfitAndRevenue($resources, $projectCurrentMonthStartDate, $projectCurrentMonthEndDate);
 
+        }
 
-          }
+        // $this->calcuateMonthlyProfit();
 
-          $this->calcuateMonthlyProfit();
+        //d($monthlyCostSum);
 
-          dd($monthlyCost);
+        return $monthlyCostSum;
 
+    }
 
-      
+    public function getMonthlyCostProfitAndRevenue($resources, $projectCurrentMonthStartDate, $projectCurrentMonthEndDate)
+    {
 
-    
-
-  
-}
-
-public function getResourcesCost($resources,$projectCurrentMonthStartDate,$projectCurrentMonthEndDate)
-{
-
-    $monthlyCost=0;
-    foreach ($resources as $resource) {
+        $monthlyCostSum    = 0;
+        $totalCostPerMonth = 0;
+        foreach ($resources as $resource) {
             //dd($resources);
             list($resourceStartDate, $resourceEndDate) = $this->ProjectResourceService->getResourceStartAndEndDate($resource);
 
             if (($projectCurrentMonthStartDate <= $resourceEndDate) && ($resourceStartDate <= $projectCurrentMonthEndDate)
                 && ($projectCurrentMonthStartDate <= $projectCurrentMonthEndDate) && ($resourceStartDate <= $resourceEndDate)) {
                 list($resourceCurrentMonthStartDate, $resourceCurrentMonthEndDate) =
-            $this->getCurrentMonthStartAndEndDates($projectCurrentMonthStartDate, $projectCurrentMonthEndDate, $resourceStartDate, $resourceEndDate);
-                 
-          
-                     $difference = $this->DateTimeService->calculateDifferenceBetweenTwoDates(date("Y-m-d", strtotime($resourceCurrentMonthStartDate)), date("Y-m-d", strtotime($resourceCurrentMonthEndDate)));
+                $this->getCurrentMonthStartAndEndDates($projectCurrentMonthStartDate, $projectCurrentMonthEndDate, $resourceStartDate, $resourceEndDate);
 
-                        $weeksWorkedInCurrentMonth = ($difference->days + 1) / 7;
+                $difference = $this->DateTimeService->calculateDifferenceBetweenTwoDates(date("Y-m-d", strtotime($resourceCurrentMonthStartDate)), date("Y-m-d", strtotime($resourceCurrentMonthEndDate)));
 
-                        $costPerMonth = $weeksWorkedInCurrentMonth * ($resource->hourlyBillingRate) * ($resource->hoursPerWeek);
+                $weeksWorkedInCurrentMonth = ($difference->days + 1) / 7;
 
-                        //$totalCostPerMonth     = $totalCostPerMonth + $costPerMonth;
-             
-                        $monthlyCost= $monthlyCost+$costPerMonth;
+                $costPerMonth = $weeksWorkedInCurrentMonth * ($resource->hourlyBillingRate) * ($resource->hoursPerWeek);
+
+                $totalCostPerMonth = $totalCostPerMonth + $costPerMonth;
+                $monthlyCostSum    = round($totalCostPerMonth, 2);
+
             }
         }
 
-        return $monthlyCost;
-
-
-}
-
-function getCurrentMonthStartAndEndDates($currentMonthStartDate, $currentMonthEndDate, $startDate, $endDate)
-{
-    $projectCurrentMonthStartDate = null;
-    $projectCurrentMonthEndDate   = null;
-    if ($currentMonthStartDate >= $startDate) {
-        $projectCurrentMonthStartDate = $currentMonthStartDate;
-    } elseif ($currentMonthStartDate < $startDate) {
-        $projectCurrentMonthStartDate = $startDate;
+        return $monthlyCostSum;
 
     }
 
-    if ($currentMonthEndDate <= $endDate) {
-        $projectCurrentMonthEndDate = $currentMonthEndDate;
+    public function getCurrentMonthStartAndEndDates($currentMonthStartDate, $currentMonthEndDate, $startDate, $endDate)
+    {
+        $projectCurrentMonthStartDate = null;
+        $projectCurrentMonthEndDate   = null;
+        if ($currentMonthStartDate >= $startDate) {
+            $projectCurrentMonthStartDate = $currentMonthStartDate;
+        } elseif ($currentMonthStartDate < $startDate) {
+            $projectCurrentMonthStartDate = $startDate;
 
-    } elseif ($currentMonthEndDate > $endDate) {
-        $projectCurrentMonthEndDate = $endDate;
+        }
+
+        if ($currentMonthEndDate <= $endDate) {
+            $projectCurrentMonthEndDate = $currentMonthEndDate;
+
+        } elseif ($currentMonthEndDate > $endDate) {
+            $projectCurrentMonthEndDate = $endDate;
+
+        }
+
+        return array($projectCurrentMonthStartDate, $projectCurrentMonthEndDate);
 
     }
 
-    return array($projectCurrentMonthStartDate, $projectCurrentMonthEndDate);
+    public function setupProjectTimeline($currentMonthStartDate, $currentMonthEndDate)
+    {
 
-}
+        $currentMonthStartDate = $currentMonthStartDate->format("Y-m-d");
+        $currentMonthName      = date("M-Y", strtotime($currentMonthStartDate));
 
-function setupProjectTimeline($currentMonthStartDate, $currentMonthEndDate)
-{
+        $dateDiff = $this->calculateDiffernceBetweenTwoDates($currentMonthStartDate, $currentMonthEndDate);
 
-    $currentMonthStartDate = $currentMonthStartDate->format("Y-m-d");
-    $currentMonthName      = date("M-Y", strtotime($currentMonthStartDate));
+        $projectDetails = new ProjectTimeline();
 
-    $dateDiff = $this->calculateDiffernceBetweenTwoDates($currentMonthStartDate, $currentMonthEndDate);
+        $projectDetails->monthName = $currentMonthName;
+        $projectDetails->startDate = $currentMonthStartDate;
+        $projectDetails->endDate   = $currentMonthEndDate;
+        $projectDetails->noOfDays  = $dateDiff->days;
+        $projectDetails->cost      = 0;
 
-    $projectDetails = new ProjectTimeline();
-
-    $projectDetails->monthName = $currentMonthName;
-    $projectDetails->startDate = $currentMonthStartDate;
-    $projectDetails->endDate   = $currentMonthEndDate;
-    $projectDetails->noOfDays  = $dateDiff->days;
-    $projectDetails->cost      = 0;
-
-    return $projectDetails;
-}
-  // public function projectWithIn($currentMonthStartDate, $currentMonthEndDate, $projectStartDate, $projectEndDate)
+        return $projectDetails;
+    }
+    // public function projectWithIn($currentMonthStartDate, $currentMonthEndDate, $projectStartDate, $projectEndDate)
     // {
 
     // }
@@ -455,129 +448,129 @@ function setupProjectTimeline($currentMonthStartDate, $currentMonthEndDate)
     //     }
     //     return $projectTimelines;
     // }
-function getMonthlyProfit($startAndEndDateTimelines, $projectsTimelines)
-{
+    public function getMonthlyProfit($startAndEndDateTimelines, $projectsTimelines)
+    {
 
-    $budget    = 0;
-    $profit1   = 0;
-    $profit    = 0;
-    $sumOfCost = 0;
-
-    foreach ($projectsTimelines as $projectTimelines) {
-
-        if (count($projectTimelines) > 0) {
-            $budget = $budget + $projectTimelines[0]->project->budget;
-        }
-    }
-
-    foreach ($startAndEndDateTimelines as $startAndEndDateTimeline) {
+        $budget    = 0;
+        $profit1   = 0;
+        $profit    = 0;
+        $sumOfCost = 0;
 
         foreach ($projectsTimelines as $projectTimelines) {
 
-            foreach ($projectTimelines as $projectTimeline) {
-                if ($startAndEndDateTimeline->monthName == $projectTimeline->monthName) {
-
-                    $cost = $startAndEndDateTimeline->cost;
-
-                    $profit = $budget - ($cost);
-
-                    $profit1                         = 1;
-                    $startAndEndDateTimeline->profit = $profit;
-                } else {
-                    $startAndEndDateTimeline->profit = $profit;
-                }
-
+            if (count($projectTimelines) > 0) {
+                $budget = $budget + $projectTimelines[0]->project->budget;
             }
-
         }
-    }
 
-    return $startAndEndDateTimelines;
-}
-function getTotalRevenue($startAndEndDateTimelines, $projectsTimelines)
-{
-    $sumOfCost = 0;
-    $profit    = 0;
-    $budget    = 0;
-    $revenue   = 0;
-    //  dd($projectsTimelines);
-    foreach ($startAndEndDateTimelines as $startAndEndDateTimeline) {
-        {
+        foreach ($startAndEndDateTimelines as $startAndEndDateTimeline) {
+
             foreach ($projectsTimelines as $projectTimelines) {
 
-                $budget = $projectTimelines[0]->budget;
-                //   $revenue =
                 foreach ($projectTimelines as $projectTimeline) {
                     if ($startAndEndDateTimeline->monthName == $projectTimeline->monthName) {
 
-                        //$sumOfCost                     = $sumOfCost + $budget;
-                        $revenue                          = $budget;
-                        $startAndEndDateTimeline->revenue = $revenue;
+                        $cost = $startAndEndDateTimeline->cost;
 
+                        $profit = $budget - ($cost);
+
+                        $profit1                         = 1;
+                        $startAndEndDateTimeline->profit = $profit;
                     } else {
-                        $revenue                          = $revenue;
-                        $startAndEndDateTimeline->revenue = $revenue;
+                        $startAndEndDateTimeline->profit = $profit;
+                    }
 
+                }
+
+            }
+        }
+
+        return $startAndEndDateTimelines;
+    }
+    public function getTotalRevenue($startAndEndDateTimelines, $projectsTimelines)
+    {
+        $sumOfCost = 0;
+        $profit    = 0;
+        $budget    = 0;
+        $revenue   = 0;
+        //  dd($projectsTimelines);
+        foreach ($startAndEndDateTimelines as $startAndEndDateTimeline) {
+            {
+                foreach ($projectsTimelines as $projectTimelines) {
+
+                    $budget = $projectTimelines[0]->budget;
+                    //   $revenue =
+                    foreach ($projectTimelines as $projectTimeline) {
+                        if ($startAndEndDateTimeline->monthName == $projectTimeline->monthName) {
+
+                            //$sumOfCost                     = $sumOfCost + $budget;
+                            $revenue                          = $budget;
+                            $startAndEndDateTimeline->revenue = $revenue;
+
+                        } else {
+                            $revenue                          = $revenue;
+                            $startAndEndDateTimeline->revenue = $revenue;
+
+                        }
                     }
                 }
             }
         }
+
+        return $startAndEndDateTimelines;
+
+        // return $startAndEndDateTimelines;
+        // foreach($projectTimelines as)
+        //////////
+
+        // $budget  = 0;
+        // $revenue = array();
+        // foreach ($projectsTimelines as $projectTimelines) {
+
+        //     foreach ($projectTimelines as $projectTimeline) {
+        //         if (isset($projectTimeline->project)) {
+        //             $budget = $budget + $projectTimeline->project->budget;
+
+        //             array_push($revenue,$budget);
+
+        //         }
+        //     }
+        // }
+
+        // dd($revenue);
+
+        ///////////////////////////////////////////////////////////////////////////
+
+        // $revenue = 0;
+        // $budget  = 0;
+        // $i       = 1;
+
+        // foreach ($startAndEndDateTimelines as $startAndEndDateTimeline) {
+        //     foreach ($projectsTimelines as $projectTimelines) {
+
+        //         foreach ($projectTimelines as $projectTimeline) {
+        //             if (isset($projectTimeline->project)) {
+        //                 $budget                           = $projectTimeline->project->budget;
+
+        //             } else {
+        //                 $revenue = $budget;
+
+        //             }
+        //             if ($startAndEndDateTimeline->monthName == $projectTimeline->monthName) {
+
+        //                 $startAndEndDateTimeline->revenue = $revenue+$budget;
+        //                // dd($$revenue+$budget)
+
+        //             } else {
+        //                 $startAndEndDateTimeline->revenue = $revenue;
+
+        //             }
+        //         }
+        //     }
+        // }
+
+        // return $startAndEndDateTimelines;
+
     }
-
-    return $startAndEndDateTimelines;
-
-    // return $startAndEndDateTimelines;
-    // foreach($projectTimelines as)
-    //////////
-
-    // $budget  = 0;
-    // $revenue = array();
-    // foreach ($projectsTimelines as $projectTimelines) {
-
-    //     foreach ($projectTimelines as $projectTimeline) {
-    //         if (isset($projectTimeline->project)) {
-    //             $budget = $budget + $projectTimeline->project->budget;
-
-    //             array_push($revenue,$budget);
-
-    //         }
-    //     }
-    // }
-
-    // dd($revenue);
-
-    ///////////////////////////////////////////////////////////////////////////
-
-    // $revenue = 0;
-    // $budget  = 0;
-    // $i       = 1;
-
-    // foreach ($startAndEndDateTimelines as $startAndEndDateTimeline) {
-    //     foreach ($projectsTimelines as $projectTimelines) {
-
-    //         foreach ($projectTimelines as $projectTimeline) {
-    //             if (isset($projectTimeline->project)) {
-    //                 $budget                           = $projectTimeline->project->budget;
-
-    //             } else {
-    //                 $revenue = $budget;
-
-    //             }
-    //             if ($startAndEndDateTimeline->monthName == $projectTimeline->monthName) {
-
-    //                 $startAndEndDateTimeline->revenue = $revenue+$budget;
-    //                // dd($$revenue+$budget)
-
-    //             } else {
-    //                 $startAndEndDateTimeline->revenue = $revenue;
-
-    //             }
-    //         }
-    //     }
-    // }
-
-    // return $startAndEndDateTimelines;
-
-}
 
 }

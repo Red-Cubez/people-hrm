@@ -143,6 +143,7 @@ class ProjectGrapher implements IProjectGrapher
                 $currentMonth = strtotime($projectStartInDateTime->modify('+1 month')->format("Y-m-d"));
 
                 $firstDateOfCurrentMonth = new \DateTime(date("Y-m-01", $currentMonth));
+                
             }
             if ($monthCounter == $totalMonths) {
                 $lastDateOfCurrentMonth = $projectEndDate;
@@ -158,6 +159,8 @@ class ProjectGrapher implements IProjectGrapher
             array_push($projectTimeLine, $projectDetails);
 
         }
+
+        dd($currentMonth);
 
         $projectTimeLines = $this->calculateResourcesCost($projectResources, $projectTimeLine);
 

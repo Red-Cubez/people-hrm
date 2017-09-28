@@ -3,6 +3,7 @@
 namespace People\Http\Controllers;
 
 use Illuminate\Http\Request;
+use People\Services\Interfaces\IDateTimeService;
 use People\Services\Interfaces\IReportService;
 use People\Services\Interfaces\IUserAuthenticationService;
 
@@ -10,25 +11,27 @@ class ReportsController extends Controller
 {
     public $ReportService;
     public $UserAuthenticationService;
+    public $DateTimeService;
 
-    public function __construct(IReportService $reportService, IUserAuthenticationService $userAuthenticationService)
-    {
+    public function __construct(IReportService $reportService, IUserAuthenticationService $userAuthenticationService,
+        IDateTimeService $dateTimeService) {
 
         $this->middleware('auth');
 
         $this->ReportService             = $reportService;
         $this->UserAuthenticationService = $userAuthenticationService;
+        $this->DateTimeService           = $dateTimeService;
 
     }
 
     public function showOptions($companyId)
     {
-        $isManager = $this->UserAuthenticationService->isManager();
-        $isAdmin   = $this->UserAuthenticationService->isAdmin();
+        $isManager                           = $this->UserAuthenticationService->isManager();
+        $isAdmin                             = $this->UserAuthenticationService->isAdmin();
         $isRequestedCompanyBelongsToEmployee = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($companyId);
 
         if (($isManager || $isAdmin) && $isRequestedCompanyBelongsToEmployee) {
-            
+
             return view
                 ('reports/index',
                 [
@@ -89,29 +92,38 @@ class ReportsController extends Controller
             'endDate'   => 'required|date|after:startDate',
         ]);
 
-        $projectsTimelines =
-        $this->ReportService->getInternalProjectsTimeLines($companyId, $request->startDate, $request->endDate);
+        // $projectsTimelines =
+        // $this->ReportService->getInternalProjectsTimeLines($companyId, $request->startDate, $request->endDate);
 
-        $startAndEndDateTimelines =
-        $this->ReportService->getStartAndEndDateTimelines($request->startDate, $request->endDate);
+        // $startAndEndDateTimelines =
+        // $this->ReportService->getStartAndEndDateTimelines($request->startDate, $request->endDate);
 
-        $startAndEndDateTimelinesWithCost =
-        $this->ReportService->mapMonthlyCostToStartAndEndDateTimelines($startAndEndDateTimelines, $projectsTimelines, null);
+        //////
 
-        $startAndEndDateTimelinesWithCostAndProfit =
-        $this->ReportService->getMonthlyProfit($startAndEndDateTimelinesWithCost, $projectsTimelines);
+        list($startDate, $endDate) = $this->DateTimeService->getfirstAndLastDateOfGivenDate($request->startDate, $request->endDate);
 
         $startAndEndDateTimelinesWithCostProfitAndNetTotal =
-        $this->ReportService->getTotalRevenue($startAndEndDateTimelinesWithCostAndProfit, $projectsTimelines);
+        $this->ReportService->startAndEndDateTimelinesWithCostProfitAndNetTotal($startDate, $endDate, $companyId);
 
-        return view
-            ('reports/showProjectsGraphs',
-            [
-                'projectsTimelines'        => $projectsTimelines,
+        //////
 
-                'startAndEndDateTimelines' => $startAndEndDateTimelinesWithCostProfitAndNetTotal,
+        // $startAndEndDateTimelinesWithCost =
+        // $this->ReportService->mapMonthlyCostToStartAndEndDateTimelines($startAndEndDateTimelines, $projectsTimelines, null);
 
-            ]);
+        // $startAndEndDateTimelinesWithCostAndProfit =
+        // $this->ReportService->getMonthlyProfit($startAndEndDateTimelinesWithCost, $projectsTimelines);
+
+        // $startAndEndDateTimelinesWithCostProfitAndNetTotal =
+        // $this->ReportService->getTotalRevenue($startAndEndDateTimelinesWithCostAndProfit, $projectsTimelines);
+
+        // return view
+        //     ('reports/showProjectsGraphs',
+        //     [
+        //         'projectsTimelines'        => $projectsTimelines,
+
+        //         'startAndEndDateTimelines' => $startAndEndDateTimelinesWithCostProfitAndNetTotal,
+
+        //     ]);
     }
 
     public function showClientProjectsReport(Request $request, $companyId)

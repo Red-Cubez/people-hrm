@@ -42,6 +42,20 @@ class CompanyProjectService implements ICompanyProjectService
         }
 
     }
+
+public function getInternalProjectsWithin($companyId, $startDate, $endDate)
+    {
+        // $companyProjects = CompanyProject::where('company_id', $companyId)->where()->where()->get();
+        
+        if (isset($companyProjects)) {
+            return $companyProjects;
+        } else {
+            return null;
+        }
+
+    }
+
+
     public function getProjectStartAndEndDate($project)
     {
         $startDate=null;

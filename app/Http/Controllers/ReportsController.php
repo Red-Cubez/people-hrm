@@ -104,10 +104,10 @@ class ReportsController extends Controller
 
         $startAndEndDateTimelinesWithCostProfitAndNetTotal =
         $this->ReportService->startAndEndDateTimelinesWithCostProfitAndNetTotal($startDate, $endDate, $companyId);
-    
+       
         $monthlyTimelines=$this->ReportService->setUpMontlhyTimelines($startAndEndDateTimelinesWithCostProfitAndNetTotal);
-
-
+ // dd($monthlyTimelines);
+  
         //////
 
         // $startAndEndDateTimelinesWithCost =
@@ -124,7 +124,7 @@ class ReportsController extends Controller
             [
                 //'projectsTimelines'        => $projectsTimelines,
 
-                'monthlyTimelines' => $startAndEndDateTimelinesWithCostProfitAndNetTotal,
+                'monthlyTimelines' => $monthlyTimelines,
 
             ]);
     }

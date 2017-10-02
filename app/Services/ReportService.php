@@ -46,7 +46,7 @@ class MonthlyTimeline
     public $totalCost;
     public $totalProfit;
     public $monthlyTimelineItems;
-    public $projectNames;
+
 }
 class ReportService implements IReportService
 {
@@ -275,8 +275,9 @@ class ReportService implements IReportService
             $monthlyTimeline->monthlyTimelineItems = array();
 
             foreach ($projectsMonthlyTimeLine as $projectMonthlyTimeLine) {
-
-                $monthlyCost = $monthlyCost + $monthlyTimeline->totalCost + $projectMonthlyTimeLine->totalCost;
+        
+               // $monthlyCost = $monthlyCost + $monthlyTimeline->totalCost + $projectMonthlyTimeLine->totalCost;
+                   $monthlyCost = $monthlyCost  + $projectMonthlyTimeLine->totalCost;
 
                 $monthlyTimeline->totalCost = $monthlyCost;
 
@@ -284,22 +285,24 @@ class ReportService implements IReportService
                 $monthlyTimeline->totalProfit  = $totalProfit + $projectMonthlyTimeLine->totalProfit;
                 $totalRevenue                  = $totalRevenue + $projectMonthlyTimeLine->totalRevenue;
                 $totalProfit                   = $totalProfit + $projectMonthlyTimeLine->totalProfit;
-
+       
                 array_push($monthlyTimeline->monthlyTimelineItems, $projectMonthlyTimeLine);
 
             }
 
+
             array_push($monthlyTimelines, $monthlyTimeline);
 
         }
+      //  dd($monthlyTimelines);
 
-        foreach ($monthlyTimelines as $monthlyTimeline) {
-            $monthlyTimeline->projectNames = array();
-            foreach ($monthlyTimeline->monthlyTimelineItems as $monthlyTimelineItem) {
-                array_push($monthlyTimeline->projectNames, $monthlyTimelineItem->projectName);
+        // foreach ($monthlyTimelines as $monthlyTimeline) {
+        //     $monthlyTimeline->projectNames = array();
+        //     foreach ($monthlyTimeline->monthlyTimelineItems as $monthlyTimelineItem) {
+        //         array_push($monthlyTimeline->projectNames, $monthlyTimelineItem->projectName);
 
-            }
-        }
+        //     }
+        // }
 
         return $monthlyTimelines;
 
@@ -352,8 +355,27 @@ class ReportService implements IReportService
                 $projectMonthlyTimeLine->totalRevenue  = $revenue;
                 $projectMonthlyTimeLine->totalProfit   = $profit;
 
-                array_push($projectsMonthlyTimeLine, $projectMonthlyTimeLine);
+               
             }
+            else
+            {
+
+
+                $currentMonthName = $this->DateTimeService->getMonthNameAndYear($currentMonthStartDate);
+
+                $projectMonthlyTimeLine = new ProjectMonthlyTimeLine();
+
+                $projectMonthlyTimeLine->totalCost     = null;
+                $projectMonthlyTimeLine->monthName     = $currentMonthName;
+                $projectMonthlyTimeLine->projectName   = $companyInternalProject->name;
+                $projectMonthlyTimeLine->projectId     = $companyInternalProject->id;
+                $projectMonthlyTimeLine->projectBudget = null;
+                $projectMonthlyTimeLine->startDate     = $projectStartDate;
+                $projectMonthlyTimeLine->endDate       = $projectEndDate;
+                $projectMonthlyTimeLine->totalRevenue  = null;
+                $projectMonthlyTimeLine->totalProfit   = null;
+            }
+             array_push($projectsMonthlyTimeLine, $projectMonthlyTimeLine);
         }
 
         return $projectsMonthlyTimeLine;
@@ -514,45 +536,133 @@ class ReportService implements IReportService
         }
         return $totalCost;
     }
+     public function countProjectsIn($monthlyTimelines)
+    {
+        $projectIds = array();
+        foreach ($monthlyTimelines as $monthlyTimeline) {
+            foreach ($monthlyTimeline->monthlyTimelineItems as $monthlyTimelineItem) {
+
+                if (!in_array($monthlyTimelineItem->projectId, $projectIds)) {
+                    array_push($projectIds, $monthlyTimelineItem->projectId);
+                }
+            }
+        }
+
+        return count($projectIds);
+    }
+
 
     public function setUpMontlhyTimelines($monthlyTimelines)
     {
-        $counter = 0;
+
+        $counter   = 0;
+        $timelines = array();
 
         foreach ($monthlyTimelines as $monthlyTimeline) {
+
             if ($counter == 0 && count($monthlyTimelines) > 0) {
-                $monthlyTimeline->monthlyTimelineArray=array();
-                foreach ($monthlyTimelines as $monthlyTimeline) {
-                       
-                    array_push($monthlyTimelines[0]->monthlyTimelineArray,$monthlyTimeline);
 
-                    $counter++;
+                $monthlyTimelineArray = array();
 
-                }
-            } else {
+                array_push($monthlyTimelineArray, $monthlyTimeline);
+                array_push($timelines, $monthlyTimelines);
+
+                $counter++;
 
             }
 
         }
-        dd($monthlyTimelines);
+        $totalProjects=$this->countProjectsIn($monthlyTimelines);   
+ 
+        for ($i = 0; $i < $totalProjects; $i++) {
+              $projects = array();
+            foreach ($monthlyTimelines as $monthlyTimeline) {
+                // foreach ($monthlyTimeline->monthlyTimelineItems as $monthlyTimelineItem) {
+                if (isset($monthlyTimeline->monthlyTimelineItems[$i])) {
+                    $a1 = (array) $monthlyTimeline->monthlyTimelineItems[$i];
+                
+
+                $a2           = $projects;
+                $inBoth       = array_intersect_assoc($a1, $a2);
+                $onlyInFirst  = array_diff_assoc($a1, $a2);
+                $onlyInSecond = array_diff_assoc($a2, $a1);
+                if (($onlyInSecond)) {
+                    //   dd("here");
+
+                    array_push($projects, $monthlyTimeline->monthlyTimelineItems[$i]);
+
+                } else {
+
+                    $projects = array();
+                    array_push($projects,$monthlyTimeline->monthlyTimelineItems[$i]);
+
+                }
+                }
+
+                // dd($projects);
+                //         }
+
+                
+            }
+             array_push($timelines, $projects);
+        }
+
+
+        return $timelines;
+
+        //dd(sizeof($monthlyTimelines));
+       
+
+        // foreach ($monthlyTimelines as $monthlyTimeline) {
+        //      $k=0;
+        //     foreach ($monthlyTimeline->monthlyTimelineItems as $monthlyTimelineItem) {
+
+        //         //$projectId = $monthlyTimelineItem->projectId;
+        //         if ($i > 0 && count($monthlyTimelines[$i-1]->monthlyTimelineItems)>=$k) {
+        //             if ($monthlyTimelineItem->projectId==$monthlyTimelines[$i-1]->monthlyTimelineItems[$k]->projectId) {
+
+        //                 array_push($project, $monthlyTimelineItem);
+        //             }
+        //         }
+        //         else
+        //         {
+        //              array_push($project, $monthlyTimelineItem);
+        //         }
+        //        $k++;
+        //     }
+        //     $i++;
+
+        // }
+        // }  elseif ($counter >0 && count($monthlyTimelines) > 1) {
+        //      //$monthlyTimeline->monthlyTimelineArray=array();
+        //      foreach ($monthlyTimelines as $monthlyTimeline) {
+        //             foreach ($monthlyTimeline->monthlyTimelineItems as $monthlyTimelineItem) {
+        //                 if($monthlyTimelineItem)
+        //         array_push($monthlyTimelines[$i],$monthlyTimeline-);
+
+        //         $counter++;
+
+        //     }}
+        // }
+
     }
 
-    // public function projectWithIn($currentMonthStartDate, $currentMonthEndDate, $projectStartDate, $projectEndDate)
+// public function projectWithIn($currentMonthStartDate, $currentMonthEndDate, $projectStartDate, $projectEndDate)
     // {
 
-    // }
+// }
 
-    // public function getInternalProjectTimelines111111($companyProject, $currentMonthStartDate, $currentMonthEndDate)
+// public function getInternalProjectTimelines111111($companyProject, $currentMonthStartDate, $currentMonthEndDate)
     // {
 
-    //     list($currentProjectResources) = $this->CompanyProjectResourceService->showCompanyProjectResources($companyProject->id);
+//     list($currentProjectResources) = $this->CompanyProjectResourceService->showCompanyProjectResources($companyProject->id);
 
-    //     //$companyProject = $this->CompanyProjectService->viewCompanyProject($companyProjectId);
+//     //$companyProject = $this->CompanyProjectService->viewCompanyProject($companyProjectId);
 
-    //     $projectTimelines = $this->setupProjectCost($companyProject, $currentProjectResources, $currentMonthStartDate, $currentMonthEndDate);
+//     $projectTimelines = $this->setupProjectCost($companyProject, $currentProjectResources, $currentMonthStartDate, $currentMonthEndDate);
     //     if (count($projectTimelines) > 0) {
 
-    //         $projectTimelines[0]->project = $companyProject;
+//         $projectTimelines[0]->project = $companyProject;
     //     }
     //     foreach ($projectTimelines as $projectTimeline) {
     //         $projectTimeline->budget = $companyProject->budget;

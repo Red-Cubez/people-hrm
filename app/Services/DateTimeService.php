@@ -71,7 +71,7 @@ class DateTimeService implements IDateTimeService
 
         $currentMonthStartDate=new \DateTime($currentMonthStartDate);
         $currentMonthStartDate = $currentMonthStartDate->format("Y-m-d");
-        $currentMonthName      = date("Y-M", strtotime($currentMonthStartDate));
+        $currentMonthName      = date("M-Y", strtotime($currentMonthStartDate));
 
         return $currentMonthName;
     }

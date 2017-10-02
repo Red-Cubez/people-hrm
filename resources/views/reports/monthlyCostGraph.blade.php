@@ -1,4 +1,5 @@
-<?php $i=0; $projectNames=array(); ?>
+<?php $i=0; ?>
+
 <div class="panel panel-default">
     <div class="panel-body">
         <div style="width: 600px; height: 400px;display: block;">
@@ -8,30 +9,46 @@
     </div>
 </div>
 <script type="text/javascript">
-    data = {     
+    data = {
+                labels: getChartMonthLabel(),
                 datasets: [
-                        {
-                          data: getChartData(),                                  
-                          label: "test",
-                          fill: false,
-                          backgroundColor: "#991d31",
-                          borderColor: "#991d31",
-                          pointHitRadius: 20,
-                        },
-         
-                    {
-                          label: "Monthly Cost",
-                          data:  getMonthlyCost(),
-                          fill: false,
-                          backgroundColor: "orange",
-                          borderColor: "orange",
-                          pointHitRadius: 20,  
-                        },
+                          @foreach($monthlyTimelines as $monthlyTimeline)
+                             @if($i>0)
+                               {
+
+                                 label: "@if(count($monthlyTimeline)>0) {{$monthlyTimeline[0]->projectName}}  @endif",
+                                 data:  [ @foreach($monthlyTimeline as $monthlyTimelineItem)
+                                            {                    
+                                                 x: "{{$monthlyTimelineItem->monthName}}",
+
+                                                 y: "{{$monthlyTimelineItem->totalCost}}",
+
+                                            },
+                              
+                                           @endforeach
+                                        ],
+                                 fill: false,
+                                 backgroundColor: "#991d31",
+                                 borderColor: "#991d31",
+                                 pointHitRadius: 20,
+                               },
+                              @endif
+                                 <?php $i++; ?>
+                          @endforeach
+
+                                {
+                                 label: "Monthly Cost",
+                                 data:  getMonthlyCost(),
+                                 fill: false,
+                                 backgroundColor: "orange",
+                                 borderColor: "orange",
+                                 pointHitRadius: 20,  
+                                 },
 
                           ],
                
-                labels: getChartMonthLabel()
-                    };
+               
+              };
 
 
             var ctx = document.getElementById("myChartWithCost");
@@ -69,25 +86,13 @@
                 }
             });
       
- function getChartData()
-  {
-    return [
-                    @foreach (($monthlyTimelines as $monthlyTimeline)
-                    /                     
-                        x: "{{$monthlyTimeline->monthName}}",
-                        y: "{{$monthlyTimeline->totalCost}}"
-                    },
-                    @endforeach
-            ];
-          
-  
-  
-        }
+
         
         function getChartMonthLabel() {
 
-            return [0,
-                @foreach ($monthlyTimelines as $monthlyTimeline)
+            return [
+                @foreach ($monthlyTimelines[0] as $monthlyTimeline)
+
                     "{{$monthlyTimeline->monthName}}",
                 @endforeach
             ];
@@ -95,12 +100,15 @@
          function getMonthlyCost()
          {
 
-           return [0, @foreach($monthlyTimelines as $monthlyTimeline )
+           return [ @foreach($monthlyTimelines[0] as $monthlyTimeline )
                      
-                      
-                                           "{{$monthlyTimeline->totalCost}}",
+                      {
+                                           
+                                         x: "{{$monthlyTimeline->monthName}}",
+
+                                         y: "{{$monthlyTimeline->totalCost}}",
                                  
-                    
+                    },
                       @endforeach
               
                       

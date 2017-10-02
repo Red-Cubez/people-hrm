@@ -12,28 +12,30 @@
             data = {
                 datasets: [
                  @foreach($monthlyTimelines as $monthlyTimeline)
+                  @if($i>0)
                         {
                           <?php $i++; ?>
-                          label: "test ",
+                          label: "@if(count($monthlyTimeline)>0) {{$monthlyTimeline[0]->projectName}}  @endif",
                           data:  [
-                                @foreach($monthlyTimeline->monthlyTimelineItems as $monthlyTimelineItem)
-         
+                                @foreach($monthlyTimeline as $monthlyTimelineItem)
+                                
+           
                                     {
                       
                                          x: "{{$monthlyTimelineItem->monthName}}",
                                          y: "{{$monthlyTimelineItem->totalProfit}}",
 
                                    },
-  
+                              
                                    @endforeach
-             
                                    ],
                           fill: false,
                           backgroundColor: "#991d31",
                           borderColor: "#991d31",
                           pointHitRadius: 20,
                         },
-                         
+                    @endif
+                         <?php $i++; ?>
                 @endforeach
                     {
                           label: "Monthly Profit",
@@ -90,15 +92,17 @@
         function getChartMonthLabel() {
 
             return [0,
-                @foreach ($monthlyTimelines as $monthlyTimeline)
+                @foreach ($monthlyTimelines[0] as $monthlyTimeline)
+
                     "{{$monthlyTimeline->monthName}}",
                 @endforeach
             ];
+        
         }
          function getMonthlyProfit()
          {
 
-           return [0, @foreach($monthlyTimelines as $monthlyTimeline )
+              return [0, @foreach($monthlyTimelines[0] as $monthlyTimeline )
                      
                       
                                            "{{$monthlyTimeline->totalProfit}}",
@@ -109,6 +113,7 @@
                       
                      
                 ];
+
 
          }
         

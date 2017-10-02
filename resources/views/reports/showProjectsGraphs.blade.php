@@ -2,7 +2,7 @@
 @extends('layouts.app')
 
 @section('content')
-@if(count($projectsTimelines) > 0)
+@if(count($monthlyTimelines) > 0)
     <div class="container">
         <div class="row">
             <div class="col-sm-8">

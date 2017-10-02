@@ -1,43 +1,24 @@
-
-<?php $i=0; ?>
-
- <div class="panel panel-default">
-        <div class="panel-body">
-            <div style="width: 600px; height: 400px;display: block;">
-                <canvas id="myChartWithCost"></canvas>
-            </div>
+<?php $i=0; $projectNames=array(); ?>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div style="width: 600px; height: 400px;display: block;">
+            <canvas id="myChartWithCost">
+            </canvas>
         </div>
     </div>
-
- <script type="text/javascript">
-        
-            data = {
+</div>
+<script type="text/javascript">
+    data = {     
                 datasets: [
-                 @foreach($projectsTimelines as $projectTimelines)
                         {
-                          <?php $i++; ?>
-                          label: "@if(count($projectTimelines)>0) {{$projectTimelines[0]->project->name}}  @endif",
-                          data:  [
-                                @foreach($startAndEndDateTimelines as $startAndEndDateTimeline)
-                                @foreach ($projectTimelines as $projectTimeline)
-                                  @if($startAndEndDateTimeline->monthName==$projectTimeline->monthName)
-                                    {
-                      
-                                         x: "{{$projectTimeline->monthName}}",
-                                         y: "{{$projectTimeline->cost}}",
-
-                                   },
-                                   @endif
-                                   @endforeach
-                                   @endforeach
-                                   ],
+                          data: getChartData(),                                  
+                          label: "test",
                           fill: false,
                           backgroundColor: "#991d31",
                           borderColor: "#991d31",
                           pointHitRadius: 20,
                         },
-                         
-                @endforeach
+         
                     {
                           label: "Monthly Cost",
                           data:  getMonthlyCost(),
@@ -88,23 +69,36 @@
                 }
             });
       
-
+ function getChartData()
+  {
+    return [
+                    @foreach (($monthlyTimelines as $monthlyTimeline)
+                    /                     
+                        x: "{{$monthlyTimeline->monthName}}",
+                        y: "{{$monthlyTimeline->totalCost}}"
+                    },
+                    @endforeach
+            ];
+          
+  
+  
+        }
         
         function getChartMonthLabel() {
 
             return [0,
-                @foreach ($startAndEndDateTimelines as $startAndEndDateTimeline)
-                    "{{$startAndEndDateTimeline->monthName}}",
+                @foreach ($monthlyTimelines as $monthlyTimeline)
+                    "{{$monthlyTimeline->monthName}}",
                 @endforeach
             ];
         }
          function getMonthlyCost()
          {
 
-           return [0, @foreach($startAndEndDateTimelines as $startAndEndDateTimeline )
+           return [0, @foreach($monthlyTimelines as $monthlyTimeline )
                      
                       
-                                           "{{$startAndEndDateTimeline->cost}}",
+                                           "{{$monthlyTimeline->totalCost}}",
                                  
                     
                       @endforeach
@@ -114,6 +108,4 @@
                 ];
 
          }
-        
-    
-    </script>
+</script>

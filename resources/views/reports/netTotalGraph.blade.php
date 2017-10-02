@@ -11,22 +11,20 @@
         
             data = {
                 datasets: [
-                 @foreach($projectsTimelines as $projectTimelines)
+                 @foreach($monthlyTimelines as $monthlyTimeline)
                         {
                           <?php $i++; ?>
-                          label: "@if(count($projectTimelines)>0) {{$projectTimelines[0]->project->name}}  @endif",
+                          label: "test",
                           data:  [
-                                @foreach($startAndEndDateTimelines as $startAndEndDateTimeline)
-                                @foreach ($projectTimelines as $projectTimeline)
-                                  @if($startAndEndDateTimeline->monthName==$projectTimeline->monthName)
+                                @foreach($monthlyTimeline->monthlyTimelineItems as $monthlyTimelineItem)
+
                                     {
                       
-                                         x: "{{$projectTimeline->monthName}}",
-                                         y: "@if(count($projectTimelines)>0) {{$projectTimelines[0]->project->budget}}  @endif",
+                                         x: "{{$monthlyTimelineItem->monthName}}",
+                                         y: "{{$monthlyTimelineItem->totalRevenue}}",
 
                                    },
-                                   @endif
-                                   @endforeach
+                                 
                                    @endforeach
                                    ],
                           fill: false,
@@ -91,18 +89,18 @@
         function getChartMonthLabel() {
 
             return [0,
-                @foreach ($startAndEndDateTimelines as $startAndEndDateTimeline)
-                    "{{$startAndEndDateTimeline->monthName}}",
+                @foreach ($monthlyTimelines as $monthlyTimeline)
+                    "{{$monthlyTimeline->monthName}}",
                 @endforeach
             ];
         }
          function getTotalRevenue()
          {
 
-           return [0, @foreach($startAndEndDateTimelines as $startAndEndDateTimeline )
+           return [0, @foreach($monthlyTimelines as $monthlyTimeline )
                      
                                            
-                                           "{{$startAndEndDateTimeline->revenue}}",
+                                           "{{$monthlyTimeline->totalRevenue}}",
                                  
                     
                       @endforeach

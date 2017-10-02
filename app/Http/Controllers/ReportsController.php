@@ -104,6 +104,9 @@ class ReportsController extends Controller
 
         $startAndEndDateTimelinesWithCostProfitAndNetTotal =
         $this->ReportService->startAndEndDateTimelinesWithCostProfitAndNetTotal($startDate, $endDate, $companyId);
+    
+        $monthlyTimelines=$this->ReportService->setUpMontlhyTimelines($startAndEndDateTimelinesWithCostProfitAndNetTotal);
+
 
         //////
 
@@ -116,14 +119,14 @@ class ReportsController extends Controller
         // $startAndEndDateTimelinesWithCostProfitAndNetTotal =
         // $this->ReportService->getTotalRevenue($startAndEndDateTimelinesWithCostAndProfit, $projectsTimelines);
 
-        // return view
-        //     ('reports/showProjectsGraphs',
-        //     [
-        //         'projectsTimelines'        => $projectsTimelines,
+        return view
+            ('reports/showProjectsGraphs',
+            [
+                //'projectsTimelines'        => $projectsTimelines,
 
-        //         'startAndEndDateTimelines' => $startAndEndDateTimelinesWithCostProfitAndNetTotal,
+                'monthlyTimelines' => $startAndEndDateTimelinesWithCostProfitAndNetTotal,
 
-        //     ]);
+            ]);
     }
 
     public function showClientProjectsReport(Request $request, $companyId)

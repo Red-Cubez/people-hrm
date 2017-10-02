@@ -37,7 +37,7 @@ class ProjectMonthlyTimeLine
     public $projectBudget;
 
 }
-class MOnthlyTimeline
+class MonthlyTimeline
 {
     public $monthName;
     public $startDate;
@@ -46,6 +46,7 @@ class MOnthlyTimeline
     public $totalCost;
     public $totalProfit;
     public $monthlyTimelineItems;
+    public $projectNames;
 }
 class ReportService implements IReportService
 {
@@ -248,9 +249,10 @@ class ReportService implements IReportService
         $totalMonths      = $this->DateTimeService->calculateMonthsBetweenTwoDates($startDate, $endDate);
         $timeLine         = array();
         $monthlyTimelines = array();
+        $projectNames     = array();
 
-        $startDate = date("Y-m-d", strtotime($startDate));
-
+        $startDate           = date("Y-m-d", strtotime($startDate));
+        $monthlyCost         = 0;
         $startDateInDateTime = new \DateTime($startDate);
         $totalRevenue        = 0;
         $totalProfit         = 0;
@@ -274,7 +276,10 @@ class ReportService implements IReportService
 
             foreach ($projectsMonthlyTimeLine as $projectMonthlyTimeLine) {
 
-                $monthlyTimeline->totalCost    = $monthlyTimeline->totalCost + $projectMonthlyTimeLine->totalCost;
+                $monthlyCost = $monthlyCost + $monthlyTimeline->totalCost + $projectMonthlyTimeLine->totalCost;
+
+                $monthlyTimeline->totalCost = $monthlyCost;
+
                 $monthlyTimeline->totalRevenue = $totalRevenue + $projectMonthlyTimeLine->totalRevenue;
                 $monthlyTimeline->totalProfit  = $totalProfit + $projectMonthlyTimeLine->totalProfit;
                 $totalRevenue                  = $totalRevenue + $projectMonthlyTimeLine->totalRevenue;
@@ -288,7 +293,15 @@ class ReportService implements IReportService
 
         }
 
-        dd($monthlyTimelines);
+        foreach ($monthlyTimelines as $monthlyTimeline) {
+            $monthlyTimeline->projectNames = array();
+            foreach ($monthlyTimeline->monthlyTimelineItems as $monthlyTimelineItem) {
+                array_push($monthlyTimeline->projectNames, $monthlyTimelineItem->projectName);
+
+            }
+        }
+
+        return $monthlyTimelines;
 
     }
 
@@ -298,7 +311,7 @@ class ReportService implements IReportService
         $currentMonthStartDate = $currentMonthStartDate->format("Y-m-d");
         $currentMonthName      = date("M-Y", strtotime($currentMonthStartDate));
 
-        $timeline = new MOnthlyTimeline();
+        $timeline = new MonthlyTimeline();
 
         $timeline->monthName = $currentMonthName;
         $timeline->startDate = $currentMonthStartDate;
@@ -500,6 +513,28 @@ class ReportService implements IReportService
 
         }
         return $totalCost;
+    }
+
+    public function setUpMontlhyTimelines($monthlyTimelines)
+    {
+        $counter = 0;
+
+        foreach ($monthlyTimelines as $monthlyTimeline) {
+            if ($counter == 0 && count($monthlyTimelines) > 0) {
+                $monthlyTimeline->monthlyTimelineArray=array();
+                foreach ($monthlyTimelines as $monthlyTimeline) {
+                       
+                    array_push($monthlyTimelines[0]->monthlyTimelineArray,$monthlyTimeline);
+
+                    $counter++;
+
+                }
+            } else {
+
+            }
+
+        }
+        dd($monthlyTimelines);
     }
 
     // public function projectWithIn($currentMonthStartDate, $currentMonthEndDate, $projectStartDate, $projectEndDate)

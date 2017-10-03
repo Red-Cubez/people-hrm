@@ -41,9 +41,9 @@
                                         ],
                                  fill: false,
 
-                                 backgroundColor: "@if(count($monthlyTimeline)>0) {{$monthlyTimeline[0]->color}}  @endif",
-                                 borderColor: "@if(count($monthlyTimeline)>0) {{$monthlyTimeline[0]->color}}  @endif",
-                                  pointHoverBackgroundColor:"{{$monthlyTimeline[0]->color}}" ,
+                                 backgroundColor: "{{$monthlyTimeline[0]->color}}"  ,
+                                 borderColor: " {{$monthlyTimeline[0]->color}} ",
+                                 pointHoverBackgroundColor:"{{$monthlyTimeline[0]->color}}" ,
                                  pointHoverBorderColor: "{{$monthlyTimeline[0]->color}}",         
                                  pointHitRadius: 20,
 
@@ -77,11 +77,15 @@
                     legend: {
                         position: 'bottom'
                     },
-                  
-                    hover: {
-                        mode:'index',
+                       tooltips: {
+                         enabled: true,
+                        mode: 'index',
                         intersect:false,
+                      },
+                    hover: {
+                     
                     },
+
                     scales: {
                         xAxes: [{
                             display: true,
@@ -136,12 +140,5 @@
 
          }
 
-         function getRandomColor() {
-  var letters = '0123456789ABCDEF';
-  var color = '#';
-  for (var i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
-}
+         
 </script>

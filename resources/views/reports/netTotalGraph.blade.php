@@ -37,11 +37,11 @@
                                    @endforeach
                                    ],
                           fill: false,
-                           backgroundColor: "@if(count($monthlyTimeline)>0) {{$monthlyTimeline[0]->color}}  @endif",
-                           borderColor: "@if(count($monthlyTimeline)>0) {{$monthlyTimeline[0]->color}}  @endif",
-                                pointHoverBackgroundColor:"{{$monthlyTimeline[0]->color}}" ,
-                                 pointHoverBorderColor: "{{$monthlyTimeline[0]->color}}",
-                          pointHitRadius: 20,
+                             backgroundColor: "{{$monthlyTimeline[0]->color}}"  ,
+                                 borderColor: " {{$monthlyTimeline[0]->color}} ",
+                                 pointHoverBackgroundColor:"{{$monthlyTimeline[0]->color}}" ,
+                                 pointHoverBorderColor: "{{$monthlyTimeline[0]->color}}",         
+                                 pointHitRadius: 20,
                         },
                     @endif
                          <?php $i++; ?>
@@ -70,6 +70,11 @@
                     legend: {
                         position: 'bottom'
                     },
+                     tooltips: {
+                         enabled: true,
+                        mode: 'index',
+                        intersect:false,
+                      },
                     hover: {
                         
                     },

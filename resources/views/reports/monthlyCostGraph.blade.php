@@ -8,6 +8,7 @@
         </div>
     </div>
 </div>
+
 <script type="text/javascript">
     data = {
                 labels: getChartMonthLabel(),
@@ -15,7 +16,7 @@
                           @foreach($monthlyTimelines as $monthlyTimeline)
                              @if($i>0)
                                {
-
+                                
                                  label: @if(count($monthlyTimeline)>0) "{{$monthlyTimeline[0]->projectName}}",  @endif
                                  data:  [ 
 
@@ -42,7 +43,10 @@
 
                                  backgroundColor: "@if(count($monthlyTimeline)>0) {{$monthlyTimeline[0]->color}}  @endif",
                                  borderColor: "@if(count($monthlyTimeline)>0) {{$monthlyTimeline[0]->color}}  @endif",
+                                  pointHoverBackgroundColor:"{{$monthlyTimeline[0]->color}}" ,
+                                 pointHoverBorderColor: "{{$monthlyTimeline[0]->color}}",         
                                  pointHitRadius: 20,
+
                                },
                               @endif
                                  <?php $i++; ?>
@@ -64,6 +68,7 @@
 
 
             var ctx = document.getElementById("myChartWithCost");
+
             var myLineChart = new Chart(ctx, {
                 type: 'line',
                 data: data,
@@ -72,8 +77,10 @@
                     legend: {
                         position: 'bottom'
                     },
+                  
                     hover: {
-                        
+                        mode:'index',
+                        intersect:false,
                     },
                     scales: {
                         xAxes: [{

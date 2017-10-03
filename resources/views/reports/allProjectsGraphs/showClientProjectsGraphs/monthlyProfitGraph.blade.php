@@ -41,7 +41,10 @@
                           fill: false,
                            backgroundColor: "@if(count($monthlyTimeline)>0) {{$monthlyTimeline[0]->color}}  @endif",
                            borderColor: "@if(count($monthlyTimeline)>0) {{$monthlyTimeline[0]->color}}  @endif",
+                               pointHoverBackgroundColor:"{{$monthlyTimeline[0]->color}}" ,
+                                 pointHoverBorderColor: "{{$monthlyTimeline[0]->color}}",
                           pointHitRadius: 20,
+
                         },
                     @endif
                          <?php $i++; ?>
@@ -71,7 +74,7 @@
                         position: 'bottom'
                     },
                     hover: {
-                        
+                        mode:'index'
                     },
                     scales: {
                         xAxes: [{

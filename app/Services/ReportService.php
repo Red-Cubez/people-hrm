@@ -354,6 +354,7 @@ class ReportService implements IReportService
                 $projectMonthlyTimeLine->endDate       = $projectEndDate;
                 $projectMonthlyTimeLine->totalRevenue  = $revenue;
                 $projectMonthlyTimeLine->totalProfit   = $profit;
+                $projectMonthlyTimeLine->isActive=true;
 
                
             }
@@ -374,6 +375,7 @@ class ReportService implements IReportService
                 $projectMonthlyTimeLine->endDate       = $projectEndDate;
                 $projectMonthlyTimeLine->totalRevenue  = null;
                 $projectMonthlyTimeLine->totalProfit   = null;
+                $projectMonthlyTimeLine->isActive=false;
             }
              array_push($projectsMonthlyTimeLine, $projectMonthlyTimeLine);
         }

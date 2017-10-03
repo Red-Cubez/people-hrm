@@ -17,13 +17,24 @@
                                {
 
                                  label: "@if(count($monthlyTimeline)>0) {{$monthlyTimeline[0]->projectName}}  @endif",
-                                 data:  [ @foreach($monthlyTimeline as $monthlyTimelineItem)
+                                 data:  [ 
+
+                                          @foreach($monthlyTimeline as $monthlyTimelineItem)
+                                          @if($monthlyTimelineItem->isActive)
                                             {                    
                                                  x: "{{$monthlyTimelineItem->monthName}}",
 
                                                  y: "{{$monthlyTimelineItem->totalCost}}",
 
                                             },
+                                           @else
+                                              {                    
+                                                 x: null,
+
+                                                 y: null,
+
+                                            },
+                                           @endif 
                               
                                            @endforeach
                                         ],

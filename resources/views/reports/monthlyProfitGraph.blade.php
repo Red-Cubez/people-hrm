@@ -16,8 +16,9 @@
                         {
                           <?php $i++; ?>
                           label: "@if(count($monthlyTimeline)>0) {{$monthlyTimeline[0]->projectName}}  @endif",
-                          data:  [
+                          data:  [ 
                                 @foreach($monthlyTimeline as $monthlyTimelineItem)
+                                 @if($monthlyTimelineItem->isActive)
                                 
            
                                     {
@@ -26,6 +27,14 @@
                                          y: "{{$monthlyTimelineItem->totalProfit}}",
 
                                    },
+                                   @else
+                                              {                    
+                                                 x: null,
+
+                                                 y: null,
+
+                                            },
+                                           @endif 
                               
                                    @endforeach
                                    ],
@@ -91,7 +100,7 @@
         
         function getChartMonthLabel() {
 
-            return [0,
+            return [
                 @foreach ($monthlyTimelines[0] as $monthlyTimeline)
 
                     "{{$monthlyTimeline->monthName}}",
@@ -102,17 +111,22 @@
          function getMonthlyProfit()
          {
 
-              return [0, @foreach($monthlyTimelines[0] as $monthlyTimeline )
+               return [ @foreach($monthlyTimelines[0] as $monthlyTimeline )
                      
-                      
-                                           "{{$monthlyTimeline->totalProfit}}",
+                      {
+                                           
+                                         x: "{{$monthlyTimeline->monthName}}",
+
+                                         y: "{{$monthlyTimeline->totalProfit}}",
                                  
-                    
+                    },
                       @endforeach
               
                       
                      
                 ];
+
+
 
 
          }

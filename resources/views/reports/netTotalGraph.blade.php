@@ -18,15 +18,22 @@
                           label: "@if(count($monthlyTimeline)>0) {{$monthlyTimeline[0]->projectName}}  @endif",
                           data:  [
                                 @foreach($monthlyTimeline as $monthlyTimelineItem)
+                                 @if($monthlyTimelineItem->isActive)
                                 
-           
                                     {
                       
                                          x: "{{$monthlyTimelineItem->monthName}}",
                                          y: "{{$monthlyTimelineItem->totalRevenue}}",
 
                                    },
-                              
+                                @else
+                                              {                    
+                                                 x: null,
+
+                                                 y: null,
+
+                                            },
+                                           @endif 
                                    @endforeach
                                    ],
                           fill: false,
@@ -91,7 +98,7 @@
         
         function getChartMonthLabel() {
 
-             return [0,
+             return [
                 @foreach ($monthlyTimelines[0] as $monthlyTimeline)
 
                     "{{$monthlyTimeline->monthName}}",
@@ -101,12 +108,15 @@
          function getTotalRevenue()
          {
 
-            return [0, @foreach($monthlyTimelines[0] as $monthlyTimeline )
+            return [ @foreach($monthlyTimelines[0] as $monthlyTimeline )
                      
-                      
-                                           "{{$monthlyTimeline->totalRevenue}}",
+                      {
+                                           
+                                         x: "{{$monthlyTimeline->monthName}}",
+
+                                         y: "{{$monthlyTimeline->totalRevenue}}",
                                  
-                    
+                    },
                       @endforeach
               
                       

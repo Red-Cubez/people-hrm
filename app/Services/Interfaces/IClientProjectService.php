@@ -13,7 +13,7 @@ interface IClientProjectService
     public function viewClientProject($clientProjectId);
     public function getClientProjectDetails($clientProjectId);
     public function getAllClientsOfCompanyWithProjects($companyId);
-    public function getAllClientProjectsOfCompany($companyId, $startDate, $endDate);
+    public function getAllClientProjectsOfCompany($companyId);
     public function getProjectStartAndEndDate($project);
 
 }

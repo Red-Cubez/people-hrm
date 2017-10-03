@@ -2,46 +2,54 @@
  <div class="panel panel-default">
         <div class="panel-body">
             <div style="width: 600px; height: 400px;display: block;">
-                <canvas id="myClientProjectsChartWithNetTotal"></canvas>
+                <canvas id="clientProjectsChartWithTotalRevenue"></canvas>
             </div>
         </div>
     </div>
 
  <script type="text/javascript">
-       
+        
             data = {
                 datasets: [
-                 @foreach($clientProjectsTimelines as $projectTimelines)
+                  @foreach($clientProjectsMonthlyTimelines as $monthlyTimeline)
+                  @if($i>0)
                         {
                           <?php $i++; ?>
-                          label: "@if(count($projectTimelines)>0) {{$projectTimelines[0]->project->name}}  @endif",
+                          label: "@if(count($monthlyTimeline)>0) {{$monthlyTimeline[0]->projectName}}  @endif",
                           data:  [
-                                @foreach($clientProjectsStartAndEndDateTimelines as $startAndEndDateTimeline)
-                                @foreach ($projectTimelines as $projectTimeline)
-                                  @if($startAndEndDateTimeline->monthName==$projectTimeline->monthName)
+                                @foreach($monthlyTimeline as $monthlyTimelineItem)
+                                 @if($monthlyTimelineItem->isActive)
+                                
                                     {
                       
-                                         x: "{{$projectTimeline->monthName}}",
-                                         y: "@if(count($projectTimelines)>0) {{$projectTimelines[0]->project->budget}}  @endif",
+                                         x: "{{$monthlyTimelineItem->monthName}}",
+                                         y: "{{$monthlyTimelineItem->totalRevenue}}",
 
                                    },
-                                   @endif
-                                   @endforeach
+                                @else
+                                              {                    
+                                                 x: null,
+
+                                                 y: null,
+
+                                            },
+                                           @endif 
                                    @endforeach
                                    ],
                           fill: false,
-                          backgroundColor: "#991d31",
-                          borderColor: "#991d31",
+                           backgroundColor: "@if(count($monthlyTimeline)>0) {{$monthlyTimeline[0]->color}}  @endif",
+                           borderColor: "@if(count($monthlyTimeline)>0) {{$monthlyTimeline[0]->color}}  @endif",
                           pointHitRadius: 20,
                         },
-                         
+                    @endif
+                         <?php $i++; ?>
                 @endforeach
                     {
-                          label: "Net Total",
-                          data:  getNetTotal(),
+                          label: "Total Revenue",
+                          data:  getTotalRevenue(),
                           fill: false,
-                          backgroundColor: "blue",
-                          borderColor: "blue",
+                          backgroundColor: "gray",
+                          borderColor: "gray",
                           pointHitRadius: 20,  
                         },
 
@@ -51,7 +59,7 @@
                     };
 
 
-            var ctx = document.getElementById("myClientProjectsChartWithNetTotal");
+            var ctx = document.getElementById("clientProjectsChartWithTotalRevenue");
             var myLineChart = new Chart(ctx, {
                 type: 'line',
                 data: data,
@@ -81,35 +89,39 @@
                     },
                     title: {
                         display: true,
-                        text: 'Client Projects Net Total'
+                        text: 'Projects Total Revenue'
                     }
                 }
             });
-  
+        
+
         
         function getChartMonthLabel() {
 
-            return [0,
-                @foreach ($clientProjectsStartAndEndDateTimelines as $startAndEndDateTimeline)
-                    "{{$startAndEndDateTimeline->monthName}}",
+             return [
+                @foreach ($clientProjectsMonthlyTimelines[0] as $monthlyTimeline)
+
+                    "{{$monthlyTimeline->monthName}}",
                 @endforeach
             ];
         }
-         function getNetTotal()
+         function getTotalRevenue()
          {
 
-           return [0, @foreach($clientProjectsStartAndEndDateTimelines as $startAndEndDateTimeline )
+            return [ @foreach($clientProjectsMonthlyTimelines[0] as $monthlyTimeline )
                      
-                      
-                                           "{{$startAndEndDateTimeline->revenue}}",
+                      {
+                                           
+                                         x: "{{$monthlyTimeline->monthName}}",
+
+                                         y: "{{$monthlyTimeline->totalRevenue}}",
                                  
-                    
+                    },
                       @endforeach
               
                       
                      
                 ];
-
          }
         
     

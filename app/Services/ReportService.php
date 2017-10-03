@@ -136,8 +136,7 @@ class ReportService implements IReportService
     public function getStartAndEndDateTimelines($startDate, $endDate)
     {
 
-        $totalMonths = $this->ProjectGrapher -
-        calculateMonthsBetweenTwoDates($startDate, $endDate);
+        $totalMonths = $this->ProjectGrapher->calculateMonthsBetweenTwoDates($startDate, $endDate);
         $timeLine = array();
 
         $startDate = date("Y-m-d", strtotime($startDate));
@@ -241,15 +240,13 @@ class ReportService implements IReportService
         return $companyInternalProjectsTimeLines;
     }
 /////////////////////////////////////////////////New//////////////////////////////////////////////////
-    public function startAndEndDateTimelinesWithCostProfitAndNetTotal($startDate, $endDate, $companyId)
+    public function startAndEndDateTimelinesWithCostProfitAndNetTotal($startDate, $endDate, $projects)
     {
 
-        //$this->DateTimeService->getStartAndEndDateTimelines($startDate, $endDate, $companyId);
-
-        $totalMonths      = $this->DateTimeService->calculateMonthsBetweenTwoDates($startDate, $endDate);
-        $timeLine         = array();
+        $totalMonths = $this->DateTimeService->calculateMonthsBetweenTwoDates($startDate, $endDate);
+        // $timeLine         = array();
         $monthlyTimelines = array();
-        $projectNames     = array();
+        // $projectNames     = array();
 
         $startDate           = date("Y-m-d", strtotime($startDate));
         $monthlyCost         = 0;
@@ -270,14 +267,14 @@ class ReportService implements IReportService
             $monthlyTimeline->startDate = $firstDateOfCurrentMonth->format("Y-m-d");
             $monthlyTimeline->endDate   = $lastDateOfCurrentMonth;
 
-            $projectsMonthlyTimeLine = $this->setupTimeline($firstDateOfCurrentMonth, $lastDateOfCurrentMonth, $companyId);
+            $projectsMonthlyTimeLine = $this->setupTimeline($firstDateOfCurrentMonth, $lastDateOfCurrentMonth, $projects,$startDate,$endDate);
 
             $monthlyTimeline->monthlyTimelineItems = array();
 
             foreach ($projectsMonthlyTimeLine as $projectMonthlyTimeLine) {
-        
-               // $monthlyCost = $monthlyCost + $monthlyTimeline->totalCost + $projectMonthlyTimeLine->totalCost;
-                   $monthlyCost = $monthlyCost  + $projectMonthlyTimeLine->totalCost;
+
+                // $monthlyCost = $monthlyCost + $monthlyTimeline->totalCost + $projectMonthlyTimeLine->totalCost;
+                $monthlyCost = $monthlyCost + $projectMonthlyTimeLine->totalCost;
 
                 $monthlyTimeline->totalCost = $monthlyCost;
 
@@ -285,30 +282,20 @@ class ReportService implements IReportService
                 $monthlyTimeline->totalProfit  = $totalProfit + $projectMonthlyTimeLine->totalProfit;
                 $totalRevenue                  = $totalRevenue + $projectMonthlyTimeLine->totalRevenue;
                 $totalProfit                   = $totalProfit + $projectMonthlyTimeLine->totalProfit;
-       
+
                 array_push($monthlyTimeline->monthlyTimelineItems, $projectMonthlyTimeLine);
 
             }
 
-
             array_push($monthlyTimelines, $monthlyTimeline);
 
         }
-      //  dd($monthlyTimelines);
-
-        // foreach ($monthlyTimelines as $monthlyTimeline) {
-        //     $monthlyTimeline->projectNames = array();
-        //     foreach ($monthlyTimeline->monthlyTimelineItems as $monthlyTimelineItem) {
-        //         array_push($monthlyTimeline->projectNames, $monthlyTimelineItem->projectName);
-
-        //     }
-        // }
 
         return $monthlyTimelines;
 
     }
 
-    public function setupTimeline($currentMonthStartDate, $currentMonthEndDate, $companyId)
+    public function setupTimeline($currentMonthStartDate, $currentMonthEndDate, $projects,$startDate,$endDate)
     {
 
         $currentMonthStartDate = $currentMonthStartDate->format("Y-m-d");
@@ -321,25 +308,34 @@ class ReportService implements IReportService
         $timeline->endDate   = $currentMonthEndDate;
 
         $timeline->timelineItems = array();
-        $projectsMonthlyTimeLine = $this->getProjectsMonthlyTimeLine($companyId, $currentMonthStartDate, $currentMonthEndDate);
+
+        // $companyInternalProjects = $this->CompanyProjectService->getAllInternalProjectsOfCompany($companyId);
+        $projectsMonthlyTimeLine = $this->getProjectsMonthlyTimeLine($projects, $currentMonthStartDate, $currentMonthEndDate,$startDate,$endDate);
 
         return $projectsMonthlyTimeLine;
     }
 
-    public function getProjectsMonthlyTimeLine($companyId, $currentMonthStartDate, $currentMonthEndDate)
+    public function getProjectsMonthlyTimeLine($projects,$currentMonthStartDate, $currentMonthEndDate,$startDate,$endDate)
+    {
+
+       
+        $projectsMonthlyTimeLine = $this->setupCostProfitAndRevenue($projects,$currentMonthStartDate, $currentMonthEndDate,$startDate,$endDate);
+
+        return $projectsMonthlyTimeLine;
+
+    }
+
+    public function setupCostProfitAndRevenue($projects,$currentMonthStartDate,$currentMonthEndDate,$startDate,$endDate)
     {
         $projectsMonthlyTimeLine = array();
-
-        $companyInternalProjects = $this->CompanyProjectService->getAllInternalProjectsOfCompany($companyId);
-
-        foreach ($companyInternalProjects as $companyInternalProject) {
-
-            list($projectStartDate, $projectEndDate) = $this->CompanyProjectService->getProjectStartAndEndDate($companyInternalProject);
+        foreach ($projects as $project) {
+   
+            list($projectStartDate, $projectEndDate) = $this->ProjectService->getProjectStartAndEndDate($project);
 
             if (($currentMonthStartDate <= $projectEndDate) && ($projectStartDate <= $currentMonthEndDate)
                 && ($currentMonthStartDate <= $currentMonthEndDate) && ($projectStartDate <= $projectEndDate)) {
 
-                list($monthlyCostSum, $revenue, $profit) = $this->projectTimeline($companyInternalProject, $currentMonthStartDate, $currentMonthEndDate, $projectStartDate, $projectEndDate);
+                list($monthlyCostSum, $revenue, $profit) = $this->projectTimeline($project, $currentMonthStartDate, $currentMonthEndDate, $projectStartDate, $projectEndDate);
 
                 $currentMonthName = $this->DateTimeService->getMonthNameAndYear($currentMonthStartDate);
 
@@ -347,20 +343,18 @@ class ReportService implements IReportService
 
                 $projectMonthlyTimeLine->totalCost     = $monthlyCostSum;
                 $projectMonthlyTimeLine->monthName     = $currentMonthName;
-                $projectMonthlyTimeLine->projectName   = $companyInternalProject->name;
-                $projectMonthlyTimeLine->projectId     = $companyInternalProject->id;
-                $projectMonthlyTimeLine->projectBudget = $companyInternalProject->budget;
+                $projectMonthlyTimeLine->projectName   = $project->name;
+                $projectMonthlyTimeLine->projectId     = $project->id;
+                $projectMonthlyTimeLine->projectBudget = $project->budget;
                 $projectMonthlyTimeLine->startDate     = $projectStartDate;
                 $projectMonthlyTimeLine->endDate       = $projectEndDate;
                 $projectMonthlyTimeLine->totalRevenue  = $revenue;
                 $projectMonthlyTimeLine->totalProfit   = $profit;
-                $projectMonthlyTimeLine->isActive=true;
+                $projectMonthlyTimeLine->isActive      = true;
+                $projectMonthlyTimeLine->color         = $this->random_color();
 
-               
-            }
-            else
-            {
-
+                array_push($projectsMonthlyTimeLine, $projectMonthlyTimeLine);
+            } elseif ($projectStartDate >= $startDate && $projectEndDate <= $endDate) {
 
                 $currentMonthName = $this->DateTimeService->getMonthNameAndYear($currentMonthStartDate);
 
@@ -368,18 +362,20 @@ class ReportService implements IReportService
 
                 $projectMonthlyTimeLine->totalCost     = null;
                 $projectMonthlyTimeLine->monthName     = $currentMonthName;
-                $projectMonthlyTimeLine->projectName   = $companyInternalProject->name;
-                $projectMonthlyTimeLine->projectId     = $companyInternalProject->id;
+                $projectMonthlyTimeLine->projectName   = $project->name;
+                $projectMonthlyTimeLine->projectId     = $project->id;
                 $projectMonthlyTimeLine->projectBudget = null;
                 $projectMonthlyTimeLine->startDate     = $projectStartDate;
                 $projectMonthlyTimeLine->endDate       = $projectEndDate;
                 $projectMonthlyTimeLine->totalRevenue  = null;
                 $projectMonthlyTimeLine->totalProfit   = null;
-                $projectMonthlyTimeLine->isActive=false;
-            }
-             array_push($projectsMonthlyTimeLine, $projectMonthlyTimeLine);
-        }
+                $projectMonthlyTimeLine->isActive      = false;
+                $projectMonthlyTimeLine->color         = $this->random_color();
 
+                array_push($projectsMonthlyTimeLine, $projectMonthlyTimeLine);
+            }
+         
+        }
         return $projectsMonthlyTimeLine;
 
     }
@@ -538,7 +534,7 @@ class ReportService implements IReportService
         }
         return $totalCost;
     }
-     public function countProjectsIn($monthlyTimelines)
+    public function countProjectsIn($monthlyTimelines)
     {
         $projectIds = array();
         foreach ($monthlyTimelines as $monthlyTimeline) {
@@ -552,7 +548,6 @@ class ReportService implements IReportService
 
         return count($projectIds);
     }
-
 
     public function setUpMontlhyTimelines($monthlyTimelines)
     {
@@ -574,46 +569,42 @@ class ReportService implements IReportService
             }
 
         }
-        $totalProjects=$this->countProjectsIn($monthlyTimelines);   
- 
+        $totalProjects = $this->countProjectsIn($monthlyTimelines);
+
         for ($i = 0; $i < $totalProjects; $i++) {
-              $projects = array();
+            $projects = array();
             foreach ($monthlyTimelines as $monthlyTimeline) {
                 // foreach ($monthlyTimeline->monthlyTimelineItems as $monthlyTimelineItem) {
                 if (isset($monthlyTimeline->monthlyTimelineItems[$i])) {
                     $a1 = (array) $monthlyTimeline->monthlyTimelineItems[$i];
-                
 
-                $a2           = $projects;
-                $inBoth       = array_intersect_assoc($a1, $a2);
-                $onlyInFirst  = array_diff_assoc($a1, $a2);
-                $onlyInSecond = array_diff_assoc($a2, $a1);
-                if (($onlyInSecond)) {
-                    //   dd("here");
+                    $a2           = $projects;
+                    $inBoth       = array_intersect_assoc($a1, $a2);
+                    $onlyInFirst  = array_diff_assoc($a1, $a2);
+                    $onlyInSecond = array_diff_assoc($a2, $a1);
+                    if (($onlyInSecond)) {
+                        //   dd("here");
 
-                    array_push($projects, $monthlyTimeline->monthlyTimelineItems[$i]);
+                        array_push($projects, $monthlyTimeline->monthlyTimelineItems[$i]);
 
-                } else {
+                    } else {
 
-                    $projects = array();
-                    array_push($projects,$monthlyTimeline->monthlyTimelineItems[$i]);
+                        $projects = array();
+                        array_push($projects, $monthlyTimeline->monthlyTimelineItems[$i]);
 
-                }
+                    }
                 }
 
                 // dd($projects);
                 //         }
 
-                
             }
-             array_push($timelines, $projects);
+            array_push($timelines, $projects);
         }
-
 
         return $timelines;
 
         //dd(sizeof($monthlyTimelines));
-       
 
         // foreach ($monthlyTimelines as $monthlyTimeline) {
         //      $k=0;
@@ -671,6 +662,15 @@ class ReportService implements IReportService
     //     }
     //     return $projectTimelines;
     // }
+
+    public function random_color_part()
+    {
+        return str_pad(dechex(mt_rand(0, 255)), 2, '0', STR_PAD_LEFT);
+    }
+    public function random_color()
+    {
+        return '#' . $this->random_color_part() . $this->random_color_part() . $this->random_color_part();
+    }
     public function getMonthlyProfit($startAndEndDateTimelines, $projectsTimelines)
     {
 

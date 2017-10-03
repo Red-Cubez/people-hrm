@@ -37,8 +37,8 @@
                                    @endforeach
                                    ],
                           fill: false,
-                          backgroundColor: "#991d31",
-                          borderColor: "#991d31",
+                           backgroundColor: "@if(count($monthlyTimeline)>0) {{$monthlyTimeline[0]->color}}  @endif",
+                           borderColor: "@if(count($monthlyTimeline)>0) {{$monthlyTimeline[0]->color}}  @endif",
                           pointHitRadius: 20,
                         },
                     @endif

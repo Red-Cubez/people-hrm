@@ -16,7 +16,7 @@
                              @if($i>0)
                                {
 
-                                 label: "@if(count($monthlyTimeline)>0) {{$monthlyTimeline[0]->projectName}}  @endif",
+                                 label: @if(count($monthlyTimeline)>0) "{{$monthlyTimeline[0]->projectName}}",  @endif
                                  data:  [ 
 
                                           @foreach($monthlyTimeline as $monthlyTimelineItem)
@@ -39,8 +39,9 @@
                                            @endforeach
                                         ],
                                  fill: false,
-                                 backgroundColor: "#991d31",
-                                 borderColor: "#991d31",
+
+                                 backgroundColor: "@if(count($monthlyTimeline)>0) {{$monthlyTimeline[0]->color}}  @endif",
+                                 borderColor: "@if(count($monthlyTimeline)>0) {{$monthlyTimeline[0]->color}}  @endif",
                                  pointHitRadius: 20,
                                },
                               @endif
@@ -51,8 +52,8 @@
                                  label: "Monthly Cost",
                                  data:  getMonthlyCost(),
                                  fill: false,
-                                 backgroundColor: "orange",
-                                 borderColor: "orange",
+                                 backgroundColor: "red",
+                                 borderColor: "red",
                                  pointHitRadius: 20,  
                                  },
 
@@ -127,4 +128,13 @@
                 ];
 
          }
+
+         function getRandomColor() {
+  var letters = '0123456789ABCDEF';
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
 </script>

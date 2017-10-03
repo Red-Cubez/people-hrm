@@ -5,15 +5,14 @@
 <div class="container">
     <div class="row">
         Internal Projects Graphs
-           @if(count($internalProjectsTimelines)>0)
+           @if(count($internalProjectsmonthlyTimelines)>0)
         <div class="col-sm-8">
     
          
             @include('reports/allProjectsGraphs/showInternalProjectsGraphs/showInternalProjectsGraphs',
                 [
-                    'internalProjectsTimelines'        => $internalProjectsTimelines,
-                    'internalProjectsStartAndEndDateTimelines' =>$internalProjectsStartAndEndDateTimelines
-
+                    'internalProjectsmonthlyTimelines'        => $internalProjectsmonthlyTimelines,
+                  
                     ])
              
         </div>
@@ -23,15 +22,14 @@
     </div>
     <div class="row">
         Client Projects Graphs
-         @if(count($clientProjectsTimelines)>0)
+         @if(count($clientProjectsmonthlyTimelines)>0)
         <div class="col-sm-8">
 
              
               @include('reports/allProjectsGraphs/showClientProjectsGraphs/showClientProjectsGraphs',
                 [
-                    'clientProjectsTimelines'        => $clientProjectsTimelines,
-                    'clientProjectsStartAndEndDateTimelines' =>$clientProjectsStartAndEndDateTimelines
-
+                    'clientProjectsMonthlyTimelines'        => $clientProjectsmonthlyTimelines,
+            
                     ])
                       
         </div>

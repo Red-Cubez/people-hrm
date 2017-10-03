@@ -1,9 +1,8 @@
 <?php $i=0; ?>
-
  <div class="panel panel-default">
         <div class="panel-body">
             <div style="width: 600px; height: 400px;display: block;">
-                <canvas id="myInternalProjectsChartWithProfit"></canvas>
+                <canvas id="internalProjectsChartWithProfit"></canvas>
             </div>
         </div>
     </div>
@@ -12,31 +11,40 @@
         
             data = {
                 datasets: [
-                 @foreach($internalProjectsTimelines as $projectTimelines)
+                 @foreach($internalProjectsmonthlyTimelines as $monthlyTimeline)
+                  @if($i>0)
                         {
                           <?php $i++; ?>
-                          label: "@if(count($projectTimelines)>0) {{$projectTimelines[0]->project->name}}  @endif",
-                          data:  [
-                                @foreach($internalProjectsStartAndEndDateTimelines as $startAndEndDateTimeline)
-                                @foreach ($projectTimelines as $projectTimeline)
-                                  @if($startAndEndDateTimeline->monthName==$projectTimeline->monthName)
+                          label: "@if(count($monthlyTimeline)>0) {{$monthlyTimeline[0]->projectName}}  @endif",
+                          data:  [ 
+                                @foreach($monthlyTimeline as $monthlyTimelineItem)
+                                 @if($monthlyTimelineItem->isActive)
+                                
+           
                                     {
-
-                                         x: "{{$projectTimeline->monthName}}",
-                                         y: "{{$projectTimeline->cost}}",
+                      
+                                         x: "{{$monthlyTimelineItem->monthName}}",
+                                         y: "{{$monthlyTimelineItem->totalProfit}}",
 
                                    },
-                                   @endif
-                                   @endforeach
+                                   @else
+                                              {                    
+                                                 x: null,
+
+                                                 y: null,
+
+                                            },
+                                           @endif 
+                              
                                    @endforeach
                                    ],
-
                           fill: false,
-                          backgroundColor: "#991d31",
-                          borderColor: "#991d31",
+                           backgroundColor: "@if(count($monthlyTimeline)>0) {{$monthlyTimeline[0]->color}}  @endif",
+                           borderColor: "@if(count($monthlyTimeline)>0) {{$monthlyTimeline[0]->color}}  @endif",
                           pointHitRadius: 20,
                         },
-                         
+                    @endif
+                         <?php $i++; ?>
                 @endforeach
                     {
                           label: "Monthly Profit",
@@ -53,7 +61,7 @@
                     };
 
 
-            var ctx = document.getElementById("myInternalProjectsChartWithProfit");
+            var ctx = document.getElementById("internalProjectsChartWithProfit");
             var myLineChart = new Chart(ctx, {
                 type: 'line',
                 data: data,
@@ -83,34 +91,43 @@
                     },
                     title: {
                         display: true,
-                        text: 'Internal Projects Monthly Profit'
+                        text: 'Projects Monthly Profit'
                     }
                 }
             });
-     
+        
 
         
         function getChartMonthLabel() {
 
-            return [0,
-                @foreach ($internalProjectsStartAndEndDateTimelines as $startAndEndDateTimeline)
-                    "{{$startAndEndDateTimeline->monthName}}",
+            return [
+                @foreach ($internalProjectsmonthlyTimelines[0] as $monthlyTimeline)
+
+                    "{{$monthlyTimeline->monthName}}",
                 @endforeach
             ];
+        
         }
          function getMonthlyProfit()
          {
 
-           return [0, @foreach($internalProjectsStartAndEndDateTimelines as $startAndEndDateTimeline )
+               return [ @foreach($internalProjectsmonthlyTimelines[0] as $monthlyTimeline )
                      
+                      {
                                            
-                                           {{$startAndEndDateTimeline->profit}},
-         
-                    
+                                         x: "{{$monthlyTimeline->monthName}}",
+
+                                         y: "{{$monthlyTimeline->totalProfit}}",
+                                 
+                    },
                       @endforeach
-                
+              
+                      
                      
                 ];
+
+
+
 
          }
         

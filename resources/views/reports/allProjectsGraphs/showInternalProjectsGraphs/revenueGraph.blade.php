@@ -2,7 +2,7 @@
  <div class="panel panel-default">
         <div class="panel-body">
             <div style="width: 600px; height: 400px;display: block;">
-                <canvas id="clientProjectsChartWithTotalRevenue"></canvas>
+                <canvas id="internalProjectsChartWithTotalRevenue"></canvas>
             </div>
         </div>
     </div>
@@ -11,7 +11,7 @@
         
             data = {
                 datasets: [
-                  @foreach($clientProjectsMonthlyTimelines as $monthlyTimeline)
+                  @foreach($internalProjectsmonthlyTimelines as $monthlyTimeline)
                   @if($i>0)
                         {
                           <?php $i++; ?>
@@ -61,7 +61,7 @@
                     };
 
 
-            var ctx = document.getElementById("clientProjectsChartWithTotalRevenue");
+            var ctx = document.getElementById("internalProjectsChartWithTotalRevenue");
             var myLineChart = new Chart(ctx, {
                 type: 'line',
                 data: data,
@@ -90,7 +90,7 @@
                             display: true,
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Rupees'
+                                labelString: '@if(isset($currencyNameAndSymbol)){{$currencyNameAndSymbol}}@endif'
                             }
                         }]
                     },
@@ -106,7 +106,7 @@
         function getChartMonthLabel() {
 
              return [
-                @foreach ($clientProjectsMonthlyTimelines[0] as $monthlyTimeline)
+                @foreach ($internalProjectsmonthlyTimelines[0] as $monthlyTimeline)
 
                     "{{$monthlyTimeline->monthName}}",
                 @endforeach
@@ -115,7 +115,7 @@
          function getTotalRevenue()
          {
 
-            return [ @foreach($clientProjectsMonthlyTimelines[0] as $monthlyTimeline )
+            return [ @foreach($internalProjectsmonthlyTimelines[0] as $monthlyTimeline )
                      
                       {
                                            

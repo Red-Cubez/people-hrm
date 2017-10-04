@@ -108,6 +108,6 @@ Route::post('register-user', 'RegisterUserController@register');
 
 //Reports
 Route::get('/company/{companyId}/reports', 'ReportsController@showOptions');
-Route::post('/company/{companyId}/all-projects/report', 'ReportsController@showAllProjectsReport');
+Route::post('/company/{companyId}/projects/report', 'ReportsController@showAllProjectsReport');
 Route::post('/company/{companyId}/internal-projects/report', 'ReportsController@showInternalProjectsReport');
 Route::post('/company/{companyId}/client-projects/report', 'ReportsController@showClientProjectsReport');

@@ -10,6 +10,7 @@ use People\Services\Interfaces\IProjectGrapher;
 use People\Services\Interfaces\IProjectResourceService;
 use People\Services\Interfaces\IProjectService;
 use People\Services\Interfaces\IReportService;
+use People\Services\Resources\RandomColorGenerator;
 
 class Project
 {
@@ -137,7 +138,7 @@ class ReportService implements IReportService
     {
 
         $totalMonths = $this->ProjectGrapher->calculateMonthsBetweenTwoDates($startDate, $endDate);
-        $timeLine = array();
+        $timeLine    = array();
 
         $startDate = date("Y-m-d", strtotime($startDate));
 
@@ -244,13 +245,15 @@ class ReportService implements IReportService
     {
 
         $totalMonths = $this->DateTimeService->calculateMonthsBetweenTwoDates($startDate, $endDate);
-        // $timeLine         = array();
+      
         $monthlyTimelines = array();
         // $projectNames     = array();
-
-        $startDate           = date("Y-m-d", strtotime($startDate));
+     
+        //$startDate           = date("Y-m-d", strtotime($startDate));
+      
         $monthlyCost         = 0;
         $startDateInDateTime = new \DateTime($startDate);
+
         $totalRevenue        = 0;
         $totalProfit         = 0;
         for ($monthCounter = 0; $monthCounter <= $totalMonths; $monthCounter++) {
@@ -267,7 +270,7 @@ class ReportService implements IReportService
             $monthlyTimeline->startDate = $firstDateOfCurrentMonth->format("Y-m-d");
             $monthlyTimeline->endDate   = $lastDateOfCurrentMonth;
 
-            $projectsMonthlyTimeLine = $this->setupTimeline($firstDateOfCurrentMonth, $lastDateOfCurrentMonth, $projects,$startDate,$endDate);
+            $projectsMonthlyTimeLine = $this->setupTimeline($firstDateOfCurrentMonth, $lastDateOfCurrentMonth, $projects, $startDate, $endDate);
 
             $monthlyTimeline->monthlyTimelineItems = array();
 
@@ -295,7 +298,7 @@ class ReportService implements IReportService
 
     }
 
-    public function setupTimeline($currentMonthStartDate, $currentMonthEndDate, $projects,$startDate,$endDate)
+    public function setupTimeline($currentMonthStartDate, $currentMonthEndDate, $projects, $startDate, $endDate)
     {
 
         $currentMonthStartDate = $currentMonthStartDate->format("Y-m-d");
@@ -310,26 +313,25 @@ class ReportService implements IReportService
         $timeline->timelineItems = array();
 
         // $companyInternalProjects = $this->CompanyProjectService->getAllInternalProjectsOfCompany($companyId);
-        $projectsMonthlyTimeLine = $this->getProjectsMonthlyTimeLine($projects, $currentMonthStartDate, $currentMonthEndDate,$startDate,$endDate);
+        $projectsMonthlyTimeLine = $this->getProjectsMonthlyTimeLine($projects, $currentMonthStartDate, $currentMonthEndDate, $startDate, $endDate);
 
         return $projectsMonthlyTimeLine;
     }
 
-    public function getProjectsMonthlyTimeLine($projects,$currentMonthStartDate, $currentMonthEndDate,$startDate,$endDate)
+    public function getProjectsMonthlyTimeLine($projects, $currentMonthStartDate, $currentMonthEndDate, $startDate, $endDate)
     {
 
-       
-        $projectsMonthlyTimeLine = $this->setupCostProfitAndRevenue($projects,$currentMonthStartDate, $currentMonthEndDate,$startDate,$endDate);
+        $projectsMonthlyTimeLine = $this->setupCostProfitAndRevenue($projects, $currentMonthStartDate, $currentMonthEndDate, $startDate, $endDate);
 
         return $projectsMonthlyTimeLine;
 
     }
 
-    public function setupCostProfitAndRevenue($projects,$currentMonthStartDate,$currentMonthEndDate,$startDate,$endDate)
+    public function setupCostProfitAndRevenue($projects, $currentMonthStartDate, $currentMonthEndDate, $startDate, $endDate)
     {
         $projectsMonthlyTimeLine = array();
         foreach ($projects as $project) {
-   
+
             list($projectStartDate, $projectEndDate) = $this->ProjectService->getProjectStartAndEndDate($project);
 
             if (($currentMonthStartDate <= $projectEndDate) && ($projectStartDate <= $currentMonthEndDate)
@@ -351,7 +353,7 @@ class ReportService implements IReportService
                 $projectMonthlyTimeLine->totalRevenue  = $revenue;
                 $projectMonthlyTimeLine->totalProfit   = $profit;
                 $projectMonthlyTimeLine->isActive      = true;
-                $projectMonthlyTimeLine->color         = $this->random_color();
+                $projectMonthlyTimeLine->color         = RandomColorGenerator::one();
 
                 array_push($projectsMonthlyTimeLine, $projectMonthlyTimeLine);
             } elseif ($projectStartDate >= $startDate && $projectEndDate <= $endDate) {
@@ -370,11 +372,11 @@ class ReportService implements IReportService
                 $projectMonthlyTimeLine->totalRevenue  = null;
                 $projectMonthlyTimeLine->totalProfit   = null;
                 $projectMonthlyTimeLine->isActive      = false;
-                $projectMonthlyTimeLine->color         = $this->random_color();
+                $projectMonthlyTimeLine->color         = RandomColorGenerator::one();
 
                 array_push($projectsMonthlyTimeLine, $projectMonthlyTimeLine);
             }
-         
+
         }
         return $projectsMonthlyTimeLine;
 
@@ -396,8 +398,10 @@ class ReportService implements IReportService
         if ($projectEndDate <= $currentMonthEndDate && $projectEndDate >= $currentMonthStartDate) {
 
             $budget        = $project->budget;
+            $budget        = round($budget, 2);
             $resourcesCost = $this->getResourcesTotalCostForProject($project, $resources);
             $profit        = $budget - $resourcesCost;
+            $profit        = round($profit, 2);
             $revenue       = $budget;
 
         }
@@ -663,14 +667,7 @@ class ReportService implements IReportService
     //     return $projectTimelines;
     // }
 
-    public function random_color_part()
-    {
-        return str_pad(dechex(mt_rand(0, 255)), 2, '0', STR_PAD_LEFT);
-    }
-    public function random_color()
-    {
-        return '#' . $this->random_color_part() . $this->random_color_part() . $this->random_color_part();
-    }
+    
     public function getMonthlyProfit($startAndEndDateTimelines, $projectsTimelines)
     {
 

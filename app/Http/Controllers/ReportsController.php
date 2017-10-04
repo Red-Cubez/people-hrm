@@ -5,9 +5,11 @@ namespace People\Http\Controllers;
 use Illuminate\Http\Request;
 use People\Services\Interfaces\IClientProjectService;
 use People\Services\Interfaces\ICompanyProjectService;
+use People\Services\Interfaces\ICompanySettingService;
 use People\Services\Interfaces\IDateTimeService;
 use People\Services\Interfaces\IReportService;
 use People\Services\Interfaces\IUserAuthenticationService;
+
 
 class ReportsController extends Controller
 {
@@ -16,9 +18,11 @@ class ReportsController extends Controller
     public $DateTimeService;
     public $CompanyProjectService;
     public $ClientProjectService;
+    public $CompanySettingService;
 
     public function __construct(IReportService $reportService, IUserAuthenticationService $userAuthenticationService,
-        IDateTimeService $dateTimeService, ICompanyProjectService $companyProjectService, IClientProjectService $clientProjectService) {
+        IDateTimeService $dateTimeService, ICompanyProjectService $companyProjectService, IClientProjectService $clientProjectService,
+        ICompanySettingService $companySettingService) {
 
         $this->middleware('auth');
 
@@ -27,16 +31,20 @@ class ReportsController extends Controller
         $this->DateTimeService           = $dateTimeService;
         $this->CompanyProjectService     = $companyProjectService;
         $this->ClientProjectService      = $clientProjectService;
+        $this->CompanySettingService     = $companySettingService;
 
     }
 
     public function showOptions($companyId)
     {
-        $isManager                           = $this->UserAuthenticationService->isManager();
-        $isAdmin                             = $this->UserAuthenticationService->isAdmin();
+        $isManager       = $this->UserAuthenticationService->isManager();
+        $isAdmin         = $this->UserAuthenticationService->isAdmin();
+        $isHrManager     = $this->UserAuthenticationService->isHrManager();
+        $isClientManager = $this->UserAuthenticationService->isClientManager();
+
         $isRequestedCompanyBelongsToEmployee = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($companyId);
 
-        if (($isManager || $isAdmin) && $isRequestedCompanyBelongsToEmployee) {
+        if (($isManager || $isAdmin || $isClientManager) && $isRequestedCompanyBelongsToEmployee) {
 
             return view
                 ('reports/index',
@@ -51,89 +59,156 @@ class ReportsController extends Controller
 
     public function showAllProjectsReport(Request $request, $companyId)
     {
-        $this->validate($request, [
-            'startDate' => 'required|date|before:endDate',
+      
+        list($startDate, $endDate) = $this->DateTimeService->getfirstAndLastDateOfGivenDate($request->startDate, $request->endDate);
+     
+         $this->validate($request, [
+            'startDate' => 'required|date',
 
-            'endDate'   => 'required|date|after:startDate',
+            'endDate'   => 'required|date',
         ]);
 
-        //internal projects
-        list($startDate, $endDate)                         = $this->DateTimeService->getfirstAndLastDateOfGivenDate($request->startDate, $request->endDate);
-        $companyInternalProjects                           = $this->CompanyProjectService->getAllInternalProjectsOfCompany($companyId);
-        $internalProjectsStartAndEndDateTimelinesWithCostProfitAndNetTotal =
-        $this->ReportService->startAndEndDateTimelinesWithCostProfitAndNetTotal($startDate, $endDate, $companyInternalProjects);
 
-        $internalProjectsmonthlyTimelines = $this->ReportService->setUpMontlhyTimelines($internalProjectsStartAndEndDateTimelinesWithCostProfitAndNetTotal);
+        if(!$this->DateTimeService->validateStartAndEndDates($startDate,$endDate))
+        {
+            $errosMessage="End date can not be a date before start date";
+            return back()->withErrors($errosMessage);
 
-        //client projects
+        }
+       
+        $isManager = $this->UserAuthenticationService->isManager();
+        $isAdmin   = $this->UserAuthenticationService->isAdmin();
 
-        list($startDate, $endDate)                         = $this->DateTimeService->getfirstAndLastDateOfGivenDate($request->startDate, $request->endDate);
-        $companyClientProjects                             = $this->ClientProjectService->getAllClientProjectsOfCompany($companyId);
-        $clientProjectsStartAndEndDateTimelinesWithCostProfitAndNetTotal =
-        $this->ReportService->startAndEndDateTimelinesWithCostProfitAndNetTotal($startDate, $endDate, $companyClientProjects);
+        $isRequestedCompanyBelongsToEmployee = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($companyId);
 
-        $clientProjectsmonthlyTimelines = $this->ReportService->setUpMontlhyTimelines($clientProjectsStartAndEndDateTimelinesWithCostProfitAndNetTotal);
-        return view
-            ('reports/allProjectsGraphs/showProjectsGraphs',
-            [
-                'internalProjectsmonthlyTimelines' => $internalProjectsmonthlyTimelines,
+        if (($isManager || $isAdmin) && $isRequestedCompanyBelongsToEmployee) {
 
-                'clientProjectsmonthlyTimelines'   => $clientProjectsmonthlyTimelines,
+           
+            $companyInternalProjects                                           = $this->CompanyProjectService->getAllInternalProjectsOfCompany($companyId);
+            $internalProjectsStartAndEndDateTimelinesWithCostProfitAndNetTotal =
+            $this->ReportService->startAndEndDateTimelinesWithCostProfitAndNetTotal($startDate, $endDate, $companyInternalProjects);
 
-                'isAllProjectsGraphs'              => true,
+            $internalProjectsmonthlyTimelines = $this->ReportService->setUpMontlhyTimelines($internalProjectsStartAndEndDateTimelinesWithCostProfitAndNetTotal);
 
-            ]);
+            //client projects
+
+            list($startDate, $endDate)                                       = $this->DateTimeService->getfirstAndLastDateOfGivenDate($request->startDate, $request->endDate);
+            $companyClientProjects                                           = $this->ClientProjectService->getAllClientProjectsOfCompany($companyId);
+            $clientProjectsStartAndEndDateTimelinesWithCostProfitAndNetTotal =
+            $this->ReportService->startAndEndDateTimelinesWithCostProfitAndNetTotal($startDate, $endDate, $companyClientProjects);
+
+            $clientProjectsmonthlyTimelines = $this->ReportService->setUpMontlhyTimelines($clientProjectsStartAndEndDateTimelinesWithCostProfitAndNetTotal);
+
+            $currencyNameAndSymbol = $this->CompanySettingService->getCurrencyName($companyId) . ' ' . $this->CompanySettingService->getCurrencySymbol($companyId);
+
+            return view
+                ('reports/allProjectsGraphs/showProjectsGraphs',
+                [
+                    'internalProjectsmonthlyTimelines' => $internalProjectsmonthlyTimelines,
+                    'clientProjectsmonthlyTimelines'   => $clientProjectsmonthlyTimelines,
+                    'currencyNameAndSymbol'            => $currencyNameAndSymbol,
+                    'isAllProjectsGraphs'              => true,
+
+                ]);
+        } else {
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+
+        }
 
     }
 
     public function showInternalProjectsReport(Request $request, $companyId)
     {
-        $this->validate($request, [
-            'startDate' => 'required|date|before:endDate',
+         list($startDate, $endDate) = $this->DateTimeService->getfirstAndLastDateOfGivenDate($request->startDate, $request->endDate);
+     
+         $this->validate($request, [
+            'startDate' => 'required|date',
 
-            'endDate'   => 'required|date|after:startDate',
+            'endDate'   => 'required|date',
         ]);
 
-        list($startDate, $endDate)                         = $this->DateTimeService->getfirstAndLastDateOfGivenDate($request->startDate, $request->endDate);
-        $companyInternalProjects                           = $this->CompanyProjectService->getAllInternalProjectsOfCompany($companyId);
-        $startAndEndDateTimelinesWithCostProfitAndNetTotal =
-        $this->ReportService->startAndEndDateTimelinesWithCostProfitAndNetTotal($startDate, $endDate, $companyInternalProjects);
 
-        $monthlyTimelines = $this->ReportService->setUpMontlhyTimelines($startAndEndDateTimelinesWithCostProfitAndNetTotal);
+        if(!$this->DateTimeService->validateStartAndEndDates($startDate,$endDate))
+        {
+            $errosMessage="End date can not be a date before start date";
+            return back()->withErrors($errosMessage);
 
-        return view
-            ('reports/showProjectsGraphs',
-            [
-                //'projectsTimelines'        => $projectsTimelines,
+        }
 
-                'monthlyTimelines' => $monthlyTimelines,
+        $isManager = $this->UserAuthenticationService->isManager();
+        $isAdmin   = $this->UserAuthenticationService->isAdmin();
 
-            ]);
+        $isRequestedCompanyBelongsToEmployee = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($companyId);
+
+        if (($isManager || $isAdmin) && $isRequestedCompanyBelongsToEmployee) {
+
+        
+            $companyInternalProjects                           = $this->CompanyProjectService->getAllInternalProjectsOfCompany($companyId);
+            $startAndEndDateTimelinesWithCostProfitAndNetTotal =
+            $this->ReportService->startAndEndDateTimelinesWithCostProfitAndNetTotal($startDate, $endDate, $companyInternalProjects);
+
+            $monthlyTimelines = $this->ReportService->setUpMontlhyTimelines($startAndEndDateTimelinesWithCostProfitAndNetTotal);
+
+            $currencyNameAndSymbol = $this->CompanySettingService->getCurrencyName($companyId) . ' ' . $this->CompanySettingService->getCurrencySymbol($companyId);
+
+            return view
+                ('reports/showProjectsGraphs',
+                [
+
+                    'monthlyTimelines'      => $monthlyTimelines,
+                    'currencyNameAndSymbol' => $currencyNameAndSymbol,
+
+                ]);
+        } else {
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+        }
     }
 
     public function showClientProjectsReport(Request $request, $companyId)
     {
-        $this->validate($request, [
-            'startDate' => 'required|date|before:endDate',
+         list($startDate, $endDate) = $this->DateTimeService->getfirstAndLastDateOfGivenDate($request->startDate, $request->endDate);
+     
+         $this->validate($request, [
+            'startDate' => 'required|date',
 
-            'endDate'   => 'required|date|after:startDate',
+            'endDate'   => 'required|date',
         ]);
 
-        list($startDate, $endDate)                         = $this->DateTimeService->getfirstAndLastDateOfGivenDate($request->startDate, $request->endDate);
-        $companyClientProjects                             = $this->ClientProjectService->getAllClientProjectsOfCompany($companyId);
-        $startAndEndDateTimelinesWithCostProfitAndNetTotal =
-        $this->ReportService->startAndEndDateTimelinesWithCostProfitAndNetTotal($startDate, $endDate, $companyClientProjects);
 
-        $monthlyTimelines = $this->ReportService->setUpMontlhyTimelines($startAndEndDateTimelinesWithCostProfitAndNetTotal);
+        if(!$this->DateTimeService->validateStartAndEndDates($startDate,$endDate))
+        {
+            $errosMessage="End date can not be a date before start date";
+            return back()->withErrors($errosMessage);
 
-        return view
-            ('reports/showProjectsGraphs',
-            [
-                //'projectsTimelines'        => $projectsTimelines,
+        }
 
-                'monthlyTimelines' => $monthlyTimelines,
+        $isManager       = $this->UserAuthenticationService->isManager();
+        $isAdmin         = $this->UserAuthenticationService->isAdmin();
+        $isClientManager = $this->UserAuthenticationService->isClientManager();
 
-            ]);
+        $isRequestedCompanyBelongsToEmployee = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($companyId);
+
+        if (($isManager || $isAdmin || $isClientManager) && $isRequestedCompanyBelongsToEmployee) {
+
+            $companyClientProjects                             = $this->ClientProjectService->getAllClientProjectsOfCompany($companyId);
+            $startAndEndDateTimelinesWithCostProfitAndNetTotal =
+            $this->ReportService->startAndEndDateTimelinesWithCostProfitAndNetTotal($startDate, $endDate, $companyClientProjects);
+
+            $monthlyTimelines = $this->ReportService->setUpMontlhyTimelines($startAndEndDateTimelinesWithCostProfitAndNetTotal);
+
+            $currencyNameAndSymbol = $this->CompanySettingService->getCurrencyName($companyId) . ' ' . $this->CompanySettingService->getCurrencySymbol($companyId);
+
+            return view
+                ('reports/showProjectsGraphs',
+                [
+
+                    'monthlyTimelines'      => $monthlyTimelines,
+                    'currencyNameAndSymbol' => $currencyNameAndSymbol,
+
+                ]);
+        } else {
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+        }
     }
 
 }

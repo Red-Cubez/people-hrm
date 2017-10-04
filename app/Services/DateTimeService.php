@@ -47,29 +47,20 @@ class DateTimeService implements IDateTimeService
         return $timeLine;
     }
 
-    public function setupTimeline($currentMonthStartDate, $currentMonthEndDate)
+    public function validateStartAndEndDates($startDate, $endDate)
     {
+        if ($endDate <= $startDate) {
+            return false;
+        } else {
+            return true;
+        }
 
-        // $currentMonthStartDate = $currentMonthStartDate->format("Y-m-d");
-        // $currentMonthName      = date("M-Y", strtotime($currentMonthStartDate));
-
-        // $dateDiff = $this->calculateDiffernceBetweenTwoDates($currentMonthStartDate, $currentMonthEndDate);
-
-        // $projectDetails = new ProjectTimeline();
-
-        // $projectDetails->monthName = $currentMonthName;
-        // $projectDetails->startDate = $currentMonthStartDate;
-        // $projectDetails->endDate   = $currentMonthEndDate;
-
-        // $projectDetails->cost      = 0;
-
-        // return $projectDetails;
     }
 
     public function getMonthNameAndYear($currentMonthStartDate)
-    {   
+    {
 
-        $currentMonthStartDate=new \DateTime($currentMonthStartDate);
+        $currentMonthStartDate = new \DateTime($currentMonthStartDate);
         $currentMonthStartDate = $currentMonthStartDate->format("Y-m-d");
         $currentMonthName      = date("M-Y", strtotime($currentMonthStartDate));
 
@@ -78,15 +69,24 @@ class DateTimeService implements IDateTimeService
 
     public function calculateMonthsBetweenTwoDates($startDate, $endDate)
     {
-        $timeSpan1 = strtotime($startDate);
-        $timeSpan2 = strtotime($endDate);
-        $startYear = date('Y', $timeSpan1);
-        $endYear   = date('Y', $timeSpan2);
+        $to             = \Carbon\Carbon::parse($endDate);
+        $from           = \Carbon\Carbon::parse($startDate);
+        $totalMonths = $to->diffInMonths($from);
 
-        $startMonth = date('m', $timeSpan1);
-        $endMonth   = date('m', $timeSpan2);
+        // if($totalMonths==0)
+        // {
+            //$totalMonths=$totalMonths+1;
+        //}
 
-        $totalMonths = (($endYear - $startYear) * 12) + ($endMonth - $startMonth);
+        // $timeSpan1 = strtotime($startDate);
+        // $timeSpan2 = strtotime($endDate);
+        // $startYear = date('Y', $timeSpan1);
+        // $endYear   = date('Y', $timeSpan2);
+
+        // $startMonth = date('m', $timeSpan1);
+        // $endMonth   = date('m', $timeSpan2);
+
+        // $totalMonths = (($endYear - $startYear) * 12) + ($endMonth - $startMonth);
         return $totalMonths;
     }
 
@@ -100,9 +100,27 @@ class DateTimeService implements IDateTimeService
         $endDateInDateTime = new \DateTime(date("Y-m-t", $endDate));
         $endDate           = $endDateInDateTime->format("Y-m-d");
 
-        return array($startDate,$endDate);
+        return array($startDate, $endDate);
 
     }
+
+//     public function getfirstAndLastDateFromGivenMonthAndYear($request)
+    //     {
+    //         $startDate           = strtotime($request->startDate);
+    //         $startDateInDateTime = new \DateTime(date("Y-m-01", $startDate));
+    //         $startDate           = $startDateInDateTime->format("Y-m-d");
+
+//         $endDate           = strtotime($request->endDate);
+    //         $endDateInDateTime = new \DateTime(date("Y-m-t", $endDate));
+    //         $endDate           = $endDateInDateTime->format("Y-m-d");
+
+//         $request->request->startDate=$startDate;
+    //         $request->request->endDate=$endDate;
+
+//         $startAndEndDate=array(['startDate'=>$startDate,'endDate'=>$endDate]);
+    // //dd($startAndEndDate);
+    //         return $startAndEndDate;
+    //     }
 
     public function getFirstAndLastDateCurrentOfMonth($monthCounter, $totalMonths, $startDateInDateTime, $endDate)
     {
@@ -129,7 +147,7 @@ class DateTimeService implements IDateTimeService
         return array($firstDateOfCurrentMonth, $lastDateOfCurrentMonth);
     }
 
-     public function calculateDifferenceBetweenTwoDates($d1, $d2)
+    public function calculateDifferenceBetweenTwoDates($d1, $d2)
     {
 
         $date1 = date_create($d1);

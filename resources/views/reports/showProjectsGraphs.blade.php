@@ -6,7 +6,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-8">
-                @include('reports/netTotalGraph')
+                @include('reports/revenueGraph')
 
             </div>
         </div>

@@ -28,9 +28,11 @@
         <div class="col-sm-8">
             @include('companyProjects/showClientProjectsOfCompany')
         </div>
+        @role(['admin','manager','client-manager'])
         <div class="col-sm-3">
             @include('companies/companyReports')
         </div>
+        @endrole
     </div>
 
     <div class="row">

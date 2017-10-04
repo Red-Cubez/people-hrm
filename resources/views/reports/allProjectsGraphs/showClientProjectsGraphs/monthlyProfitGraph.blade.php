@@ -93,7 +93,7 @@
                             display: true,
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Rupees'
+                                labelString: '@if(isset($currencyNameAndSymbol)){{$currencyNameAndSymbol}}@endif'
                             }
                         }]
                     },

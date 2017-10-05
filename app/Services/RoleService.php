@@ -9,7 +9,7 @@ class RoleService implements IRoleService
 {
     public function getAllRoles()
     {
-        return Role::all();
+        return Role::where('name','!=','employee')->get();
     }
     public function saveRole($request)
     {
@@ -22,6 +22,19 @@ class RoleService implements IRoleService
         $role->save();
 
     }
+       public function getDefaultRole()
+        {
+            $role=Role::where('name','employee')->first(); 
+            if(isset($role))
+            {
+                return $role;
+
+            } 
+            else
+            {
+                return NULL;
+            }
+        }
     public function getRole($id)
     {
         return Role::find($id);

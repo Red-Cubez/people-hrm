@@ -26,6 +26,7 @@ class UserRolesService implements IUserRolesService
 
         foreach($user->roles as $role)
         {
+           
             array_push($rolesArray,$role->id);
         }
         return $rolesArray;

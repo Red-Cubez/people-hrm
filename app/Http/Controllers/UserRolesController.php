@@ -14,7 +14,7 @@ class UserRolesController extends Controller
     public function __construct(IUserRolesService $userRolesService, IRoleService $roleService)
     {
 
-        // $this->middleware('auth');
+        $this->middleware('auth');
 
         // $this->middleware('isAuthorizedToView');
         $this->UserRolesService = $userRolesService;
@@ -76,11 +76,13 @@ class UserRolesController extends Controller
      */
     public function edit($userId)
     {
+
         $user = $this->UserRolesService->getUserWithRoles($userId);
 
         $userRoles = $this->UserRolesService->saveRolesInArray($user);
 
         $roles = $this->RoleService->getAllRoles();
+
         return view('userRole/edit',
             [
                 'user'      => $user,
@@ -100,14 +102,21 @@ class UserRolesController extends Controller
     public function update(Request $request, $userId)
     {
 
-        $this->validate($request, array(
-            'roles' => 'required',
-        ));
+        // $this->validate($request, array(
+        //     'roles' => 'required',
+        // ));
         $user = $this->UserRolesService->getUser($userId);
         $user->roles()->detach();
         $user->attachRole($request->roles);
-        return back();
-        // return redirect('user-roles');
+
+        $defaultRole = $this->RoleService->getDefaultRole();
+
+        if (isset($defaultRole)) {
+            $user->attachRole($defaultRole->id);
+        }
+
+        /// return back();
+        return redirect('user-roles');
 
     }
 

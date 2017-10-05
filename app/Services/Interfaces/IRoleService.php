@@ -9,6 +9,7 @@ interface IRoleService {
 	public function getRole($id);
 	public function updateRole($request,$id);
 	public function deleteRole($id);
+	public function getDefaultRole();
 
 
 }

@@ -14,7 +14,7 @@
 <div class="form-group">
     <label for="displayName" class="col-sm-3 control-label">User Roles</label>
     <div class="col-sm-6">
-        <select name="roles[]" multiple required>
+        <select name="roles[]" multiple>
           @foreach($roles as $role)
           <option value="{{$role->id}}" @if(in_array($role->id,$userRoles)) selected @endif>
           {{$role->name}}

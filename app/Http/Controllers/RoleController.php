@@ -12,7 +12,7 @@ class RoleController extends Controller
     public function __construct(IRoleService $roleService)
     {
 
-        //  $this->middleware('auth');
+        $this->middleware('auth');
         $this->RoleService = $roleService;
 
     }
@@ -23,6 +23,7 @@ class RoleController extends Controller
      */
     public function index()
     {
+
         $roles = $this->RoleService->getAllRoles();
         return view('role/index',
             [
@@ -93,7 +94,7 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-
+dd("hrere");
         $this->validate($request, array(
             'name'        => "required|unique:roles,name,$id|max:255",
             'displayName' => 'required|max:255',

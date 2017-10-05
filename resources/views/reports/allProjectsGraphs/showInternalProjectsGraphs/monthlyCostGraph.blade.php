@@ -40,7 +40,7 @@
                                         ],
                                  fill: false,
 
-                                    backgroundColor: "{{$monthlyTimeline[0]->color}}"  ,
+                                 backgroundColor: "{{$monthlyTimeline[0]->color}}"  ,
                                  borderColor: " {{$monthlyTimeline[0]->color}} ",
                                  pointHoverBackgroundColor:"{{$monthlyTimeline[0]->color}}" ,
                                  pointHoverBorderColor: "{{$monthlyTimeline[0]->color}}",         

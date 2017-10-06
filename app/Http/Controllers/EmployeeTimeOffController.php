@@ -223,17 +223,21 @@ class EmployeeTimeoffController extends Controller
     }
     public function approveTimeoffs(Request $request)
     {
+       
         $isManager = $this->UserAuthenticationService->isManager();
+
+        $isAdmin = $this->UserAuthenticationService->isAdmin();
 
         $isEmployee      = $this->UserAuthenticationService->isEmployee();
         $canEmployeeView = false;
         if ($isEmployee) {
-            $canEmployeeView = $this->UserAuthenticationService->canEmployeeView($employeeId);
+            $canEmployeeView = $this->UserAuthenticationService->canEmployeeView($request->employeeId);
 
         }
-        if ($isManager || $canEmployeeView) {
+        if ($isManager || $isAdmin || $canEmployeeView) {
 
             $this->EmployeeTimeoffService->approveTimeoffs($request);
+
             return back();
         }
     }

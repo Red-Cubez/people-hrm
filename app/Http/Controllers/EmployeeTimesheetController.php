@@ -297,6 +297,8 @@ class EmployeeTimesheetController extends Controller
     {
         $this->EmployeeTimesheetService->approveTimesheets($request);
 
+        return back();
+
     }
 
 /**

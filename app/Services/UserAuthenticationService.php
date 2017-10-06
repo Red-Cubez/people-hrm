@@ -28,6 +28,7 @@ class UserAuthenticationService implements IUserAuthenticationService
         $client               = Client::find($requestedClientId);
         $logedInUser          = $this->getCurrrentLogedInUserDetails();
         $belongsToSameCompany = false;
+
         if (isset($client)) {
             if ($logedInUser->employee->company_id == $client->company_id) {
                 $belongsToSameCompany = true;

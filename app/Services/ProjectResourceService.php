@@ -63,6 +63,7 @@ class ProjectResourceService implements IProjectResourceService
 
             $projectResource->save();
         }
+         return $projectResource->client_project_id;
     }
     public function getProjectResource($projectResourceId)
     {

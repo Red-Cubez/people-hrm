@@ -55,7 +55,7 @@ class CompanyProjectResourceController extends Controller
      */
     public function validateResourceForm(Request $request)
     {
-
+   
         $formErrors = $this->ResourceFormValidator->validateForm($request);
 
         return response()->json(
@@ -67,12 +67,13 @@ class CompanyProjectResourceController extends Controller
 
     public function store(Request $request)
     {
-
-        $this->CompanyProjectResourceService->saveOrUpdateCompanyProjectResource($request);
-        return response()->json(
-            [
-                'projectId' => $request->companyProjectId,
-            ]);
+           ////Function use in project resource controller
+        // $projectId=$this->CompanyProjectResourceService->saveOrUpdateCompanyProjectResource($request);
+        // return redirect("companyprojects/".$projectId);
+        // return response()->json(
+        //     [
+        //         'projectId' => $request->companyProjectId,
+        //     ]);
 
 //        return redirect('/companyprojects/'. $request->companyProjectId);
 
@@ -119,7 +120,7 @@ class CompanyProjectResourceController extends Controller
      */
     public function edit($companyProjectResourceId)
     {
-
+      
         $isManager       = $this->UserAuthenticationService->isManager();
         $isAdmin         = $this->UserAuthenticationService->isAdmin();
         $projectResource = $this->CompanyProjectResourceService->getCompanyProjectResource($companyProjectResourceId);

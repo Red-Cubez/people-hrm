@@ -2,8 +2,8 @@
     <!-- Display Validation Errors -->
 @include('common.errors')
 <!-- New clientProject Form -->
-<!-- <form action="{{url('projectresources') }}" method="POST" class="form-horizontal">
-        {{ csrf_field() }} -->
+<!-- <form action="{{-- {{url('projectresources') }} --}}" method="POST" class="form-horizontal">
+       {{--  {{ csrf_field()  --}}}} -->
     <!-- Resource Name -->
     @if (count($projectResources)>0 )
         <div class="panel panel-default">

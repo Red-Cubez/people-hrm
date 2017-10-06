@@ -92,19 +92,12 @@
             env.preventDefault();
             $.ajax({
                 type: 'POST',
-                <?php if( isset($companyProjectId)){ ?>
-                url: '/companyprojectresources/validateform',
-                <?php } ?>
-                    <?php if(isset($clientProjectid)){ ?>
                 url: '/projectresources/validateform',
-
-                <?php } ?>
-
                 data: resourceForm.serialize(),
                 success: function (data) {
 
                     if (data.formErrors.hasErrors == false) {
-                        //form have no errors
+                        
                         submitResourceForm(resourceForm);
                     }
                     else if (data.formErrors.hasErrors == true) {
@@ -144,30 +137,17 @@
         });
     });
     function submitResourceForm(resourceForm) {
-
+      $("#list").remove();
         $.ajax({
             type: 'POST',
-            <?php if(isset($companyProjectId)){ ?>
-            url: '/companyprojectresources/',
-            <?php } ?>
-
-                <?php if(isset($clientProjectid)){ ?>
+           
             url: '/projectresources/',
-            <?php } ?>
-
+        
             data: resourceForm.serialize(),
-
-            <?php if(isset($companyProjectId)){ ?>
             success: function (data) {
-                top.location.href = "/companyprojects/" + data.projectId;
-
+                top.location.href = data.redirectTo;
             },
-            <?php } ?>
-                <?php if(isset($clientProjectid)){ ?>
-            success: function (data) {
-                top.location.href = "/clientprojects/" + data.projectId +"/projectresources";
-            },
-            <?php } ?>
+          
             error: function () {
                 alert("Bad submit store/update");
             }

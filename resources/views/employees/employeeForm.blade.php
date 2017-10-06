@@ -28,7 +28,7 @@
     <div class="col-sm-6">
         <input type="date" name="hireDate" id="hireDate" class="form-control"
                @if(isset($editEmployeeModel->employeeProfile->hireDate)) value="{{ $editEmployeeModel->employeeProfile->hireDate }}"
-               @else placeholder="Hire Date" @endif>
+               @else placeholder="Hire Date" @endif required>
     </div>
 </div>
 <div class="form-group">

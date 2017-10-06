@@ -87,17 +87,13 @@ class CompanyProjectController extends Controller
 
     public function store(Request $request)
     {
-        $isManager = false;
-        $isManager = $this->UserAuthenticationService->isManager();
-        if ($isManager) {
+  
             $companyProjectId = $this->CompanyProjectService->saveCompanyProject($request);
             return response()->json(
                 [
                     'projectId' => $companyProjectId,
                 ]);
-        } else {
-            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
-        }
+       
     }
 
     /**
@@ -123,7 +119,7 @@ class CompanyProjectController extends Controller
                 $companyProject = $this->CompanyProjectService->viewCompanyProject($companyProjectId);
 
                 $projectTimeLines = $this->ProjectGrapher->setupProjectCost($companyProject, $currentProjectResources, true);
-
+ 
                 $projectTotalCost = $this->ProjectGrapher->calculateProjectTotalCost($projectTimeLines);
                 $resourcesDetails = $this->ProjectGrapher->getResourcesTotalCostForProject($companyProject, $currentProjectResources, $projectTotalCost);
 

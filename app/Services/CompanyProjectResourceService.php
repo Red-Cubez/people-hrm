@@ -67,6 +67,8 @@ class CompanyProjectResourceService implements ICompanyProjectResourceService
 
             $companyProjectResource->save();
         }
+
+        return $companyProjectResource->company_project_id;
     }
     public function getCompanyProjectResource($companyProjectResourceId)
     {

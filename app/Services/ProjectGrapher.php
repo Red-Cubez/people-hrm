@@ -217,10 +217,17 @@ class ProjectGrapher implements IProjectGrapher
                     $projectResourceEndDate = $projectResource->actualEndDate;
 
                 }
-                $totalMonths       = $this->calculateMonthsBetweenTwoDates($projectResource->actualStartDate, $projectResourceEndDate);
+                 if ($projectResource->actualStartDate == null) {
+                    $projectResourceStartDate = $projectResource->expectedStartDate;
+                } else {
+                    $projectResourceStartDate = $projectResource->actualStartDate;
+
+                }
+
+                $totalMonths       = $this->calculateMonthsBetweenTwoDates($projectResourceStartDate, $projectResourceEndDate);
                 $resourceTimeLines = array();
 
-                $projectResourceStartDate = date("Y-m-d", strtotime($projectResource->actualStartDate));
+                $projectResourceStartDate = date("Y-m-d", strtotime($projectResourceStartDate));
 
                 $projectResourceStartInDateTime = new \DateTime($projectResourceStartDate);
 
@@ -277,7 +284,7 @@ class ProjectGrapher implements IProjectGrapher
         $currentMonthName      = date("Y-M", strtotime($currentMonthStartDate));
 
         $dateDiff = $this->calculateDiffernceBetweenTwoDates($currentMonthStartDate, $currentMonthEndDate);
-
+      
         $resourceDetails            = new ResourceTimeline();
         $resourceDetails->startDate = $currentMonthStartDate;
         $resourceDetails->endDate   = $currentMonthEndDate;

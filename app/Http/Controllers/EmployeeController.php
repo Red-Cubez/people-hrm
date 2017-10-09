@@ -27,7 +27,7 @@ class EmployeeController extends Controller
 
         $this->middleware('auth');
         $this->middleware('permission:create/edit-employee', ['only' => ['showEmployeeForm', 'store', 'edit', 'update']]);
-        $this->middleware('permission:view-employee', ['only' => ['show']]);
+        $this->middleware('permission:view-ownProfile|view-othersProfile', ['only' => ['show']]);
         $this->middleware('permission:delete-employee', ['only' => ['destroy']]);
 
         $this->EmployeeService           = $employeeService;
@@ -138,14 +138,14 @@ class EmployeeController extends Controller
         // $isEmployee           = $this->UserAuthenticationService->isEmployee();
         // $isHrManager = $this->UserAuthenticationService->isHrManager();
         //$isClientManager = $this->UserAuthenticationService->isClientManager();
-
+        
         $canEmployeeView                         = false;
         $isRequestedEmployeeBelongsToSameCompany = false;
         $isRequestedEmployeeBelongsToSameCompany = $this->UserAuthenticationService->isRequestedEmployeeBelongsToSameCompany($employeeId);
 
-        $canViewProfile = $this->UserAuthenticationService->canEmployeeView($employeeId);
-
-        if ($canViewProfile && $isRequestedEmployeeBelongsToSameCompany) {
+        list($canViewOwnProfile,$canViewOthersProfile) = $this->UserAuthenticationService->canEmployeeView($employeeId);
+  
+        if ($canViewOwnProfile || $canViewOthersProfile && $isRequestedEmployeeBelongsToSameCompany) {
             $employee = $this->EmployeeService->getEmployee($employeeId);
             if (isset($employee)) {
                 $company       = Company::find($employee->company_id);

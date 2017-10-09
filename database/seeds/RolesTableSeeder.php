@@ -43,6 +43,11 @@ class RolesTableSeeder extends Seeder
             'name' => 'client-manager',
             'display_name' => 'Client Manager',
             'description'  => 'This is client-manager',
+          ],
+          [
+            'name' => 'employee',
+            'display_name' => 'Employee',
+            'description'  => 'This is employee',
           ]
         ];
 

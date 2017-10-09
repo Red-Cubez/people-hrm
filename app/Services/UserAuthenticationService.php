@@ -50,8 +50,10 @@ class UserAuthenticationService implements IUserAuthenticationService
     public function canEmployeeView($requestId)
     {
 
-        $canEmployeeView = false;
-        $logedInUser     = $this->getCurrrentLogedInUserDetails();
+        $canViewEmployee                          = false;
+        $canViewOwnProfile=false;
+        $canViewOthersProfile = false;
+        $logedInUser                              = $this->getCurrrentLogedInUserDetails();
 
         // if ($logedInUser->employee->id == $requestId) {
         //     $canEmployeeView = true;
@@ -59,19 +61,33 @@ class UserAuthenticationService implements IUserAuthenticationService
         $user = Auth::user();
 
         $roles = $user->roles;
-        if (count($roles)>1) {
-            $canEmployeeView = true;
-        }
-        else
-        {
+        foreach ($roles as $role) {
+            foreach ($role->perms as $permission) {
 
-            if($user->employee->id==$requestId)
-            {
-                  $canEmployeeView = true;
+                if ($permission->name == "view-ownProfile") {
+                    if ($user->employee->id == $requestId) {
+                         $canViewOwnProfile = true;
+                    }
+                   
+                }
+                if ($permission->name == "view-othersProfile") {
+                    $canViewOthersProfile = true;
+
+                }
             }
         }
+        // dd($roles);
+        // if (count($roles)>1) {
+        //     $canViewEmployee = true;
+        // }
+        // else {
 
-        return $canEmployeeView;
+        //     if ($user->employee->id == $requestId) {
+        //         $canViewEmployee = true;
+        //     }
+        // }
+        return array($canViewOwnProfile, $canViewOthersProfile);
+       // return $canViewEmployee;
 
     }
 

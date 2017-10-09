@@ -206,9 +206,15 @@ class PermissionsTableSeeder extends Seeder
             ],
             [
             
-                'name'         => 'view-employee',
-                'display_name' => 'Can view-employee',
-                'description'  => 'This User LoggedIn will be able to  view-employee',
+                'name'         => 'view-ownProfile',
+                'display_name' => 'Can view-ownProfile',
+                'description'  => 'This User LoggedIn will be able to  view-ownProfile',
+            ],
+            [
+            
+                'name'         => 'view-othersProfile',
+                'display_name' => 'Can view-othersProfile',
+                'description'  => 'This User LoggedIn will be able to  view-othersProfile',
             ],
             [
                 

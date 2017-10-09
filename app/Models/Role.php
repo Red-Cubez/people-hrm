@@ -1,11 +1,15 @@
-<?php 
+<?php
 namespace People\Models;
 
 use Zizaco\Entrust\EntrustRole;
+use Zizaco\Entrust\Traits\EntrustRoleTrait;
 
 class Role extends EntrustRole
 {
-	 public function users() {
+    use EntrustRoleTrait;
+
+    public function users()
+    {
         return $this->belongsToMany('People\Models\User');
     }
 }

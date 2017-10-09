@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-@role(['manager','admin','client-manager'])
+@permission('view-client')
     <div class="panel-body">
         @include('common.errors')
         <div>
@@ -68,13 +68,15 @@
             {{$client->address->country }}
             @endif
         </div>
-        @role(['manager','client-manager','admin'])
+        @permission('create/edit-client')
         <div>
         <a href="/clients/{{$client->id}}/edit">
             <button class="btn btn-primary"> Edit
 
             </button></a>
         </div>
+        @endpermission
+        @permission('delete-client')
         <div>
         <form action="{{ url('clients/'.$client->id) }}" method="POST">
             {{ csrf_field() }}
@@ -86,12 +88,13 @@
             </input>
         </form>
         </div>
-         @endrole
-        <a href="/clients/{{$client->id}}/clientprojects">
+         @endpermission
+       @permission('create/edit-clientProject') 
+        <a href="/clients/{{$client->id}}/createproject">
             <button class="btn btn-primary"> Add New Project
 
             </button></a>
-       
+        @endpermission
     </div>
     @include('clientProjects/showProjects')
 <script type="text/javascript">
@@ -100,5 +103,5 @@ $('[data-toggle=confirmation]').confirmation({
   
 });
 </script>
-@endrole
+@endpermission
 @endsection

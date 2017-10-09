@@ -14,7 +14,12 @@ class EmployeeTimeoffController extends Controller
 
     public function __construct(IEmployeeTimeoffService $employeeTimeoffService, IUserAuthenticationService
          $userAuthenticationService) {
+
         $this->middleware('auth');
+        $this->middleware('permission:create/edit-timeoff', ['only' => ['store','edit','update']]);
+          $this->middleware('permission:delete-timeoff', ['only' => ['destroy']]);
+       $this->middleware('permission:approve-timeoffs', ['only' => ['showNonApprovedTimeoffsOfEmployees','approveTimeoffs','show']]);
+
         $this->EmployeeTimeoffService    = $employeeTimeoffService;
         $this->UserAuthenticationService = $userAuthenticationService;
 
@@ -41,18 +46,18 @@ class EmployeeTimeoffController extends Controller
     public function createTimeoff($employeeId)
     {
 
-        $isManager                               = $this->UserAuthenticationService->isManager();
-        $isAdmin                                 = $this->UserAuthenticationService->isAdmin();
-        $isHrManager                             = $this->UserAuthenticationService->isHrManager();
-        $isRequestedEmployeeBelongsToSameCompany = $this->UserAuthenticationService->isRequestedEmployeeBelongsToSameCompany($employeeId);
-        $isEmployee                              = $this->UserAuthenticationService->isEmployee();
-        $canEmployeeView                         = false;
+        // $isManager                               = $this->UserAuthenticationService->isManager();
+        // $isAdmin                                 = $this->UserAuthenticationService->isAdmin();
+        // $isHrManager                             = $this->UserAuthenticationService->isHrManager();
+         $isRequestedEmployeeBelongsToSameCompany = $this->UserAuthenticationService->isRequestedEmployeeBelongsToSameCompany($employeeId);
+        // $isEmployee                              = $this->UserAuthenticationService->isEmployee();
+        // $canEmployeeView                         = false;
 
-        if ($isEmployee) {
-            $canEmployeeView = $this->UserAuthenticationService->canEmployeeView($employeeId);
+        // if ($isEmployee) {
+        //     $canEmployeeView = $this->UserAuthenticationService->canEmployeeView($employeeId);
 
-        }
-        if (($isManager || $isAdmin || $isHrManager || $canEmployeeView) && $isRequestedEmployeeBelongsToSameCompany) {
+        // }
+        if ($isRequestedEmployeeBelongsToSameCompany) {
             $timeoffs = $this->EmployeeTimeoffService->getTimeoffsOfEmployee($employeeId);
 
             return view('employeeTimeoff.index',
@@ -102,11 +107,12 @@ class EmployeeTimeoffController extends Controller
     }
     public function showNonApprovedTimeoffsOfEmployees()
     {
-        $isManager   = $this->UserAuthenticationService->isManager();
-        $isAdmin     = $this->UserAuthenticationService->isAdmin();
-        $isHrManager = $this->UserAuthenticationService->isHrManager();
 
-        if ($isManager || $isAdmin || $isHrManager) {
+        // $isManager   = $this->UserAuthenticationService->isManager();
+        // $isAdmin     = $this->UserAuthenticationService->isAdmin();
+        // $isHrManager = $this->UserAuthenticationService->isHrManager();
+
+       // if ($isManager || $isAdmin || $isHrManager) {
 
             $employeesTimeoffs = $this->EmployeeTimeoffService->getNonApprovedTimeoffsOfEmployees();
 
@@ -114,9 +120,9 @@ class EmployeeTimeoffController extends Controller
                 [
                     'employeesTimeoffs' => $employeesTimeoffs,
                 ]);
-        } else {
-            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
-        }
+        // } else {
+        //     return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+        // }
     }
 
     /**
@@ -128,22 +134,22 @@ class EmployeeTimeoffController extends Controller
     public function edit($timeoffId)
     {
 
-        $isManager   = $this->UserAuthenticationService->isManager();
-        $isAdmin     = $this->UserAuthenticationService->isAdmin();
-        $isHrManager = $this->UserAuthenticationService->isHrManager();
+        // $isManager   = $this->UserAuthenticationService->isManager();
+        // $isAdmin     = $this->UserAuthenticationService->isAdmin();
+        // $isHrManager = $this->UserAuthenticationService->isHrManager();
 
-        $isEmployee      = $this->UserAuthenticationService->isEmployee();
+       // $isEmployee      = $this->UserAuthenticationService->isEmployee();
         $timeoff         = $this->EmployeeTimeoffService->getTimeoff($timeoffId);
-        $canEmployeeView = false;
+       // $canEmployeeView = false;
 
         if (isset($timeoff)) {
             $isTimeoffBelongsToEmployeeOfCompany = $this->UserAuthenticationService->isRequestedEmployeeBelongsToSameCompany($timeoff->employee_id);
-            if ($isEmployee) {
+            //if ($isEmployee) {
 
-                $canEmployeeView = $this->UserAuthenticationService->canEmployeeView($timeoff->employee->id);
+               // $canEmployeeView = $this->UserAuthenticationService->canEmployeeView($timeoff->employee->id);
 
-            }
-            if (($isManager || $isAdmin || $isHrManager || $canEmployeeView) && $isTimeoffBelongsToEmployeeOfCompany) {
+           // }
+            if($isTimeoffBelongsToEmployeeOfCompany) {
 
                 if ($timeoff->is_approved == 0) {
                     return view('employeeTimeoff.edit',
@@ -223,23 +229,23 @@ class EmployeeTimeoffController extends Controller
     }
     public function approveTimeoffs(Request $request)
     {
-       
-        $isManager = $this->UserAuthenticationService->isManager();
 
-        $isAdmin = $this->UserAuthenticationService->isAdmin();
+        // $isManager = $this->UserAuthenticationService->isManager();
 
-        $isEmployee      = $this->UserAuthenticationService->isEmployee();
-        $canEmployeeView = false;
-        if ($isEmployee) {
-            $canEmployeeView = $this->UserAuthenticationService->canEmployeeView($request->employeeId);
+        // $isAdmin = $this->UserAuthenticationService->isAdmin();
 
-        }
-        if ($isManager || $isAdmin || $canEmployeeView) {
+       // $isEmployee      = $this->UserAuthenticationService->isEmployee();
+       // $canEmployeeView = false;
+        // if ($isEmployee) {
+        //     $canEmployeeView = $this->UserAuthenticationService->canEmployeeView($request->employeeId);
+
+        // }
+      //  if ($isManager || $isAdmin || $canEmployeeView) {
 
             $this->EmployeeTimeoffService->approveTimeoffs($request);
 
             return back();
-        }
+       // }
     }
 
 }

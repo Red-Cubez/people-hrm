@@ -30,17 +30,17 @@
                 <th>
                     Cost
                 </th>
-                 @role(['admin','manager','client-manager'])
+               @permission(['view-clientProject','delete-clientProject'])
                 <th>
                     Operations
                 </th>
-                @endrole
+                @endpermission
             </thead>
             <!-- Table Body -->
             <tbody>
                 @foreach ($companyProfileModel->clientProjects as $project)
                 <tr>
-                    <!-- company->project Name -->
+            
                     <td class="table-text">
                         <div>
                             {{ $project->projectName }}
@@ -78,7 +78,7 @@
                     </td>
                
                     <td>
-                             @role(['admin','manager'])
+                     @permission('delete-clientProject')
                         <form action="{{ url('clientprojects/'.$project->projectId) }}" method="POST">
                             {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
@@ -90,12 +90,12 @@
                                 </button>
                             </input>
                         </form>
-                        @endrole
-                      @role(['admin','manager','client-manager'])
+                    @endpermission
+                     @permission('view-clientProject')
                         <a href="{{route('clientprojects.show', $project->projectId)}}"> <button class="btn btn-primary"> View </button></a>
 
                     </td>
-                        @endrole
+                     @endpermission
                 </tr>
                 @endforeach
             </tbody>

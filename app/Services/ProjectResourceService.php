@@ -100,7 +100,7 @@ class ProjectResourceService implements IProjectResourceService
 
     public function getClientProjectResourcesOnActiveProjects($employeeId)
     {
-
+ 
         $currentDate = date("Y-m-d");
         return ProjectResource::where('employee_id', $employeeId)
             ->where('actualEndDate', '>=', $currentDate)

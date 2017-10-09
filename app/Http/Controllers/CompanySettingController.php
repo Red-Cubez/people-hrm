@@ -16,6 +16,8 @@ class CompanySettingController extends Controller
         IUserAuthenticationService $userAuthenticationService) {
 
         $this->middleware('auth');
+        $this->middleware('permission:create/show/edit/delete-companySettings');
+
         $this->CompanySettingService     = $companySettingService;
         $this->UserAuthenticationService = $userAuthenticationService;
     }
@@ -40,6 +42,7 @@ class CompanySettingController extends Controller
     }
     public function createSettings($companyId)
     {
+
         $isAdmin                             = $this->UserAuthenticationService->isAdmin();
         $isManager                           = $this->UserAuthenticationService->isManager();
         $isRequestedCompanyBelongsToEmployee = $this->UserAuthenticationService->
@@ -81,12 +84,13 @@ class CompanySettingController extends Controller
      */
     public function show($companyId)
     {
-        $isAdmin                             = $this->UserAuthenticationService->isAdmin();
-        $isManager                           = $this->UserAuthenticationService->isManager();
+
+        // $isAdmin                             = $this->UserAuthenticationService->isAdmin();
+        // $isManager                           = $this->UserAuthenticationService->isManager();
         $isRequestedCompanyBelongsToEmployee = $this->UserAuthenticationService->
             isRequestedCompanyBelongsToEmployee($companyId);
 
-        if (($isAdmin || $isManager) && $isRequestedCompanyBelongsToEmployee) {
+        if ($isRequestedCompanyBelongsToEmployee) {
             $companySetting = $this->CompanySettingService->getCompanySetting($companyId);
 
             return view('companySettings/show',
@@ -139,7 +143,7 @@ class CompanySettingController extends Controller
     public function update(Request $request, $settingId)
     {
         $this->validate($request, array(
-            'currencyName' => 'required|max:255',
+            'currencyName'   => 'required|max:255',
             'currencySymbol' => 'required|max:255',
         ));
         $companySetting = $this->CompanySettingService->updateCompanySettings($request, $settingId);

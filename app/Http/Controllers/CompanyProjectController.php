@@ -36,6 +36,10 @@ class CompanyProjectController extends Controller
     ) {
 
         $this->middleware('auth');
+        $this->middleware( 'permission:view-companyProject' , [ 'only' => ['show']]);
+        $this->middleware( 'permission:create/edit-companyProject' , [ 'only' => ['store','manageProject','edit','update']]);
+        $this->middleware( 'permission:delete-companyProject' , [ 'only' => ['destroy']]);
+
         $this->CompanyProjectService         = $companyProjectService;
         $this->CompanyProjectResourceService = $companyProjectResourceService;
         $this->ProjectGrapher                = $ProjectGrapher;
@@ -105,15 +109,15 @@ class CompanyProjectController extends Controller
     public function show($companyProjectId)
     {
 
-        $isManager = false;
-        $isManager = $this->UserAuthenticationService->isManager();
-        $isAdmin   = $this->UserAuthenticationService->isAdmin();
+        // $isManager = false;
+        // $isManager = $this->UserAuthenticationService->isManager();
+        // $isAdmin   = $this->UserAuthenticationService->isAdmin();
         $project   = $this->CompanyProjectService->getCompanyProject($companyProjectId);
 
         if (isset($project)) {
 
             $isRequestedCompanyProjectBelongsToSameCompany = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($project->company_id);
-            if (($isManager || $isAdmin) && $isRequestedCompanyProjectBelongsToSameCompany) {
+            if ($isRequestedCompanyProjectBelongsToSameCompany) {
                 list($currentProjectResources) = $this->CompanyProjectResourceService->showCompanyProjectResources($companyProjectId);
 
                 $companyProject = $this->CompanyProjectService->viewCompanyProject($companyProjectId);
@@ -159,14 +163,14 @@ class CompanyProjectController extends Controller
     public function edit($companyProjectId)
     {
 
-        $isManager = $this->UserAuthenticationService->isManager();
-        $isAdmin   = $this->UserAuthenticationService->isAdmin();
+        // $isManager = $this->UserAuthenticationService->isManager();
+        // $isAdmin   = $this->UserAuthenticationService->isAdmin();
         $project   = $this->CompanyProjectService->getCompanyProject($companyProjectId);
 
         if (isset($project)) {
 
             $isRequestedCompanyProjectBelongsToSameCompany = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($project->company_id);
-            if (($isManager || $isAdmin) && $isRequestedCompanyProjectBelongsToSameCompany) {
+            if ($isRequestedCompanyProjectBelongsToSameCompany) {
                 return view('companyProjects/companyProjectEditForm', ['companyproject' => $project]);
             } else {
                 return $this->UserAuthenticationService->redirectToErrorMessageView(null);
@@ -186,7 +190,7 @@ class CompanyProjectController extends Controller
      */
     public function update(Request $request, CompanyProject $companyproject)
     {
-
+    
         $this->CompanyProjectService->updateCompanyProject($request, $companyproject);
         return response()->json(
             [
@@ -204,27 +208,27 @@ class CompanyProjectController extends Controller
     public function destroy(CompanyProject $companyproject)
     {
 
-        $isManager = false;
-        $isManager = $this->UserAuthenticationService->isManager();
-        $isAdmin   = $this->UserAuthenticationService->isAdmin();
-        if ($isManager || $isAdmin) {
+        // $isManager = false;
+        // $isManager = $this->UserAuthenticationService->isManager();
+        // $isAdmin   = $this->UserAuthenticationService->isAdmin();
+        // if ($isManager || $isAdmin) {
 
             $this->CompanyProjectService->deleteCompanyProject($companyproject);
 
             return redirect('/companies/' . $companyproject->company_id);
-        } else {
-            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
-        }
+        // } else {
+        //     return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+        // }
     }
 
     public function manageProject($companyid)
     {
-
-        $isManager                                     = false;
-        $isManager                                     = $this->UserAuthenticationService->isManager();
-        $isAdmin                                       = $this->UserAuthenticationService->isAdmin();
+       // dd("here");
+        // $isManager                                     = false;
+        // $isManager                                     = $this->UserAuthenticationService->isManager();
+        // $isAdmin                                       = $this->UserAuthenticationService->isAdmin();
         $isRequestedCompanyProjectBelongsToSameCompany = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($companyid);
-        if (($isManager || $isAdmin) && $isRequestedCompanyProjectBelongsToSameCompany) {
+        if ($isRequestedCompanyProjectBelongsToSameCompany) {
 
             return view('companyprojects.index',
                 [

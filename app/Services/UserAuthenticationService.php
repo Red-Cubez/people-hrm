@@ -49,12 +49,28 @@ class UserAuthenticationService implements IUserAuthenticationService
     }
     public function canEmployeeView($requestId)
     {
+
         $canEmployeeView = false;
         $logedInUser     = $this->getCurrrentLogedInUserDetails();
 
-        if ($logedInUser->employee->id == $requestId) {
+        // if ($logedInUser->employee->id == $requestId) {
+        //     $canEmployeeView = true;
+        // }
+        $user = Auth::user();
+
+        $roles = $user->roles;
+        if (count($roles)>1) {
             $canEmployeeView = true;
         }
+        else
+        {
+
+            if($user->employee->id==$requestId)
+            {
+                  $canEmployeeView = true;
+            }
+        }
+
         return $canEmployeeView;
 
     }
@@ -101,7 +117,7 @@ class UserAuthenticationService implements IUserAuthenticationService
     }
     public function redirectToErrorMessageView($message)
     {
-    
+
         if (!isset($message)) {
             $message = "You are not Authorized to view this page !!";
         }

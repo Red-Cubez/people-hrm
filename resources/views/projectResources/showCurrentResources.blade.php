@@ -1,10 +1,7 @@
 <div class="panel-body">
     <!-- Display Validation Errors -->
 @include('common.errors')
-<!-- New clientProject Form -->
-<!-- <form action="{{-- {{url('projectresources') }} --}}" method="POST" class="form-horizontal">
-       {{--  {{ csrf_field()  --}}}} -->
-    <!-- Resource Name -->
+
     @if (count($projectResources)>0 )
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -14,10 +11,12 @@
                 <table class="table table-striped task-table">
                     <!-- Table Headings -->
                     <thead>
-                    <th>Project</th>
-                    <th>&nbsp;</th>
+                    <th>Resource Name</th>
+                    @permission(['create/edit-clientProjectResource','delete-clientProjectResource'])
+                    <th>Operations</th>
+                    @endrole
                     </thead>
-                    <!-- Table Body -->
+                    
                     <tbody>
                     @foreach ($projectResources as $projectResource)
                         <tr>
@@ -31,12 +30,14 @@
 
                             <td>
                              
-                               
+                              @permission(['create/edit-clientProjectResource'])
                                   <a href="/projectresources/{{$projectResource->resourceId}}/updateResource"> 
                                   <button class="btn btn-primary">
                                    Edit
                                     </button>
                                   </a>
+                               @endrole
+                               @permission(['delete-clientProjectResource'])   
                                 <form action="{{ url('projectresources/'.$projectResource->resourceId) }}"
                                       method="POST">
                                     {{ csrf_field() }}
@@ -49,6 +50,7 @@
                                      </button>
                                    
                                 </form>
+                               @endpermission 
                             </td>
                         </tr>
                     @endforeach

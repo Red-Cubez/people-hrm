@@ -25,6 +25,10 @@ class ReportsController extends Controller
         ICompanySettingService $companySettingService) {
 
         $this->middleware('auth');
+        $this->middleware( 'permission:showInternalProjectsReport|showClientProjectsReport|showAllProjectsReport|reportOptions' , ['only' => ['showOptions']]);
+        $this->middleware( 'permission:showInternalProjectsReport', ['only' => ['showInternalProjectsReport']]);
+        $this->middleware( 'permission:showClientProjectsReport', ['only' => ['showClientProjectsReport']]);
+        $this->middleware( 'permission:showAllProjectsReport', ['only' => ['showAllProjectsReport']]);
 
         $this->ReportService             = $reportService;
         $this->UserAuthenticationService = $userAuthenticationService;
@@ -37,14 +41,14 @@ class ReportsController extends Controller
 
     public function showOptions($companyId)
     {
-        $isManager       = $this->UserAuthenticationService->isManager();
-        $isAdmin         = $this->UserAuthenticationService->isAdmin();
-        $isHrManager     = $this->UserAuthenticationService->isHrManager();
-        $isClientManager = $this->UserAuthenticationService->isClientManager();
+        // $isManager       = $this->UserAuthenticationService->isManager();
+        // $isAdmin         = $this->UserAuthenticationService->isAdmin();
+        // $isHrManager     = $this->UserAuthenticationService->isHrManager();
+        // $isClientManager = $this->UserAuthenticationService->isClientManager();
 
         $isRequestedCompanyBelongsToEmployee = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($companyId);
 
-        if (($isManager || $isAdmin || $isClientManager) && $isRequestedCompanyBelongsToEmployee) {
+        if ($isRequestedCompanyBelongsToEmployee) {
 
             return view
                 ('reports/index',
@@ -76,12 +80,12 @@ class ReportsController extends Controller
 
         }
        
-        $isManager = $this->UserAuthenticationService->isManager();
-        $isAdmin   = $this->UserAuthenticationService->isAdmin();
+        // $isManager = $this->UserAuthenticationService->isManager();
+        // $isAdmin   = $this->UserAuthenticationService->isAdmin();
 
         $isRequestedCompanyBelongsToEmployee = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($companyId);
 
-        if (($isManager || $isAdmin) && $isRequestedCompanyBelongsToEmployee) {
+        if ($isRequestedCompanyBelongsToEmployee) {
 
            
             $companyInternalProjects                                           = $this->CompanyProjectService->getAllInternalProjectsOfCompany($companyId);
@@ -135,12 +139,12 @@ class ReportsController extends Controller
 
         }
 
-        $isManager = $this->UserAuthenticationService->isManager();
-        $isAdmin   = $this->UserAuthenticationService->isAdmin();
+        // $isManager = $this->UserAuthenticationService->isManager();
+        // $isAdmin   = $this->UserAuthenticationService->isAdmin();
 
         $isRequestedCompanyBelongsToEmployee = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($companyId);
 
-        if (($isManager || $isAdmin) && $isRequestedCompanyBelongsToEmployee) {
+        if ($isRequestedCompanyBelongsToEmployee) {
 
         
             $companyInternalProjects                           = $this->CompanyProjectService->getAllInternalProjectsOfCompany($companyId);
@@ -182,13 +186,13 @@ class ReportsController extends Controller
 
         }
 
-        $isManager       = $this->UserAuthenticationService->isManager();
-        $isAdmin         = $this->UserAuthenticationService->isAdmin();
-        $isClientManager = $this->UserAuthenticationService->isClientManager();
+        // $isManager       = $this->UserAuthenticationService->isManager();
+        // $isAdmin         = $this->UserAuthenticationService->isAdmin();
+        // $isClientManager = $this->UserAuthenticationService->isClientManager();
 
         $isRequestedCompanyBelongsToEmployee = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($companyId);
 
-        if (($isManager || $isAdmin || $isClientManager) && $isRequestedCompanyBelongsToEmployee) {
+        if ($isRequestedCompanyBelongsToEmployee) {
 
             $companyClientProjects                             = $this->ClientProjectService->getAllClientProjectsOfCompany($companyId);
             $startAndEndDateTimelinesWithCostProfitAndNetTotal =

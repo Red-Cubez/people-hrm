@@ -18,9 +18,11 @@
                 <th>
                     Hire Date
                 </th>
+                @permission(['create/edit-employee','view-employee'])
                 <th>
                     Operation
                 </th>
+                @endpermission
                 </thead>
                 <!-- Table Body -->
                 <tbody>
@@ -43,11 +45,12 @@
                             </div>
                         </td>
                         <td>
+                          @permission(['view-employee'])
                             <a href="/employees/{{$employee->employeeId}}">
                                 <button class="btn btn-primary"> View
 
                                 </button></a>
-                           
+                         @endpermission
                         </td>
                     </tr>
                 @endforeach
@@ -57,10 +60,10 @@
             No Record Found
         @endif
     </div>
-  @role(['hr-manager','manager','admin'])
+    @permission(['create/edit-employee'])
     <a href="/employees/showemployeeform/{{$companyProfileModel->companyId}}">
         <button class="btn btn-primary"> Add New Employee
 
         </button></a>
-  @endrole
+  @endpermission
 </div>

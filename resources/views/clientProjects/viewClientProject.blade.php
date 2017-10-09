@@ -5,10 +5,10 @@
         <div class="row">
             <div class="col-sm-4">
                 @include('viewProject/viewProject')
-                @role(['manager','admin'])
+                @permission('create/edit-clientProject')
                 <a href="/clientprojects/{{$project->projectId}}/edit">
                     <button class="btn btn-primary"> Edit</button></a>
-                @endrole
+                @endpermission
             </div>
             <div class="col-sm-8">
                 @include('showGraph/showProjectGraph')

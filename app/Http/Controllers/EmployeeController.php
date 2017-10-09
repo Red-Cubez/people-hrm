@@ -26,8 +26,10 @@ class EmployeeController extends Controller
         IResourceFormValidator $employeeFormValidator, ICompanyHolidayService $companyHolidayService) {
 
         $this->middleware('auth');
+        $this->middleware('permission:create/edit-employee', ['only' => ['showEmployeeForm', 'store', 'edit', 'update']]);
+        $this->middleware('permission:view-employee', ['only' => ['show']]);
+        $this->middleware('permission:delete-employee', ['only' => ['destroy']]);
 
-        // $this->middleware('isAuthorizedToView');
         $this->EmployeeService           = $employeeService;
         $this->DepartmentService         = $departmentService;
         $this->JobTitleService           = $jobTitleService;
@@ -50,12 +52,12 @@ class EmployeeController extends Controller
     public function showEmployeeForm($companyId)
     {
 
-        $isManager = $this->UserAuthenticationService->isManager();
-        $isHrManager = $this->UserAuthenticationService->isHrManager();
-        $isAdmin     = $this->UserAuthenticationService->isAdmin();
-        $isRequestedCompanyBelongsToEmployee=$this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($companyId);
+        // $isManager = $this->UserAuthenticationService->isManager();
+        // $isHrManager = $this->UserAuthenticationService->isHrManager();
+        // $isAdmin     = $this->UserAuthenticationService->isAdmin();
+        $isRequestedCompanyBelongsToEmployee = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($companyId);
 
-        if (($isAdmin || $isManager || $isHrManager) && $isRequestedCompanyBelongsToEmployee) {
+        if ($isRequestedCompanyBelongsToEmployee) {
             $employees   = $this->EmployeeService->getAllEmployees();
             $departments = $this->DepartmentService->getAllDepartments();
             $jobTitles   = $this->JobTitleService->getJobTitlesOfCompany($companyId);
@@ -104,21 +106,21 @@ class EmployeeController extends Controller
     public function store(Request $request)
     {
 
-        $isManager = $this->UserAuthenticationService->isManager();
-        $isHrManager = $this->UserAuthenticationService->isHrManager();
-        $isAdmin     = $this->UserAuthenticationService->isAdmin();
-        
-        if ($isAdmin || $isManager || $isHrManager) {
-            $employeeId = $this->EmployeeService->createEmployee($request);
+        // $isManager = $this->UserAuthenticationService->isManager();
+        // $isHrManager = $this->UserAuthenticationService->isHrManager();
+        // $isAdmin     = $this->UserAuthenticationService->isAdmin();
 
-            return response()->json(
-                [
-                    'employeeId' => $employeeId,
-                ]);
-        } else {
-            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+        //if ($isAdmin || $isManager || $isHrManager) {
+        $employeeId = $this->EmployeeService->createEmployee($request);
 
-        }
+        return response()->json(
+            [
+                'employeeId' => $employeeId,
+            ]);
+        // } else {
+        //     return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+
+        // }
 
     }
 
@@ -131,21 +133,19 @@ class EmployeeController extends Controller
     public function show($employeeId)
     {
 
-        $isAdmin              = $this->UserAuthenticationService->isAdmin();
-        $isManager            = $this->UserAuthenticationService->isManager();
-        $isEmployee           = $this->UserAuthenticationService->isEmployee();
-        $isHrManager = $this->UserAuthenticationService->isHrManager();
-        $isClientManager = $this->UserAuthenticationService->isClientManager();
+        // $isAdmin              = $this->UserAuthenticationService->isAdmin();
+        // $isManager            = $this->UserAuthenticationService->isManager();
+        // $isEmployee           = $this->UserAuthenticationService->isEmployee();
+        // $isHrManager = $this->UserAuthenticationService->isHrManager();
+        //$isClientManager = $this->UserAuthenticationService->isClientManager();
 
-        $canEmployeeView      = false;
+        $canEmployeeView                         = false;
         $isRequestedEmployeeBelongsToSameCompany = false;
         $isRequestedEmployeeBelongsToSameCompany = $this->UserAuthenticationService->isRequestedEmployeeBelongsToSameCompany($employeeId);
-        if ($isEmployee) {
-            $canEmployeeView = $this->UserAuthenticationService->canEmployeeView($employeeId);
 
-        }
+        $canViewProfile = $this->UserAuthenticationService->canEmployeeView($employeeId);
 
-        if (($isAdmin || $isManager || $canEmployeeView || $isHrManager || $isClientManager) && $isRequestedEmployeeBelongsToSameCompany) {
+        if ($canViewProfile && $isRequestedEmployeeBelongsToSameCompany) {
             $employee = $this->EmployeeService->getEmployee($employeeId);
             if (isset($employee)) {
                 $company       = Company::find($employee->company_id);
@@ -165,7 +165,7 @@ class EmployeeController extends Controller
         } else {
             return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         }
-     
+
     }
 
 /**
@@ -176,12 +176,12 @@ class EmployeeController extends Controller
  */
     public function edit($employeeId)
     {
-        $isManager = $this->UserAuthenticationService->isManager();
-        $isHrManager = $this->UserAuthenticationService->isHrManager();
-        $isAdmin     = $this->UserAuthenticationService->isAdmin();
-        $isRequestedEmployeeBelongsToSameCompany= $this->UserAuthenticationService->isRequestedEmployeeBelongsToSameCompany($employeeId);
-        
-        if (($isAdmin || $isManager || $isHrManager) && $isRequestedEmployeeBelongsToSameCompany) {
+        // $isManager = $this->UserAuthenticationService->isManager();
+        // $isHrManager = $this->UserAuthenticationService->isHrManager();
+        // $isAdmin     = $this->UserAuthenticationService->isAdmin();
+        $isRequestedEmployeeBelongsToSameCompany = $this->UserAuthenticationService->isRequestedEmployeeBelongsToSameCompany($employeeId);
+
+        if ($isRequestedEmployeeBelongsToSameCompany) {
             $employee          = $this->EmployeeService->getEmployee($employeeId);
             $editEmployeeModel = $this->EmployeeService->editEmployee($employee);
             $departments       = $this->EmployeeService->getAllDepartments();
@@ -209,20 +209,20 @@ class EmployeeController extends Controller
 
     public function update(Request $request, $employeeId)
     {
-       $isManager = $this->UserAuthenticationService->isManager();
-        $isHrManager = $this->UserAuthenticationService->isHrManager();
-        $isAdmin     = $this->UserAuthenticationService->isAdmin();
-        
-        if ($isAdmin || $isManager || $isHrManager) {
-            $employee = $this->EmployeeService->getEmployee($employeeId);
-            $this->EmployeeService->updateEmployee($request, $employee);
-            return response()->json(
-                [
-                    'employeeId' => $employeeId,
-                ]);
-        } else {
-            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
-        }
+        // $isManager = $this->UserAuthenticationService->isManager();
+        //  $isHrManager = $this->UserAuthenticationService->isHrManager();
+        //  $isAdmin     = $this->UserAuthenticationService->isAdmin();
+
+        //if ($isAdmin || $isManager || $isHrManager) {
+        $employee = $this->EmployeeService->getEmployee($employeeId);
+        $this->EmployeeService->updateEmployee($request, $employee);
+        return response()->json(
+            [
+                'employeeId' => $employeeId,
+            ]);
+        // } else {
+        //     return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+        // }
 
     }
 
@@ -234,18 +234,18 @@ class EmployeeController extends Controller
  */
     public function destroy(Employee $employee)
     {
-        $isManager = $this->UserAuthenticationService->isManager();
-        $isHrManager = $this->UserAuthenticationService->isHrManager();
-        $isAdmin     = $this->UserAuthenticationService->isAdmin();
-        
-        if ($isAdmin || $isManager || $isHrManager) {
+        // $isManager = $this->UserAuthenticationService->isManager();
+        // $isHrManager = $this->UserAuthenticationService->isHrManager();
+        // $isAdmin     = $this->UserAuthenticationService->isAdmin();
 
-            $this->EmployeeService->deleteEmployee($employee);
+        //if ($isAdmin || $isManager || $isHrManager) {
 
-            return redirect('/companies/' . $employee->company_id);
-        } else {
-            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
-        }
+        $this->EmployeeService->deleteEmployee($employee);
+
+        return redirect('/companies/' . $employee->company_id);
+        // } else {
+        //     return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+        // }
 
     }
 }

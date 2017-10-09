@@ -67,11 +67,11 @@ class EmployeeService implements IEmployeeService
     }
     public function attachUserIdToEmployee($userId, $employeeId)
     {
-       $employee=Employee::find($employeeId);
-         
-       $employee->user_id=$userId;
+        $employee = Employee::find($employeeId);
 
-       $employee->save();
+        $employee->user_id = $userId;
+
+        $employee->save();
     }
 
     public function createOrUpdateEmployee($request, $employee)
@@ -159,12 +159,13 @@ class EmployeeService implements IEmployeeService
         $employeeProfileModel->jobTitle        = $employee->JobTitle->title;
         $employeeProfileModel->annualSalary    = $employee->annualSalary;
         $employeeProfileModel->hourlyRate      = $employee->hourlyRate;
-
-        $employeeProfileModel->streetLine1   = $employee->address->streetLine1;
-        $employeeProfileModel->streetLine2   = $employee->address->streetLine2;
-        $employeeProfileModel->country       = $employee->address->country;
-        $employeeProfileModel->stateProvince = $employee->address->stateProvince;
-        $employeeProfileModel->city          = $employee->address->city;
+        if (isset($employee->address)) {
+            $employeeProfileModel->streetLine1   = $employee->address->streetLine1;
+            $employeeProfileModel->streetLine2   = $employee->address->streetLine2;
+            $employeeProfileModel->country       = $employee->address->country;
+            $employeeProfileModel->stateProvince = $employee->address->stateProvince;
+            $employeeProfileModel->city          = $employee->address->city;
+        }
 
         return $employeeProfileModel;
 
@@ -262,6 +263,7 @@ class EmployeeService implements IEmployeeService
         } else {
             $employeeModel->isWorkingOverTime = null;
         }
+  
 
         return $employeeModel;
     }

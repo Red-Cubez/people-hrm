@@ -101,17 +101,18 @@
                                 @endif
                                 Working Over Time.
                             </div>
-                            @role(['hr-manager','manager','admin'])
+                        
                                
-
+                            @permission('create/edit-employee')
                             <br>
                             <a href="/employees/{{$employeeModel->employeeProfile->employeeId}}/edit">
                                 <button class="btn btn-primary"> Edit
 
                                 </button>
                             </a>
+                            @endpermission
                             
-                            
+                            @permission('delete-employee')
                             <form action="{{ url('employees/'.$employeeModel->employeeProfile->employeeId) }}"
                                   method="POST">
                                 {{ csrf_field() }}
@@ -122,7 +123,7 @@
                                     </i>
                                 </button>
                             </form>
-                            @endrole
+                            @endpermission
 
                         </div>
                         </div>
@@ -139,7 +140,7 @@
                     </div>
                 </div>
                 </div>
-                  @role(['manager','hr-manager','admin','employee'])
+                  @permission(['create/edit-timesheet'])
                     <div class="row">
                         <div class="col-sm-12">
                             <a href="/employeetimesheet/{{$employeeModel->employeeProfile->employeeId}}/create">
@@ -149,9 +150,9 @@
 
                         </div>
                     </div>
-                    @endrole
+                    @endpermission
                     <br/>
-                    @role(['manager','hr-manager','admin'])
+                    @permission(['approve-timesheets'])
                     <div class="row">
                         <div class="col-sm-12">
                             <a href="/employeestimesheets/">
@@ -162,9 +163,9 @@
 
                       </div>
                       </div>
-                      @endrole
+                    @endrole
                     <br/>
-                     @role(['manager','employee','hr-manager','admin'])
+                    @permission(['create/edit-timeoff'])
                        <div class="row">
                         <div class="col-sm-12">
                             <a href="/employeetimeoff/{{$employeeModel->employeeProfile->employeeId}}/create">
@@ -175,9 +176,9 @@
 
                         </div>
                             </div>
-                     @endrole
+                     @endpermission
                         <br/>
-                        @role(['manager','hr-manager','admin'])
+                       @permission(['approve-timeoffs'])
                         <div class="row">
                         <div class="col-sm-12">
              
@@ -188,7 +189,7 @@
 
                       </div>
                       </div>
-                       @endrole
+                       @endpermission
 
                 
                     @include('employees/showEmployeeClientProjects')

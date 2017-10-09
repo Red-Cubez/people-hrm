@@ -11,7 +11,6 @@ use People\Services\Interfaces\IProjectService;
 use People\Services\Interfaces\IResourceFormValidator;
 use People\Services\Interfaces\IUserAuthenticationService;
 
-
 class ProjectResourceController extends Controller
 {
     /**
@@ -28,8 +27,12 @@ class ProjectResourceController extends Controller
     public $CompanyProjectResourceService;
 
     public function __construct(IProjectResourceService $projectResourceService, IProjectService $projectService,
-        IResourceFormValidator $resourceFormValidator, IUserAuthenticationService $userAuthenticationService, IClientProjectService $clientProjectService,ICompanyProjectResourceService $companyProjectResourceService) {
+        IResourceFormValidator $resourceFormValidator, IUserAuthenticationService $userAuthenticationService, IClientProjectService $clientProjectService, ICompanyProjectResourceService $companyProjectResourceService) {
+
         $this->middleware('auth');
+        $this->middleware('permission:create/edit-clientProjectResource|create/edit-companyProjectResource', ['only' => ['manageressources', 'store', 'updateressources']]);
+        $this->middleware('permission:delete-clientProjectResource', ['only' => ['destroy']]);
+
         $this->ProjectResourceService        = $projectResourceService;
         $this->ProjectService                = $projectService;
         $this->ResourceFormValidator         = $resourceFormValidator;
@@ -38,7 +41,7 @@ class ProjectResourceController extends Controller
         $this->CompanyProjectResourceService = $companyProjectResourceService;
     }
 
-    function index()
+    public function index()
     {
         //
     }
@@ -48,7 +51,7 @@ class ProjectResourceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    function create()
+    public function create()
     {
         //
     }
@@ -59,7 +62,7 @@ class ProjectResourceController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    function validateResourceForm(Request $request)
+    public function validateResourceForm(Request $request)
     {
         $formErrors = $this->ResourceFormValidator->validateForm($request);
 
@@ -69,7 +72,7 @@ class ProjectResourceController extends Controller
             ]);
 
     }
-    function store(Request $request)
+    public function store(Request $request)
     {
         $projectId  = null;
         $redirectTo = null;
@@ -89,16 +92,17 @@ class ProjectResourceController extends Controller
 
     }
 
-    function manageressources($clientProjectId)
+    public function manageressources($clientProjectId)
     {
-        $isAdmin         = $this->UserAuthenticationService->isAdmin();
-        $isManager       = $this->UserAuthenticationService->isManager();
-        $isClientManager = $this->UserAuthenticationService->isClientManager();
+        //   dd("here");
+        // $isAdmin         = $this->UserAuthenticationService->isAdmin();
+        // $isManager       = $this->UserAuthenticationService->isManager();
+        // $isClientManager = $this->UserAuthenticationService->isClientManager();
 
         $clientProject = $this->ClientProjectService->getClientProjectDetails($clientProjectId);
         if (isset($clientProject)) {
             $isRequestedClientProjectBelongsToSameCompany = $this->UserAuthenticationService->isRequestedClientBelongsToSameCompany($clientProject->client_id);
-            if (($isAdmin || $isManager || $isClientManager) && $isRequestedClientProjectBelongsToSameCompany) {
+            if ($isRequestedClientProjectBelongsToSameCompany) {
                 list($currentProjectResources, $availableEmployees) = $this->ProjectResourceService->showClientProjectResources($clientProjectId);
 
                 $projectResources = $this->ProjectService->mapResourcesDetailsToClass($currentProjectResources, false);
@@ -125,7 +129,7 @@ class ProjectResourceController extends Controller
  * @param  \People\Models\ClientProject $clientProject
  * @return \Illuminate\Http\Response
  */
-    function show(ProjectResource $projectresource)
+    public function show(ProjectResource $projectresource)
     {
         //
     }
@@ -136,7 +140,7 @@ class ProjectResourceController extends Controller
  * @param  \People\Models\ClientProject $clientProject
  * @return \Illuminate\Http\Response
  */
-    function edit(ProjectResource $projectresource)
+    public function edit(ProjectResource $projectresource)
     {
         //
     }
@@ -148,7 +152,7 @@ class ProjectResourceController extends Controller
  * @param  \People\Models\ClientProject $clientProject
  * @return \Illuminate\Http\Response
  */
-    function update(Request $request, ProjectResource $projectresource)
+    public function update(Request $request, ProjectResource $projectresource)
     {
 
     }
@@ -159,7 +163,7 @@ class ProjectResourceController extends Controller
  * @param  \People\Models\ProjectResource $projectresource
  * @return \Illuminate\Http\Response
  */
-    function destroy(ProjectResource $projectresource, Request $request)
+    public function destroy(ProjectResource $projectresource, Request $request)
     {
 
         $this->ProjectResourceService->deleteProjectResource($projectresource);
@@ -167,7 +171,7 @@ class ProjectResourceController extends Controller
         return redirect('/clientprojects/' . $projectresource->client_project_id . '/projectresources');
     }
 
-    function updateressources($projectResourceId)
+    public function updateressources($projectResourceId)
     {
 
         //edit form
@@ -177,11 +181,11 @@ class ProjectResourceController extends Controller
         if (isset($resource)) {
             $isRequestedClientProjectResourceBelongsToSameCompany = $this->UserAuthenticationService->isRequestedClientBelongsToSameCompany($resource->clientProject->client->id);
 
-            $isAdmin                                              = $this->UserAuthenticationService->isAdmin();
-            $isManager                                            = $this->UserAuthenticationService->isManager();
-            $isClientManager                                      = $this->UserAuthenticationService->isClientManager();
+            // $isAdmin         = $this->UserAuthenticationService->isAdmin();
+            // $isManager       = $this->UserAuthenticationService->isManager();
+            //$isClientManager = $this->UserAuthenticationService->isClientManager();
 
-            if (($isAdmin || $isManager || $isClientManager) && $isRequestedClientProjectResourceBelongsToSameCompany) {
+            if ($isRequestedClientProjectResourceBelongsToSameCompany) {
                 return view('projectResources.updateResource', [
                     'projectresources' => $resource,
                     'clientProjectid'  => $resource->client_project_id,

@@ -65,16 +65,18 @@
                                 EDIT
                             </button>
                         </a>
+                         @permission('delete-timeoff')
                         <form action="{{ url('employeetimeoff/'.$timeoff->id) }}" method="POST">
                             {{ csrf_field() }}
                                     {{ method_field('DELETE') }}
-                            <button class="btn btn-danger" type="submit">
+                            <button class="btn btn-danger" data-toggle="confirmation" data-singleton="true" type="submit">
                                 <i class="fa fa-trash">
                                     DELETE
                                 </i>
                             </button>
                         @endif
                         </form>
+                         @endpermission
                     </td>
                 </tr>
                 @endforeach
@@ -84,25 +86,11 @@
             </tbody>
         </table>
     </div>
-    {{--
-    <form action="{{ url('/companies/'.$companyProfileModel->companyId.'/companyprojects') }}" method="POST">
-        --}}
-    {{--{{ csrf_field() }}--}}
-    {{--{{ method_field('GET') }}--}}
-    {{--
-        <button class="btn btn-primary" type="submit">
-            --}}
-    {{--
-            <i class="fa fa-trash">
-                --}}
-    {{--Add New Projects--}}
-    {{--
-            </i>
-            --}}
-    {{--
-        </button>
-        --}}
-    {{--
-    </form>
-    --}}
+   
 </div>
+<script type="text/javascript">
+$('[data-toggle=confirmation]').confirmation({
+  rootSelector: '[data-toggle=confirmation]',
+  
+});
+</script>

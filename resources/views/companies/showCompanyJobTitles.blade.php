@@ -29,7 +29,7 @@
                                 {{$companyJobTitle->jobTitle }}
                             </div>
                         </td>
-                        @role(['hr-manager','manager','admin'])
+                            @permission(['create/edit/delete-jobTitle'])
                         <td>
                             <button
                                     class="btn btn-primary"
@@ -46,7 +46,7 @@
                             </form>
                            
                         </td>
-                        @endrole
+                         @endpermission
                     </tr>
                 @endforeach
 
@@ -55,17 +55,17 @@
             </tbody>
         </table>
     </div>
-    @role(['hr-manager','manager','admin'])
+    @permission(['create/edit/delete-jobTitle'])
     <div>
     <button class="btn btn-primary btn-lg" onclick="openJobTitleModal(null,null);" type="button">
         Add New Job Title
     </button>
     </div>
-    @endrole
+    @endpermission
 </div>
-@role(['hr-manager','manager','admin'])
+@permission(['create/edit/delete-jobTitle'])
 @include('jobTitles/jobTitleModal')
-@endrole
+@endpermission
 @section('page-scripts')
     @parent
     <script type="text/javascript">

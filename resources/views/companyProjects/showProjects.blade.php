@@ -30,11 +30,11 @@
                 <th>
                     Cost
                 </th>
-                 @role(['manager','admin'])
+                 @permission(['delete-companyProject','view-companyProject'])
                 <th>
                     Operations
                 </th>
-                @endrole
+                @endpermission
             </thead>
             <!-- Table Body -->
             <tbody>
@@ -78,7 +78,7 @@
                     </td>
                     <!-- Delete Button -->
                     <td>
-                       @role(['manager','admin'])
+                        @permission('delete-companyProject')
                         <form action="{{ url('companyprojects/'.$project->projectId) }}" method="POST">
                             {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
@@ -91,12 +91,13 @@
                                 
                             </input>
                         </form>
-                      
+                        @endpermission
+                        @permission('view-companyProject')
                         <a href="/companyprojects/{{$project->projectId}}">
                             <button class="btn btn-primary"> View
 
                             </button></a>
-                              @endrole
+                        @endpermission
                                          </td>
                 </tr>
                 @endforeach
@@ -106,12 +107,12 @@
             </tbody>
         </table>
     </div>
-    @role(['admin','manager'])
+    @permission(['create/edit-companyProject'])
     <a href="/companies/{{$companyProfileModel->companyId}}/companyprojects">
         <button class="btn btn-primary"> Add New Projects
 
         </button></a>
-    @endrole
+    @endpermission
 </div>
 <script type="text/javascript">
 $('[data-toggle=confirmation]').confirmation({

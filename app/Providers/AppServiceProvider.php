@@ -81,8 +81,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             'People\Services\Interfaces\IReportService', 'People\Services\ReportService');
 
-         $this->app->bind(
+        $this->app->bind(
             'People\Services\Interfaces\IDateTimeService', 'People\Services\DateTimeService');
+
+        $this->app->bind(
+            'People\Services\Interfaces\IPermissionService', 'People\Services\PermissionService');
     }
 
 }

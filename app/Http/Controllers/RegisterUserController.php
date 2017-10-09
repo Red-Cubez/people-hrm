@@ -18,6 +18,8 @@ class RegisterUserController extends Controller
     public function __construct(IUserAuthenticationService $userAuthenticationService, IEmployeeService $employeeService, IRoleService $roleService)
     {
         $this->middleware('auth');
+        $this->middleware( 'permission:registerUser');
+
         $this->EmployeeService           = $employeeService;
         $this->UserAuthenticationService = $userAuthenticationService;
         $this->RoleService               = $roleService;
@@ -44,10 +46,11 @@ class RegisterUserController extends Controller
 
     public function createUser($companyId)
     {
-        $isAdmin                             = $this->UserAuthenticationService->isAdmin();
+
+        // $isAdmin                             = $this->UserAuthenticationService->isAdmin();
         $isRequestedCompanyBelongsToEmployee = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($companyId);
 
-        if ($isAdmin && $isRequestedCompanyBelongsToEmployee) {
+        if ($isRequestedCompanyBelongsToEmployee) {
             $nonRegisteredEmployees = $this->EmployeeService->getNonRegisteredEmployees($companyId);
             if (isset($nonRegisteredEmployees)) {
                 return view('registerUser/create',

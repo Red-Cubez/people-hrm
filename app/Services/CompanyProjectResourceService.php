@@ -99,10 +99,15 @@ class CompanyProjectResourceService implements ICompanyProjectResourceService
 
     public function getCompanyProjectResourcesOnActiveProjects($employeeId)
     {
+
         $currentDate = date("Y-m-d");
-        return CompanyProjectResource::where('employee_id', $employeeId)
+        //$projectResources= CompanyProjectResource::where('employee_id', $employeeId)->get();
+        
+         $projectResources= CompanyProjectResource::where('employee_id', $employeeId)
             ->where('actualEndDate', '>=', $currentDate)
             ->with('companyProject')
             ->get();
+
+        return $projectResources;     
     }
 }

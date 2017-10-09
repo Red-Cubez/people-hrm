@@ -13,7 +13,11 @@ class EmployeeTimesheetController extends Controller
     public $UserAuthenticationService;
     public function __construct(IEmployeeTimesheetService $employeeTimesheetService, IUserAuthenticationService
          $userAuthenticationService) {
+
         $this->middleware('auth');
+        $this->middleware('permission:create/edit-timesheet', ['only' => ['createTimesheet', 'store', 'edit', 'update']]);
+        $this->middleware('permission:approve-timesheets', ['only' => ['showNonApprovedTimesheetsOfEmployees', 'show','approveTimesheets']]);
+
         $this->EmployeeTimesheetService  = $employeeTimesheetService;
         $this->UserAuthenticationService = $userAuthenticationService;
     }
@@ -54,18 +58,18 @@ class EmployeeTimesheetController extends Controller
     public function createTimesheet($employeeId)
     {
 
-        $isManager                               = $this->UserAuthenticationService->isManager();
-        $isAdmin                                 = $this->UserAuthenticationService->isAdmin();
-        $isHrManager                             = $this->UserAuthenticationService->isHrManager();
+        // $isManager                               = $this->UserAuthenticationService->isManager();
+        // $isAdmin                                 = $this->UserAuthenticationService->isAdmin();
+        // $isHrManager                             = $this->UserAuthenticationService->isHrManager();
         $isRequestedEmployeeBelongsToSameCompany = $this->UserAuthenticationService->isRequestedEmployeeBelongsToSameCompany($employeeId);
 
-        $isEmployee      = $this->UserAuthenticationService->isEmployee();
-        $canEmployeeView = false;
-        if ($isEmployee) {
-            $canEmployeeView = $this->UserAuthenticationService->canEmployeeView($employeeId);
+        //$isEmployee      = $this->UserAuthenticationService->isEmployee();
+        // $canEmployeeView = false;
+        // if ($isEmployee) {
+        //     $canEmployeeView = $this->UserAuthenticationService->canEmployeeView($employeeId);
 
-        }
-        if (($isManager || $isAdmin || $isHrManager || $canEmployeeView) && $isRequestedEmployeeBelongsToSameCompany) {
+        // }
+        if ($isRequestedEmployeeBelongsToSameCompany) {
             $timesheets = $this->EmployeeTimesheetService->getTimesheetsOfEmployee($employeeId);
 
             return view('employeeTimesheet.create',
@@ -82,45 +86,45 @@ class EmployeeTimesheetController extends Controller
     public function store(Request $request)
     {
 
-        $isManager   = $this->UserAuthenticationService->isManager();
-        $isAdmin     = $this->UserAuthenticationService->isAdmin();
-        $isHrManager = $this->UserAuthenticationService->isHrManager();
+        // $isManager   = $this->UserAuthenticationService->isManager();
+        // $isAdmin     = $this->UserAuthenticationService->isAdmin();
+        // $isHrManager = $this->UserAuthenticationService->isHrManager();
 
-        $isEmployee      = $this->UserAuthenticationService->isEmployee();
-        $canEmployeeView = false;
-        if ($isEmployee) {
-            $canEmployeeView = $this->UserAuthenticationService->canEmployeeView($request->employeeId);
+        // $isEmployee      = $this->UserAuthenticationService->isEmployee();
+        // $canEmployeeView = false;
+        // if ($isEmployee) {
+        //     $canEmployeeView = $this->UserAuthenticationService->canEmployeeView($request->employeeId);
 
-        }
-        if ($isManager || $isAdmin || $isHrManager || $canEmployeeView) {
+        // }
+        //if ($isManager || $isAdmin || $isHrManager || $canEmployeeView) {
 
-            $this->validate($request, array(
-                'timesheetDate'        => 'required',
-                'mondayBillable'       => 'required|integer|min:0|max:40',
-                'tuesdayBillable'      => 'required|integer|min:0|max:40',
-                'wednesdayBillable'    => 'required|integer|min:0|max:40',
-                'thursdayBillable'     => 'required|integer|min:0|max:40',
-                'fridayBillable'       => 'required|integer|min:0|max:40',
-                'saturdayBillable'     => 'nullable|integer|min:0|max:40',
-                'sundayBillable'       => 'nullable|integer|min:0|max:40',
+        $this->validate($request, array(
+            'timesheetDate'        => 'required',
+            'mondayBillable'       => 'required|integer|min:0|max:40',
+            'tuesdayBillable'      => 'required|integer|min:0|max:40',
+            'wednesdayBillable'    => 'required|integer|min:0|max:40',
+            'thursdayBillable'     => 'required|integer|min:0|max:40',
+            'fridayBillable'       => 'required|integer|min:0|max:40',
+            'saturdayBillable'     => 'nullable|integer|min:0|max:40',
+            'sundayBillable'       => 'nullable|integer|min:0|max:40',
 
-                'mondayNonBillable'    => 'nullable|integer|min:0|max:40',
-                'tuesdayNonBillable'   => 'nullable|integer|min:0|max:40',
-                'wednesdayNonBillable' => 'nullable|integer|min:0|max:40',
-                'thursdayNonBillable'  => 'nullable|integer|min:0|max:40',
-                'fridayNonBillable'    => 'nullable|integer|min:0|max:40',
-                'saturdayNonBillable'  => 'nullable|integer|min:0|max:40',
-                'sundayNonBillable'    => 'nullable|integer|min:0|max:40',
+            'mondayNonBillable'    => 'nullable|integer|min:0|max:40',
+            'tuesdayNonBillable'   => 'nullable|integer|min:0|max:40',
+            'wednesdayNonBillable' => 'nullable|integer|min:0|max:40',
+            'thursdayNonBillable'  => 'nullable|integer|min:0|max:40',
+            'fridayNonBillable'    => 'nullable|integer|min:0|max:40',
+            'saturdayNonBillable'  => 'nullable|integer|min:0|max:40',
+            'sundayNonBillable'    => 'nullable|integer|min:0|max:40',
 
-            ));
+        ));
 
-            $this->EmployeeTimesheetService->storeTimesheet($request);
+        $this->EmployeeTimesheetService->storeTimesheet($request);
 
-            return back();
-        } else {
-            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+        return back();
+        // } else {
+        //     return $this->UserAuthenticationService->redirectToErrorMessageView(null);
 
-        }
+        // }
 
     }
 
@@ -133,16 +137,17 @@ class EmployeeTimesheetController extends Controller
     ////view readonly to admin
     public function show($id)
     {
+
         $timesheet = $this->EmployeeTimesheetService->getEmployeeTimesheet($id);
 
         if (isset($timesheet)) {
             $isTimesheetBelongsToEmployeeOfCompany = $this->UserAuthenticationService->isRequestedEmployeeBelongsToSameCompany($timesheet->employee_id);
 
-            $isManager   = $this->UserAuthenticationService->isManager();
-            $isAdmin     = $this->UserAuthenticationService->isAdmin();
-            $isHrManager = $this->UserAuthenticationService->isHrManager();
+            // $isManager   = $this->UserAuthenticationService->isManager();
+            // $isAdmin     = $this->UserAuthenticationService->isAdmin();
+            // $isHrManager = $this->UserAuthenticationService->isHrManager();
 
-            if (($isManager || $isAdmin || $isHrManager) && $isTimesheetBelongsToEmployeeOfCompany) {
+            if ($isTimesheetBelongsToEmployeeOfCompany) {
 
                 $billableWeeklyTimesheet    = json_decode($timesheet->billableWeeklyTimesheet, true);
                 $nonBillableWeeklyTimesheet = json_decode($timesheet->nonBillableWeeklyTimesheet, true);
@@ -170,21 +175,22 @@ class EmployeeTimesheetController extends Controller
     }
     public function showNonApprovedTimesheetsOfEmployees()
     {
-        $isManager   = $this->UserAuthenticationService->isManager();
-        $isAdmin     = $this->UserAuthenticationService->isAdmin();
-        $isHrManager = $this->UserAuthenticationService->isHrManager();
 
-        if ($isManager || $isAdmin || $isHrManager || $canEmployeeView) {
+        // $isManager   = $this->UserAuthenticationService->isManager();
+        // $isAdmin     = $this->UserAuthenticationService->isAdmin();
+        // $isHrManager = $this->UserAuthenticationService->isHrManager();
+
+       // if ($isManager || $isAdmin || $isHrManager || $canEmployeeView) {
             $employeesTimesheets = $this->EmployeeTimesheetService->getNonApprovedTimesheetsOfEmployees();
 
             return view('employeeTimesheet.showNonApprovedTimesheetsOfEmployees',
                 [
                     'employeesTimesheets' => $employeesTimesheets,
                 ]);
-        } else {
-            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+        // } else {
+        //     return $this->UserAuthenticationService->redirectToErrorMessageView(null);
 
-        }
+        // }
 
     }
 
@@ -197,26 +203,26 @@ class EmployeeTimesheetController extends Controller
     public function edit($id)
     {
 
-        $isManager       = $this->UserAuthenticationService->isManager();
-        $isEmployee      = $this->UserAuthenticationService->isEmployee();
-        $isAdmin         = $this->UserAuthenticationService->isAdmin();
-        $canEmployeeView = false;
-        $timesheet       = $this->EmployeeTimesheetService->getEmployeeTimesheet($id);
+        // $isManager       = $this->UserAuthenticationService->isManager();
+        // $isEmployee      = $this->UserAuthenticationService->isEmployee();
+        // $isAdmin         = $this->UserAuthenticationService->isAdmin();
+        // $canEmployeeView = false;
+        $timesheet = $this->EmployeeTimesheetService->getEmployeeTimesheet($id);
 
         if (isset($timesheet)) {
             $isTimesheetBelongsToEmployeeOfCompany = $this->UserAuthenticationService->isRequestedEmployeeBelongsToSameCompany($timesheet->employee_id);
 
-            if ($isEmployee) {
+            // if ($isEmployee) {
 
-                if (isset($timesheet)) {
-                    $canEmployeeView = $this->UserAuthenticationService->canEmployeeView($timesheet->employee->id);
-                } else {
+            //     // if (isset($timesheet)) {
+            //     //     $canEmployeeView = $this->UserAuthenticationService->canEmployeeView($timesheet->employee->id);
+            //     // } else {
 
-                    return $this->UserAuthenticationService->redirectToErrorMessageView(null);
-                }
+            //     //     return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+            //     // }
 
-            }
-            if (($isManager || $isAdmin || $canEmployeeView) && $isTimesheetBelongsToEmployeeOfCompany) {
+            // }
+            if ($isTimesheetBelongsToEmployeeOfCompany) {
 
                 $billableWeeklyTimesheet    = json_decode($timesheet->billableWeeklyTimesheet, true);
                 $nonBillableWeeklyTimesheet = json_decode($timesheet->nonBillableWeeklyTimesheet, true);
@@ -251,20 +257,20 @@ class EmployeeTimesheetController extends Controller
     public function update(Request $request, $id)
     {
 
-        $isAdmin         = $this->UserAuthenticationService->isAdmin();
-        $isEmployee      = $this->UserAuthenticationService->isEmployee();
-        $canEmployeeView = false;
-        if ($isEmployee) {
+        // $isAdmin         = $this->UserAuthenticationService->isAdmin();
+        // $isEmployee      = $this->UserAuthenticationService->isEmployee();
+        // $canEmployeeView = false;
+       // if ($isEmployee) {
             $timesheet = $this->EmployeeTimesheetService->getEmployeeTimesheet($id);
 
-            if (isset($timesheet)) {
-                $canEmployeeView = $this->UserAuthenticationService->canEmployeeView($timesheet->employee->id);
-            } else {
-                return $this->UserAuthenticationService->redirectToErrorMessageView(null);
-            }
+            // if (isset($timesheet)) {
+            //     $canEmployeeView = $this->UserAuthenticationService->canEmployeeView($timesheet->employee->id);
+            // } else {
+            //     return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+            // }
 
-        }
-        if ($isAdmin || $canEmployeeView) {
+       // }
+       // if ($isAdmin || $canEmployeeView) {
             $this->validate($request, array(
 
                 'mondayBillable'       => 'required|integer|min:0|max:40',
@@ -287,10 +293,10 @@ class EmployeeTimesheetController extends Controller
 
             $employeeId = $this->EmployeeTimesheetService->updateTimesheet($request, $id);
             return redirect('employeetimesheet/' . $employeeId . '/create');
-        } else {
-            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+        // } else {
+        //     return $this->UserAuthenticationService->redirectToErrorMessageView(null);
 
-        }
+        // }
 
     }
     public function approveTimesheets(Request $request)

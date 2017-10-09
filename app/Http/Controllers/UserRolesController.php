@@ -94,9 +94,9 @@ class UserRolesController extends Controller
             $user = $this->UserRolesService->getUserWithRoles($userId);
 
             $userRoles = $this->UserRolesService->saveRolesInArray($user);
-
+        
             $roles = $this->RoleService->getAllRoles();
-
+    
             return view('userRole/edit',
                 [
                     'user'      => $user,

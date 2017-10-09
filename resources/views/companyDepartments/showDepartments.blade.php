@@ -12,13 +12,13 @@
             <th>
                 Department Name
             </th>
-            @role(['hr-manager','manager','admin'])
+            @permission('create/edit/delete-department')
             <th>
                 Operations
             </th> 
-            @endrole 
+            @endpermission
             </thead>
-            <!-- Table Body -->
+         
             <tbody id="departmentTableBody">
             @if (count($companyProfileModel->departments) > 0)
                 @foreach ($companyProfileModel->departments as $department)
@@ -29,7 +29,7 @@
                                 {{ $department->departmentName }}
                             </div>
                         </td>
-                        @role(['hr-manager','manager','admin'])
+                        @permission('create/edit/delete-department')
                         <td>
                             <button class="btn btn-primary"
                                     onclick="openDepartmentModal({{$department->departmentId}},null);"
@@ -47,7 +47,7 @@
                                     </button>
                             </form>
                         </td>
-                        @endrole
+                        @endpermission
                     </tr>
                 @endforeach
 
@@ -55,16 +55,16 @@
             </tbody>
         </table>
     </div>
-@role(['hr-manager','manager','admin'])
+ @permission('create/edit/delete-department')
     <button class="btn btn-primary btn-lg" onclick="openDepartmentModal(null,null);" type="button">
         Add Department
     </button>
- @endrole   
+ @endpermission  
 
 </div>
-@role(['hr-manager','manager','admin'])
+ @permission('create/edit/delete-department')
  @include('companyDepartments/companyDepartmentModal')
-@endrole 
+@endpermission
 @section('page-scripts')
     @parent
     <script type="text/javascript">

@@ -5,12 +5,12 @@ namespace People\Http\Controllers;
 use Illuminate\Http\Request;
 use People\Models\ClientProject;
 use People\Services\Interfaces\IClientProjectService;
+use People\Services\Interfaces\ICompanySettingService;
 use People\Services\Interfaces\IProjectGrapher;
 use People\Services\Interfaces\IProjectResourceService;
 use People\Services\Interfaces\IProjectService;
 use People\Services\Interfaces\IResourceFormValidator;
 use People\Services\Interfaces\IUserAuthenticationService;
-use People\Services\Interfaces\ICompanySettingService;
 
 class ClientProjectController extends Controller
 {
@@ -31,9 +31,13 @@ class ClientProjectController extends Controller
     public function __construct(IClientProjectService $clientProjectService, IProjectGrapher $projectGrapher,
         IProjectService $projectService, IProjectResourceService $projectResourceService,
         IResourceFormValidator $projectFormValidator, IUserAuthenticationService
-         $userAuthenticationService,ICompanySettingService $companySettingService) {
+         $userAuthenticationService, ICompanySettingService $companySettingService) {
 
         $this->middleware('auth');
+        $this->middleware('permission:create/edit-clientProject', ['only' => ['createProject', 'store', 'edit', 'update']]);
+        $this->middleware('permission:view-clientProject', ['only' => ['show']]);
+        $this->middleware('permission:delete-clientProject', ['only' => ['destroy']]);
+
         $this->ClientProjectService      = $clientProjectService;
         $this->ProjectGrapher            = $projectGrapher;
         $this->ProjectService            = $projectService;
@@ -104,14 +108,14 @@ class ClientProjectController extends Controller
     public function show($clientProjectId)
     {
 
-        $isManager       = $this->UserAuthenticationService->isManager();
-        $isAdmin         = $this->UserAuthenticationService->isAdmin();
-        $isClientManager = $this->UserAuthenticationService->isClientManager();
+        // $isManager       = $this->UserAuthenticationService->isManager();
+        // $isAdmin         = $this->UserAuthenticationService->isAdmin();
+        // $isClientManager = $this->UserAuthenticationService->isClientManager();
         $clientProject   = $this->ClientProjectService->getClientProjectDetails($clientProjectId);
 
         if (isset($clientProject)) {
             $isRequestedClientProjectBelongsToSameCompany = $this->UserAuthenticationService->isRequestedClientBelongsToSameCompany($clientProject->client_id);
-            if (($isManager || $isAdmin || $isClientManager) && $isRequestedClientProjectBelongsToSameCompany) {
+            if ($isRequestedClientProjectBelongsToSameCompany) {
 
                 $clientProjectModel = $this->ClientProjectService->viewClientProject($clientProjectId);
                 $clientProjects     = $this->ClientProjectService->getClientProjectDetails($clientProjectId);
@@ -128,9 +132,9 @@ class ClientProjectController extends Controller
                 $isOnBudget                            = $this->ProjectService->isProjectOnBudget($projectTotalCost, $clientProjectModel->budget);
                 $clientProjectModel->isProjectOnBudget = $isOnBudget;
                 $currencyName                          = $this->CompanySettingService->
-                                                         getCurrencyName($clientProject->client->company_id);
-                $currencySymbol                        = $this->CompanySettingService->
-                                                         getCurrencySymbol($clientProject->client->company_id);
+                    getCurrencyName($clientProject->client->company_id);
+                $currencySymbol = $this->CompanySettingService->
+                    getCurrencySymbol($clientProject->client->company_id);
                 return view('clientProjects/viewClientProject',
                     [
                         'project'          => $clientProjectModel,
@@ -158,13 +162,13 @@ class ClientProjectController extends Controller
     public function edit($clientProjectId)
     {
 
-        $isManager     = $this->UserAuthenticationService->isManager();
-        $isAdmin       = $this->UserAuthenticationService->isAdmin();
+        // $isManager     = $this->UserAuthenticationService->isManager();
+        // $isAdmin       = $this->UserAuthenticationService->isAdmin();
         $clientProject = $this->ClientProjectService->getClientProjectDetails($clientProjectId);
 
         if (isset($clientProject)) {
             $isRequestedClientProjectBelongsToSameCompany = $this->UserAuthenticationService->isRequestedClientBelongsToSameCompany($clientProject->client_id);
-            if (($isManager || $isAdmin) && $isRequestedClientProjectBelongsToSameCompany) {
+            if ($isRequestedClientProjectBelongsToSameCompany) {
 
                 return view('clientProjects/clientProjectEditForm', ['clientProject' => $clientProject]);
             } else {
@@ -197,26 +201,27 @@ class ClientProjectController extends Controller
      */
     public function destroy(ClientProject $clientproject)
     {
-        $isManager = $this->UserAuthenticationService->isManager();
-        $isAdmin   = $this->UserAuthenticationService->isAdmin();
+       
+        // $isManager = $this->UserAuthenticationService->isManager();
+        // $isAdmin   = $this->UserAuthenticationService->isAdmin();
 
-        if ($isManager || $isAdmin) {
+       // if ($isManager || $isAdmin) {
             $clientid = $this->ClientProjectService->deleteClientProject($clientproject);
 
             return redirect('/clients/' . $clientid);
-        } else {
-            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+        // } else {
+        //     return $this->UserAuthenticationService->redirectToErrorMessageView(null);
 
-        }
+        // }
     }
 
-    public function manageProject($clientId)
+    public function createProject($clientId)
     {
 
-        $isManager                             = $this->UserAuthenticationService->isManager();
-        $isAdmin                               = $this->UserAuthenticationService->isAdmin();
+        // $isManager                             = $this->UserAuthenticationService->isManager();
+        // $isAdmin                               = $this->UserAuthenticationService->isAdmin();
         $isRequestedClientBelongsToSameCompany = $this->UserAuthenticationService->isRequestedClientBelongsToSameCompany($clientId);
-        if (($isManager || $isAdmin) && $isRequestedClientBelongsToSameCompany) {
+        if ($isRequestedClientBelongsToSameCompany) {
 
             $clientProjects = $this->ClientProjectService->manageClientProjects($clientId);
 

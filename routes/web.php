@@ -12,7 +12,7 @@
  */
 
 Route::get('/', function () {
-	return view('welcome');
+    return view('welcome');
 });
 
 /**
@@ -20,21 +20,21 @@ Route::get('/', function () {
  */
 Route::post('/task', function (Request $request) {
 
-	$validator = Validator::make($request->all(), [
-		'name' => 'required|max:255',
-	]);
+    $validator = Validator::make($request->all(), [
+        'name' => 'required|max:255',
+    ]);
 
-	if ($validator->fails()) {
-		return redirect('/')
-			->withInput()
-			->withErrors($validator);
-	}
+    if ($validator->fails()) {
+        return redirect('/')
+            ->withInput()
+            ->withErrors($validator);
+    }
 
-	$task = new People\Models\Task;
-	$task->name = $request->name;
-	$task->save();
+    $task       = new People\Models\Task;
+    $task->name = $request->name;
+    $task->save();
 
-	return redirect('/');
+    return redirect('/');
 });
 
 /**
@@ -42,9 +42,9 @@ Route::post('/task', function (Request $request) {
  */
 Route::delete('/task/{task}', function (People\Models\Task $task) {
 
-	$task->delete();
+    $task->delete();
 
-	return redirect('/');
+    return redirect('/');
 });
 
 Auth::routes();
@@ -73,7 +73,7 @@ Route::resource('companyprojectresources', 'CompanyProjectResourceController');
 Route::resource('jobtitle', 'JobTitleController');
 Route::resource('companyholidays', 'CompanyHolidayController');
 
-Route::get('/clients/{clientid}/clientprojects', 'ClientProjectController@manageProject');
+Route::get('/clients/{clientid}/createproject', 'ClientProjectController@createProject');
 
 Route::resource('company/department', 'CompanyDepartmentController');
 Route::resource('companies', 'CompanyController');
@@ -87,7 +87,10 @@ Route::get('/employeestimesheets/', 'EmployeeTimesheetController@showNonApproved
 Route::post('/employeestimesheets/approve', 'EmployeeTimesheetController@approveTimesheets');
 Route::resource('employeetimesheet', 'EmployeeTimesheetController');
 
-Route::get('/employeetimeoff/{employeeId}/create/', 'EmployeeTimeoffController@createTimeOff');
+//Route::get('/employeetimeoff/{employeeId}/create/', 'EmployeeTimeoffController@createTimeOff');
+
+Route::get('/employeetimeoff/{employeeId}/create', ['middleware' => ['permission:create/edit-timeoff'], 'uses' => 'EmployeeTimeoffController@createTimeOff']);
+
 Route::post('/employeetimeoff/timeoff/validatetimeoffdates', 'EmployeeTimeoffController@validateTimeoffDates');
 Route::get('/employeestimeoffs/', 'EmployeeTimeoffController@showNonApprovedTimeoffsOfEmployees');
 Route::post('/employeestimeoffs/approve', 'EmployeeTimeoffController@approveTimeoffs');

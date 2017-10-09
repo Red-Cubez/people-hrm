@@ -24,7 +24,11 @@ class CompanyProjectResourceController extends Controller
     public function __construct(ICompanyProjectResourceService $companyProjectResourceService,
         IResourceFormValidator $resourceFormValidator, IUserAuthenticationService
          $userAuthenticationService, ICompanyProjectService $companyProjectService) {
+
         $this->middleware('auth');
+        $this->middleware('permission:create/edit-companyProjectResource', ['only' => ['show','edit']]);
+        $this->middleware('permission:delete-companyProjectResource', ['only' => ['destroy']]);
+
         $this->CompanyProjectResourceService = $companyProjectResourceService;
         $this->ResourceFormValidator         = $resourceFormValidator;
         $this->UserAuthenticationService     = $userAuthenticationService;
@@ -55,7 +59,7 @@ class CompanyProjectResourceController extends Controller
      */
     public function validateResourceForm(Request $request)
     {
-   
+
         $formErrors = $this->ResourceFormValidator->validateForm($request);
 
         return response()->json(
@@ -67,7 +71,7 @@ class CompanyProjectResourceController extends Controller
 
     public function store(Request $request)
     {
-           ////Function use in project resource controller
+        ////Function use in project resource controller
         // $projectId=$this->CompanyProjectResourceService->saveOrUpdateCompanyProjectResource($request);
         // return redirect("companyprojects/".$projectId);
         // return response()->json(
@@ -88,14 +92,14 @@ class CompanyProjectResourceController extends Controller
     public function show($companyProjectId)
     {
 
-        $isManager = $this->UserAuthenticationService->isManager();
-        $isAdmin   = $this->UserAuthenticationService->isAdmin();
+        // $isManager = $this->UserAuthenticationService->isManager();
+        // $isAdmin   = $this->UserAuthenticationService->isAdmin();
         $project   = $this->CompanyProjectService->getCompanyProject($companyProjectId);
 
         if (isset($project)) {
 
             $isRequestedCompanyProjectBelongsToSameCompany = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($project->company_id);
-            if (($isManager || $isAdmin) && $isRequestedCompanyProjectBelongsToSameCompany) {
+            if ($isRequestedCompanyProjectBelongsToSameCompany) {
                 list($currentProjectResources, $availableEmployees) = $this->CompanyProjectResourceService->showCompanyProjectResources($companyProjectId);
                 return view('CompanyProjectResources.index', [
                     'projectResources'   => $currentProjectResources,
@@ -120,7 +124,7 @@ class CompanyProjectResourceController extends Controller
      */
     public function edit($companyProjectResourceId)
     {
-      
+
         $isManager       = $this->UserAuthenticationService->isManager();
         $isAdmin         = $this->UserAuthenticationService->isAdmin();
         $projectResource = $this->CompanyProjectResourceService->getCompanyProjectResource($companyProjectResourceId);

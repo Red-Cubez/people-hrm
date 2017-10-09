@@ -19,17 +19,21 @@ class ClientController extends Controller
     public function __construct(IClientService $clientService, IUserAuthenticationService $userAuthenticationService)
     {
         $this->middleware('auth');
+         $this->middleware( 'permission:create/edit-client' , ['only' => ['showClientForm' ,'store','edit','update']]);
+         $this->middleware( 'permission:view-client' , ['only' => ['show']]);
+                $this->middleware( 'permission:delete-client' , ['only' => ['destroy']]);
         $this->ClientService             = $clientService;
         $this->UserAuthenticationService = $userAuthenticationService;
     }
     public function showClientForm($companyId)
     {
-        $isRequestedCompanyBelongsToEmployee = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($companyId);
-        $isManager                           = $this->UserAuthenticationService->isManager();
-        $isClientManager                     = $this->UserAuthenticationService->isClientManager();
-        $isAdmin                             = $this->UserAuthenticationService->isAdmin();
 
-        if (($isAdmin || $isManager || $isClientManager) && $isRequestedCompanyBelongsToEmployee) {
+        $isRequestedCompanyBelongsToEmployee = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($companyId);
+        // $isManager                           = $this->UserAuthenticationService->isManager();
+        // $isClientManager                     = $this->UserAuthenticationService->isClientManager();
+        // $isAdmin                             = $this->UserAuthenticationService->isAdmin();
+
+        if ($isRequestedCompanyBelongsToEmployee) {
 
             $clients = $this->ClientService->getAllClients();
 
@@ -74,12 +78,12 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        $isManager                           = $this->UserAuthenticationService->isManager();
-        $isClientManager                     = $this->UserAuthenticationService->isClientManager();
-        $isAdmin                             = $this->UserAuthenticationService->isAdmin();
+        // $isManager                           = $this->UserAuthenticationService->isManager();
+        // $isClientManager                     = $this->UserAuthenticationService->isClientManager();
+        // $isAdmin                             = $this->UserAuthenticationService->isAdmin();
         $isRequestedCompanyBelongsToEmployee = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($request->companyId);
 
-        if (($isAdmin || $isManager || $isClientManager) && $isRequestedCompanyBelongsToEmployee) {
+        if ($isRequestedCompanyBelongsToEmployee) {
             $this->validate($request, array(
                 'name' => 'required|max:255',
             ));
@@ -100,14 +104,14 @@ class ClientController extends Controller
     public function show($clientId)
     {
 
-        $isManager       = $this->UserAuthenticationService->isManager();
-        $isClientManager = $this->UserAuthenticationService->isClientManager();
-        $isAdmin         = $this->UserAuthenticationService->isAdmin();
+        // $isManager       = $this->UserAuthenticationService->isManager();
+        // $isClientManager = $this->UserAuthenticationService->isClientManager();
+        // $isAdmin         = $this->UserAuthenticationService->isAdmin();
         $client          = $this->ClientService->getClientDetails($clientId);
 
         if (isset($client)) {
             $isRequestedClientBelongsToSameCompany = $this->UserAuthenticationService->isRequestedClientBelongsToSameCompany($clientId);
-            if (($isAdmin || $isManager || $isClientManager) && $isRequestedClientBelongsToSameCompany) {
+            if ($isRequestedClientBelongsToSameCompany) {
                 $clientProjects = $this->ClientService->getClientProjects($client);
 
                 return view('clients/showClient',
@@ -131,14 +135,15 @@ class ClientController extends Controller
      */
     public function edit($clientId, Request $request)
     {
-        $isManager       = $this->UserAuthenticationService->isManager();
-        $isClientManager = $this->UserAuthenticationService->isClientManager();
-        $isAdmin         = $this->UserAuthenticationService->isAdmin();
+
+        // $isManager       = $this->UserAuthenticationService->isManager();
+        // $isClientManager = $this->UserAuthenticationService->isClientManager();
+        // $isAdmin         = $this->UserAuthenticationService->isAdmin();
         $client          = $this->ClientService->getClientDetails($clientId);
 
         if (isset($client)) {
             $isRequestedClientBelongsToSameCompany = $this->UserAuthenticationService->isRequestedClientBelongsToSameCompany($clientId);
-            if (($isAdmin || $isManager || $isClientManager) && $isRequestedClientBelongsToSameCompany) {
+            if ($isRequestedClientBelongsToSameCompany) {
 
                 return view('clients/clientEditForm',
                     [
@@ -164,20 +169,20 @@ class ClientController extends Controller
      */
     public function update(Request $request, Client $client)
     {
-        $isManager       = $this->UserAuthenticationService->isManager();
-        $isClientManager = $this->UserAuthenticationService->isClientManager();
-        $isAdmin         = $this->UserAuthenticationService->isAdmin();
+        // $isManager       = $this->UserAuthenticationService->isManager();
+        // $isClientManager = $this->UserAuthenticationService->isClientManager();
+        // $isAdmin         = $this->UserAuthenticationService->isAdmin();
 
-        if ($isAdmin || $isManager || $isClientManager) {
+        //if ($isAdmin || $isManager || $isClientManager) {
             $this->validate($request, array(
                 'name' => 'required|max:255',
             ));
             $this->ClientService->updateClient($request, $client);
 
             return redirect('/clients/' . $client->id);
-        } else {
-            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
-        }
+        // } else {
+        //     return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+        // }
     }
     /**
      * Remove the specified resource from storage.
@@ -188,17 +193,17 @@ class ClientController extends Controller
 
     public function destroy(Client $client)
     {
-        $isManager       = $this->UserAuthenticationService->isManager();
-        $isClientManager = $this->UserAuthenticationService->isClientManager();
-        $isAdmin         = $this->UserAuthenticationService->isAdmin();
+        // $isManager       = $this->UserAuthenticationService->isManager();
+        // $isClientManager = $this->UserAuthenticationService->isClientManager();
+        // $isAdmin         = $this->UserAuthenticationService->isAdmin();
 
-        if ($isAdmin || $isManager || $isClientManager) {
+       // if ($isAdmin || $isManager || $isClientManager) {
 
             $this->ClientService->deleteClient($client);
 
             return redirect('/companies/' . $client->company_id);
-        } else {
-            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
-        }
+        // } else {
+        //     return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+        // }
     }
 }

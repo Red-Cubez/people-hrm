@@ -1,3 +1,4 @@
+@permission(['show-clientProjects'])
 @if (count($clientProjects) > 0)
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -5,7 +6,7 @@
         </div>
         <div class="panel-body">
             <table class="table table-striped task-table">
-                <!-- Table Headings -->
+   
                 <thead>
                 <th>Name</th>
                 <th>Expected Start Date</th>
@@ -14,10 +15,11 @@
                 <th>Actual End Date</th>
                 <th>Budget</th>
                 <th>Cost</th>
+                @permission(['viewClientProject','delete-clientProject','show-clientProjects'])
                 <th>Operations</th>
-
+                @endpermission
                 </thead>
-                <!-- Table Body -->
+        
                 <tbody>
                 @foreach ($clientProjects as $clientProject)
                     <tr>
@@ -45,11 +47,13 @@
                         </td>
 
                         <td>
+                             @permission(['view-clientProject'])
                             <a href="/clientprojects/{{$clientProject->id}}">
                                 <button class="btn btn-primary"> View
 
                                 </button></a>
-                           @role(['admin','manager','client-manager'])
+                             @endpermission   
+                           @permission(['delete-clientProject'])
                             <form action="{{ url('clientprojects/'.$clientProject->id) }}" method="POST">
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
@@ -57,11 +61,14 @@
                                     <i class="fa fa-trash"> Delete </i>
                                 </button>
                             </form>
+                            @endpermission
+                            @permission('create/edit-clientProjectResource')
                             <a href="/clientprojects/{{$clientProject->id}}/projectresources">
                                 <button class="btn btn-primary"> Manage Resource
 
                                 </button></a>
-                            @endrole    
+                            @endpermission    
+                         
                            
                         </td>
                     </tr>
@@ -70,6 +77,7 @@
             </table>
         </div>
 @endif
+@endpermission
 <script type="text/javascript">
 $('[data-toggle=confirmation]').confirmation({
   rootSelector: '[data-toggle=confirmation]',

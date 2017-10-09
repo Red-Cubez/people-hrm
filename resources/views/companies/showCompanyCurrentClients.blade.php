@@ -1,4 +1,4 @@
-@role(['client-manager','manager','admin'])
+@permission(['show-clients'])
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3>
@@ -58,11 +58,11 @@
             No Record Found
         @endif
     </div>
-    @role(['client-manager','manager','admin'])
+    @permission(['create/edit-client'])
     <a href="/clients/showclientform/{{$companyProfileModel->companyId}}">
         <button class="btn btn-primary"> Add New Client
 
         </button></a>
-     @endrole   
+     @endpermission  
 </div>
-@endrole
+@endpermission

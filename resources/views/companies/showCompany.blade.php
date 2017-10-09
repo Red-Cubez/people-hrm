@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-@role(['manager','admin','hr-manager','client-manager'])
+
+@permission('view-company')
 <div class="container">
     <div class="row">
         <div class="col-sm-3">
@@ -17,22 +18,25 @@
         <div class="col-sm-3">
             @include('companies/showCompanyJobTitles')
         </div>
-       
+        @permission(['show-companyProjects'])
         <div class="col-sm-8">
             @include('companyProjects/showProjects')
         </div>
+        @endpermission
   
     </div>
 
     <div class="row">
+        @permission(['show-clientProjects'])
         <div class="col-sm-8">
             @include('companyProjects/showClientProjectsOfCompany')
         </div>
-        @role(['admin','manager','client-manager'])
+        @endpermission
+        @permission(['reportOptions','showAllProjects','showClientProjects','showInternalProjects'])
         <div class="col-sm-3">
             @include('companies/companyReports')
         </div>
-        @endrole
+        @endpermission
     </div>
 
     <div class="row">
@@ -44,13 +48,15 @@
         </div>
     </div>
     <div class="row">
+       @permission(['create/edit-employee','view-employee','show-employees'])
         <div class="col-sm-5">
             @include('companies/showCompanyCurrentEmployees')
         </div>
+       @endpermission 
         <div class="col-sm-5">
             @include('companies/showCompanyCurrentClients')
         </div>
     </div>
 </div>
-@endrole
+@endpermission
 @endsection

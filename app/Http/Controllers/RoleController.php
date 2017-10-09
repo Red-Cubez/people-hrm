@@ -3,20 +3,24 @@
 namespace People\Http\Controllers;
 
 use Illuminate\Http\Request;
+use People\Services\Interfaces\IPermissionService;
 use People\Services\Interfaces\IRoleService;
 use People\Services\Interfaces\IUserAuthenticationService;
+use People\Models\Role;
 
 class RoleController extends Controller
 {
     public $RoleService;
     public $UserAuthenticationService;
+    public $PermissionService;
 
-    public function __construct(IRoleService $roleService, IUserAuthenticationService $userAuthenticationService)
+    public function __construct(IRoleService $roleService, IUserAuthenticationService $userAuthenticationService, IPermissionService $permissionService)
     {
 
         $this->middleware('auth');
         $this->RoleService               = $roleService;
         $this->UserAuthenticationService = $userAuthenticationService;
+        $this->PermissionService         = $permissionService;
 
     }
     /**
@@ -27,19 +31,23 @@ class RoleController extends Controller
     public function index()
     {
 
-        $isManager = $this->UserAuthenticationService->isManager();
-        $isAdmin   = $this->UserAuthenticationService->isAdmin();
+        $roles       = $this->RoleService->getRoles();
+        $permissions = $this->PermissionService->pluckPermissions();
 
-        if ($isAdmin || $isManager) {
+        return view('roles.index')->withRoles($roles)->withPermissions($permissions);
+        // $isManager = $this->UserAuthenticationService->isManager();
+        // $isAdmin   = $this->UserAuthenticationService->isAdmin();
 
-            $roles = $this->RoleService->getAllRoles();
-            return view('role/index',
-                [
-                    'roles' => $roles,
-                ]);
-        } else {
-            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
-        }
+        // if ($isAdmin || $isManager) {
+
+        //     $roles = $this->RoleService->getAllRoles();
+        //     return view('roles/index',
+        //         [
+        //             'roles' => $roles,
+        //         ]);
+        // } else {
+        //     return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+        // }
     }
 
     /**
@@ -68,22 +76,25 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        $isManager = $this->UserAuthenticationService->isManager();
-        $isAdmin   = $this->UserAuthenticationService->isAdmin();
 
-        if ($isAdmin || $isManager) {
+        $this->RoleService->createRole($request);
+        return redirect()->route('roles.index');
+        // $isManager = $this->UserAuthenticationService->isManager();
+        // $isAdmin   = $this->UserAuthenticationService->isAdmin();
 
-            $this->validate($request, array(
-                'name'        => 'required|unique:roles,name|max:255',
-                'displayName' => 'required|max:255',
-            ));
-            $this->RoleService->saveRole($request);
+        // if ($isAdmin || $isManager) {
 
-            return redirect('roles');
+        //     $this->validate($request, array(
+        //         'name'        => 'required|unique:roles,name|max:255',
+        //         'displayName' => 'required|max:255',
+        //     ));
+        //     $this->RoleService->saveRole($request);
 
-        } else {
-            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
-        }
+        //     return redirect('roles');
+
+        // } else {
+        //     return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+        // }
     }
 
     /**
@@ -105,20 +116,23 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
-        $isManager = $this->UserAuthenticationService->isManager();
-        $isAdmin   = $this->UserAuthenticationService->isAdmin();
+        $role        = Role::with('perms')->find($id);
+        $permissions = $this->PermissionService->pluckPermissions();
+        return view('roles.edit')->withRole($role)->withPermissions($permissions);
+        //     $isManager = $this->UserAuthenticationService->isManager();
+        //     $isAdmin   = $this->UserAuthenticationService->isAdmin();
 
-        if ($isAdmin || $isManager) {
+        //     if ($isAdmin || $isManager) {
 
-            $role = $this->RoleService->getRole($id);
+        //         $role = $this->RoleService->getRole($id);
 
-            return view('role/edit',
-                [
-                    'role' => $role,
-                ]);
-        } else {
-            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
-        }
+        //         return view('role/edit',
+        //             [
+        //                 'role' => $role,
+        //             ]);
+        //     } else {
+        //         return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+        //     }
     }
 
     /**
@@ -128,17 +142,21 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request,Role $role)
     {
+       
+        $role->detachPermissions();
+        $this->RoleService->updateRole($request, $role);
+        return redirect()->route('roles.index');
 
-        $this->validate($request, array(
-            'name'        => "required|unique:roles,name,$id|max:255",
-            'displayName' => 'required|max:255',
-        ));
+        // $this->validate($request, array(
+        //     'name'        => "required|unique:roles,name,$id|max:255",
+        //     'displayName' => 'required|max:255',
+        // ));
 
-        $this->RoleService->updateRole($request, $id);
+        // $this->RoleService->updateRole($request, $id);
 
-        return redirect('roles');
+        // return redirect('roles');
     }
 
     /**
@@ -149,15 +167,17 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        $isManager = $this->UserAuthenticationService->isManager();
-        $isAdmin   = $this->UserAuthenticationService->isAdmin();
+        $this->RoleService->deleteRole($id);
+        return redirect()->route('roles.index');
+        // $isManager = $this->UserAuthenticationService->isManager();
+        // $isAdmin   = $this->UserAuthenticationService->isAdmin();
 
-        if ($isAdmin || $isManager) {
-            $this->RoleService->deleteRole($id);
+        // if ($isAdmin || $isManager) {
+        //     $this->RoleService->deleteRole($id);
 
-            return back();
-        } else {
-            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
-        }
+        //     return back();
+        // } else {
+        //     return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+        // }
     }
 }

@@ -21,12 +21,12 @@
             <th>
                 Total Holidays
             </th>
-             @role(['hr-manager','manager','admin'])
+               @permission(['create/edit/delete-holiday'])
             <th>
                 Operations
             </th>
            
-            @endrole
+            @endpermission
             
             </thead>
             <!-- Table Body -->
@@ -55,7 +55,7 @@
                                 {{ $companyHoliday->countHolidays }}
                             </div>
                         </td>
-                        @role(['hr-manager','manager','admin'])
+                        @permission(['create/edit/delete-holiday'])
                         <td>
                             <button class="btn btn-primary"
                                     onclick="openHolidayModal({{$companyHoliday->holidayId}},null,null,null);"
@@ -73,7 +73,7 @@
                                     </button>
                             </form>
                         </td>
-                        @endrole
+                        @endpermission
                     </tr>
                 @endforeach
 
@@ -81,15 +81,15 @@
             </tbody>
         </table>
     </div>
-  @role(['hr-manager','manager','admin'])
+@permission(['create/edit/delete-holiday'])
     <button class="btn btn-primary btn-lg" onclick="openHolidayModal(null,null,null,null);" type="button">
         Add Holiday
     </button>
-@endrole
+@endpermission
 </div>
-@role(['hr-manager','manager','admin'])
+@permission(['create/edit/delete-holiday'])
     @include('companyHolidays/companyHolidayModal')
-@endrole
+@endpermission
 @section('page-scripts')
     @parent
     <script type="text/javascript">

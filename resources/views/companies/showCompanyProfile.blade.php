@@ -65,7 +65,7 @@
             </table>
 
         </div>
-        @role(['manager','admin'])
+        @permission(['edit/update-company'])
         <a href="/companies/{{$companyProfileModel->companyId}}/edit">
             <button class="btn btn-primary"> Edit Company
 
@@ -74,12 +74,14 @@
             <button class="btn btn-primary"> Company Settings
 
             </button></a>   
-        @endrole
+        @endpermission
+        @permission(['registerUser'])
         <a href="/register-user/{{$companyProfileModel->companyId}}">
             <button class="btn btn-primary"> Setup New User
 
             </button>
-         </a>   
+         </a> 
+         @endpermission  
     </div>
 
 @endif

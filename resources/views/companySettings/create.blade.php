@@ -3,8 +3,7 @@
     <div class="panel-body">
         <!-- Display Validation Errors -->
     @include('common.errors')
-    <!-- New Employee Form -->
-        <!-- New Employee Form -->
+
         <form  action="{{url('company-settings') }}"  name="employeeForm" class="form-horizontal" method="POST">
             {{ csrf_field() }}
             

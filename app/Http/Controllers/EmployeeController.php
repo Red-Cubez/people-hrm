@@ -143,9 +143,9 @@ class EmployeeController extends Controller
         $isRequestedEmployeeBelongsToSameCompany = false;
         $isRequestedEmployeeBelongsToSameCompany = $this->UserAuthenticationService->isRequestedEmployeeBelongsToSameCompany($employeeId);
 
-        list($canViewOwnProfile,$canViewOthersProfile) = $this->UserAuthenticationService->canEmployeeView($employeeId);
+        $canViewProfile = $this->UserAuthenticationService->canEmployeeView($employeeId);
   
-        if ($canViewOwnProfile || $canViewOthersProfile && $isRequestedEmployeeBelongsToSameCompany) {
+        if ($canViewProfile && $isRequestedEmployeeBelongsToSameCompany) {
             $employee = $this->EmployeeService->getEmployee($employeeId);
             if (isset($employee)) {
                 $company       = Company::find($employee->company_id);

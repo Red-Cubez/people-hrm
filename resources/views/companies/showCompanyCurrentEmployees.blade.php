@@ -45,7 +45,7 @@
                             </div>
                         </td>
                         <td>
-                          @permission(['view-employee'])
+                          @permission(['view-othersProfile'])
                             <a href="/employees/{{$employee->employeeId}}">
                                 <button class="btn btn-primary"> View
 

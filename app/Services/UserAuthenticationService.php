@@ -50,44 +50,41 @@ class UserAuthenticationService implements IUserAuthenticationService
     public function canEmployeeView($requestId)
     {
 
-        $canViewEmployee                          = false;
-        $canViewOwnProfile=false;
+        $canViewProfile       = false;
+        $canViewOwnProfile    = false;
         $canViewOthersProfile = false;
-        $logedInUser                              = $this->getCurrrentLogedInUserDetails();
+        $logedInUser          = $this->getCurrrentLogedInUserDetails();
 
-        // if ($logedInUser->employee->id == $requestId) {
-        //     $canEmployeeView = true;
-        // }
-        $user = Auth::user();
-
-        $roles = $user->roles;
-        foreach ($roles as $role) {
-            foreach ($role->perms as $permission) {
-
-                if ($permission->name == "view-ownProfile") {
-                    if ($user->employee->id == $requestId) {
-                         $canViewOwnProfile = true;
-                    }
-                   
-                }
-                if ($permission->name == "view-othersProfile") {
-                    $canViewOthersProfile = true;
-
-                }
+        if ($logedInUser->can('view-ownProfile')) {
+            if ($logedInUser->employee->id == $requestId) {
+                $canViewOwnProfile = true;
             }
-        }
-        // dd($roles);
-        // if (count($roles)>1) {
-        //     $canViewEmployee = true;
-        // }
-        // else {
 
-        //     if ($user->employee->id == $requestId) {
-        //         $canViewEmployee = true;
-        //     }
-        // }
-        return array($canViewOwnProfile, $canViewOthersProfile);
-       // return $canViewEmployee;
+        }
+        if ($logedInUser->can('view-othersProfile')) {
+            $canViewOthersProfile = true;
+
+        }
+
+        if ($canViewOwnProfile && $canViewOthersProfile) {
+            $canViewProfile = true;
+
+        } elseif ($canViewOwnProfile && !$canViewOthersProfile) {
+            if ($logedInUser->employee->id == $requestId) {
+                $canViewProfile = true;
+            }
+
+        } elseif (!$canViewOwnProfile && $canViewOthersProfile) {
+            if ($logedInUser->employee->id != $requestId) {
+                $canViewProfile = true;
+            }
+
+        } else {
+
+            $canViewProfile = false;
+        }
+
+        return $canViewProfile;
 
     }
 

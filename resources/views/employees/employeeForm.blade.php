@@ -1,4 +1,5 @@
-@role(['hr-manager','manager','admin'])
+
+@permission('create/edit-employee')
 <div id="name" class="form-group">
     <label for="name" class="col-sm-3 control-label">First Name</label>
     <div class="col-sm-6">
@@ -117,7 +118,7 @@
         </button>
     </div>
 </div>
-@endrole
+@endpermission
 <script type="text/javascript">
 
     $(document).ready(function () {

@@ -78,7 +78,8 @@ class RoleController extends Controller
     {
 
         $this->RoleService->createRole($request);
-        return redirect()->route('roles.index');
+        // return redirect()->route('roles.index');
+        return back();
         // $isManager = $this->UserAuthenticationService->isManager();
         // $isAdmin   = $this->UserAuthenticationService->isAdmin();
 
@@ -147,8 +148,8 @@ class RoleController extends Controller
        
         $role->detachPermissions();
         $this->RoleService->updateRole($request, $role);
-        return redirect()->route('roles.index');
-
+       // return redirect()->route('roles.index');
+         return back();
         // $this->validate($request, array(
         //     'name'        => "required|unique:roles,name,$id|max:255",
         //     'displayName' => 'required|max:255',

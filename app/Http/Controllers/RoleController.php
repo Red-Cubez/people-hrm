@@ -3,10 +3,10 @@
 namespace People\Http\Controllers;
 
 use Illuminate\Http\Request;
+use People\Models\Role;
 use People\Services\Interfaces\IPermissionService;
 use People\Services\Interfaces\IRoleService;
 use People\Services\Interfaces\IUserAuthenticationService;
-use People\Models\Role;
 
 class RoleController extends Controller
 {
@@ -76,6 +76,12 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
+ 
+        $this->validate($request, [
+            'name'         => 'required',
+
+            'display_name' => 'required',
+        ]);
 
         $this->RoleService->createRole($request);
         // return redirect()->route('roles.index');
@@ -143,13 +149,13 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,Role $role)
+    public function update(Request $request, Role $role)
     {
-       
+
         $role->detachPermissions();
         $this->RoleService->updateRole($request, $role);
-       // return redirect()->route('roles.index');
-         return back();
+        // return redirect()->route('roles.index');
+        return back();
         // $this->validate($request, array(
         //     'name'        => "required|unique:roles,name,$id|max:255",
         //     'displayName' => 'required|max:255',

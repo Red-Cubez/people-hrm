@@ -5,7 +5,7 @@
                 <label for="name"  >Name</label>
                 <input type="text" name="name" id="name" class="form-control"
                            @if (isset($role->name)) value="{{ $role->name }}"
-                           @else placeholder="Enter Name" @endif />
+                           @else placeholder="Enter Name" @endif required />
             </div>
         </div>
     </div>
@@ -15,7 +15,7 @@
                 <label for='display_name' >Display Name</label>
                 <input type="text" name="display_name" id="display_name" class="form-control"
                            @if (isset($role->display_name)) value="{{ $role->display_name }}"
-                           @else placeholder="Enter Display Name" @endif />
+                           @else placeholder="Enter Display Name" @endif required />
             </div>
         </div>
     </div>

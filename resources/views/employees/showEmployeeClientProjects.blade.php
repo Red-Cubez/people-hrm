@@ -13,9 +13,10 @@
                             <th>Start Date</th>
                             <th>End Date</th>
                             <th>Hours Per Week</th>
-                            @role(['manager','admin'])
+
+                    @permission(StandardPermissions::getPermissionName(StandardPermissions::showClientProjects))
                               <th>Operations</th>
-                            @endrole
+                    @endpermission
 
                         </thead>
                         <!-- Table Body -->
@@ -23,7 +24,7 @@
                             @foreach ($employeeModel->clientProjects as $clientProject)
 
                                 <tr>
-                                    <!-- clientProject Name -->
+         
                                     <td class="table-text">
                                         <div>{{ $clientProject->projectName }}</div>
                                     </td>
@@ -40,7 +41,8 @@
                                     <td class="table-text">
                                         <div>{{ $clientProject->hoursPerWeek }}</div>
                                     </td>
-                                    @role(['manager','admin'])
+
+                    @permission(StandardPermissions::getPermissionName(StandardPermissions::viewClientProject))
                                     <td>
          
                                          <a href="/clientprojects/{{$clientProject->projectId}}">
@@ -49,7 +51,7 @@
                                          </button></a>
                                     </td>
 
-                                    @endrole
+                   @endpermission
                                     
                                 </tr>
 

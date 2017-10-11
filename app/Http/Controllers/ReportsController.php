@@ -9,7 +9,7 @@ use People\Services\Interfaces\ICompanySettingService;
 use People\Services\Interfaces\IDateTimeService;
 use People\Services\Interfaces\IReportService;
 use People\Services\Interfaces\IUserAuthenticationService;
-
+use People\Enums\StandardPermissions;
 
 class ReportsController extends Controller
 {
@@ -25,10 +25,17 @@ class ReportsController extends Controller
         ICompanySettingService $companySettingService) {
 
         $this->middleware('auth');
-        $this->middleware( 'permission:showInternalProjectsReport|showClientProjectsReport|showAllProjectsReport|reportOptions' , ['only' => ['showOptions']]);
-        $this->middleware( 'permission:showInternalProjectsReport', ['only' => ['showInternalProjectsReport']]);
-        $this->middleware( 'permission:showClientProjectsReport', ['only' => ['showClientProjectsReport']]);
-        $this->middleware( 'permission:showAllProjectsReport', ['only' => ['showAllProjectsReport']]);
+
+        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::showInternalProjectsReport).
+            '|'.StandardPermissions::getPermissionName(StandardPermissions::showClientProjectsReport).
+            '|'.StandardPermissions::getPermissionName(StandardPermissions::showAllProjectsReport).
+            '|'.StandardPermissions::getPermissionName(StandardPermissions::reportOptions), ['only' => ['showOptions']]);
+
+        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::showInternalProjectsReport), ['only' => ['showInternalProjectsReport']]);
+
+        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::showClientProjectsReport), ['only' => ['showClientProjectsReport']]);
+
+        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::showAllProjectsReport), ['only' => ['showAllProjectsReport']]);
 
         $this->ReportService             = $reportService;
         $this->UserAuthenticationService = $userAuthenticationService;

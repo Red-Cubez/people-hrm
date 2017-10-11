@@ -5,6 +5,7 @@ namespace People\Http\Controllers;
 use Illuminate\Http\Request;
 use People\Services\Interfaces\ICompanySettingService;
 use People\Services\Interfaces\IUserAuthenticationService;
+use People\Enums\StandardPermissions;
 
 class CompanySettingController extends Controller
 {
@@ -16,7 +17,8 @@ class CompanySettingController extends Controller
         IUserAuthenticationService $userAuthenticationService) {
 
         $this->middleware('auth');
-        $this->middleware('permission:create/show/edit/delete-companySettings');
+
+        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::createShowEditDeleteCompanySettings));
 
         $this->CompanySettingService     = $companySettingService;
         $this->UserAuthenticationService = $userAuthenticationService;
@@ -43,12 +45,12 @@ class CompanySettingController extends Controller
     public function createSettings($companyId)
     {
 
-        $isAdmin                             = $this->UserAuthenticationService->isAdmin();
-        $isManager                           = $this->UserAuthenticationService->isManager();
+        // $isAdmin                             = $this->UserAuthenticationService->isAdmin();
+        // $isManager                           = $this->UserAuthenticationService->isManager();
         $isRequestedCompanyBelongsToEmployee = $this->UserAuthenticationService->
             isRequestedCompanyBelongsToEmployee($companyId);
 
-        if (($isAdmin || $isManager) && $isRequestedCompanyBelongsToEmployee) {
+        if ($isRequestedCompanyBelongsToEmployee) {
             return view('companySettings/create',
                 [
                     'companyId' => $companyId,
@@ -112,13 +114,13 @@ class CompanySettingController extends Controller
      */
     public function edit($companySettingId)
     {
-        $isAdmin        = $this->UserAuthenticationService->isAdmin();
-        $isManager      = $this->UserAuthenticationService->isManager();
+        // $isAdmin        = $this->UserAuthenticationService->isAdmin();
+        // $isManager      = $this->UserAuthenticationService->isManager();
         $companySetting = $this->CompanySettingService->getCompanySettingDetails($companySettingId);
 
         if (isset($companySetting)) {
             $isRequestedSettingBelongsToCompany = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($companySetting->company_id);
-            if (($isAdmin || $isManager) && $isRequestedSettingBelongsToCompany) {
+            if ($isRequestedSettingBelongsToCompany) {
 
                 return view('companySettings/edit',
                     [

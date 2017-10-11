@@ -13,9 +13,10 @@
                 <th>Start Date</th>
                 <th>End Date</th>
                 <th>Hours Per Week</th>
-                 @role(['manager','admin'])
+
+                 @permission(StandardPermissions::getPermissionName(StandardPermissions::showCompanyProjects))
                               <th>Operations</th>
-                 @endrole
+                 @endpermission
                 </thead>
                 <!-- Table Body -->
                 <tbody>
@@ -38,7 +39,7 @@
                             <td class="table-text">
                                 <div>{{ $companyProject->hoursPerWeek }}</div>
                             </td>
-                             @role(['manager','admin'])
+                    @permission(StandardPermissions::getPermissionName(StandardPermissions::viewCompanyProject))
                                     <td>
          
                                          <a href="/companyprojects/{{$companyProject->projectId}}">
@@ -47,7 +48,7 @@
                                          </button></a>
                                     </td>
 
-                                    @endrole
+                    @endpermission
                                     
 
                         </tr>

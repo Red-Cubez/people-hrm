@@ -5,6 +5,7 @@ namespace People\Http\Controllers;
 use Illuminate\Http\Request;
 use People\Services\Interfaces\IEmployeeTimeoffService;
 use People\Services\Interfaces\IUserAuthenticationService;
+use People\Enums\StandardPermissions;
 
 class EmployeeTimeoffController extends Controller
 {
@@ -14,11 +15,16 @@ class EmployeeTimeoffController extends Controller
 
     public function __construct(IEmployeeTimeoffService $employeeTimeoffService, IUserAuthenticationService
          $userAuthenticationService) {
-
+    
         $this->middleware('auth');
-        $this->middleware('permission:create/edit-timeoff', ['only' => ['store', 'edit', 'update']]);
-        $this->middleware('permission:delete-timeoff', ['only' => ['destroy']]);
-        $this->middleware('permission:approve-timeoffs', ['only' => ['showNonApprovedTimeoffsOfEmployees', 'approveTimeoffs', 'show']]);
+
+        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::createEditTimeoff),
+         ['only' => ['store', 'edit', 'update']]);
+
+        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::deleteTimeoff),
+         ['only' => ['destroy']]);
+
+        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::approveTimeoffs), ['only' => ['showNonApprovedTimeoffsOfEmployees', 'approveTimeoffs', 'show']]);
 
         $this->EmployeeTimeoffService    = $employeeTimeoffService;
         $this->UserAuthenticationService = $userAuthenticationService;

@@ -11,7 +11,8 @@
         </div>
         <div class="panel-body">
             <table class="table table-striped task-table">
-                 @permission('showAllProjectsReport')
+
+            @permission(StandardPermissions::getPermissionName(StandardPermissions::showAllProjectsReport))
                 <div>
                     <form action="{{url('company/'.$companyId.'/projects/report')}}" class="form-horizontal" id="dateForm" method="POST" name="dateForm" role="form">
                         {{ csrf_field() }}
@@ -23,8 +24,8 @@
                         @include('reports/dateForm')
                     </form>
                 </div>
-                @endpermission
-                 @permission('showInternalProjectsReport')
+            @endpermission
+            @permission(StandardPermissions::getPermissionName(StandardPermissions::showInternalProjectsReport))
                 <div>
                     <form action="{{url('company/'.$companyId.'/internal-projects/report')}}" class="form-horizontal" id="dateForm" method="POST" name="dateForm" role="form">
                         {{ csrf_field() }}
@@ -36,8 +37,8 @@
                         @include('reports/dateForm')
                     </form>
                 </div>
-                @endpermission
-                @permission('showClientProjectsReport')
+            @endpermission
+            @permission(StandardPermissions::getPermissionName(StandardPermissions::showClientProjectsReport))
                 <div>
                     <form action="{{url('company/'.$companyId.'/client-projects/report')}}" class="form-horizontal" id="dateForm" method="POST" name="dateForm" role="form">
                         {{ csrf_field() }}
@@ -49,7 +50,7 @@
                         @include('reports/dateForm')
                     </form>
                 </div>
-                @endpermission
+            @endpermission
             </table>
         </div>
     </div>

@@ -11,6 +11,7 @@ use People\Services\Interfaces\IEmployeeService;
 use People\Services\Interfaces\IJobTitleService;
 use People\Services\Interfaces\IResourceFormValidator;
 use People\Services\Interfaces\IUserAuthenticationService;
+use People\Enums\StandardPermissions;
 
 class EmployeeController extends Controller
 {
@@ -24,11 +25,14 @@ class EmployeeController extends Controller
     public function __construct(IEmployeeService $employeeService, IDepartmentService $departmentService,
         IJobTitleService $jobTitleService, IUserAuthenticationService $userAuthenticationService,
         IResourceFormValidator $employeeFormValidator, ICompanyHolidayService $companyHolidayService) {
-
+    
         $this->middleware('auth');
-        $this->middleware('permission:create/edit-employee', ['only' => ['showEmployeeForm', 'store', 'edit', 'update']]);
-        $this->middleware('permission:view-ownProfile|view-othersProfile', ['only' => ['show']]);
-        $this->middleware('permission:delete-employee', ['only' => ['destroy']]);
+
+        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::createEditEmployee), ['only' => ['showEmployeeForm', 'store', 'edit', 'update']]);
+
+        $this->middleware( 'permission:'.StandardPermissions::getPermissionName(StandardPermissions::viewOwnProfile).'|'.StandardPermissions::getPermissionName(StandardPermissions::viewOthersProfile), ['only' => ['show']]);
+
+        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::deleteEmployee), ['only' => ['destroy']]);
 
         $this->EmployeeService           = $employeeService;
         $this->DepartmentService         = $departmentService;

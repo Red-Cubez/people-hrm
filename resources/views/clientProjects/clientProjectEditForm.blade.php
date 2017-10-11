@@ -10,7 +10,7 @@
 
           <input type="hidden" name="action" id="action" value="update">
           <input type="hidden" name="clientProjectId" id="clientProjectId" value="{{$clientProject->id}}">
-        <!-- Client Project Name -->
+       
         @include('clientProjects/clientProjectForm')
       </form>
     </div>

@@ -2,7 +2,7 @@
 
 @section('content')
 
-@permission('view-company')
+@permission(StandardPermissions::getPermissionName(StandardPermissions::viewCompany))
 <div class="container">
     <div class="row">
         <div class="col-sm-3">
@@ -18,7 +18,7 @@
         <div class="col-sm-3">
             @include('companies/showCompanyJobTitles')
         </div>
-        @permission(['show-companyProjects'])
+        @permission(StandardPermissions::getPermissionName(StandardPermissions::showCompanyProjects))
         <div class="col-sm-8">
             @include('companyProjects/showProjects')
         </div>
@@ -27,12 +27,19 @@
     </div>
 
     <div class="row">
-        @permission(['show-clientProjects'])
+        
+        @permission(StandardPermissions::getPermissionName(StandardPermissions::showClientProjects))
         <div class="col-sm-8">
             @include('companyProjects/showClientProjectsOfCompany')
         </div>
         @endpermission
-        @permission(['reportOptions','showAllProjects','showClientProjects','showInternalProjects'])
+        
+        @permission([
+            StandardPermissions::getPermissionName(StandardPermissions::reportOptions),
+            StandardPermissions::getPermissionName(StandardPermissions::showAllProjectsReport),
+            StandardPermissions::getPermissionName(StandardPermissions::showClientProjectsReport),
+            StandardPermissions::getPermissionName(StandardPermissions::showInternalProjectsReport),
+            ])
         <div class="col-sm-3">
             @include('companies/companyReports')
         </div>
@@ -48,7 +55,13 @@
         </div>
     </div>
     <div class="row">
-       @permission(['create/edit-employee','view-employee','show-employees'])
+        
+       @permission([
+        StandardPermissions::getPermissionName(StandardPermissions::createEditEmployee),
+        StandardPermissions::getPermissionName(StandardPermissions::viewOthersProfile),
+        StandardPermissions::getPermissionName(StandardPermissions::viewOwnProfile),
+        StandardPermissions::getPermissionName(StandardPermissions::showEmployees)
+       ])
         <div class="col-sm-5">
             @include('companies/showCompanyCurrentEmployees')
         </div>

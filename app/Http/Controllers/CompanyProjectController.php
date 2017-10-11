@@ -11,6 +11,7 @@ use People\Services\Interfaces\IProjectGrapher;
 use People\Services\Interfaces\IProjectService;
 use People\Services\Interfaces\IResourceFormValidator;
 use People\Services\Interfaces\IUserAuthenticationService;
+use People\Enums\StandardPermissions;
 
 class CompanyProjectController extends Controller
 {
@@ -36,9 +37,12 @@ class CompanyProjectController extends Controller
     ) {
 
         $this->middleware('auth');
-        $this->middleware( 'permission:view-companyProject' , [ 'only' => ['show']]);
-        $this->middleware( 'permission:create/edit-companyProject' , [ 'only' => ['store','manageProject','edit','update']]);
-        $this->middleware( 'permission:delete-companyProject' , [ 'only' => ['destroy']]);
+
+        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::viewCompanyProject), [ 'only' => ['show']]);
+
+        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::createEditCompanyProject), [ 'only' => ['store','manageProject','edit','update']]);
+
+        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::deleteCompanyProject), [ 'only' => ['destroy']]);
 
         $this->CompanyProjectService         = $companyProjectService;
         $this->CompanyProjectResourceService = $companyProjectResourceService;

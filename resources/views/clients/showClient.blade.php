@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-@permission('view-client')
+@permission(StandardPermissions::getPermissionName(StandardPermissions::viewClient))
     <div class="panel-body">
         @include('common.errors')
         <div>
@@ -68,7 +68,7 @@
             {{$client->address->country }}
             @endif
         </div>
-        @permission('create/edit-client')
+        @permission(StandardPermissions::getPermissionName(StandardPermissions::createEditClient))
         <div>
         <a href="/clients/{{$client->id}}/edit">
             <button class="btn btn-primary"> Edit
@@ -76,7 +76,7 @@
             </button></a>
         </div>
         @endpermission
-        @permission('delete-client')
+        @permission(StandardPermissions::getPermissionName(StandardPermissions::deleteClient))
         <div>
         <form action="{{ url('clients/'.$client->id) }}" method="POST">
             {{ csrf_field() }}
@@ -89,7 +89,8 @@
         </form>
         </div>
          @endpermission
-       @permission('create/edit-clientProject') 
+         
+       @permission(StandardPermissions::getPermissionName(StandardPermissions::createEditClientProject)) 
         <a href="/clients/{{$client->id}}/createproject">
             <button class="btn btn-primary"> Add New Project
 

@@ -10,6 +10,7 @@ use People\Services\Interfaces\IProjectResourceService;
 use People\Services\Interfaces\IProjectService;
 use People\Services\Interfaces\IResourceFormValidator;
 use People\Services\Interfaces\IUserAuthenticationService;
+use People\Enums\StandardPermissions;
 
 class ProjectResourceController extends Controller
 {
@@ -30,8 +31,10 @@ class ProjectResourceController extends Controller
         IResourceFormValidator $resourceFormValidator, IUserAuthenticationService $userAuthenticationService, IClientProjectService $clientProjectService, ICompanyProjectResourceService $companyProjectResourceService) {
 
         $this->middleware('auth');
-        $this->middleware('permission:create/edit-clientProjectResource|create/edit-companyProjectResource', ['only' => ['manageressources', 'store', 'updateressources']]);
-        $this->middleware('permission:delete-clientProjectResource', ['only' => ['destroy']]);
+
+        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::createEditClientProjectResource).'|'.StandardPermissions::getPermissionName(StandardPermissions::createEditCompanyProjectResource), ['only' => ['manageressources', 'store', 'updateressources']]);
+
+        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::deleteClientProjectResource), ['only' => ['destroy']]);
 
         $this->ProjectResourceService        = $projectResourceService;
         $this->ProjectService                = $projectService;

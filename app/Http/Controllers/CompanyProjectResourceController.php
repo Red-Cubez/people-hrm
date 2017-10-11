@@ -8,6 +8,7 @@ use People\Services\Interfaces\ICompanyProjectResourceService;
 use People\Services\Interfaces\ICompanyProjectService;
 use People\Services\Interfaces\IResourceFormValidator;
 use People\Services\Interfaces\IUserAuthenticationService;
+use People\Enums\StandardPermissions;
 
 class CompanyProjectResourceController extends Controller
 {
@@ -26,8 +27,10 @@ class CompanyProjectResourceController extends Controller
          $userAuthenticationService, ICompanyProjectService $companyProjectService) {
 
         $this->middleware('auth');
-        $this->middleware('permission:create/edit-companyProjectResource', ['only' => ['show','edit']]);
-        $this->middleware('permission:delete-companyProjectResource', ['only' => ['destroy']]);
+
+        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::createEditCompanyProjectResource), ['only' => ['show','edit']]);
+
+        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::deleteCompanyProjectResource), ['only' => ['destroy']]);
 
         $this->CompanyProjectResourceService = $companyProjectResourceService;
         $this->ResourceFormValidator         = $resourceFormValidator;
@@ -125,12 +128,12 @@ class CompanyProjectResourceController extends Controller
     public function edit($companyProjectResourceId)
     {
 
-        $isManager       = $this->UserAuthenticationService->isManager();
-        $isAdmin         = $this->UserAuthenticationService->isAdmin();
+        // $isManager       = $this->UserAuthenticationService->isManager();
+        // $isAdmin         = $this->UserAuthenticationService->isAdmin();
         $projectResource = $this->CompanyProjectResourceService->getCompanyProjectResource($companyProjectResourceId);
         if (isset($projectResource)) {
             $isRequestedCompanyProjectResourceBelongsToSameCompany = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($projectResource->companyProject->company_id);
-            if (($isManager || $isAdmin) && $isRequestedCompanyProjectResourceBelongsToSameCompany) {
+            if ($isRequestedCompanyProjectResourceBelongsToSameCompany) {
 
                 $resource = $this->CompanyProjectResourceService->showEditForm($companyProjectResourceId);
 

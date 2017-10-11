@@ -14,6 +14,7 @@ class CompanyHolidayController extends Controller
 
     public function __construct(ICompanyHolidayService $companyHolidayService, IResourceFormValidator $resourceFormValidator)
     {
+        $this->middleware('auth');
         $this->CompanyHolidayService = $companyHolidayService;
         $this->ResourceFormValidator = $resourceFormValidator;
     }

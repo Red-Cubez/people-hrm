@@ -30,7 +30,10 @@
                 <th>
                     Cost
                 </th>
-                 @permission(['delete-companyProject','view-companyProject'])
+                 @permission([
+                    StandardPermissions::getPermissionName(StandardPermissions::deleteCompanyProject),
+                    StandardPermissions::getPermissionName(StandardPermissions::viewCompanyProject)
+                    ])
                 <th>
                     Operations
                 </th>
@@ -78,7 +81,7 @@
                     </td>
                     <!-- Delete Button -->
                     <td>
-                        @permission('delete-companyProject')
+                @permission(StandardPermissions::getPermissionName(StandardPermissions::deleteCompanyProject))
                         <form action="{{ url('companyprojects/'.$project->projectId) }}" method="POST">
                             {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
@@ -91,13 +94,13 @@
                                 
                             </input>
                         </form>
-                        @endpermission
-                        @permission('view-companyProject')
+                @endpermission
+                @permission(StandardPermissions::getPermissionName(StandardPermissions::viewCompanyProject))
                         <a href="/companyprojects/{{$project->projectId}}">
                             <button class="btn btn-primary"> View
 
                             </button></a>
-                        @endpermission
+                @endpermission
                                          </td>
                 </tr>
                 @endforeach
@@ -107,7 +110,7 @@
             </tbody>
         </table>
     </div>
-    @permission(['create/edit-companyProject'])
+    @permission(StandardPermissions::getPermissionName(StandardPermissions::createEditCompanyProject))
     <a href="/companies/{{$companyProfileModel->companyId}}/companyprojects">
         <button class="btn btn-primary"> Add New Projects
 

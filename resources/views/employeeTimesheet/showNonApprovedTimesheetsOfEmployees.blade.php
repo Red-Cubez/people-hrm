@@ -11,7 +11,6 @@
             </div>
             <div class="panel-body">
 
-
              @if(count($employeesTimesheets)>0)
                  <form class="" action="{{ url('/employeestimesheets/approve/') }}" method="POST">
                         {{ csrf_field() }}

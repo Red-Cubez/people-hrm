@@ -3,6 +3,7 @@
 namespace People\Http\Controllers;
 
 use Illuminate\Http\Request;
+use People\Enums\StandardPermissions;
 use People\Models\Company;
 use People\Services\Interfaces\ICompanyHolidayService;
 use People\Services\Interfaces\ICompanyService;
@@ -27,9 +28,13 @@ class CompanyController extends Controller
         IDepartmentService $departmentService) {
 
         $this->middleware('auth');
-        $this->middleware( 'permission:create/delete-companies' , ['only' => ['create' ,'destroy','store']]);
-        $this->middleware( 'permission:view-company' , [ 'only' => ['show']]);
-        $this->middleware( 'permission:edit/update-company' , [ 'only' => ['edit','update']]);
+        $this->middleware('permission:' .
+            StandardPermissions::getPermissionName(StandardPermissions::createDeleteCompanies),
+            ['only' => ['create', 'destroy', 'store']]);
+
+        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::viewCompany),
+            ['only' => ['show']]);
+        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::editUpdateCompany), ['only' => ['edit', 'update']]);
 
         $this->CompanyService            = $companyService;
         $this->JobTitleService           = $jobTitleService;
@@ -46,14 +51,15 @@ class CompanyController extends Controller
      */
     public function index()
     {
+        //  dd(StandardPermissions::getPermissionName(1));
 
         // $isManager = $this->UserAuthenticationService->isManager();
         // $isAdmin   = $this->UserAuthenticationService->isAdmin();
 
         // if ($isManager || $isAdmin) {
-            $companies = $this->CompanyService->getAllCompanies();
+        $companies = $this->CompanyService->getAllCompanies();
 
-            return view('companies.index', ['companies' => $companies]);
+        return view('companies.index', ['companies' => $companies]);
         // } else {
         //     return $this->UserAuthenticationService->redirectToErrorMessageView(null);
 
@@ -71,7 +77,7 @@ class CompanyController extends Controller
         // $isManager = $this->UserAuthenticationService->isManager();
         // $isAdmin   = $this->UserAuthenticationService->isAdmin();
         // if ($isManager || $isAdmin) {
-            return view('companies.addNewCompany');
+        return view('companies.addNewCompany');
         // } else {
         //     return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         // }
@@ -84,16 +90,16 @@ class CompanyController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-     {
-    //     $isManager = $this->UserAuthenticationService->isManager();
-    //     $isAdmin   = $this->UserAuthenticationService->isAdmin();
-    //     if ($isManager || $isAdmin) {
-            $this->validate($request, array(
-                'name' => 'required|max:255',
-            ));
-            $this->CompanyService->createCompany($request);
+    {
+        //     $isManager = $this->UserAuthenticationService->isManager();
+        //     $isAdmin   = $this->UserAuthenticationService->isAdmin();
+        //     if ($isManager || $isAdmin) {
+        $this->validate($request, array(
+            'name' => 'required|max:255',
+        ));
+        $this->CompanyService->createCompany($request);
 
-            return redirect('/companies');
+        return redirect('/companies');
         // } else {
         //     return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         // }
@@ -112,7 +118,7 @@ class CompanyController extends Controller
         // $isAdmin                             = $this->UserAuthenticationService->isAdmin();
         // $isHrManager                         = $this->UserAuthenticationService->isHrManager();
         // $isClientManager                     = $this->UserAuthenticationService->isClientManager();
-         $isRequestedCompanyBelongsToEmployee = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($companyId);
+        $isRequestedCompanyBelongsToEmployee = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($companyId);
 
         if ($isRequestedCompanyBelongsToEmployee) {
             $company          = $this->CompanyService->getCompanyDetails($companyId);
@@ -179,12 +185,12 @@ class CompanyController extends Controller
         // $isManager = $this->UserAuthenticationService->isManager();
         // $isAdmin   = $this->UserAuthenticationService->isAdmin();
         // if ($isManager || $isAdmin) {
-            $this->validate($request, array(
-                'name' => 'required|max:255',
-            ));
-            $this->CompanyService->updateCompany($request, $company);
+        $this->validate($request, array(
+            'name' => 'required|max:255',
+        ));
+        $this->CompanyService->updateCompany($request, $company);
 
-            return redirect('/companies/' . $company->id);
+        return redirect('/companies/' . $company->id);
         // } else {
         //     return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         // }
@@ -202,9 +208,9 @@ class CompanyController extends Controller
         // $isManager = $this->UserAuthenticationService->isManager();
         // $isAdmin   = $this->UserAuthenticationService->isAdmin();
         // if ($isManager || $isAdmin) {
-            $this->CompanyService->deleteCompany($company);
+        $this->CompanyService->deleteCompany($company);
 
-            return redirect('/companies');
+        return redirect('/companies');
         // } else {
         //     return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         // }

@@ -11,6 +11,7 @@ use People\Services\Interfaces\IProjectResourceService;
 use People\Services\Interfaces\IProjectService;
 use People\Services\Interfaces\IResourceFormValidator;
 use People\Services\Interfaces\IUserAuthenticationService;
+use People\Enums\StandardPermissions;
 
 class ClientProjectController extends Controller
 {
@@ -34,9 +35,12 @@ class ClientProjectController extends Controller
          $userAuthenticationService, ICompanySettingService $companySettingService) {
 
         $this->middleware('auth');
-        $this->middleware('permission:create/edit-clientProject', ['only' => ['createProject', 'store', 'edit', 'update']]);
-        $this->middleware('permission:view-clientProject', ['only' => ['show']]);
-        $this->middleware('permission:delete-clientProject', ['only' => ['destroy']]);
+
+        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::createEditClientProject), ['only' => ['createProject', 'store', 'edit', 'update']]);
+
+        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::viewClientProject), ['only' => ['show']]);
+
+        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::deleteClientProject), ['only' => ['destroy']]);
 
         $this->ClientProjectService      = $clientProjectService;
         $this->ProjectGrapher            = $projectGrapher;

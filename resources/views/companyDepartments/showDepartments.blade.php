@@ -12,7 +12,7 @@
             <th>
                 Department Name
             </th>
-            @permission('create/edit/delete-department')
+            @permission(StandardPermissions::getPermissionName(StandardPermissions::createEditDeleteDepartment))
             <th>
                 Operations
             </th> 
@@ -29,7 +29,8 @@
                                 {{ $department->departmentName }}
                             </div>
                         </td>
-                        @permission('create/edit/delete-department')
+
+            @permission(StandardPermissions::getPermissionName(StandardPermissions::createEditDeleteDepartment))
                         <td>
                             <button class="btn btn-primary"
                                     onclick="openDepartmentModal({{$department->departmentId}},null);"
@@ -47,7 +48,7 @@
                                     </button>
                             </form>
                         </td>
-                        @endpermission
+            @endpermission
                     </tr>
                 @endforeach
 
@@ -55,14 +56,14 @@
             </tbody>
         </table>
     </div>
- @permission('create/edit/delete-department')
+ @permission(StandardPermissions::getPermissionName(StandardPermissions::createEditDeleteDepartment))
     <button class="btn btn-primary btn-lg" onclick="openDepartmentModal(null,null);" type="button">
         Add Department
     </button>
  @endpermission  
 
 </div>
- @permission('create/edit/delete-department')
+ @permission(StandardPermissions::getPermissionName(StandardPermissions::createEditDeleteDepartment))
  @include('companyDepartments/companyDepartmentModal')
 @endpermission
 @section('page-scripts')

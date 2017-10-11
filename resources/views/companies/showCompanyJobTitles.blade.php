@@ -29,7 +29,7 @@
                                 {{$companyJobTitle->jobTitle }}
                             </div>
                         </td>
-                            @permission(['create/edit/delete-jobTitle'])
+            @permission(StandardPermissions::getPermissionName(StandardPermissions::createEditDeleteJobTitle))
                         <td>
                             <button
                                     class="btn btn-primary"
@@ -46,7 +46,7 @@
                             </form>
                            
                         </td>
-                         @endpermission
+             @endpermission
                     </tr>
                 @endforeach
 
@@ -55,7 +55,7 @@
             </tbody>
         </table>
     </div>
-    @permission(['create/edit/delete-jobTitle'])
+    @permission(StandardPermissions::getPermissionName(StandardPermissions::createEditDeleteJobTitle))
     <div>
     <button class="btn btn-primary btn-lg" onclick="openJobTitleModal(null,null);" type="button">
         Add New Job Title
@@ -63,7 +63,7 @@
     </div>
     @endpermission
 </div>
-@permission(['create/edit/delete-jobTitle'])
+@permission(StandardPermissions::getPermissionName(StandardPermissions::createEditDeleteJobTitle))
 @include('jobTitles/jobTitleModal')
 @endpermission
 @section('page-scripts')

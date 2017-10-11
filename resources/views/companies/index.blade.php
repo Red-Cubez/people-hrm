@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    @permission('create/delete-company')
+    @permission(StandardPermissions::getPermissionName(StandardPermissions::createDeleteCompanies))
     <a href="{{route('companies.create')}}">
         <button class="btn btn-primary"> Add Company</button>
     </a>
@@ -51,7 +51,7 @@
                                 <td class="table-text"></td>
                             @endif
                             <td>
-                                @permission('delete-company')
+                              @permission(StandardPermissions::getPermissionName(StandardPermissions::createDeleteCompanies))
                                 <form action="{{url('companies/'.$company->id) }}" method="POST">
                                     {{ csrf_field() }}
                                     {{ method_field('DELETE') }}

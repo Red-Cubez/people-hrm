@@ -65,7 +65,8 @@
                                 EDIT
                             </button>
                         </a>
-                         @permission('delete-timeoff')
+
+                    @permission(StandardPermissions::getPermissionName(StandardPermissions::deleteTimeoff))
                         <form action="{{ url('employeetimeoff/'.$timeoff->id) }}" method="POST">
                             {{ csrf_field() }}
                                     {{ method_field('DELETE') }}
@@ -76,7 +77,7 @@
                             </button>
                         @endif
                         </form>
-                         @endpermission
+                    @endpermission
                     </td>
                 </tr>
                 @endforeach

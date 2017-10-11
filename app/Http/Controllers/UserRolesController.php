@@ -31,19 +31,19 @@ class UserRolesController extends Controller
      */
     public function index()
     {
-        $isManager = $this->UserAuthenticationService->isManager();
-        $isAdmin   = $this->UserAuthenticationService->isAdmin();
+        // $isManager = $this->UserAuthenticationService->isManager();
+        // $isAdmin   = $this->UserAuthenticationService->isAdmin();
 
-        if ($isAdmin || $isManager) {
+        // if ($isAdmin || $isManager) {
             $usersWithRoles = $this->UserRolesService->getUsersWithRoles();
 
             return view('userRole/index',
                 [
                     'usersWithRoles' => $usersWithRoles,
                 ]);
-        } else {
-            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
-        }
+        // } else {
+        //     return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+        // }
     }
 
     /**
@@ -86,10 +86,10 @@ class UserRolesController extends Controller
      */
     public function edit($userId)
     {
-        $isManager = $this->UserAuthenticationService->isManager();
-        $isAdmin   = $this->UserAuthenticationService->isAdmin();
+        // $isManager = $this->UserAuthenticationService->isManager();
+        // $isAdmin   = $this->UserAuthenticationService->isAdmin();
 
-        if ($isAdmin || $isManager) {
+        // if ($isAdmin || $isManager) {
 
             $user = $this->UserRolesService->getUserWithRoles($userId);
 
@@ -103,9 +103,9 @@ class UserRolesController extends Controller
                     'roles'     => $roles,
                     'userRoles' => $userRoles,
                 ]);
-        } else {
-            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
-        }
+        // } else {
+        //     return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+        // }
 
     }
 

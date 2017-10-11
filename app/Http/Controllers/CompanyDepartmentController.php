@@ -20,7 +20,7 @@ class CompanyDepartmentController extends Controller
 
     public function __construct(IDepartmentService $departmentService, IResourceFormValidator $resourceFormValidator)
     {
-
+        $this->middleware('auth');
         $this->DepartmentService     = $departmentService;
         $this->ResourceFormValidator = $resourceFormValidator;
 

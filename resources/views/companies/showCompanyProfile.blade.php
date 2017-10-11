@@ -65,7 +65,7 @@
             </table>
 
         </div>
-        @permission(['edit/update-company'])
+        @permission(StandardPermissions::getPermissionName(StandardPermissions::editUpdateCompany))
         <a href="/companies/{{$companyProfileModel->companyId}}/edit">
             <button class="btn btn-primary"> Edit Company
 
@@ -75,7 +75,7 @@
 
             </button></a>   
         @endpermission
-        @permission(['registerUser'])
+        @permission(StandardPermissions::getPermissionName(StandardPermissions::registerUser))
         <a href="/register-user/{{$companyProfileModel->companyId}}">
             <button class="btn btn-primary"> Setup New User
 

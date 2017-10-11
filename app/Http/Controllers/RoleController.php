@@ -18,6 +18,7 @@ class RoleController extends Controller
     {
 
         $this->middleware('auth');
+        
         $this->RoleService               = $roleService;
         $this->UserAuthenticationService = $userAuthenticationService;
         $this->PermissionService         = $permissionService;

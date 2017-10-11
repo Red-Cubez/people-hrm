@@ -12,9 +12,14 @@
                     <!-- Table Headings -->
                     <thead>
                     <th>Resource Name</th>
-                    @permission(['create/edit-clientProjectResource','delete-clientProjectResource'])
+                  
+                @permission([
+                    StandardPermissions::getPermissionName(StandardPermissions::createEditClientProjectResource),
+                    StandardPermissions::getPermissionName(StandardPermissions::deleteClientProjectResource)
+                      ])
                     <th>Operations</th>
-                    @endrole
+                @endpermission
+
                     </thead>
                     
                     <tbody>
@@ -30,14 +35,15 @@
 
                             <td>
                              
-                              @permission(['create/edit-clientProjectResource'])
+        @permission(StandardPermissions::getPermissionName(StandardPermissions::createEditClientProjectResource))
                                   <a href="/projectresources/{{$projectResource->resourceId}}/updateResource"> 
                                   <button class="btn btn-primary">
                                    Edit
                                     </button>
                                   </a>
-                               @endrole
-                               @permission(['delete-clientProjectResource'])   
+        @endpermission
+        
+        @permission(StandardPermissions::getPermissionName(StandardPermissions::deleteClientProjectResource))   
                                 <form action="{{ url('projectresources/'.$projectResource->resourceId) }}"
                                       method="POST">
                                     {{ csrf_field() }}
@@ -50,7 +56,7 @@
                                      </button>
                                    
                                 </form>
-                               @endpermission 
+        @endpermission 
                             </td>
                         </tr>
                     @endforeach

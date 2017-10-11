@@ -21,7 +21,7 @@
             <th>
                 Total Holidays
             </th>
-               @permission(['create/edit/delete-holiday'])
+               @permission(StandardPermissions::getPermissionName(StandardPermissions::createEditDeleteHoliday))
             <th>
                 Operations
             </th>
@@ -55,7 +55,7 @@
                                 {{ $companyHoliday->countHolidays }}
                             </div>
                         </td>
-                        @permission(['create/edit/delete-holiday'])
+            @permission(StandardPermissions::getPermissionName(StandardPermissions::createEditDeleteHoliday))
                         <td>
                             <button class="btn btn-primary"
                                     onclick="openHolidayModal({{$companyHoliday->holidayId}},null,null,null);"
@@ -73,7 +73,7 @@
                                     </button>
                             </form>
                         </td>
-                        @endpermission
+            @endpermission
                     </tr>
                 @endforeach
 
@@ -81,13 +81,13 @@
             </tbody>
         </table>
     </div>
-@permission(['create/edit/delete-holiday'])
+@permission(StandardPermissions::getPermissionName(StandardPermissions::createEditDeleteHoliday))
     <button class="btn btn-primary btn-lg" onclick="openHolidayModal(null,null,null,null);" type="button">
         Add Holiday
     </button>
 @endpermission
 </div>
-@permission(['create/edit/delete-holiday'])
+@permission(StandardPermissions::getPermissionName(StandardPermissions::createEditDeleteHoliday))
     @include('companyHolidays/companyHolidayModal')
 @endpermission
 @section('page-scripts')

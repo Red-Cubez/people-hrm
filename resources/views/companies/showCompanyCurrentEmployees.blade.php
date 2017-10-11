@@ -18,7 +18,10 @@
                 <th>
                     Hire Date
                 </th>
-                @permission(['create/edit-employee','view-employee'])
+                @permission([
+                    StandardPermissions::getPermissionName(StandardPermissions::createEditEmployee),
+                    StandardPermissions::getPermissionName(StandardPermissions::viewOthersProfile)
+                    ])
                 <th>
                     Operation
                 </th>
@@ -45,7 +48,8 @@
                             </div>
                         </td>
                         <td>
-                          @permission(['view-othersProfile'])
+
+                          @permission(StandardPermissions::getPermissionName(StandardPermissions::viewOthersProfile))
                             <a href="/employees/{{$employee->employeeId}}">
                                 <button class="btn btn-primary"> View
 
@@ -60,7 +64,7 @@
             No Record Found
         @endif
     </div>
-    @permission(['create/edit-employee'])
+    @permission(StandardPermissions::getPermissionName(StandardPermissions::createEditEmployee))
     <a href="/employees/showemployeeform/{{$companyProfileModel->companyId}}">
         <button class="btn btn-primary"> Add New Employee
 

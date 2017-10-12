@@ -1,3 +1,4 @@
+@permission(StandardPermissions::createEditClient)
 <div class="form-group">
     <label for="name" class="col-sm-3 control-label">Name</label>
 
@@ -46,3 +47,4 @@
         </button>
     </div>
 </div>
+@endpermission

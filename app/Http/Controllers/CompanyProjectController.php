@@ -6,9 +6,12 @@ use Illuminate\Http\Request;
 use People\Models\CompanyProject;
 use People\Services\Interfaces\ICompanyProjectResourceService;
 use People\Services\Interfaces\ICompanyProjectService;
+use People\Services\Interfaces\ICompanySettingService;
 use People\Services\Interfaces\IProjectGrapher;
 use People\Services\Interfaces\IProjectService;
 use People\Services\Interfaces\IResourceFormValidator;
+use People\Services\Interfaces\IUserAuthenticationService;
+use People\Services\StandardPermissions;
 
 class CompanyProjectController extends Controller
 {
@@ -23,19 +26,31 @@ class CompanyProjectController extends Controller
     public $ProjectGrapher;
     public $ProjectService;
     public $ProjectFormValidator;
-
+    public $UserAuthenticationService;
+    public $CompanySettingService;
 
     public function __construct(ICompanyProjectService $companyProjectService,
-                                ICompanyProjectResourceService $companyProjectResourceService,
-                                IProjectGrapher $ProjectGrapher, IProjectService $ProjectService,
-                                IResourceFormValidator $projectFormValidator)
-    {
+        ICompanyProjectResourceService $companyProjectResourceService,
+        IProjectGrapher $ProjectGrapher, IProjectService $ProjectService,
+        IResourceFormValidator $projectFormValidator, IUserAuthenticationService $userAuthenticationService,
+        ICompanySettingService $companySettingService
+    ) {
 
-        $this->CompanyProjectService = $companyProjectService;
+        $this->middleware('auth');
+
+        $this->middleware('permission:' . StandardPermissions::viewCompanyProject, ['only' => ['show']]);
+
+        $this->middleware('permission:' . StandardPermissions::createEditCompanyProject, ['only' => ['store', 'manageProject', 'edit', 'update']]);
+
+        $this->middleware('permission:' . StandardPermissions::deleteCompanyProject, ['only' => ['destroy']]);
+
+        $this->CompanyProjectService         = $companyProjectService;
         $this->CompanyProjectResourceService = $companyProjectResourceService;
-        $this->ProjectGrapher = $ProjectGrapher;
-        $this->ProjectService = $ProjectService;
-        $this->ProjectFormValidator = $projectFormValidator;
+        $this->ProjectGrapher                = $ProjectGrapher;
+        $this->ProjectService                = $ProjectService;
+        $this->ProjectFormValidator          = $projectFormValidator;
+        $this->UserAuthenticationService     = $userAuthenticationService;
+        $this->CompanySettingService         = $companySettingService;
     }
 
     public function index()
@@ -67,12 +82,13 @@ class CompanyProjectController extends Controller
      */
     public function validateProjectForm(Request $request)
     {
+
         $formErrors = $this->ProjectFormValidator->validateProjectForm($request);
 
         return response()->json(
             [
                 'formErrors' => $formErrors,
-                'action'=> $request->action,
+                'action'     => $request->action,
             ]);
 
     }
@@ -85,7 +101,7 @@ class CompanyProjectController extends Controller
             [
                 'projectId' => $companyProjectId,
             ]);
-      //  return redirect('/companyprojects/' . $companyProjectId);
+
     }
 
     /**
@@ -97,29 +113,48 @@ class CompanyProjectController extends Controller
     public function show($companyProjectId)
     {
 
-        list($currentProjectResources) = $this->CompanyProjectResourceService->showCompanyProjectResources($companyProjectId);
+        // $isManager = false;
+        // $isManager = $this->UserAuthenticationService->isManager();
+        // $isAdmin   = $this->UserAuthenticationService->isAdmin();
+        $project = $this->CompanyProjectService->getCompanyProject($companyProjectId);
 
-        $companyProject = $this->CompanyProjectService->viewCompanyProject($companyProjectId);
+        if (isset($project)) {
 
+            $isRequestedCompanyProjectBelongsToSameCompany = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($project->company_id);
+            if ($isRequestedCompanyProjectBelongsToSameCompany) {
+                list($currentProjectResources) = $this->CompanyProjectResourceService->showCompanyProjectResources($companyProjectId);
 
-        $projectTimeLines = $this->ProjectGrapher->setupProjectCost($companyProject, $currentProjectResources, true);
-        $projectTotalCost = $this->ProjectGrapher->calculateProjectTotalCost($projectTimeLines);
-        $resourcesDetails = $this->ProjectGrapher->getResourcesTotalCostForProject($companyProject, $currentProjectResources, $projectTotalCost);
+                $companyProject = $this->CompanyProjectService->viewCompanyProject($companyProjectId);
 
-        $companyProject->cost = $projectTotalCost;
-        $isOnBudget = $this->ProjectService->isProjectOnBudget($projectTotalCost, $companyProject->budget);
-        $companyProject->isProjectOnBudget = $isOnBudget;
+                $projectTimeLines = $this->ProjectGrapher->setupProjectCost($companyProject, $currentProjectResources, true);
 
-        return view('companyProjects/viewCompanyProject',
-            [
-                'project' => $companyProject,
-                'projectResources' => $currentProjectResources,
-                'companyProjectId' => $companyProjectId,
-                'projectTimeLines' => $projectTimeLines,
-                'resourcesDetails' => $resourcesDetails,
-                'projectTotalCost' => $projectTotalCost,
+                $projectTotalCost = $this->ProjectGrapher->calculateProjectTotalCost($projectTimeLines);
+                $resourcesDetails = $this->ProjectGrapher->getResourcesTotalCostForProject($companyProject, $currentProjectResources, $projectTotalCost);
 
-            ]);
+                $companyProject->cost              = $projectTotalCost;
+                $isOnBudget                        = $this->ProjectService->isProjectOnBudget($projectTotalCost, $companyProject->budget);
+                $companyProject->isProjectOnBudget = $isOnBudget;
+                $currencyName                      = $this->CompanySettingService->getCurrencyName($project->company_id);
+                $currencySymbol                    = $this->CompanySettingService->getCurrencySymbol($project->company_id);
+
+                return view('companyProjects/viewCompanyProject',
+                    [
+                        'project'          => $companyProject,
+                        'projectResources' => $currentProjectResources,
+                        'companyProjectId' => $companyProjectId,
+                        'projectTimeLines' => $projectTimeLines,
+                        'resourcesDetails' => $resourcesDetails,
+                        'projectTotalCost' => $projectTotalCost,
+                        'currencyName'     => $currencyName,
+                        'currencySymbol'   => $currencySymbol,
+
+                    ]);
+            } else {
+                return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+            }
+        } else {
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+        }
 
     }
 
@@ -129,9 +164,25 @@ class CompanyProjectController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(CompanyProject $companyproject)
+    public function edit($companyProjectId)
     {
-        return view('companyProjects/companyProjectEditForm', ['companyproject' => $companyproject]);
+
+        // $isManager = $this->UserAuthenticationService->isManager();
+        // $isAdmin   = $this->UserAuthenticationService->isAdmin();
+        $project = $this->CompanyProjectService->getCompanyProject($companyProjectId);
+
+        if (isset($project)) {
+
+            $isRequestedCompanyProjectBelongsToSameCompany = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($project->company_id);
+            if ($isRequestedCompanyProjectBelongsToSameCompany) {
+                return view('companyProjects/companyProjectEditForm', ['companyproject' => $project]);
+            } else {
+                return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+            }
+
+        } else {
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+        }
     }
 
     /**
@@ -161,17 +212,35 @@ class CompanyProjectController extends Controller
     public function destroy(CompanyProject $companyproject)
     {
 
+        // $isManager = false;
+        // $isManager = $this->UserAuthenticationService->isManager();
+        // $isAdmin   = $this->UserAuthenticationService->isAdmin();
+        // if ($isManager || $isAdmin) {
+
         $this->CompanyProjectService->deleteCompanyProject($companyproject);
 
         return redirect('/companies/' . $companyproject->company_id);
+        // } else {
+        //     return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+        // }
     }
 
     public function manageProject($companyid)
     {
+        // dd("here");
+        // $isManager                                     = false;
+        // $isManager                                     = $this->UserAuthenticationService->isManager();
+        // $isAdmin                                       = $this->UserAuthenticationService->isAdmin();
+        $isRequestedCompanyProjectBelongsToSameCompany = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($companyid);
+        if ($isRequestedCompanyProjectBelongsToSameCompany) {
 
-        $companyProjects = $this->CompanyProjectService->manageProject($companyid);
-
-        return view('companyprojects.index', ['companyProjects' => $companyProjects, 'companyid' => $companyid]);
+            return view('companyprojects.index',
+                [
+                    'companyid' => $companyid,
+                ]);
+        } else {
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+        }
     }
 
 }

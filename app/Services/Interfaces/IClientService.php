@@ -9,5 +9,7 @@ interface IClientService {
 	public function updateClient($request, $client);
 	public function getAllClients();
 	public function getClientProjects($client);
+	public function getClientDetails($clientId);
+
 
 }

@@ -8,6 +8,7 @@
                     @include('common.errors')
                     <div class="row">
                         <div class="col-sm-3">
+                        <div class="panel panel-default">
                             <div>
                                 <label class="control-label" for="name">
                                     First Name :
@@ -100,32 +101,31 @@
                                 @endif
                                 Working Over Time.
                             </div>
+                        
+                               
+                    @permission(StandardPermissions::createEditEmployee)
                             <br>
                             <a href="/employees/{{$employeeModel->employeeProfile->employeeId}}/edit">
                                 <button class="btn btn-primary"> Edit
 
                                 </button>
                             </a>
-                            {{--<form action="{{ url('employees/'.$employeeModel->employeeProfile->employeeId.'/edit') }}" method="POST">--}}
-                            {{--{{ csrf_field() }}--}}
-                            {{--{{ method_field('GET') }}--}}
-                            {{--<button class="btn btn-primary" type="submit">--}}
-                            {{--<i class="fa fa-trash">--}}
-                            {{--EDIT--}}
-                            {{--</i>--}}
-                            {{--</button>--}}
-                            {{--</form>--}}
+                     @endpermission
+                            
+                    @permission(StandardPermissions::deleteEmployee)
                             <form action="{{ url('employees/'.$employeeModel->employeeProfile->employeeId) }}"
                                   method="POST">
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
-                                <button class="btn btn-danger" type="submit">
+                                <button class="btn btn-danger" data-toggle="confirmation" data-singleton="true" type="submit">
                                     <i c="" lass="fa fa-trash">
                                         DELETE
                                     </i>
                                 </button>
                             </form>
+                    @endpermission
 
+                        </div>
                         </div>
                         <div class="col-sm-5">
 
@@ -140,20 +140,58 @@
                     </div>
                 </div>
                 </div>
+                  @permission(StandardPermissions::createEditTimesheet)
                     <div class="row">
                         <div class="col-sm-12">
-                            {{--<form class="panel-body" action="{{ url('employeetimeline/') }}" method="POST">--}}
-                                {{--{{ csrf_field() }}--}}
-                                {{--{{ method_field('POST') }}--}}
                             <a href="/employeetimesheet/{{$employeeModel->employeeProfile->employeeId}}/create">
                                 <button class="btn btn-primary"> Add Timesheet
 
                                 </button></a>
 
-                                {{--@include('employees/employeeTimeSheet')--}}
-                            {{--</form>--}}
                         </div>
                     </div>
+                    @endpermission
+                    <br/>
+                    @permission(StandardPermissions::approveTimesheets)
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <a href="/employeestimesheets/">
+                        
+                                <button class="btn btn-primary"> Approve Timesheets
+
+                                </button></a>
+
+                      </div>
+                      </div>
+                    @endrole
+                    <br/>
+                    @permission(StandardPermissions::createEditTimeoff)
+                       <div class="row">
+                        <div class="col-sm-12">
+                            <a href="/employeetimeoff/{{$employeeModel->employeeProfile->employeeId}}/create">
+                          {{--   <a href="/employeetimeoff/create"> --}}
+                                <button class="btn btn-primary"> Add Time Off
+
+                                </button></a>
+
+                        </div>
+                            </div>
+                     @endpermission
+                        <br/>
+                    @permission(StandardPermissions::approveTimeoffs)
+                        <div class="row">
+                        <div class="col-sm-12">
+             
+                            <a href="/employeestimeoffs/">
+                                <button class="btn btn-primary"> Approve Time Offs
+
+                                </button></a>
+
+                      </div>
+                      </div>
+                       @endpermission
+
+                
                     @include('employees/showEmployeeClientProjects')
                     @include('employees/showEmployeeCompanyProjects')
 
@@ -162,4 +200,10 @@
             </div>
         </div>
     </main>
+    <script type="text/javascript">
+$('[data-toggle=confirmation]').confirmation({
+  rootSelector: '[data-toggle=confirmation]',
+  
+});
+</script>
 @endsection

@@ -30,9 +30,11 @@
                 <th>
                     Cost
                 </th>
+                 @permission([StandardPermissions::deleteCompanyProject,StandardPermissions::viewCompanyProject])
                 <th>
                     Operations
                 </th>
+                @endpermission
             </thead>
             <!-- Table Body -->
             <tbody>
@@ -76,31 +78,27 @@
                     </td>
                     <!-- Delete Button -->
                     <td>
+                @permission(StandardPermissions::deleteCompanyProject)
                         <form action="{{ url('companyprojects/'.$project->projectId) }}" method="POST">
                             {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
                             <input name="_method" type="hidden" value="DELETE">
-                                <button class="btn btn-danger" type="submit">
+                                <button class="btn btn-danger" data-toggle="confirmation" data-singleton="true" type="submit">
                                     <i class="fa fa-trash">
                                         Delete
                                     </i>
                                 </button>
+                                
                             </input>
                         </form>
+                @endpermission
+                @permission(StandardPermissions::viewCompanyProject)
                         <a href="/companyprojects/{{$project->projectId}}">
                             <button class="btn btn-primary"> View
 
                             </button></a>
-                        {{--<form action="{{ url('companyprojects/'.$project->projectId) }}" method="POST">--}}
-                            {{--{{ csrf_field() }}--}}
-                                {{--{{ method_field('GET') }}--}}
-                            {{--<button class="btn btn-primary" type="submit">--}}
-                                {{--<i class="fa fa-trash">--}}
-                                    {{--View--}}
-                                {{--</i>--}}
-                            {{--</button>--}}
-                        {{--</form>--}}
-                    </td>
+                @endpermission
+                                         </td>
                 </tr>
                 @endforeach
                 @else
@@ -109,17 +107,16 @@
             </tbody>
         </table>
     </div>
+    @permission(StandardPermissions::createEditCompanyProject)
     <a href="/companies/{{$companyProfileModel->companyId}}/companyprojects">
         <button class="btn btn-primary"> Add New Projects
 
         </button></a>
-    {{--<form action="{{ url('/companies/'.$companyProfileModel->companyId.'/companyprojects') }}" method="POST">--}}
-        {{--{{ csrf_field() }}--}}
-            {{--{{ method_field('GET') }}--}}
-        {{--<button class="btn btn-primary" type="submit">--}}
-            {{--<i class="fa fa-trash">--}}
-                {{--Add New Projects--}}
-            {{--</i>--}}
-        {{--</button>--}}
-    {{--</form>--}}
+    @endpermission
 </div>
+<script type="text/javascript">
+$('[data-toggle=confirmation]').confirmation({
+  rootSelector: '[data-toggle=confirmation]',
+  // other options
+});
+</script>

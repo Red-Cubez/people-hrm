@@ -14,6 +14,9 @@
                 <th>End Date</th>
                 <th>Hours Per Week</th>
 
+                 @permission(StandardPermissions::showCompanyProjects)
+                              <th>Operations</th>
+                 @endpermission
                 </thead>
                 <!-- Table Body -->
                 <tbody>
@@ -36,6 +39,17 @@
                             <td class="table-text">
                                 <div>{{ $companyProject->hoursPerWeek }}</div>
                             </td>
+                    @permission(StandardPermissions::viewCompanyProject)
+                                    <td>
+         
+                                         <a href="/companyprojects/{{$companyProject->projectId}}">
+                                         <button class="btn btn-primary"> View
+
+                                         </button></a>
+                                    </td>
+
+                    @endpermission
+                                    
 
                         </tr>
                 @endforeach

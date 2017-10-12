@@ -44,7 +44,6 @@ class JobTitleService implements IJobTitleService {
 
 		$jobTitle->delete();
 
-		return $companyId;
 
 	}
 

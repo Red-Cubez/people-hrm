@@ -4,10 +4,13 @@ namespace People\Http\Controllers;
 
 use Illuminate\Http\Request;
 use People\Models\ProjectResource;
+use People\Services\Interfaces\IClientProjectService;
+use People\Services\Interfaces\ICompanyProjectResourceService;
 use People\Services\Interfaces\IProjectResourceService;
 use People\Services\Interfaces\IProjectService;
 use People\Services\Interfaces\IResourceFormValidator;
-
+use People\Services\Interfaces\IUserAuthenticationService;
+use People\Services\StandardPermissions;
 
 class ProjectResourceController extends Controller
 {
@@ -20,14 +23,25 @@ class ProjectResourceController extends Controller
 
     public $ProjectResourceService;
     public $ResourceFormValidator;
+    public $UserAuthenticationService;
+    public $ClientProjectService;
+    public $CompanyProjectResourceService;
 
     public function __construct(IProjectResourceService $projectResourceService, IProjectService $projectService,
-                                IResourceFormValidator $resourceFormValidator)
-    {
+        IResourceFormValidator $resourceFormValidator, IUserAuthenticationService $userAuthenticationService, IClientProjectService $clientProjectService, ICompanyProjectResourceService $companyProjectResourceService) {
 
-        $this->ProjectResourceService = $projectResourceService;
-        $this->ProjectService = $projectService;
-        $this->ResourceFormValidator = $resourceFormValidator;
+        $this->middleware('auth');
+
+        $this->middleware('permission:' . StandardPermissions::createEditClientProjectResource . '|' . StandardPermissions::createEditCompanyProjectResource, ['only' => ['manageressources', 'store', 'updateressources']]);
+
+        $this->middleware('permission:' . StandardPermissions::deleteClientProjectResource, ['only' => ['destroy']]);
+
+        $this->ProjectResourceService        = $projectResourceService;
+        $this->ProjectService                = $projectService;
+        $this->ResourceFormValidator         = $resourceFormValidator;
+        $this->UserAuthenticationService     = $userAuthenticationService;
+        $this->ClientProjectService          = $clientProjectService;
+        $this->CompanyProjectResourceService = $companyProjectResourceService;
     }
 
     public function index()
@@ -63,31 +77,54 @@ class ProjectResourceController extends Controller
     }
     public function store(Request $request)
     {
+        $projectId  = null;
+        $redirectTo = null;
+        if (isset($request->companyProjectId)) {
+            $projectId  = $this->CompanyProjectResourceService->saveOrUpdateCompanyProjectResource($request);
+            $redirectTo = "/companyprojects/" . $projectId;
+        } elseif (isset($request->clientProjectid)) {
+            $projectId  = $this->ProjectResourceService->saveOrUpdateProjectResource($request);
+            $redirectTo = "/clientprojects/" . $projectId;
+        }
 
-        $this->ProjectResourceService->saveOrUpdateProjectResource($request);
         return response()->json(
             [
-                'projectId' => $request->clientProjectid,
+                'projectId'  => $request->clientProjectid,
+                'redirectTo' => $redirectTo,
             ]);
-
 
     }
 
-public
-function manageressources($clientProjectId)
-{
+    public function manageressources($clientProjectId)
+    {
+        //   dd("here");
+        // $isAdmin         = $this->UserAuthenticationService->isAdmin();
+        // $isManager       = $this->UserAuthenticationService->isManager();
+        // $isClientManager = $this->UserAuthenticationService->isClientManager();
 
-    list($currentProjectResources, $availableEmployees) = $this->ProjectResourceService->showClientProjectResources($clientProjectId);
+        $clientProject = $this->ClientProjectService->getClientProjectDetails($clientProjectId);
+        if (isset($clientProject)) {
+            $isRequestedClientProjectBelongsToSameCompany = $this->UserAuthenticationService->isRequestedClientBelongsToSameCompany($clientProject->client_id);
+            if ($isRequestedClientProjectBelongsToSameCompany) {
+                list($currentProjectResources, $availableEmployees) = $this->ProjectResourceService->showClientProjectResources($clientProjectId);
 
-    $projectResources = $this->ProjectService->mapResourcesDetailsToClass($currentProjectResources, false);
+                $projectResources = $this->ProjectService->mapResourcesDetailsToClass($currentProjectResources, false);
 
-    return view('projectResources.index', [
-        'projectResources' => $projectResources,
-        'availableEmployees' => $availableEmployees,
-        'clientProjectid' => $clientProjectId,
-    ]);
+                return view('projectResources.index', [
+                    'projectResources'   => $projectResources,
+                    'availableEmployees' => $availableEmployees,
+                    'clientProjectid'    => $clientProjectId,
+                ]);
+            } else {
+                return $this->UserAuthenticationService->redirectToErrorMessageView(null);
 
-}
+            }
+        } else {
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+
+        }
+
+    }
 
 /**
  * Display the specified resource.
@@ -95,11 +132,10 @@ function manageressources($clientProjectId)
  * @param  \People\Models\ClientProject $clientProject
  * @return \Illuminate\Http\Response
  */
-public
-function show(ProjectResource $projectresource)
-{
-    //
-}
+    public function show(ProjectResource $projectresource)
+    {
+        //
+    }
 
 /**
  * Show the form for editing the specified resource.
@@ -107,11 +143,10 @@ function show(ProjectResource $projectresource)
  * @param  \People\Models\ClientProject $clientProject
  * @return \Illuminate\Http\Response
  */
-public
-function edit(ProjectResource $projectresource)
-{
-    //
-}
+    public function edit(ProjectResource $projectresource)
+    {
+        //
+    }
 
 /**
  * Update the specified resource in storage.
@@ -120,11 +155,10 @@ function edit(ProjectResource $projectresource)
  * @param  \People\Models\ClientProject $clientProject
  * @return \Illuminate\Http\Response
  */
-public
-function update(Request $request, ProjectResource $projectresource)
-{
+    public function update(Request $request, ProjectResource $projectresource)
+    {
 
-}
+    }
 
 /**
  * Remove the specified resource from storage.
@@ -132,26 +166,40 @@ function update(Request $request, ProjectResource $projectresource)
  * @param  \People\Models\ProjectResource $projectresource
  * @return \Illuminate\Http\Response
  */
-public
-function destroy(ProjectResource $projectresource, Request $request)
-{
+    public function destroy(ProjectResource $projectresource, Request $request)
+    {
 
-    $this->ProjectResourceService->deleteProjectResource($projectresource);
+        $this->ProjectResourceService->deleteProjectResource($projectresource);
 
-    return redirect('/clientprojects/' . $projectresource->client_project_id . '/projectresources');
-}
+        return redirect('/clientprojects/' . $projectresource->client_project_id . '/projectresources');
+    }
 
-public
-function updateressources($projectResourceid)
-{
-    //edit form
-    $Resource = $this->ProjectResourceService->updateProjectRessources($projectResourceid);
+    public function updateressources($projectResourceId)
+    {
 
-    return view('projectResources.updateResource', [
-        'projectresources' => $Resource,
-        'clientProjectid'=>$Resource[0]->client_project_id,
+        //edit form
 
-    ]);
-}
+        $resource = $this->ProjectResourceService->getProjectResource($projectResourceId);
+
+        if (isset($resource)) {
+            $isRequestedClientProjectResourceBelongsToSameCompany = $this->UserAuthenticationService->isRequestedClientBelongsToSameCompany($resource->clientProject->client->id);
+
+            // $isAdmin         = $this->UserAuthenticationService->isAdmin();
+            // $isManager       = $this->UserAuthenticationService->isManager();
+            //$isClientManager = $this->UserAuthenticationService->isClientManager();
+
+            if ($isRequestedClientProjectResourceBelongsToSameCompany) {
+                return view('projectResources.updateResource', [
+                    'projectresources' => $resource,
+                    'clientProjectid'  => $resource->client_project_id,
+
+                ]);
+            } else {
+                return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+            }
+        } else {
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+        }
+    }
 
 }

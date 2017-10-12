@@ -22,4 +22,10 @@ class Employee extends Model {
     public function timesheets() {
         return $this->hasMany('People\Models\EmployeeTimesheet');
     }
+    public function timeoffs() {
+        return $this->hasMany('People\Models\EmployeeTimeoff');
+    }
+    public function user() {
+        return $this->hasOne('People\Models\User');
+    }
 }

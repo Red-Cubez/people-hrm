@@ -65,20 +65,23 @@
             </table>
 
         </div>
-
+        @permission(StandardPermissions::editUpdateCompany)
         <a href="/companies/{{$companyProfileModel->companyId}}/edit">
-            <button class="btn btn-primary"> Edit Companay
+            <button class="btn btn-primary"> Edit Company
 
             </button></a>
+         <a href="/company-settings/{{$companyProfileModel->companyId}}">
+            <button class="btn btn-primary"> Company Settings
 
-        {{--<form action="{{ url('companies/'.$companyProfileModel->companyId.'/edit') }}" method="POST">--}}
-            {{--{{ csrf_field() }}--}}
-            {{--{{ method_field('GET') }}--}}
+            </button></a>   
+        @endpermission
+        @permission(StandardPermissions::registerUser)
+        <a href="/register-user/{{$companyProfileModel->companyId}}">
+            <button class="btn btn-primary"> Setup New User
 
-            {{--<button type="submit" class="btn btn-primary">--}}
-                {{--<i class="fa fa-trash"> Edit Company</i>--}}
-            {{--</button>--}}
-        {{--</form>--}}
+            </button>
+         </a> 
+         @endpermission  
     </div>
 
 @endif

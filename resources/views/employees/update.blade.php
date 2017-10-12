@@ -3,13 +3,13 @@
   <div class="panel-body">
     <!-- Display Validation Errors -->
     @include('common.errors')
-    <!-- New Employee Form -->
+
     <form id="employeeForm" name="employeeForm" class="form-horizontal">
       {{ csrf_field() }}
 
       <input type="hidden" name="action" id="action" value="update">
       <input type="hidden" name="employeeId" id="employeeId" value="{{$editEmployeeModel->employeeProfile->employeeId}}">
-      <!-- Employee Name -->
+
       @include('employees/employeeForm')
     </form>
 

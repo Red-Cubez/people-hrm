@@ -10,4 +10,7 @@ class Department extends Model {
     {
         return $this->belongsToMany('People\Models\Employee')->withTimestamps();
     }
+     public function company() {
+        return $this->belongsTo('People\Models\Company');
+    }
 }

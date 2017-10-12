@@ -5,9 +5,8 @@
     <div class="panel-body">
 
         <div>
-            <form id="resourceForm" method="POST"
-                  class="form-horizontal">
-                {{ csrf_field() }}
+            <form id="resourceForm" name="resourceForm" class="form-horizontal">
+                  {{ csrf_field() }}
 
                 @if(isset($companyProjectId))
                     <input type="hidden" name="companyProjectId" value="{{ $companyProjectId }}">

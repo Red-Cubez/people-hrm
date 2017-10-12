@@ -80,7 +80,9 @@
                         else if (data.formErrors.hasErrors == true) {
 
                             var htmlError = '<div id="list" class="alert alert-danger">';
-
+                            if (data.formErrors.nameNotEntered) {
+                            htmlError = htmlError + "<li>" + data.formErrors.nameNotEntered + "</li>";
+                        }
                             if (data.formErrors.startDateNotEntered) {
                                 htmlError = htmlError + "<li>" + data.formErrors.startDateNotEntered + "</li>";
                             }
@@ -94,6 +96,7 @@
                             html = htmlError;
                             $("#list").remove();
                             $("#name").before(html);
+                            $(window).scrollTop($('#list').offset().top);
                         }
                     },
                     error: function () {

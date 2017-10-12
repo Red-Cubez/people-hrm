@@ -21,11 +21,13 @@
             <th>
                 Total Holidays
             </th>
+               @permission(StandardPermissions::createEditDeleteHoliday)
             <th>
                 Operations
             </th>
-            <th>
-            </th>
+           
+            @endpermission
+            
             </thead>
             <!-- Table Body -->
             <tbody id="holidayTableBody">
@@ -53,6 +55,7 @@
                                 {{ $companyHoliday->countHolidays }}
                             </div>
                         </td>
+            @permission(StandardPermissions::createEditDeleteHoliday)
                         <td>
                             <button class="btn btn-primary"
                                     onclick="openHolidayModal({{$companyHoliday->holidayId}},null,null,null);"
@@ -61,16 +64,16 @@
                                     Edit
                                 </i>
                             </button>
-
+                     
+                            <form  action="{{url('companyholidays/'.$companyHoliday->holidayId) }}" method="POST">
+                                    {{ csrf_field() }}
+                                    {{ method_field('DELETE') }}
+                                    <button type="submit" class="btn btn-danger" data-toggle="confirmation" data-singleton="true">
+                                        Delete
+                                    </button>
+                            </form>
                         </td>
-                        <td>
-                            <button class="btn btn-danger" onclick="deleteHoliday({{$companyHoliday->holidayId}})"
-                                    type="button">
-                                <i class="fa fa-trash">
-                                    Delete
-                                </i>
-                            </button>
-                        </td>
+            @endpermission
                     </tr>
                 @endforeach
 
@@ -78,24 +81,23 @@
             </tbody>
         </table>
     </div>
-
+@permission(StandardPermissions::createEditDeleteHoliday)
     <button class="btn btn-primary btn-lg" onclick="openHolidayModal(null,null,null,null);" type="button">
         Add Holiday
     </button>
-
+@endpermission
 </div>
-@include('companyHolidays/companyHolidayModal')
+@permission(StandardPermissions::createEditDeleteHoliday)
+    @include('companyHolidays/companyHolidayModal')
+@endpermission
 @section('page-scripts')
     @parent
     <script type="text/javascript">
 
         function initializeHolidayModal() {
             $("#list").remove();
-            $('#holidayName').val(null);
-            $('#startDate').val(null);
-            $('#endDate').val(null);
-            //$('#jobTitleId').val(null);
             $('#toBeUpdatedHoliday').val(null);
+             $('#holidayModalForm')[0].reset();
         }
         function setupHolidayEditValues(holidayId, holidayName, startDate, endDate) {
 
@@ -163,15 +165,12 @@
                         updateHoliday();
                     }
                 }
-            }
-            if(!areDatesValid) {
+           }
+            else if(!areDatesValid) {
                 $("#list").remove();
-                var html = '<div id="list" class="alert alert-danger">End Date Can not be Smaller Than Start Date </div>';
+                var endDateIsLessHtml = '<div id="list" class="alert alert-danger">End Date Can not be Less Than Start Date </div>';
 
-                $("#holidayNameDiv").before(html);
-
-              //  alert(wrongEndDate);
-                //alert("Enter Corrrect End Date");
+                $("#holidayNameDiv").before(endDateIsLessHtml);
             }
         }
         function updateHoliday() {
@@ -196,9 +195,27 @@
                         alert('errors');
                         $('.error').removeClass('hidden');
                         $('.error').text(data.errors.name);
-                    } else {
+                    }
+                     if(data.formErrors.hasErrors)
+                    {
+                        var htmlError = '<div id="list" class="alert alert-danger">';
+                        if (data.formErrors.nameNotEntered) {
+                            htmlError = htmlError + "<li>" + data.formErrors.nameNotEntered + "</li>";
+                        }
+                        if (data.formErrors.startDateNotEntered) {
+                            htmlError = htmlError + "<li>" + data.formErrors.startDateNotEntered + "</li>";
+                        }
+                         if (data.formErrors.endDateIsLessThanStartDate) {
+                            htmlError = htmlError + "<li>" + data.formErrors.endDateIsLessThanStartDate + "</li>";
+                        }
+                        
+                        html = htmlError;
+                        $("#list").remove();
+                        $("#holidayNameDiv").before(html);
 
-                        // $('#holiday_' + data.holidayId).remove();
+                    }
+                     else {
+
                         $('#holidayModal').modal('toggle');
 
                         $('#holidayName').val(null);
@@ -206,8 +223,18 @@
                         $('#holidayName_' + holidayId).text(data.jobTitle);
                         $('.error').remove();
 
-                        var html = '\
-                     <td id="holidayName_' + data.holidayId + ' " class="table-text" >\
+                        var html = createHtmlRow(data);
+                        $('#holiday_' + data.holidayId).html(html);
+
+                        initializeConfirmationBox();
+                    }
+                },
+            });
+        }
+      function createHtmlRow(data)
+      {
+           return '\
+              <td id="holidayName_' + data.holidayId + ' " class="table-text" >\
                         <div >\
                             ' + data.holidayName + '\
                         </div>\
@@ -234,20 +261,16 @@
                         type="button"> \
                         Edit \
                         </button> \
-                    </td> \
-                    <td >\
-                        <button class="btn btn-danger" onclick="deleteHoliday(' + data.holidayId + ')" type="submit"> \
-                            <i class="fa fa-trash">DELETE</i> \
-                        </button> \
+                            <form action="{{url('companyholidays')}}/' + data.holidayId + ' " method="POST">\
+                                    {{ csrf_field() }}\
+                                    {{ method_field('DELETE') }}\
+                                    <button type="submit" class="btn btn-danger" data-toggle="confirmation"\ data-singleton="true">\
+                                        Delete\
+                                    </button>\
+                            </form>\
                     </td>';
-                        // $('#holiday_' + data.holidayId)
-                        // $("#holidayTableBody").append(html);
-                        $('#holiday_' + data.holidayId).html(html);
-                    }
-                },
-            });
-        }
-
+      }
+    
         function addHoliday() {
 
             var holidayName = $("#holidayName").val();
@@ -271,71 +294,50 @@
                         alert('errors');
                         $('.error').removeClass('hidden');
                         $('.error').text(data.errors.name);
-                    } else {
+                    }
+                    if(data.formErrors.hasErrors)
+                    {
+                        var htmlError = '<div id="list" class="alert alert-danger">';
+                        if (data.formErrors.nameNotEntered) {
+                            htmlError = htmlError + "<li>" + data.formErrors.nameNotEntered + "</li>";
+                        }
+                        if (data.formErrors.startDateNotEntered) {
+                            htmlError = htmlError + "<li>" + data.formErrors.startDateNotEntered + "</li>";
+                        }
+                         if (data.formErrors.endDateIsLessThanStartDate) {
+                            htmlError = htmlError + "<li>" + data.formErrors.endDateIsLessThanStartDate + "</li>";
+                        }
+                        
+                        html = htmlError;
+                        $("#list").remove();
+                        $("#holidayNameDiv").before(html);
+                        // $(window).scrollTop($('#list').offset().top);
+                    }
+                     else {
 
                         $('#holidayModal').modal('toggle');
                         $('#holidayName').val(null);
 
                         var html = '\
                  <tr id="holiday_' + data.holidayId + '">\
-                    <td id="holidayName_' + data.holidayId + ' " class="table-text">\
-                        <div>\
-                            ' + data.holidayName + '\
-                        </div>\
-                    </td>\
-                    <td id="startDate_' + data.holidayId + ' " class="table-text">\
-                        <div>\
-                            ' + data.startDate + '\
-                        </div>\
-                    </td>\
-                    <td id="endDate' + data.holidayId + ' " class="table-text">\
-                        <div>\
-                            ' + data.endDate + '\
-                        </div>\
-                    </td>\
-                    <td id="countHolidays_' + data.holidayId + ' " class="table-text">\
-                        <div>\
-                            ' + data.holidays + '\
-                        </div>\
-                    </td>\
-                    <td >\
-                        <button \
-                        class="btn btn-primary " \
-                        onclick="openHolidayModal(\'' + data.holidayId + '\',\'' + data.holidayName + '\',\'' + data.startDate + '\',\'' + data.endDate + '\');" \
-                        type="submit"> \
-                        Edit \
-                        </button> \
-                    </td> \
-                    <td >\
-                        <button class="btn btn-danger" onclick="deleteHoliday(' + data.holidayId + ')" type="submit"> \
-                            <i class="fa fa-trash">DELETE</i> \
-                        </button> \
-                    </td> \
+                    '+ createHtmlRow(data);
+                    '\
                     </tr>"\
                     ';
                         $("#holidayTableBody").append(html);
+                        initializeConfirmationBox();
                     }
                 }
             });
         }
-        function deleteHoliday(holidayId) {
-            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            $.ajax({
-                type: 'DELETE',
-                url: '/companyholidays/' + holidayId,
-                data: {
-                    '_token': CSRF_TOKEN,
-                },
-                success: function (data) {
-                    if ((data.errors)) {
-                        alert('errors');
-                        $('.error').removeClass('hidden');
-                        $('.error').text(data.errors.name);
-                    } else {
-                        $('#holiday_' + holidayId).remove();
-                    }
-                },
-            });
-        }
+
     </script>
+<script type="text/javascript">
+function initializeConfirmationBox()
+{
+    $('[data-toggle=confirmation]').confirmation({
+  rootSelector: '[data-toggle=confirmation]',
+    });
+}
+</script>
 @endsection

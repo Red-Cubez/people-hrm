@@ -21,12 +21,5 @@
 
                </form>
         </div>
-        {{--<form action="{{url('clientprojects') }}" method="POST" class="form-horizontal">--}}
-        {{--{{ csrf_field() }}--}}
-        {{--{{ method_field('POST') }}--}}
 
-        <!-- Current clientProjects -->
-      {{--  @if(isset($clientprojects))
-       @include('clientProjects/showProjects')
-       @endif --}}
     @endsection

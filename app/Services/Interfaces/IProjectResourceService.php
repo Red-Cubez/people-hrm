@@ -13,5 +13,8 @@ interface IProjectResourceService
 
     public function manageProjectResources($clientproject);
     public function showClientProjectResources($clientProjectId);
+    public function getProjectResource($projectResourceId);
+
+    public function  getResourceStartAndEndDate($resource);
 
 }

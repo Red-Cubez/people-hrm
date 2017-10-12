@@ -2,22 +2,23 @@
 
 namespace People\Services;
 
-use People\Models\Company;
 use People\Models\Department;
 use People\Services\Interfaces\IDepartmentService;
 
 class DepartmentService implements IDepartmentService
 {
 
-    public function createDepartment($createRequest)
+    public function createDepartment($request)
     {
 
         $department = new Department();
-        $department->name = $createRequest->name;
-        $company = Company::find(1);
 
-        $department->company_id = $company->id;
+        $department->name       = $request->name;
+        $department->company_id = $request->companyId;
+
         $department->save();
+
+        return $department;
     }
 
     public function getAllDepartments()
@@ -26,17 +27,28 @@ class DepartmentService implements IDepartmentService
         return $departments;
     }
 
-    public function updateDepartment($updateRequest, $department)
+    public function updateDepartment($request, $departmentId)
     {
-
-        $department->name = $updateRequest->name;
+        $department=$this->getDepartment($departmentId);
+        $department->name = $request->name;
         $department->save();
+
+        return $department;
+    }
+     public function getDepartment($departmentId)
+    {
+        return Department::find($departmentId);
     }
 
-    public function deleteDepartment($department)
+    public function deleteDepartment($departmentId)
     {
+        $department=Department::find($departmentId);
 
         $department->delete();
+    }
+    public function getDepartmentsOfCompany($companyId)
+    {
+        return Department::where('company_id', $companyId)->get();
     }
 
 }

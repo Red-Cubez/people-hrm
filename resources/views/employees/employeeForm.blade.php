@@ -1,3 +1,6 @@
+
+@permission(StandardPermissions::createEditEmployee)
+
 <div id="name" class="form-group">
     <label for="name" class="col-sm-3 control-label">First Name</label>
     <div class="col-sm-6">
@@ -27,7 +30,7 @@
     <div class="col-sm-6">
         <input type="date" name="hireDate" id="hireDate" class="form-control"
                @if(isset($editEmployeeModel->employeeProfile->hireDate)) value="{{ $editEmployeeModel->employeeProfile->hireDate }}"
-               @else placeholder="Hire Date" @endif>
+               @else placeholder="Hire Date" @endif required>
     </div>
 </div>
 <div class="form-group">
@@ -116,7 +119,7 @@
         </button>
     </div>
 </div>
-
+@endpermission
 <script type="text/javascript">
 
     $(document).ready(function () {
@@ -140,20 +143,30 @@
                     else if (data.formErrors.hasErrors == true) {
 
                         var htmlError = '<div id="list" class="alert alert-danger">';
-
+                        if (data.formErrors.firstNameNotEntered) {
+                            htmlError = htmlError + "<li>" + data.formErrors.firstNameNotEntered + "</li>";
+                        }
+                        if (data.formErrors.lastNameNotEntered) {
+                            htmlError = htmlError + "<li>" + data.formErrors.lastNameNotEntered + "</li>";
+                        }
+                        if (data.formErrors.hireDateNotEntered) {
+                            htmlError = htmlError + "<li>" + data.formErrors.hireDateNotEntered + "</li>";
+                        }
                         if (data.formErrors.wrongHireDate) {
                             htmlError = htmlError + "<li>" + data.formErrors.wrongHireDate + "</li>";
                         }
                         if (data.formErrors.wrongTerminationDate) {
                             htmlError = htmlError + "<li>" + data.formErrors.wrongTerminationDate + "</li>";
                         }
-                        if (data.formErrors.hireDateNotEntered) {
-                            htmlError = htmlError + "<li>" + data.formErrors.hireDateNotEntered + "</li>";
+                        
+                        if (data.formErrors.jobTitleNotEntered) {
+                            htmlError = htmlError + "<li>" + data.formErrors.jobTitleNotEntered + "</li>";
                         }
 
                         html = htmlError;
                         $("#list").remove();
                         $("#name").before(html);
+                        $(window).scrollTop($('#list').offset().top);
                     }
                 },
                 error: function () {

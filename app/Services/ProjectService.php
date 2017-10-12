@@ -3,7 +3,9 @@
 namespace People\Services;
 
 use People\Services\Interfaces\IProjectService;
-class ProjectResourceDetails{
+
+class ProjectResourceDetails
+{
     public $resourceName;
     public $resourceId;
     public $employee_id;
@@ -18,68 +20,86 @@ class ProjectResourceDetails{
 }
 class ProjectService implements IProjectService
 {
-    function mapResourcesDetailsToClass($currentProjectResources,$isCompanyProject)
+    public function mapResourcesDetailsToClass($currentProjectResources, $isCompanyProject)
     {
-        $projectResources=array();
+        $projectResources = array();
 
-        foreach ($currentProjectResources as $currentProjectResource)
-        {
+        foreach ($currentProjectResources as $currentProjectResource) {
 
-            $projectResourceDetails = new ProjectResourceDetails();
-            $projectResourceDetails->resourceId = $currentProjectResource->id;
+            $projectResourceDetails              = new ProjectResourceDetails();
+            $projectResourceDetails->resourceId  = $currentProjectResource->id;
             $projectResourceDetails->employee_id = $currentProjectResource->employee_id;
-            $projectResourceDetails->title = $currentProjectResource->title;
-            if($isCompanyProject) {
+            $projectResourceDetails->title       = $currentProjectResource->title;
+            if ($isCompanyProject) {
                 $projectResourceDetails->projectId = $currentProjectResource->company_project_id;
-            }
-            else
-            {
+            } else {
                 $projectResourceDetails->projectId = $currentProjectResource->client_project_id;
             }
             $projectResourceDetails->expectedStartDate = $currentProjectResource->expectedStartDate;
-            $projectResourceDetails->expectedEndDate = $currentProjectResource->expectedEndDate;
-            $projectResourceDetails->actualStartDate = $currentProjectResource->actualStartDate;
-            $projectResourceDetails->actualEndDate = $currentProjectResource->actualEndDate;
+            $projectResourceDetails->expectedEndDate   = $currentProjectResource->expectedEndDate;
+            $projectResourceDetails->actualStartDate   = $currentProjectResource->actualStartDate;
+            $projectResourceDetails->actualEndDate     = $currentProjectResource->actualEndDate;
             $projectResourceDetails->hourlyBillingRate = $currentProjectResource->hourlyBillingRate;
-            $projectResourceDetails->hoursPerWeek = $currentProjectResource->hoursPerWeek;
-            if($currentProjectResource->employee_id==null) {
+            $projectResourceDetails->hoursPerWeek      = $currentProjectResource->hoursPerWeek;
+            if ($currentProjectResource->employee_id == null) {
                 $projectResourceDetails->resourceName = $currentProjectResource->title;
 
-            }
-            else{
+            } else {
 
-                $projectResourceDetails->resourceName = $currentProjectResource->employee->firstName.' '.$currentProjectResource->employee->lastName;
+                $projectResourceDetails->resourceName = $currentProjectResource->employee->firstName . ' ' . $currentProjectResource->employee->lastName;
             }
-            array_push($projectResources,$projectResourceDetails);
+            array_push($projectResources, $projectResourceDetails);
 
         }
         return $projectResources;
     }
+    public function getProjectStartAndEndDate($project)
+    {
+        $startDate = null;
+        $endDate   = null;
+        if (isset($project->actualStartDate)) {
+
+            $startDate = $project->actualStartDate;
+        } else {
+            $startDate = $project->expectedStartDate;
+
+        }
+
+        if (isset($project->actualEndDate)) {
+
+            $endDate = $project->actualEndDate;
+        } else {
+            $endDate = $project->expectedEndDate;
+
+        }
+
+        return array($startDate, $endDate);
+    }
     public function getProjectDetails($projectModel, $project)
     {
         $isOnTime = $this->isProjectOnTime($project->expectedEndDate, $project->actualEndDate);
-     //   $isOnBudget = $this->isProjectOnBudget($project->cost, $project->budget);
+        //   $isOnBudget = $this->isProjectOnBudget($project->cost, $project->budget);
 
-        $projectModel->projectId = $project->id;
-        $projectModel->name = $project->name;
-        $projectModel->actualStartDate = $project->actualStartDate;
-        $projectModel->actualEndDate = $project->actualEndDate;
+        $projectModel->projectId         = $project->id;
+        $projectModel->name              = $project->name;
+        $projectModel->actualStartDate   = $project->actualStartDate;
+        $projectModel->actualEndDate     = $project->actualEndDate;
         $projectModel->expectedStartDate = $project->expectedStartDate;
-        $projectModel->expectedEndDate = $project->expectedEndDate;
-        $projectModel->budget = $project->budget;
+        $projectModel->expectedEndDate   = $project->expectedEndDate;
+        $projectModel->budget            = $project->budget;
         //$projectModel->cost = $project->cost;
-       $projectModel->isProjectOnTime = $isOnTime;
-       // $projectModel->isProjectOnBudget = $isOnBudget;
+        $projectModel->isProjectOnTime = $isOnTime;
+        // $projectModel->isProjectOnBudget = $isOnBudget;
         return $projectModel;
     }
 
     private function isProjectOnTime($expectedEndDate, $actualEndDate)
     {
         $currentDate = date("Y-m-d");
-        $isOnTime = "Not On Time";
+        $isOnTime    = "Not On Time";
 
-        if ($expectedEndDate != NULL) {
-            if ($actualEndDate == NULL) {
+        if ($expectedEndDate != null) {
+            if ($actualEndDate == null) {
                 if (($expectedEndDate) >= $currentDate) {
                     $isOnTime = "On Time";
                 } else {
@@ -107,13 +127,13 @@ class ProjectService implements IProjectService
     public function isProjectOnBudget($cost, $budget)
     {
 
-        if (($cost != NULL) && ($budget != NULL)) {
+        if (($cost != null) && ($budget != null)) {
             if ($cost < $budget) {
                 $isOnBudget = "Project is On Budget";
             } else {
                 $isOnBudget = "Project is Not On Budget";
             }
-        } elseif ($cost == NULL) {
+        } elseif ($cost == null) {
             $isOnBudget = "Budget Cannot determine.Please set cost ";
         } else {
             $isOnBudget = "Budget Cannot determine.Please set budget ";

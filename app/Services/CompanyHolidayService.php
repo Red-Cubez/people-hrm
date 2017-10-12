@@ -35,7 +35,7 @@ class CompanyHolidayService implements ICompanyHolidayService {
 		$date1 = date_create($startDate);
 		$date2 = date_create($endDate);
 		$diff = date_diff($date1, $date2);
-		return $diff->days;
+		return $diff->days+1;
 	}
 
 	public function getCompanyHolidays($companyId) {

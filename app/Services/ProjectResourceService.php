@@ -2,6 +2,7 @@
 
 namespace People\Services;
 
+use People\Models\ClientProject;
 use People\Models\Employee;
 use People\Models\ProjectResource;
 use People\Services\Interfaces\IProjectResourceService;
@@ -13,7 +14,7 @@ class ProjectResourceService implements IProjectResourceService
 
     public function __construct(IProjectService $projectService)
     {
-        $this->ProjectService =$projectService;
+        $this->ProjectService = $projectService;
     }
 
     public function showClientProjectResources($clientProjectId)
@@ -22,11 +23,11 @@ class ProjectResourceService implements IProjectResourceService
         $currentProjectResources = ProjectResource::where('client_project_id', $clientProjectId)->orderBy('created_at', 'asc')
             ->get();
 
-       // $projectResources=$this->ProjectService->mapResourcesDetailsToClass($currentProjectResources);
+        // $projectResources=$this->ProjectService->mapResourcesDetailsToClass($currentProjectResources);
+        $clientProject      = ClientProject::find($clientProjectId);
+        $availableEmployees = Employee::where('company_id', $clientProject->client->company->id)->get();
 
-        $availableEmployees= Employee::all();
-
-        return array($currentProjectResources,$availableEmployees);
+        return array($currentProjectResources, $availableEmployees);
     }
     public function saveOrUpdateProjectResource($request)
     {
@@ -40,34 +41,44 @@ class ProjectResourceService implements IProjectResourceService
             $projectResource = projectResource::find($request->projectResourceId);
         }
         if (isset($request->projectResourceId)) {
-            $projectResource->title = $request->title;
+            $projectResource->title             = $request->title;
             $projectResource->expectedStartDate = $request->expectedStartDate;
-            $projectResource->expectedEndDate = $request->expectedEndDate;
-            $projectResource->actualStartDate = $request->actualStartDate;
-            $projectResource->actualEndDate = $request->actualEndDate;
+            $projectResource->expectedEndDate   = $request->expectedEndDate;
+            $projectResource->actualStartDate   = $request->actualStartDate;
+            $projectResource->actualEndDate     = $request->actualEndDate;
             $projectResource->hourlyBillingRate = $request->hourlyBillingRate;
-            $projectResource->hoursPerWeek = $request->hoursPerWeek;
+            $projectResource->hoursPerWeek      = $request->hoursPerWeek;
 
             $projectResource->save();
         } elseif (!isset($request->projectResourceId)) {
-            $projectResource->title = $request->title;
+            $projectResource->title             = $request->title;
             $projectResource->expectedStartDate = $request->expectedStartDate;
-            $projectResource->expectedEndDate = $request->expectedEndDate;
-            $projectResource->actualStartDate = $request->actualStartDate;
-            $projectResource->actualEndDate = $request->actualEndDate;
+            $projectResource->expectedEndDate   = $request->expectedEndDate;
+            $projectResource->actualStartDate   = $request->actualStartDate;
+            $projectResource->actualEndDate     = $request->actualEndDate;
             $projectResource->hourlyBillingRate = $request->hourlyBillingRate;
-            $projectResource->hoursPerWeek = $request->hoursPerWeek;
-            $projectResource->employee_id = $request->employee_id;
+            $projectResource->hoursPerWeek      = $request->hoursPerWeek;
+            $projectResource->employee_id       = $request->employee_id;
             $projectResource->client_project_id = $request->clientProjectid;
 
             $projectResource->save();
         }
+        return $projectResource->client_project_id;
     }
+    public function getProjectResource($projectResourceId)
+    {
+        $resource = ProjectResource::find($projectResourceId);
+        if (isset($resource)) {
+            return $resource;
+        } else {
+            return null;
+        }
 
+    }
     public function updateProjectRessources($clientid)
     {
-        $Resource = ProjectResource::where('id', $clientid)->orderBy('created_at', 'asc')->get();
-        return $Resource;
+        $resource = ProjectResource::where('id', $clientid)->orderBy('created_at', 'asc')->get();
+        return $resource;
     }
 
     public function manageProjectResources($clientProjectid)
@@ -89,11 +100,46 @@ class ProjectResourceService implements IProjectResourceService
 
     public function getClientProjectResourcesOnActiveProjects($employeeId)
     {
-
+        $projectResourcesArray=array();
         $currentDate = date("Y-m-d");
-        return ProjectResource::where('employee_id', $employeeId)
-            ->where('actualEndDate', '>=', $currentDate)
+        $projectResources=ProjectResource::where('employee_id', $employeeId)
             ->with('clientProject')
             ->get();
+
+        if (isset($projectResources)) {
+            foreach ($projectResources as $projectResource) {
+
+                list($startDate, $endDate) = $this->getResourceStartAndEndDate($projectResource);
+
+                if ($endDate >= $currentDate) {
+                    array_push($projectResourcesArray, $projectResource);
+                }
+            }
+        }
+        return $projectResourcesArray;
+    }
+
+    public function getResourceStartAndEndDate($resource)
+    {
+        $startDate = null;
+        $endDate   = null;
+        if (isset($resource->actualStartDate)) {
+
+            $startDate = $resource->actualStartDate;
+        } else {
+            $startDate = $resource->expectedStartDate;
+
+        }
+
+        if (isset($resource->actualEndDate)) {
+
+            $endDate = $resource->actualEndDate;
+        } else {
+            $endDate = $resource->expectedEndDate;
+
+        }
+
+        return array($startDate, $endDate);
+
     }
 }

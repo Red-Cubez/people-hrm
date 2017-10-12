@@ -1,9 +1,12 @@
 @extends('layouts.app')
 @section('content')
-
+    @permission(StandardPermissions::createDeleteCompanies)
     <a href="{{route('companies.create')}}">
         <button class="btn btn-primary"> Add Company</button>
     </a>
+    @endpermission
+
+
     <!-- Current Companies -->
     @if(count($companies)>0)
         <div class="panel panel-default">
@@ -48,15 +51,15 @@
                                 <td class="table-text"></td>
                             @endif
                             <td>
-                                <!-- Delete Button -->
+                              @permission(StandardPermissions::createDeleteCompanies)
                                 <form action="{{url('companies/'.$company->id) }}" method="POST">
                                     {{ csrf_field() }}
                                     {{ method_field('DELETE') }}
-                                    <button type="submit" class="btn btn-danger">
+                                    <button type="submit" class="btn btn-danger" data-toggle="confirmation" data-singleton="true">
                                         Delete
                                     </button>
                                 </form>
-                                <!-- Update Button -->
+                                @endpermission
                                 <a href="{{route('companies.show', $company->id)}}">
                                     <button class="btn btn-primary"> View</button>
                                 </a>
@@ -72,6 +75,12 @@
             </div>
         </div>
     @endif
+<script type="text/javascript">
+$('[data-toggle=confirmation]').confirmation({
+  rootSelector: '[data-toggle=confirmation]',
+  
+});
+</script>
 
 @endsection
 

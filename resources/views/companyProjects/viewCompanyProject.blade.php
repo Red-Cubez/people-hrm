@@ -7,18 +7,14 @@
         <div class="row">
             <div class="col-sm-4">
                 @include('viewProject/viewProject')
+
+            @permission(StandardPermissions::createEditCompanyProject)
                 <a href="/companyprojects/{{$project->projectId}}/edit">
+
                     <button class="btn btn-primary"> Edit
 
                     </button></a>
-                {{--<form action="{{ url('companyprojects/'.$project->projectId.'/edit') }}" method="POST">--}}
-                    {{--{{ csrf_field() }}--}}
-                    {{--{{ method_field('GET') }}--}}
-
-                    {{--<button type="submit" class="btn btn-primary">--}}
-                        {{--<i class="fa fa-trash"> Edit</i>--}}
-                    {{--</button>--}}
-                {{--</form>--}}
+            @endpermission
             </div>
 
             <div class="col-sm-8">
@@ -26,7 +22,7 @@
 
             </div>
         </div>
-
+       @permission(StandardPermissions::createEditCompanyProjectResource)
         <div class="row">
             <div class="col-sm-11">
                 <a href="{{route('companyprojectresources.show', $project->projectId)}}"> <button class="btn btn-primary"> Add Resource </button></a>
@@ -34,5 +30,6 @@
 
             </div>
         </div>
+       @endpermission 
     </div>
 @endsection

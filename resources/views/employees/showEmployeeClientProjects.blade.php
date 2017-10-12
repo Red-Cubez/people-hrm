@@ -13,13 +13,18 @@
                             <th>Start Date</th>
                             <th>End Date</th>
                             <th>Hours Per Week</th>
+
+                    @permission(StandardPermissions::showClientProjects)
+                              <th>Operations</th>
+                    @endpermission
+
                         </thead>
                         <!-- Table Body -->
                         <tbody>
                             @foreach ($employeeModel->clientProjects as $clientProject)
 
                                 <tr>
-                                    <!-- clientProject Name -->
+         
                                     <td class="table-text">
                                         <div>{{ $clientProject->projectName }}</div>
                                     </td>
@@ -37,7 +42,17 @@
                                         <div>{{ $clientProject->hoursPerWeek }}</div>
                                     </td>
 
+                    @permission(StandardPermissions::viewClientProject)
+                                    <td>
+         
+                                         <a href="/clientprojects/{{$clientProject->projectId}}">
+                                         <button class="btn btn-primary"> View
 
+                                         </button></a>
+                                    </td>
+
+                   @endpermission
+                                    
                                 </tr>
 
                             @endforeach

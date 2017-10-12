@@ -5,7 +5,10 @@ namespace People\Http\Controllers;
 use Illuminate\Http\Request;
 use People\Models\CompanyProjectResource;
 use People\Services\Interfaces\ICompanyProjectResourceService;
+use People\Services\Interfaces\ICompanyProjectService;
 use People\Services\Interfaces\IResourceFormValidator;
+use People\Services\Interfaces\IUserAuthenticationService;
+use People\Services\StandardPermissions;
 
 class CompanyProjectResourceController extends Controller
 {
@@ -17,13 +20,22 @@ class CompanyProjectResourceController extends Controller
      */
     public $CompanyProjectResourceService;
     public $ResourceFormValidator;
-
+    public $UserAuthenticationService;
+    public $CompanyProjectService;
     public function __construct(ICompanyProjectResourceService $companyProjectResourceService,
-                                IResourceFormValidator $resourceFormValidator)
-    {
+        IResourceFormValidator $resourceFormValidator, IUserAuthenticationService
+         $userAuthenticationService, ICompanyProjectService $companyProjectService) {
+
+        $this->middleware('auth');
+
+        $this->middleware('permission:' . StandardPermissions::createEditCompanyProjectResource, ['only' => ['show', 'edit']]);
+
+        $this->middleware('permission:' . StandardPermissions::deleteCompanyProjectResource, ['only' => ['destroy']]);
 
         $this->CompanyProjectResourceService = $companyProjectResourceService;
-        $this->ResourceFormValidator = $resourceFormValidator;
+        $this->ResourceFormValidator         = $resourceFormValidator;
+        $this->UserAuthenticationService     = $userAuthenticationService;
+        $this->CompanyProjectService         = $companyProjectService;
 
     }
 
@@ -50,6 +62,7 @@ class CompanyProjectResourceController extends Controller
      */
     public function validateResourceForm(Request $request)
     {
+
         $formErrors = $this->ResourceFormValidator->validateForm($request);
 
         return response()->json(
@@ -61,11 +74,13 @@ class CompanyProjectResourceController extends Controller
 
     public function store(Request $request)
     {
-        $this->CompanyProjectResourceService->saveOrUpdateCompanyProjectResource($request);
-        return response()->json(
-            [
-                'projectId' =>  $request->companyProjectId,
-            ]);
+        ////Function use in project resource controller
+        // $projectId=$this->CompanyProjectResourceService->saveOrUpdateCompanyProjectResource($request);
+        // return redirect("companyprojects/".$projectId);
+        // return response()->json(
+        //     [
+        //         'projectId' => $request->companyProjectId,
+        //     ]);
 
 //        return redirect('/companyprojects/'. $request->companyProjectId);
 
@@ -77,17 +92,30 @@ class CompanyProjectResourceController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public
-    function show($companyProjectId)
+    public function show($companyProjectId)
     {
 
-        list($currentProjectResources, $availableEmployees) = $this->CompanyProjectResourceService->showCompanyProjectResources($companyProjectId);
-        return view('CompanyProjectResources.index', [
-            'projectResources' => $currentProjectResources,
-            'availableEmployees' => $availableEmployees,
-            'companyProjectId' => $companyProjectId,
+        // $isManager = $this->UserAuthenticationService->isManager();
+        // $isAdmin   = $this->UserAuthenticationService->isAdmin();
+        $project = $this->CompanyProjectService->getCompanyProject($companyProjectId);
 
-        ]);
+        if (isset($project)) {
+
+            $isRequestedCompanyProjectBelongsToSameCompany = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($project->company_id);
+            if ($isRequestedCompanyProjectBelongsToSameCompany) {
+                list($currentProjectResources, $availableEmployees) = $this->CompanyProjectResourceService->showCompanyProjectResources($companyProjectId);
+                return view('CompanyProjectResources.index', [
+                    'projectResources'   => $currentProjectResources,
+                    'availableEmployees' => $availableEmployees,
+                    'companyProjectId'   => $companyProjectId,
+
+                ]);
+            } else {
+                return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+            }
+        } else {
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+        }
 
     }
 
@@ -97,17 +125,28 @@ class CompanyProjectResourceController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public
-    function edit($companyProjectId)
+    public function edit($companyProjectResourceId)
     {
 
-        $resource = $this->CompanyProjectResourceService->showEditForm($companyProjectId);
+        // $isManager       = $this->UserAuthenticationService->isManager();
+        // $isAdmin         = $this->UserAuthenticationService->isAdmin();
+        $projectResource = $this->CompanyProjectResourceService->getCompanyProjectResource($companyProjectResourceId);
+        if (isset($projectResource)) {
+            $isRequestedCompanyProjectResourceBelongsToSameCompany = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($projectResource->companyProject->company_id);
+            if ($isRequestedCompanyProjectResourceBelongsToSameCompany) {
 
-        return view('CompanyProjectResources.updateResource', [
-            'projectresources' => $resource,
-            'companyProjectId'=>$companyProjectId,
+                $resource = $this->CompanyProjectResourceService->showEditForm($companyProjectResourceId);
 
-        ]);
+                return view('CompanyProjectResources.updateResource', [
+                    'projectresources' => $resource,
+
+                ]);
+            } else {
+                return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+            }
+        } else {
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+        }
 
     }
 
@@ -118,8 +157,7 @@ class CompanyProjectResourceController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public
-    function update(Request $request, $id)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -131,8 +169,7 @@ class CompanyProjectResourceController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public
-    function destroy(CompanyProjectResource $companyprojectresource, Request $request)
+    public function destroy(CompanyProjectResource $companyprojectresource, Request $request)
     {
 
         $this->CompanyProjectResourceService->deleteCompanyProjectResource($companyprojectresource);

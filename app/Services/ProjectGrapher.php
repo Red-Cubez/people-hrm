@@ -27,7 +27,6 @@ class ResourceCost
     public $costPercentage;
 }
 
-
 class ProjectGrapher implements IProjectGrapher
 {
     public function calculateProjectTotalCost($projectTimeLines)
@@ -48,7 +47,7 @@ class ProjectGrapher implements IProjectGrapher
         $resourceDetails = array();
         foreach ($projectResources as $projectResource) {
             $totalCost = 0;
-
+        //end date
             if ($projectResource->actualEndDate == null) {
                 $projectResourceEndDate = $projectResource->expectedEndDate;
             } else {
@@ -60,14 +59,27 @@ class ProjectGrapher implements IProjectGrapher
             } else {
                 $projectEndDate = $projectDetails->expectedEndDate;
             }
+            //
+            //start date
+             if ($projectResource->actualStartDate == null) {
+                $projectResourceStartDate = $projectResource->expectedStartDate;
+            } else {
+                $projectResourceStartDate = $projectResource->actualStartDate;
 
-            if ($projectResource->actualStartDate >= $projectDetails->actualStartDate && $projectResourceEndDate <= $projectEndDate) {
+            }
+            if ($projectDetails->actualStartDate != null) {
+                $projectStartDate = $projectDetails->actualStartDate;
+            } else {
+                $projectStartDate = $projectDetails->expectedStartDate;
+            }
+            //
+            if ($projectResourceStartDate >= $projectStartDate && $projectResourceEndDate <= $projectEndDate) {
 
-                $difference = $this->calculateDiffernceBetweenTwoDates(date("Y-m-d", strtotime($projectResource->actualStartDate)), date("Y-m-d", strtotime($projectResourceEndDate)));
-
+                $difference = $this->calculateDiffernceBetweenTwoDates(date("Y-m-d", strtotime($projectResourceStartDate)), date("Y-m-d", strtotime($projectResourceEndDate)));
+                //dd($difference);
                 $weeksWorked = ($difference->days + 1) / 7;
 
-                $cost = $weeksWorked * ($projectResource->hourlyBillingRate) * ($projectResource->hoursPerWeek);
+                $cost      = $weeksWorked * ($projectResource->hourlyBillingRate) * ($projectResource->hoursPerWeek);
                 $totalCost = $totalCost + $cost;
 
                 $resourceCost = new ResourceCost();
@@ -79,8 +91,9 @@ class ProjectGrapher implements IProjectGrapher
                     $resourceCost->resourceName = $projectResource->resourceName;
 
                 }
-
-                $resourceCost->costPercentage = round(($totalCost / $projectTotalCost) * 100, 2);
+                if ($projectTotalCost > 0) {
+                    $resourceCost->costPercentage = round(($totalCost / $projectTotalCost) * 100, 2);
+                }
                 array_push($resourceDetails, $resourceCost);
             }
 
@@ -93,10 +106,10 @@ class ProjectGrapher implements IProjectGrapher
 
         $date1 = date_create($d1);
         $date2 = date_create($d2);
-        $diff = date_diff($date1, $date2);
+        $diff  = date_diff($date1, $date2);
         return $diff;
     }
-
+     
     public function setupProjectCost($project, $projectResources, $isCompanyProject)
     {
 
@@ -105,18 +118,23 @@ class ProjectGrapher implements IProjectGrapher
         } else {
             $projectEndDate = $project->expectedEndDate;
         }
+        if ($project->actualStartDate != null) {
+            $projectStartDate = $project->actualStartDate;
+        } else {
+            $projectStartDate = $project->expectedStartDate;
+        }
 
-        $totalMonths = $this->calculateMonthsBetweenTwoDates($project->actualStartDate, $projectEndDate);
+        $totalMonths     = $this->calculateMonthsBetweenTwoDates($projectStartDate, $projectEndDate);
         $projectTimeLine = array();
 
-        $projectStartDate = date("Y-m-d", strtotime($project->actualStartDate));
+        $projectStartDate = date("Y-m-d", strtotime($projectStartDate));
 
         $projectStartInDateTime = new \DateTime($projectStartDate);
 
         for ($monthCounter = 0; $monthCounter <= $totalMonths; $monthCounter++) {
-            $lastDateOfCurrentMonth = 0;
+            $lastDateOfCurrentMonth  = 0;
             $firstDateOfCurrentMonth = 0;
-            $currentMonth = "";
+            $currentMonth            = "";
 
             if ($monthCounter == 0) {
                 $firstDateOfCurrentMonth = $projectStartInDateTime;
@@ -125,6 +143,7 @@ class ProjectGrapher implements IProjectGrapher
                 $currentMonth = strtotime($projectStartInDateTime->modify('+1 month')->format("Y-m-d"));
 
                 $firstDateOfCurrentMonth = new \DateTime(date("Y-m-01", $currentMonth));
+                
             }
             if ($monthCounter == $totalMonths) {
                 $lastDateOfCurrentMonth = $projectEndDate;
@@ -140,6 +159,9 @@ class ProjectGrapher implements IProjectGrapher
             array_push($projectTimeLine, $projectDetails);
 
         }
+
+
+
         $projectTimeLines = $this->calculateResourcesCost($projectResources, $projectTimeLine);
 
         return $projectTimeLines;
@@ -150,10 +172,10 @@ class ProjectGrapher implements IProjectGrapher
         $timeSpan1 = strtotime($startDate);
         $timeSpan2 = strtotime($endDate);
         $startYear = date('Y', $timeSpan1);
-        $endYear = date('Y', $timeSpan2);
+        $endYear   = date('Y', $timeSpan2);
 
         $startMonth = date('m', $timeSpan1);
-        $endMonth = date('m', $timeSpan2);
+        $endMonth   = date('m', $timeSpan2);
 
         $totalMonths = (($endYear - $startYear) * 12) + ($endMonth - $startMonth);
         return $totalMonths;
@@ -163,7 +185,7 @@ class ProjectGrapher implements IProjectGrapher
     {
 
         $currentMonthStartDate = $currentMonthStartDate->format("Y-m-d");
-        $currentMonthName = date("M-Y", strtotime($currentMonthStartDate));
+        $currentMonthName      = date("M-Y", strtotime($currentMonthStartDate));
 
         $dateDiff = $this->calculateDiffernceBetweenTwoDates($currentMonthStartDate, $currentMonthEndDate);
 
@@ -171,9 +193,9 @@ class ProjectGrapher implements IProjectGrapher
 
         $projectDetails->monthName = $currentMonthName;
         $projectDetails->startDate = $currentMonthStartDate;
-        $projectDetails->endDate = $currentMonthEndDate;
-        $projectDetails->noOfDays = $dateDiff->days;
-        $projectDetails->cost = 0;
+        $projectDetails->endDate   = $currentMonthEndDate;
+        $projectDetails->noOfDays  = $dateDiff->days;
+        $projectDetails->cost      = 0;
 
         return $projectDetails;
     }
@@ -185,8 +207,8 @@ class ProjectGrapher implements IProjectGrapher
         foreach ($projectTimeLines as $projectTimeLine) {
 
             $weeksWorkedInCurrentMonth = 0;
-            $totalCostPerMonth = 0;
-            $costPerMonth = 0;
+            $totalCostPerMonth         = 0;
+            $costPerMonth              = 0;
             foreach ($projectResources as $projectResource) {
 
                 if ($projectResource->actualEndDate == null) {
@@ -195,17 +217,24 @@ class ProjectGrapher implements IProjectGrapher
                     $projectResourceEndDate = $projectResource->actualEndDate;
 
                 }
-                $totalMonths = $this->calculateMonthsBetweenTwoDates($projectResource->actualStartDate, $projectResourceEndDate);
+                 if ($projectResource->actualStartDate == null) {
+                    $projectResourceStartDate = $projectResource->expectedStartDate;
+                } else {
+                    $projectResourceStartDate = $projectResource->actualStartDate;
+
+                }
+
+                $totalMonths       = $this->calculateMonthsBetweenTwoDates($projectResourceStartDate, $projectResourceEndDate);
                 $resourceTimeLines = array();
 
-                $projectResourceStartDate = date("Y-m-d", strtotime($projectResource->actualStartDate));
+                $projectResourceStartDate = date("Y-m-d", strtotime($projectResourceStartDate));
 
                 $projectResourceStartInDateTime = new \DateTime($projectResourceStartDate);
 
                 for ($monthCounter = 0; $monthCounter <= $totalMonths; $monthCounter++) {
-                    $lastDateOfCurrentMonth = 0;
+                    $lastDateOfCurrentMonth  = 0;
                     $firstDateOfCurrentMonth = 0;
-                    $currentMonth = "";
+                    $currentMonth            = "";
 
                     if ($monthCounter == 0) {
                         $firstDateOfCurrentMonth = $projectResourceStartInDateTime;
@@ -223,10 +252,9 @@ class ProjectGrapher implements IProjectGrapher
                     }
 
                     $resourceDetails = $this->setupResourceTimeline($firstDateOfCurrentMonth, $lastDateOfCurrentMonth);
-
+                
                     array_push($resourceTimeLines, $resourceDetails);
                 }
-
 
                 foreach ($resourceTimeLines as $resourceTimeLine) {
 
@@ -237,7 +265,7 @@ class ProjectGrapher implements IProjectGrapher
 
                         $costPerMonth = $weeksWorkedInCurrentMonth * ($projectResource->hourlyBillingRate) * ($projectResource->hoursPerWeek);
 
-                        $totalCostPerMonth = $totalCostPerMonth + $costPerMonth;
+                        $totalCostPerMonth     = $totalCostPerMonth + $costPerMonth;
                         $projectTimeLine->cost = round($totalCostPerMonth, 2);
 
                     }
@@ -245,6 +273,7 @@ class ProjectGrapher implements IProjectGrapher
             }
 
         }
+        
         return $projectTimeLines;
     }
 
@@ -252,26 +281,25 @@ class ProjectGrapher implements IProjectGrapher
     {
 
         $currentMonthStartDate = $currentMonthStartDate->format("Y-m-d");
-        $currentMonthName = date("Y-M", strtotime($currentMonthStartDate));
+        $currentMonthName      = date("Y-M", strtotime($currentMonthStartDate));
 
         $dateDiff = $this->calculateDiffernceBetweenTwoDates($currentMonthStartDate, $currentMonthEndDate);
-
-        $resourceDetails = new ResourceTimeline();
+      
+        $resourceDetails            = new ResourceTimeline();
         $resourceDetails->startDate = $currentMonthStartDate;
-        $resourceDetails->endDate = $currentMonthEndDate;
-        $resourceDetails->noOfDays = $dateDiff->days;
+        $resourceDetails->endDate   = $currentMonthEndDate;
+        $resourceDetails->noOfDays  = $dateDiff->days;
 
         return $resourceDetails;
     }
 
-    public
-    function calculateWeeksOfResourcesUsedInProject($projectResource)
+    public function calculateWeeksOfResourcesUsedInProject($projectResource)
     {
         $date1 = date_create($projectResource->actualStartDate);
         $date2 = date_create($projectResource->actualEndDate);
-        $diff = date_diff($date1, $date2);
+        $diff  = date_diff($date1, $date2);
 
-        $days = $diff->days + 1;
+        $days  = $diff->days + 1;
         $weeks = ($days / 7);
         return $weeks;
 

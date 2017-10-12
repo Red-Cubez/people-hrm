@@ -1,3 +1,4 @@
+@permission(StandardPermissions::showClientProjects)
 @if (count($clientProjects) > 0)
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -5,19 +6,25 @@
         </div>
         <div class="panel-body">
             <table class="table table-striped task-table">
-                <!-- Table Headings -->
+   
                 <thead>
-                <th>Name</th>
+                <th>Names</th>
                 <th>Expected Start Date</th>
                 <th>Expected End Date</th>
                 <th>Actual Start Date</th>
                 <th>Actual End Date</th>
                 <th>Budget</th>
                 <th>Cost</th>
+                
+                @permission([
+                    StandardPermissions::viewClientProject,
+                    StandardPermissions::deleteClientProject,
+                    StandardPermissions::showClientProjects
+                    ])
                 <th>Operations</th>
-
+                @endpermission
                 </thead>
-                <!-- Table Body -->
+        
                 <tbody>
                 @foreach ($clientProjects as $clientProject)
                     <tr>
@@ -44,41 +51,33 @@
                             <div>{{ $clientProject->cost }}</div>
                         </td>
 
-                        <!-- Delete Button -->
                         <td>
+                            
+                             @permission(StandardPermissions::viewClientProject)
                             <a href="/clientprojects/{{$clientProject->id}}">
                                 <button class="btn btn-primary"> View
 
                                 </button></a>
-                            {{--<form action="{{ url('clientprojects/'.$clientProject->id) }}" method="POST">--}}
-                                {{--{{ csrf_field() }}--}}
-                                {{--{{ method_field('GET') }}--}}
-
-                                {{--<button type="submit" class="btn btn-primary">--}}
-                                    {{--<i class="fa fa-trash"> View</i>--}}
-                                {{--</button>--}}
-                            {{--</form>--}}
-
+                             @endpermission  
+                              
+                           @permission(StandardPermissions::deleteClientProject)
                             <form action="{{ url('clientprojects/'.$clientProject->id) }}" method="POST">
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
-                                <button type="submit" class="btn btn-danger">
+                                <button type="submit" class="btn btn-danger" data-toggle="confirmation" data-singleton="true">
                                     <i class="fa fa-trash"> Delete </i>
                                 </button>
                             </form>
+                            @endpermission
+
+                    @permission(StandardPermissions::createEditClientProjectResource)
                             <a href="/clientprojects/{{$clientProject->id}}/projectresources">
                                 <button class="btn btn-primary"> Manage Resource
 
                                 </button></a>
-                            {{--<form action="{{ url('clientprojects/'.$clientProject->id.'/projectresources') }}"--}}
-                                  {{--method="POST">--}}
-                                {{--{{ csrf_field() }}--}}
-                                {{--{{ method_field('GET') }}--}}
-
-                                {{--<button type="submit" class="btn btn-danger">--}}
-                                    {{--<i class="fa fa-trash"> Manage Resource</i>--}}
-                                {{--</button>--}}
-                            {{--</form>--}}
+                    @endpermission    
+                         
+                           
                         </td>
                     </tr>
                 @endforeach
@@ -86,3 +85,10 @@
             </table>
         </div>
 @endif
+@endpermission
+<script type="text/javascript">
+$('[data-toggle=confirmation]').confirmation({
+  rootSelector: '[data-toggle=confirmation]',
+  
+});
+</script>

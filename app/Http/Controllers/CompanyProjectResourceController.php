@@ -8,7 +8,7 @@ use People\Services\Interfaces\ICompanyProjectResourceService;
 use People\Services\Interfaces\ICompanyProjectService;
 use People\Services\Interfaces\IResourceFormValidator;
 use People\Services\Interfaces\IUserAuthenticationService;
-use People\Enums\StandardPermissions;
+use People\Services\StandardPermissions;
 
 class CompanyProjectResourceController extends Controller
 {
@@ -28,9 +28,9 @@ class CompanyProjectResourceController extends Controller
 
         $this->middleware('auth');
 
-        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::createEditCompanyProjectResource), ['only' => ['show','edit']]);
+        $this->middleware('permission:' . StandardPermissions::createEditCompanyProjectResource, ['only' => ['show', 'edit']]);
 
-        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::deleteCompanyProjectResource), ['only' => ['destroy']]);
+        $this->middleware('permission:' . StandardPermissions::deleteCompanyProjectResource, ['only' => ['destroy']]);
 
         $this->CompanyProjectResourceService = $companyProjectResourceService;
         $this->ResourceFormValidator         = $resourceFormValidator;
@@ -97,7 +97,7 @@ class CompanyProjectResourceController extends Controller
 
         // $isManager = $this->UserAuthenticationService->isManager();
         // $isAdmin   = $this->UserAuthenticationService->isAdmin();
-        $project   = $this->CompanyProjectService->getCompanyProject($companyProjectId);
+        $project = $this->CompanyProjectService->getCompanyProject($companyProjectId);
 
         if (isset($project)) {
 

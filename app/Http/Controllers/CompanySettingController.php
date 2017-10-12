@@ -5,7 +5,7 @@ namespace People\Http\Controllers;
 use Illuminate\Http\Request;
 use People\Services\Interfaces\ICompanySettingService;
 use People\Services\Interfaces\IUserAuthenticationService;
-use People\Enums\StandardPermissions;
+use People\Services\StandardPermissions;
 
 class CompanySettingController extends Controller
 {
@@ -18,7 +18,7 @@ class CompanySettingController extends Controller
 
         $this->middleware('auth');
 
-        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::createShowEditDeleteCompanySettings));
+        $this->middleware('permission:'.StandardPermissions::createShowEditDeleteCompanySettings);
 
         $this->CompanySettingService     = $companySettingService;
         $this->UserAuthenticationService = $userAuthenticationService;
@@ -150,7 +150,7 @@ class CompanySettingController extends Controller
         ));
         $companySetting = $this->CompanySettingService->updateCompanySettings($request, $settingId);
 
-        return redirect('company-settings/' . $companySetting->company_id);
+        return redirect('companies/'.$companySetting->company_id);
     }
 
     /**

@@ -9,7 +9,7 @@ use People\Services\Interfaces\ICompanySettingService;
 use People\Services\Interfaces\IDateTimeService;
 use People\Services\Interfaces\IReportService;
 use People\Services\Interfaces\IUserAuthenticationService;
-use People\Enums\StandardPermissions;
+use People\Services\StandardPermissions;
 
 class ReportsController extends Controller
 {
@@ -26,16 +26,16 @@ class ReportsController extends Controller
 
         $this->middleware('auth');
 
-        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::showInternalProjectsReport).
-            '|'.StandardPermissions::getPermissionName(StandardPermissions::showClientProjectsReport).
-            '|'.StandardPermissions::getPermissionName(StandardPermissions::showAllProjectsReport).
-            '|'.StandardPermissions::getPermissionName(StandardPermissions::reportOptions), ['only' => ['showOptions']]);
+        $this->middleware('permission:' . StandardPermissions::showInternalProjectsReport .
+            '|' . StandardPermissions::showClientProjectsReport .
+            '|' . StandardPermissions::showAllProjectsReport .
+            '|' . StandardPermissions::reportOptions, ['only' => ['showOptions']]);
 
-        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::showInternalProjectsReport), ['only' => ['showInternalProjectsReport']]);
+        $this->middleware('permission:' . StandardPermissions::showInternalProjectsReport, ['only' => ['showInternalProjectsReport']]);
 
-        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::showClientProjectsReport), ['only' => ['showClientProjectsReport']]);
+        $this->middleware('permission:' . StandardPermissions::showClientProjectsReport, ['only' => ['showClientProjectsReport']]);
 
-        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::showAllProjectsReport), ['only' => ['showAllProjectsReport']]);
+        $this->middleware('permission:' . StandardPermissions::showAllProjectsReport, ['only' => ['showAllProjectsReport']]);
 
         $this->ReportService             = $reportService;
         $this->UserAuthenticationService = $userAuthenticationService;
@@ -70,23 +70,21 @@ class ReportsController extends Controller
 
     public function showAllProjectsReport(Request $request, $companyId)
     {
-      
+
         list($startDate, $endDate) = $this->DateTimeService->getfirstAndLastDateOfGivenDate($request->startDate, $request->endDate);
-     
-         $this->validate($request, [
+
+        $this->validate($request, [
             'startDate' => 'required|date',
 
             'endDate'   => 'required|date',
         ]);
 
-
-        if(!$this->DateTimeService->validateStartAndEndDates($startDate,$endDate))
-        {
-            $errosMessage="End date can not be a date before start date";
+        if (!$this->DateTimeService->validateStartAndEndDates($startDate, $endDate)) {
+            $errosMessage = "End date can not be a date before start date";
             return back()->withErrors($errosMessage);
 
         }
-       
+
         // $isManager = $this->UserAuthenticationService->isManager();
         // $isAdmin   = $this->UserAuthenticationService->isAdmin();
 
@@ -94,7 +92,6 @@ class ReportsController extends Controller
 
         if ($isRequestedCompanyBelongsToEmployee) {
 
-           
             $companyInternalProjects                                           = $this->CompanyProjectService->getAllInternalProjectsOfCompany($companyId);
             $internalProjectsStartAndEndDateTimelinesWithCostProfitAndNetTotal =
             $this->ReportService->startAndEndDateTimelinesWithCostProfitAndNetTotal($startDate, $endDate, $companyInternalProjects);
@@ -130,18 +127,16 @@ class ReportsController extends Controller
 
     public function showInternalProjectsReport(Request $request, $companyId)
     {
-         list($startDate, $endDate) = $this->DateTimeService->getfirstAndLastDateOfGivenDate($request->startDate, $request->endDate);
-     
-         $this->validate($request, [
+        list($startDate, $endDate) = $this->DateTimeService->getfirstAndLastDateOfGivenDate($request->startDate, $request->endDate);
+
+        $this->validate($request, [
             'startDate' => 'required|date',
 
             'endDate'   => 'required|date',
         ]);
 
-
-        if(!$this->DateTimeService->validateStartAndEndDates($startDate,$endDate))
-        {
-            $errosMessage="End date can not be a date before start date";
+        if (!$this->DateTimeService->validateStartAndEndDates($startDate, $endDate)) {
+            $errosMessage = "End date can not be a date before start date";
             return back()->withErrors($errosMessage);
 
         }
@@ -153,7 +148,6 @@ class ReportsController extends Controller
 
         if ($isRequestedCompanyBelongsToEmployee) {
 
-        
             $companyInternalProjects                           = $this->CompanyProjectService->getAllInternalProjectsOfCompany($companyId);
             $startAndEndDateTimelinesWithCostProfitAndNetTotal =
             $this->ReportService->startAndEndDateTimelinesWithCostProfitAndNetTotal($startDate, $endDate, $companyInternalProjects);
@@ -177,18 +171,16 @@ class ReportsController extends Controller
 
     public function showClientProjectsReport(Request $request, $companyId)
     {
-         list($startDate, $endDate) = $this->DateTimeService->getfirstAndLastDateOfGivenDate($request->startDate, $request->endDate);
-     
-         $this->validate($request, [
+        list($startDate, $endDate) = $this->DateTimeService->getfirstAndLastDateOfGivenDate($request->startDate, $request->endDate);
+
+        $this->validate($request, [
             'startDate' => 'required|date',
 
             'endDate'   => 'required|date',
         ]);
 
-
-        if(!$this->DateTimeService->validateStartAndEndDates($startDate,$endDate))
-        {
-            $errosMessage="End date can not be a date before start date";
+        if (!$this->DateTimeService->validateStartAndEndDates($startDate, $endDate)) {
+            $errosMessage = "End date can not be a date before start date";
             return back()->withErrors($errosMessage);
 
         }

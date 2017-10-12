@@ -1,5 +1,5 @@
 
-@permission(StandardPermissions::getPermissionName(StandardPermissions::createEditEmployee))
+@permission(StandardPermissions::createEditEmployee)
 
 <div id="name" class="form-group">
     <label for="name" class="col-sm-3 control-label">First Name</label>

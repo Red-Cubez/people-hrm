@@ -1,4 +1,4 @@
-@permission(StandardPermissions::getPermissionName(StandardPermissions::showClients))
+@permission(StandardPermissions::showClients)
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3>
@@ -58,7 +58,7 @@
             No Record Found
         @endif
     </div>
-    @permission(StandardPermissions::getPermissionName(StandardPermissions::createEditClient))
+    @permission(StandardPermissions::createEditClient)
     <a href="/clients/showclientform/{{$companyProfileModel->companyId}}">
         <button class="btn btn-primary"> Add New Client
 

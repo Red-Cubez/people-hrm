@@ -11,7 +11,7 @@ use People\Services\Interfaces\IProjectGrapher;
 use People\Services\Interfaces\IProjectService;
 use People\Services\Interfaces\IResourceFormValidator;
 use People\Services\Interfaces\IUserAuthenticationService;
-use People\Enums\StandardPermissions;
+use People\Services\StandardPermissions;
 
 class CompanyProjectController extends Controller
 {
@@ -38,11 +38,11 @@ class CompanyProjectController extends Controller
 
         $this->middleware('auth');
 
-        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::viewCompanyProject), [ 'only' => ['show']]);
+        $this->middleware('permission:' . StandardPermissions::viewCompanyProject, ['only' => ['show']]);
 
-        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::createEditCompanyProject), [ 'only' => ['store','manageProject','edit','update']]);
+        $this->middleware('permission:' . StandardPermissions::createEditCompanyProject, ['only' => ['store', 'manageProject', 'edit', 'update']]);
 
-        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::deleteCompanyProject), [ 'only' => ['destroy']]);
+        $this->middleware('permission:' . StandardPermissions::deleteCompanyProject, ['only' => ['destroy']]);
 
         $this->CompanyProjectService         = $companyProjectService;
         $this->CompanyProjectResourceService = $companyProjectResourceService;
@@ -95,13 +95,13 @@ class CompanyProjectController extends Controller
 
     public function store(Request $request)
     {
-  
-            $companyProjectId = $this->CompanyProjectService->saveCompanyProject($request);
-            return response()->json(
-                [
-                    'projectId' => $companyProjectId,
-                ]);
-       
+
+        $companyProjectId = $this->CompanyProjectService->saveCompanyProject($request);
+        return response()->json(
+            [
+                'projectId' => $companyProjectId,
+            ]);
+
     }
 
     /**
@@ -116,7 +116,7 @@ class CompanyProjectController extends Controller
         // $isManager = false;
         // $isManager = $this->UserAuthenticationService->isManager();
         // $isAdmin   = $this->UserAuthenticationService->isAdmin();
-        $project   = $this->CompanyProjectService->getCompanyProject($companyProjectId);
+        $project = $this->CompanyProjectService->getCompanyProject($companyProjectId);
 
         if (isset($project)) {
 
@@ -127,7 +127,7 @@ class CompanyProjectController extends Controller
                 $companyProject = $this->CompanyProjectService->viewCompanyProject($companyProjectId);
 
                 $projectTimeLines = $this->ProjectGrapher->setupProjectCost($companyProject, $currentProjectResources, true);
- 
+
                 $projectTotalCost = $this->ProjectGrapher->calculateProjectTotalCost($projectTimeLines);
                 $resourcesDetails = $this->ProjectGrapher->getResourcesTotalCostForProject($companyProject, $currentProjectResources, $projectTotalCost);
 
@@ -169,7 +169,7 @@ class CompanyProjectController extends Controller
 
         // $isManager = $this->UserAuthenticationService->isManager();
         // $isAdmin   = $this->UserAuthenticationService->isAdmin();
-        $project   = $this->CompanyProjectService->getCompanyProject($companyProjectId);
+        $project = $this->CompanyProjectService->getCompanyProject($companyProjectId);
 
         if (isset($project)) {
 
@@ -194,7 +194,7 @@ class CompanyProjectController extends Controller
      */
     public function update(Request $request, CompanyProject $companyproject)
     {
-    
+
         $this->CompanyProjectService->updateCompanyProject($request, $companyproject);
         return response()->json(
             [
@@ -217,9 +217,9 @@ class CompanyProjectController extends Controller
         // $isAdmin   = $this->UserAuthenticationService->isAdmin();
         // if ($isManager || $isAdmin) {
 
-            $this->CompanyProjectService->deleteCompanyProject($companyproject);
+        $this->CompanyProjectService->deleteCompanyProject($companyproject);
 
-            return redirect('/companies/' . $companyproject->company_id);
+        return redirect('/companies/' . $companyproject->company_id);
         // } else {
         //     return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         // }
@@ -227,7 +227,7 @@ class CompanyProjectController extends Controller
 
     public function manageProject($companyid)
     {
-       // dd("here");
+        // dd("here");
         // $isManager                                     = false;
         // $isManager                                     = $this->UserAuthenticationService->isManager();
         // $isAdmin                                       = $this->UserAuthenticationService->isAdmin();

@@ -6,7 +6,7 @@
             <div class="col-sm-4">
                 @include('viewProject/viewProject')
                 
-                @permission(StandardPermissions::getPermissionName(StandardPermissions::createEditClientProject))
+                @permission(StandardPermissions::createEditClientProject)
                 <a href="/clientprojects/{{$project->projectId}}/edit">
                     <button class="btn btn-primary"> Edit</button></a>
                 @endpermission

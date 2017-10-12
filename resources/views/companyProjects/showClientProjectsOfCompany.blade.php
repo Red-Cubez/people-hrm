@@ -30,10 +30,7 @@
                 <th>
                     Cost
                 </th>
-               @permission([
-                StandardPermissions::getPermissionName(StandardPermissions::viewClientProject),
-                StandardPermissions::getPermissionName(StandardPermissions::deleteClientProject)
-                ])
+               @permission([ StandardPermissions::viewClientProject,StandardPermissions::deleteClientProject])
                 <th>
                     Operations
                 </th>
@@ -81,7 +78,7 @@
                     </td>
                
                     <td>
-                @permission(StandardPermissions::getPermissionName(StandardPermissions::deleteClientProject))
+                @permission(StandardPermissions::deleteClientProject)
                         <form action="{{ url('clientprojects/'.$project->projectId) }}" method="POST">
                             {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
@@ -94,7 +91,7 @@
                             </input>
                         </form>
                 @endpermission
-                @permission(StandardPermissions::getPermissionName(StandardPermissions::viewClientProject))
+                @permission(StandardPermissions::viewClientProject)
                         <a href="{{route('clientprojects.show', $project->projectId)}}"> <button class="btn btn-primary"> View </button></a>
 
                     </td>

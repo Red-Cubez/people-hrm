@@ -30,10 +30,7 @@
                 <th>
                     Cost
                 </th>
-                 @permission([
-                    StandardPermissions::getPermissionName(StandardPermissions::deleteCompanyProject),
-                    StandardPermissions::getPermissionName(StandardPermissions::viewCompanyProject)
-                    ])
+                 @permission([StandardPermissions::deleteCompanyProject,StandardPermissions::viewCompanyProject])
                 <th>
                     Operations
                 </th>
@@ -81,7 +78,7 @@
                     </td>
                     <!-- Delete Button -->
                     <td>
-                @permission(StandardPermissions::getPermissionName(StandardPermissions::deleteCompanyProject))
+                @permission(StandardPermissions::deleteCompanyProject)
                         <form action="{{ url('companyprojects/'.$project->projectId) }}" method="POST">
                             {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
@@ -95,7 +92,7 @@
                             </input>
                         </form>
                 @endpermission
-                @permission(StandardPermissions::getPermissionName(StandardPermissions::viewCompanyProject))
+                @permission(StandardPermissions::viewCompanyProject)
                         <a href="/companyprojects/{{$project->projectId}}">
                             <button class="btn btn-primary"> View
 
@@ -110,7 +107,7 @@
             </tbody>
         </table>
     </div>
-    @permission(StandardPermissions::getPermissionName(StandardPermissions::createEditCompanyProject))
+    @permission(StandardPermissions::createEditCompanyProject)
     <a href="/companies/{{$companyProfileModel->companyId}}/companyprojects">
         <button class="btn btn-primary"> Add New Projects
 

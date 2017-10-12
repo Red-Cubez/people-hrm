@@ -7,7 +7,6 @@ use People\Models\Role;
 use People\Services\Interfaces\IPermissionService;
 use People\Services\Interfaces\IRoleService;
 use People\Services\Interfaces\IUserAuthenticationService;
-use People\Enums\StandardPermissions;
 
 class RoleController extends Controller
 {
@@ -20,7 +19,7 @@ class RoleController extends Controller
 
         $this->middleware('auth');
 
-        //$this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::crudRole));
+        //$this->middleware('permission:'.StandardPermissions::crudRole);
 
         $this->RoleService               = $roleService;
         $this->UserAuthenticationService = $userAuthenticationService;
@@ -80,7 +79,7 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
- 
+
         $this->validate($request, [
             'name'         => 'required',
 

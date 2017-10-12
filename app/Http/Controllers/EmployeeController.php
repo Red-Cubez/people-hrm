@@ -11,7 +11,7 @@ use People\Services\Interfaces\IEmployeeService;
 use People\Services\Interfaces\IJobTitleService;
 use People\Services\Interfaces\IResourceFormValidator;
 use People\Services\Interfaces\IUserAuthenticationService;
-use People\Enums\StandardPermissions;
+use People\Services\StandardPermissions;
 
 class EmployeeController extends Controller
 {
@@ -25,14 +25,14 @@ class EmployeeController extends Controller
     public function __construct(IEmployeeService $employeeService, IDepartmentService $departmentService,
         IJobTitleService $jobTitleService, IUserAuthenticationService $userAuthenticationService,
         IResourceFormValidator $employeeFormValidator, ICompanyHolidayService $companyHolidayService) {
-    
+
         $this->middleware('auth');
 
-        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::createEditEmployee), ['only' => ['showEmployeeForm', 'store', 'edit', 'update']]);
+        $this->middleware('permission:' . StandardPermissions::createEditEmployee, ['only' => ['showEmployeeForm', 'store', 'edit', 'update']]);
 
-        $this->middleware( 'permission:'.StandardPermissions::getPermissionName(StandardPermissions::viewOwnProfile).'|'.StandardPermissions::getPermissionName(StandardPermissions::viewOthersProfile), ['only' => ['show']]);
+        $this->middleware('permission:' . StandardPermissions::viewOwnProfile . '|' . StandardPermissions::viewOthersProfile, ['only' => ['show']]);
 
-        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::deleteEmployee), ['only' => ['destroy']]);
+        $this->middleware('permission:' . StandardPermissions::deleteEmployee, ['only' => ['destroy']]);
 
         $this->EmployeeService           = $employeeService;
         $this->DepartmentService         = $departmentService;
@@ -142,13 +142,13 @@ class EmployeeController extends Controller
         // $isEmployee           = $this->UserAuthenticationService->isEmployee();
         // $isHrManager = $this->UserAuthenticationService->isHrManager();
         //$isClientManager = $this->UserAuthenticationService->isClientManager();
-        
+
         $canEmployeeView                         = false;
         $isRequestedEmployeeBelongsToSameCompany = false;
         $isRequestedEmployeeBelongsToSameCompany = $this->UserAuthenticationService->isRequestedEmployeeBelongsToSameCompany($employeeId);
 
         $canViewProfile = $this->UserAuthenticationService->canEmployeeView($employeeId);
-  
+
         if ($canViewProfile && $isRequestedEmployeeBelongsToSameCompany) {
             $employee = $this->EmployeeService->getEmployee($employeeId);
             if (isset($employee)) {

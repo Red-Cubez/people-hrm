@@ -13,12 +13,9 @@
                     <thead>
                     <th>Resource Name</th>
                   
-                @permission([
-                    StandardPermissions::getPermissionName(StandardPermissions::createEditClientProjectResource),
-                    StandardPermissions::getPermissionName(StandardPermissions::deleteClientProjectResource)
-                      ])
+        @permission([StandardPermissions::createEditClientProjectResource,StandardPermissions::deleteClientProjectResource])
                     <th>Operations</th>
-                @endpermission
+        @endpermission
 
                     </thead>
                     
@@ -35,7 +32,7 @@
 
                             <td>
                              
-        @permission(StandardPermissions::getPermissionName(StandardPermissions::createEditClientProjectResource))
+        @permission(StandardPermissions::createEditClientProjectResource)
                                   <a href="/projectresources/{{$projectResource->resourceId}}/updateResource"> 
                                   <button class="btn btn-primary">
                                    Edit
@@ -43,7 +40,7 @@
                                   </a>
         @endpermission
         
-        @permission(StandardPermissions::getPermissionName(StandardPermissions::deleteClientProjectResource))   
+        @permission(StandardPermissions::deleteClientProjectResource)  
                                 <form action="{{ url('projectresources/'.$projectResource->resourceId) }}"
                                       method="POST">
                                     {{ csrf_field() }}

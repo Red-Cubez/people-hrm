@@ -3,7 +3,6 @@
 namespace People\Http\Controllers;
 
 use Illuminate\Http\Request;
-use People\Enums\StandardPermissions;
 use People\Models\Company;
 use People\Services\Interfaces\ICompanyHolidayService;
 use People\Services\Interfaces\ICompanyService;
@@ -11,6 +10,7 @@ use People\Services\Interfaces\IDepartmentService;
 use People\Services\Interfaces\IEmployeeService;
 use People\Services\Interfaces\IJobTitleService;
 use People\Services\Interfaces\IUserAuthenticationService;
+use People\Services\StandardPermissions;
 
 class CompanyController extends Controller
 {
@@ -28,13 +28,10 @@ class CompanyController extends Controller
         IDepartmentService $departmentService) {
 
         $this->middleware('auth');
-        $this->middleware('permission:' .
-            StandardPermissions::getPermissionName(StandardPermissions::createDeleteCompanies),
-            ['only' => ['create', 'destroy', 'store']]);
+        $this->middleware('permission:' . StandardPermissions::createDeleteCompanies, ['only' => ['create', 'destroy', 'store']]);
 
-        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::viewCompany),
-            ['only' => ['show']]);
-        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::editUpdateCompany), ['only' => ['edit', 'update']]);
+        $this->middleware('permission:' . StandardPermissions::viewCompany, ['only' => ['show']]);
+        $this->middleware('permission:' . StandardPermissions::editUpdateCompany, ['only' => ['edit', 'update']]);
 
         $this->CompanyService            = $companyService;
         $this->JobTitleService           = $jobTitleService;

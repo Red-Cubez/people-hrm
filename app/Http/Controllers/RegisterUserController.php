@@ -8,7 +8,7 @@ use People\Models\User as User;
 use People\Services\Interfaces\IEmployeeService;
 use People\Services\Interfaces\IRoleService;
 use People\Services\Interfaces\IUserAuthenticationService;
-use People\Enums\StandardPermissions;
+use People\Services\StandardPermissions;
 
 class RegisterUserController extends Controller
 {
@@ -19,8 +19,8 @@ class RegisterUserController extends Controller
     public function __construct(IUserAuthenticationService $userAuthenticationService, IEmployeeService $employeeService, IRoleService $roleService)
     {
         $this->middleware('auth');
-        
-        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::registerUser));
+
+        $this->middleware('permission:' . StandardPermissions::registerUser);
 
         $this->EmployeeService           = $employeeService;
         $this->UserAuthenticationService = $userAuthenticationService;

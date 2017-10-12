@@ -5,7 +5,7 @@ namespace People\Http\Controllers;
 use Illuminate\Http\Request;
 use People\Services\Interfaces\IEmployeeTimesheetService;
 use People\Services\Interfaces\IUserAuthenticationService;
-Use People\Enums\StandardPermissions;
+use People\Services\StandardPermissions;
 
 class EmployeeTimesheetController extends Controller
 {
@@ -17,9 +17,9 @@ class EmployeeTimesheetController extends Controller
 
         $this->middleware('auth');
 
-        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::createEditTimesheet), ['only' => ['createTimesheet', 'store', 'edit', 'update']]);
+        $this->middleware('permission:' . StandardPermissions::createEditTimesheet, ['only' => ['createTimesheet', 'store', 'edit', 'update']]);
 
-        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::approveTimesheets), ['only' => ['showNonApprovedTimesheetsOfEmployees', 'show', 'approveTimesheets']]);
+        $this->middleware('permission:' . StandardPermissions::approveTimesheets, ['only' => ['showNonApprovedTimesheetsOfEmployees', 'show', 'approveTimesheets']]);
 
         $this->EmployeeTimesheetService  = $employeeTimesheetService;
         $this->UserAuthenticationService = $userAuthenticationService;

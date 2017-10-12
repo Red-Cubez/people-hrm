@@ -5,7 +5,7 @@ namespace People\Http\Controllers;
 use Illuminate\Http\Request;
 use People\Services\Interfaces\ICompanyHolidayService;
 use People\Services\Interfaces\IResourceFormValidator;
-use People\Enums\StandardPermissions;
+use People\Services\StandardPermissions;
 
 class CompanyHolidayController extends Controller
 {
@@ -17,7 +17,7 @@ class CompanyHolidayController extends Controller
     {
         $this->middleware('auth');
 
-        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::createEditDeleteHoliday));
+        $this->middleware('permission:'.StandardPermissions::createEditDeleteHoliday);
 
         $this->CompanyHolidayService = $companyHolidayService;
         $this->ResourceFormValidator = $resourceFormValidator;

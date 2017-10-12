@@ -30,13 +30,9 @@
                 <tr>
                     <td class="table-text">
                         <div>
-                            {{--
-                            <a href="/employeetimesheet/{{$timesheet->id}}/edit">
-                                --}}
+                           
                                 {{$timeoff->start_date}}
-                           {{--
-                            </a>
-                            --}}
+                          
                         </div>
                     </td>
                     <td class="table-text">
@@ -66,7 +62,7 @@
                             </button>
                         </a>
 
-                    @permission(StandardPermissions::getPermissionName(StandardPermissions::deleteTimeoff))
+                    @permission(StandardPermissions::deleteTimeoff)
                         <form action="{{ url('employeetimeoff/'.$timeoff->id) }}" method="POST">
                             {{ csrf_field() }}
                                     {{ method_field('DELETE') }}

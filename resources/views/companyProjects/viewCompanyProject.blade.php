@@ -8,7 +8,7 @@
             <div class="col-sm-4">
                 @include('viewProject/viewProject')
 
-            @permission(StandardPermissions::getPermissionName(StandardPermissions::createEditCompanyProject))
+            @permission(StandardPermissions::createEditCompanyProject)
                 <a href="/companyprojects/{{$project->projectId}}/edit">
 
                     <button class="btn btn-primary"> Edit
@@ -22,7 +22,7 @@
 
             </div>
         </div>
-       @permission(StandardPermissions::getPermissionName(StandardPermissions::createEditCompanyProjectResource))
+       @permission(StandardPermissions::createEditCompanyProjectResource)
         <div class="row">
             <div class="col-sm-11">
                 <a href="{{route('companyprojectresources.show', $project->projectId)}}"> <button class="btn btn-primary"> Add Resource </button></a>

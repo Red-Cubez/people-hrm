@@ -14,7 +14,7 @@
                             <th>End Date</th>
                             <th>Hours Per Week</th>
 
-                    @permission(StandardPermissions::getPermissionName(StandardPermissions::showClientProjects))
+                    @permission(StandardPermissions::showClientProjects)
                               <th>Operations</th>
                     @endpermission
 
@@ -42,7 +42,7 @@
                                         <div>{{ $clientProject->hoursPerWeek }}</div>
                                     </td>
 
-                    @permission(StandardPermissions::getPermissionName(StandardPermissions::viewClientProject))
+                    @permission(StandardPermissions::viewClientProject)
                                     <td>
          
                                          <a href="/clientprojects/{{$clientProject->projectId}}">

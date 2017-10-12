@@ -387,7 +387,7 @@ class ReportService implements IReportService
 
         list($projectCurrentMonthStartDate, $projectCurrentMonthEndDate) =
         $this->getCurrentMonthStartAndEndDates($currentMonthStartDate, $currentMonthEndDate, $projectStartDate, $projectEndDate);
-
+        $monthlyCostSum=0;
         $resources = $project->resources;
         if (count($resources) > 0) {
             $monthlyCostSum = $this->getMonthlyCostProfitAndRevenue($resources, $projectCurrentMonthStartDate, $projectCurrentMonthEndDate);

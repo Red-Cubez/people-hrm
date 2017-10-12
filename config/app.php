@@ -232,7 +232,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
-        'StandardPermissions' => People\Enums\StandardPermissions::class,
+        'StandardPermissions' => People\Services\StandardPermissions::class,
 
     ],
 

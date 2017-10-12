@@ -3,7 +3,7 @@
 namespace People\Http\Controllers;
 
 use Illuminate\Http\Request;
-use People\Enums\StandardPermissions;
+use People\Services\StandardPermissions;
 use People\Models\Client;
 use People\Services\Interfaces\IClientService;
 use People\Services\Interfaces\IUserAuthenticationService;
@@ -21,13 +21,11 @@ class ClientController extends Controller
     {
 
         $this->middleware('auth');
-        $this->middleware('permission:' . StandardPermissions::getPermissionName(StandardPermissions::createEditClient),
-            ['only' => ['showClientForm', 'store', 'edit', 'update']]);
+        $this->middleware('permission:' . StandardPermissions::createEditClient, ['only' => ['showClientForm', 'store', 'edit', 'update']]);
 
-        $this->middleware('permission:' . StandardPermissions::getPermissionName(StandardPermissions::viewClient),
-            ['only' => ['show']]);
+        $this->middleware('permission:' . StandardPermissions::viewClient, ['only' => ['show']]);
 
-        $this->middleware('permission:' . StandardPermissions::getPermissionName(StandardPermissions::deleteClient), ['only' => ['destroy']]);
+        $this->middleware('permission:' . StandardPermissions::deleteClient, ['only' => ['destroy']]);
 
         $this->ClientService             = $clientService;
         $this->UserAuthenticationService = $userAuthenticationService;

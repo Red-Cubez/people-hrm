@@ -1,4 +1,4 @@
-@permission(StandardPermissions::getPermissionName(StandardPermissions::showClientProjects))
+@permission(StandardPermissions::showClientProjects)
 @if (count($clientProjects) > 0)
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -17,9 +17,10 @@
                 <th>Cost</th>
                 
                 @permission([
-                    StandardPermissions::getPermissionName(StandardPermissions::viewClientProject),
-                    StandardPermissions::getPermissionName(StandardPermissions::deleteClientProject),
-                    StandardPermissions::getPermissionName(StandardPermissions::showClientProjects)])
+                    StandardPermissions::viewClientProject,
+                    StandardPermissions::deleteClientProject,
+                    StandardPermissions::showClientProjects
+                    ])
                 <th>Operations</th>
                 @endpermission
                 </thead>
@@ -52,14 +53,14 @@
 
                         <td>
                             
-                             @permission(StandardPermissions::getPermissionName(StandardPermissions::viewClientProject))
+                             @permission(StandardPermissions::viewClientProject)
                             <a href="/clientprojects/{{$clientProject->id}}">
                                 <button class="btn btn-primary"> View
 
                                 </button></a>
                              @endpermission  
                               
-                           @permission(StandardPermissions::getPermissionName(StandardPermissions::deleteClientProject) )
+                           @permission(StandardPermissions::deleteClientProject)
                             <form action="{{ url('clientprojects/'.$clientProject->id) }}" method="POST">
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
@@ -69,7 +70,7 @@
                             </form>
                             @endpermission
 
-                    @permission(StandardPermissions::getPermissionName(StandardPermissions::createEditClientProjectResource))
+                    @permission(StandardPermissions::createEditClientProjectResource)
                             <a href="/clientprojects/{{$clientProject->id}}/projectresources">
                                 <button class="btn btn-primary"> Manage Resource
 

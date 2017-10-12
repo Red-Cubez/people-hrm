@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use People\Services\Interfaces\IRoleService;
 use People\Services\Interfaces\IUserAuthenticationService;
 use People\Services\Interfaces\IUserRolesService;
-use People\Enums\StandardPermissions;
 
 class UserRolesController extends Controller
 {
@@ -19,7 +18,7 @@ class UserRolesController extends Controller
 
         $this->middleware('auth');
 
-        //$this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::crudUserRole));
+        //$this->middleware('permission:'.StandardPermissions::crudUserRole);
 
         $this->UserRolesService          = $userRolesService;
         $this->RoleService               = $roleService;
@@ -37,12 +36,12 @@ class UserRolesController extends Controller
         // $isAdmin   = $this->UserAuthenticationService->isAdmin();
 
         // if ($isAdmin || $isManager) {
-            $usersWithRoles = $this->UserRolesService->getUsersWithRoles();
+        $usersWithRoles = $this->UserRolesService->getUsersWithRoles();
 
-            return view('userRole/index',
-                [
-                    'usersWithRoles' => $usersWithRoles,
-                ]);
+        return view('userRole/index',
+            [
+                'usersWithRoles' => $usersWithRoles,
+            ]);
         // } else {
         //     return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         // }
@@ -93,18 +92,18 @@ class UserRolesController extends Controller
 
         // if ($isAdmin || $isManager) {
 
-            $user = $this->UserRolesService->getUserWithRoles($userId);
+        $user = $this->UserRolesService->getUserWithRoles($userId);
 
-            $userRoles = $this->UserRolesService->saveRolesInArray($user);
-        
-            $roles = $this->RoleService->getAllRoles();
-    
-            return view('userRole/edit',
-                [
-                    'user'      => $user,
-                    'roles'     => $roles,
-                    'userRoles' => $userRoles,
-                ]);
+        $userRoles = $this->UserRolesService->saveRolesInArray($user);
+
+        $roles = $this->RoleService->getAllRoles();
+
+        return view('userRole/edit',
+            [
+                'user'      => $user,
+                'roles'     => $roles,
+                'userRoles' => $userRoles,
+            ]);
         // } else {
         //     return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         // }

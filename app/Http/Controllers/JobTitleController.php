@@ -5,7 +5,7 @@ namespace People\Http\Controllers;
 use Illuminate\Http\Request;
 use People\Services\Interfaces\IJobTitleService;
 use People\Services\Interfaces\IResourceFormValidator;
-use People\Enums\StandardPermissions;
+use People\Services\StandardPermissions;
 
 class JobTitleController extends Controller
 {
@@ -22,7 +22,7 @@ class JobTitleController extends Controller
     {
         $this->middleware('auth');
 
-        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::createEditDeleteJobTitle));
+        $this->middleware('permission:' . StandardPermissions::createEditDeleteJobTitle);
 
         $this->JobTitleService       = $jobTitleService;
         $this->ResourceFormValidator = $resourceFormValidator;

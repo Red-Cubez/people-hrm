@@ -103,7 +103,7 @@
                             </div>
                         
                                
-                    @permission(StandardPermissions::getPermissionName(StandardPermissions::createEditEmployee))
+                    @permission(StandardPermissions::createEditEmployee)
                             <br>
                             <a href="/employees/{{$employeeModel->employeeProfile->employeeId}}/edit">
                                 <button class="btn btn-primary"> Edit
@@ -112,7 +112,7 @@
                             </a>
                      @endpermission
                             
-                    @permission(StandardPermissions::getPermissionName(StandardPermissions::deleteEmployee))
+                    @permission(StandardPermissions::deleteEmployee)
                             <form action="{{ url('employees/'.$employeeModel->employeeProfile->employeeId) }}"
                                   method="POST">
                                 {{ csrf_field() }}
@@ -123,7 +123,7 @@
                                     </i>
                                 </button>
                             </form>
-                            @endpermission
+                    @endpermission
 
                         </div>
                         </div>
@@ -140,7 +140,7 @@
                     </div>
                 </div>
                 </div>
-                  @permission(StandardPermissions::getPermissionName(StandardPermissions::createEditTimesheet))
+                  @permission(StandardPermissions::createEditTimesheet)
                     <div class="row">
                         <div class="col-sm-12">
                             <a href="/employeetimesheet/{{$employeeModel->employeeProfile->employeeId}}/create">
@@ -152,7 +152,7 @@
                     </div>
                     @endpermission
                     <br/>
-                    @permission(StandardPermissions::getPermissionName(StandardPermissions::approveTimesheets))
+                    @permission(StandardPermissions::approveTimesheets)
                     <div class="row">
                         <div class="col-sm-12">
                             <a href="/employeestimesheets/">
@@ -165,7 +165,7 @@
                       </div>
                     @endrole
                     <br/>
-                    @permission(StandardPermissions::getPermissionName(StandardPermissions::createEditTimeoff))
+                    @permission(StandardPermissions::createEditTimeoff)
                        <div class="row">
                         <div class="col-sm-12">
                             <a href="/employeetimeoff/{{$employeeModel->employeeProfile->employeeId}}/create">
@@ -178,7 +178,7 @@
                             </div>
                      @endpermission
                         <br/>
-                    @permission(StandardPermissions::getPermissionName(StandardPermissions::approveTimeoffs))
+                    @permission(StandardPermissions::approveTimeoffs)
                         <div class="row">
                         <div class="col-sm-12">
              

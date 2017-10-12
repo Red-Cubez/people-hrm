@@ -7,15 +7,18 @@ use People\Models\CompanyProjectResource;
 use People\Models\Employee;
 use People\Services\Interfaces\ICompanyProjectResourceService;
 use People\Services\Interfaces\IProjectService;
+use People\Services\Interfaces\IProjectResourceService;
 
 class CompanyProjectResourceService implements ICompanyProjectResourceService
 {
     public $ProjectService;
+    public $ProjectResourceService;
 
-    public function __construct(IProjectService $projectService)
+    public function __construct(IProjectService $projectService,IProjectResourceService $projectResourceService)
     {
 
         $this->ProjectService = $projectService;
+        $this->ProjectResourceService = $projectResourceService;
     }
 
     public function showCompanyProjectResources($companyProjectId)
@@ -72,15 +75,12 @@ class CompanyProjectResourceService implements ICompanyProjectResourceService
     }
     public function getCompanyProjectResource($companyProjectResourceId)
     {
-       $resource=CompanyProjectResource::find($companyProjectResourceId);
-       if(isset($resource))
-       {
-        return $resource;
-       }
-       else
-       {
-        return null;
-       }
+        $resource = CompanyProjectResource::find($companyProjectResourceId);
+        if (isset($resource)) {
+            return $resource;
+        } else {
+            return null;
+        }
     }
 
     public function showEditForm($companyProjectResourceId)
@@ -99,15 +99,24 @@ class CompanyProjectResourceService implements ICompanyProjectResourceService
 
     public function getCompanyProjectResourcesOnActiveProjects($employeeId)
     {
-
-        $currentDate = date("Y-m-d");
-        //$projectResources= CompanyProjectResource::where('employee_id', $employeeId)->get();
+        $projectResourcesArray = array();
+        $currentDate           = date("Y-m-d");
         
-         $projectResources= CompanyProjectResource::where('employee_id', $employeeId)
-            ->where('actualEndDate', '>=', $currentDate)
+        $projectResources = CompanyProjectResource::where('employee_id', $employeeId)
             ->with('companyProject')
             ->get();
 
-        return $projectResources;     
+        if (isset($projectResources)) {
+            foreach ($projectResources as $projectResource) {
+
+               list($startDate,$endDate)=$this->ProjectResourceService->getResourceStartAndEndDate($projectResource);
+
+               if($endDate>=$currentDate)
+               {
+                array_push($projectResourcesArray,$projectResource);
+               }
+            }
+        }
+        return $projectResourcesArray;
     }
 }

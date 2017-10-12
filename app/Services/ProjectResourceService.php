@@ -63,7 +63,7 @@ class ProjectResourceService implements IProjectResourceService
 
             $projectResource->save();
         }
-         return $projectResource->client_project_id;
+        return $projectResource->client_project_id;
     }
     public function getProjectResource($projectResourceId)
     {
@@ -100,12 +100,23 @@ class ProjectResourceService implements IProjectResourceService
 
     public function getClientProjectResourcesOnActiveProjects($employeeId)
     {
- 
+        $projectResourcesArray=array();
         $currentDate = date("Y-m-d");
-        return ProjectResource::where('employee_id', $employeeId)
-            ->where('actualEndDate', '>=', $currentDate)
+        $projectResources=ProjectResource::where('employee_id', $employeeId)
             ->with('clientProject')
             ->get();
+
+        if (isset($projectResources)) {
+            foreach ($projectResources as $projectResource) {
+
+                list($startDate, $endDate) = $this->getResourceStartAndEndDate($projectResource);
+
+                if ($endDate >= $currentDate) {
+                    array_push($projectResourcesArray, $projectResource);
+                }
+            }
+        }
+        return $projectResourcesArray;
     }
 
     public function getResourceStartAndEndDate($resource)

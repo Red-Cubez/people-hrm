@@ -206,15 +206,17 @@ class EmployeeService implements IEmployeeService
         $clientProjectResources = $this->ClientProjectResourceService->getClientProjectResourcesOnActiveProjects($employee->id);
 
         foreach ($clientProjectResources as $clientProjectResource) {
+            
+            list($startDate,$endDate)=$this->ClientProjectResourceService->getResourceStartAndEndDate($clientProjectResource);
 
             $projectModel = new EmployeeProjectModel();
-
+            
             $projectModel->clientName       = $clientProjectResource->clientProject->client->name;
             $projectModel->projectId        = $clientProjectResource->clientProject->id;
             $projectModel->projectName      = $clientProjectResource->clientProject->name;
             $projectModel->clientId         = $clientProjectResource->clientProject->client_id;
-            $projectModel->projectStartDate = $clientProjectResource->startDate;
-            $projectModel->projectEndDate   = $clientProjectResource->endDate;
+            $projectModel->projectStartDate = $startDate;
+            $projectModel->projectEndDate   = $endDate;
             $projectModel->hoursPerWeek     = $clientProjectResource->hoursPerWeek;
 
             $projectModel->isActive     = true;
@@ -234,14 +236,17 @@ class EmployeeService implements IEmployeeService
         $companyProjectResources                   = $this->CompanyProjectResourceService->getCompanyProjectResourcesOnActiveProjects($employee->id);
 
         foreach ($companyProjectResources as $companyProjectResource) {
+
+            list($startDate,$endDate)=$this->ClientProjectResourceService->getResourceStartAndEndDate($clientProjectResource);
+
             $projectModel = new EmployeeProjectModel();
 
             $projectModel->companyName      = $companyProjectResource->companyProject->company->name;
             $projectModel->projectId        = $companyProjectResource->companyProject->id;
             $projectModel->projectName      = $companyProjectResource->companyProject->name;
             $projectModel->clientId         = $companyProjectResource->companyProject->company_id;
-            $projectModel->projectStartDate = $companyProjectResource->actualStartDate;
-            $projectModel->projectEndDate   = $companyProjectResource->actualEndDate;
+            $projectModel->projectStartDate = $startDate;
+            $projectModel->projectEndDate   = $endDate;
             $projectModel->hoursPerWeek     = $companyProjectResource->hoursPerWeek;
 
             $projectModel->isActive      = true;

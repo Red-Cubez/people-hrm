@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use People\Services\Interfaces\IRoleService;
 use People\Services\Interfaces\IUserAuthenticationService;
 use People\Services\Interfaces\IUserRolesService;
+use People\Enums\StandardPermissions;
 
 class UserRolesController extends Controller
 {
@@ -18,7 +19,8 @@ class UserRolesController extends Controller
 
         $this->middleware('auth');
 
-        // $this->middleware('isAuthorizedToView');
+        //$this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::crudUserRole));
+
         $this->UserRolesService          = $userRolesService;
         $this->RoleService               = $roleService;
         $this->UserAuthenticationService = $userAuthenticationService;

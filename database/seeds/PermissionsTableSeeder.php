@@ -259,49 +259,17 @@ class PermissionsTableSeeder extends Seeder
             ],
             [
                 'id'           => 39,
-                'name'         => 'show-roles',
-                'display_name' => 'Can show-roles',
-                'description'  => 'This User LoggedIn will be able to show-roles',
+                'name'         => 'crud-role',
+                'display_name' => 'Can crud-roles',
+                'description'  => 'This User LoggedIn will be able to crud-roles',
             ],
             [
                 'id'           => 40,
-                'name'         => 'view-role',
-                'display_name' => 'Can view-role',
-                'description'  => 'This User LoggedIn will be able to view-role',
+                'name'         => 'crud-userRole',
+                'display_name' => 'Can crud-userRole',
+                'description'  => 'This User LoggedIn will be able to crud-userRole',
             ],
 
-            [
-                'id'           => 41,
-                'name'         => 'create/edit-role',
-                'display_name' => 'Can create/edit-role',
-                'description'  => 'This User LoggedIn will be able to create/edit-role',
-            ],
-            [
-                'id'           => 42,
-                'name'         => 'delete-role',
-                'display_name' => 'Can delete-role',
-                'description'  => 'This User LoggedIn will be able to delete-role',
-            ],
-
-            [
-                'id'           => 43,
-                'name'         => 'show-userRoles',
-                'display_name' => 'Can show-roles',
-                'description'  => 'This User LoggedIn will be able to show-roles',
-            ],
-
-            [
-                'id'           => 44,
-                'name'         => 'create/edit-userRole',
-                'display_name' => 'Can create/edit-role',
-                'description'  => 'This User LoggedIn will be able to create/edit-role',
-            ],
-            [
-                'id'           => 45,
-                'name'         => 'delete-userRole',
-                'display_name' => 'Can delete-role',
-                'description'  => 'This User LoggedIn will be able to delete-role',
-            ],
 
         ];
         foreach ($permissions as $key => $permission) {

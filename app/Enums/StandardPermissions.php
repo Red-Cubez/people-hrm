@@ -44,13 +44,9 @@ class StandardPermissions
     const createEditTimeoff                   = 36;
     const deleteTimeoff                       = 37;
     const approveTimeoffs                     = 38;
-    const showRoles                           = 39;
-    const viewRole                            = 40;
-    const createEditRole                      = 41;
-    const deleteRole                          = 42;
-    const showUserRoles                       = 43;
-    const createEditUserRole                  = 44;
-    const deleteUserRole                      = 45;
+    const crudRole                            = 39;
+    const crudUserRole                        = 40;
+    
 
     public static function getPermissionName($id)
     {

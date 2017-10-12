@@ -7,6 +7,7 @@ use People\Models\Department;
 use People\Services\DepartmentService;
 use People\Services\Interfaces\IDepartmentService;
 use People\Services\Interfaces\IResourceFormValidator;
+use People\Enums\StandardPermissions;
 
 class CompanyDepartmentController extends Controller
 {
@@ -21,6 +22,9 @@ class CompanyDepartmentController extends Controller
     public function __construct(IDepartmentService $departmentService, IResourceFormValidator $resourceFormValidator)
     {
         $this->middleware('auth');
+
+        $this->middleware('permission:'.StandardPermissions::getPermissionName(StandardPermissions::createEditDeleteDepartment));
+
         $this->DepartmentService     = $departmentService;
         $this->ResourceFormValidator = $resourceFormValidator;
 

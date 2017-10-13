@@ -245,17 +245,17 @@ class ReportService implements IReportService
     {
 
         $totalMonths = $this->DateTimeService->calculateMonthsBetweenTwoDates($startDate, $endDate);
-      
+
         $monthlyTimelines = array();
         // $projectNames     = array();
-     
+
         //$startDate           = date("Y-m-d", strtotime($startDate));
-      
+
         $monthlyCost         = 0;
         $startDateInDateTime = new \DateTime($startDate);
 
-        $totalRevenue        = 0;
-        $totalProfit         = 0;
+        $totalRevenue = 0;
+        $totalProfit  = 0;
         for ($monthCounter = 0; $monthCounter <= $totalMonths; $monthCounter++) {
 
             list($firstDateOfCurrentMonth, $lastDateOfCurrentMonth) = $this->DateTimeService->getFirstAndLastDateCurrentOfMonth($monthCounter, $totalMonths, $startDateInDateTime, $endDate);
@@ -330,6 +330,7 @@ class ReportService implements IReportService
     public function setupCostProfitAndRevenue($projects, $currentMonthStartDate, $currentMonthEndDate, $startDate, $endDate)
     {
         $projectsMonthlyTimeLine = array();
+
         foreach ($projects as $project) {
 
             list($projectStartDate, $projectEndDate) = $this->ProjectService->getProjectStartAndEndDate($project);
@@ -356,8 +357,10 @@ class ReportService implements IReportService
                 $projectMonthlyTimeLine->color         = RandomColorGenerator::one();
 
                 array_push($projectsMonthlyTimeLine, $projectMonthlyTimeLine);
-            } elseif ($projectStartDate >= $startDate && $projectEndDate <= $endDate) {
 
+            } elseif(($projectStartDate <= $endDate) && ($startDate <= $projectEndDate)&&
+             ($projectStartDate <= $projectEndDate) && ($startDate <= $endDate)) {
+               
                 $currentMonthName = $this->DateTimeService->getMonthNameAndYear($currentMonthStartDate);
 
                 $projectMonthlyTimeLine = new ProjectMonthlyTimeLine();
@@ -387,8 +390,8 @@ class ReportService implements IReportService
 
         list($projectCurrentMonthStartDate, $projectCurrentMonthEndDate) =
         $this->getCurrentMonthStartAndEndDates($currentMonthStartDate, $currentMonthEndDate, $projectStartDate, $projectEndDate);
-        $monthlyCostSum=0;
-        $resources = $project->resources;
+        $monthlyCostSum = 0;
+        $resources      = $project->resources;
         if (count($resources) > 0) {
             $monthlyCostSum = $this->getMonthlyCostProfitAndRevenue($resources, $projectCurrentMonthStartDate, $projectCurrentMonthEndDate);
 
@@ -578,7 +581,7 @@ class ReportService implements IReportService
         for ($i = 0; $i < $totalProjects; $i++) {
             $projects = array();
             foreach ($monthlyTimelines as $monthlyTimeline) {
-                // foreach ($monthlyTimeline->monthlyTimelineItems as $monthlyTimelineItem) {
+
                 if (isset($monthlyTimeline->monthlyTimelineItems[$i])) {
                     $a1 = (array) $monthlyTimeline->monthlyTimelineItems[$i];
 
@@ -586,8 +589,7 @@ class ReportService implements IReportService
                     $inBoth       = array_intersect_assoc($a1, $a2);
                     $onlyInFirst  = array_diff_assoc($a1, $a2);
                     $onlyInSecond = array_diff_assoc($a2, $a1);
-                    if (($onlyInSecond)) {
-                        //   dd("here");
+                    if ($onlyInFirst) {
 
                         array_push($projects, $monthlyTimeline->monthlyTimelineItems[$i]);
 
@@ -667,7 +669,6 @@ class ReportService implements IReportService
     //     return $projectTimelines;
     // }
 
-    
     public function getMonthlyProfit($startAndEndDateTimelines, $projectsTimelines)
     {
 
@@ -739,57 +740,30 @@ class ReportService implements IReportService
 
         return $startAndEndDateTimelines;
 
-        // return $startAndEndDateTimelines;
-        // foreach($projectTimelines as)
-        //////////
+    }
 
-        // $budget  = 0;
-        // $revenue = array();
-        // foreach ($projectsTimelines as $projectTimelines) {
+    public function generateAllProjectsReport($monthlyTimelines)
+    {
 
-        //     foreach ($projectTimelines as $projectTimeline) {
-        //         if (isset($projectTimeline->project)) {
-        //             $budget = $budget + $projectTimeline->project->budget;
-
-        //             array_push($revenue,$budget);
-
+    }
+    public function generateInternalProjectsReport($monthlyTimelines)
+    {
+        // $counter = 0;
+        // foreach ($monthlyTimelines as $project) {
+        //     if ($counter > 0) {
+        //         foreach($project as $monthlyProjectDetail)
+        //         {
+        //             $this->getResourceDetails
         //         }
+
         //     }
+        //     $counter = $counter + 1;
         // }
+        return $monthlyTimelines;
 
-        // dd($revenue);
-
-        ///////////////////////////////////////////////////////////////////////////
-
-        // $revenue = 0;
-        // $budget  = 0;
-        // $i       = 1;
-
-        // foreach ($startAndEndDateTimelines as $startAndEndDateTimeline) {
-        //     foreach ($projectsTimelines as $projectTimelines) {
-
-        //         foreach ($projectTimelines as $projectTimeline) {
-        //             if (isset($projectTimeline->project)) {
-        //                 $budget                           = $projectTimeline->project->budget;
-
-        //             } else {
-        //                 $revenue = $budget;
-
-        //             }
-        //             if ($startAndEndDateTimeline->monthName == $projectTimeline->monthName) {
-
-        //                 $startAndEndDateTimeline->revenue = $revenue+$budget;
-        //                // dd($$revenue+$budget)
-
-        //             } else {
-        //                 $startAndEndDateTimeline->revenue = $revenue;
-
-        //             }
-        //         }
-        //     }
-        // }
-
-        // return $startAndEndDateTimelines;
+    }
+    public function generateClientProjectsReport($monthlyTimelines)
+    {
 
     }
 

@@ -1,4 +1,6 @@
 <?php $i=0; ?>
+@if(count($monthlyTimelines)>1)
+
  <div class="panel panel-default">
         <div class="panel-body">
             <div style="width: 600px; height: 400px;display: block;">
@@ -133,3 +135,6 @@
         
     
     </script>
+@else
+No Record Found    
+@endif

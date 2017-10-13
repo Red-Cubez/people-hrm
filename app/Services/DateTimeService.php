@@ -144,6 +144,7 @@ class DateTimeService implements IDateTimeService
             $lastDateOfCurrentMonth = $firstDateOfCurrentMonth->format("Y-m-t");
 
         }
+        
         return array($firstDateOfCurrentMonth, $lastDateOfCurrentMonth);
     }
 

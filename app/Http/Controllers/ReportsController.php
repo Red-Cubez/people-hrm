@@ -96,6 +96,7 @@ class ReportsController extends Controller
             $internalProjectsStartAndEndDateTimelinesWithCostProfitAndNetTotal =
             $this->ReportService->startAndEndDateTimelinesWithCostProfitAndNetTotal($startDate, $endDate, $companyInternalProjects);
 
+
             $internalProjectsmonthlyTimelines = $this->ReportService->setUpMontlhyTimelines($internalProjectsStartAndEndDateTimelinesWithCostProfitAndNetTotal);
 
             //client projects
@@ -104,7 +105,7 @@ class ReportsController extends Controller
             $companyClientProjects                                           = $this->ClientProjectService->getAllClientProjectsOfCompany($companyId);
             $clientProjectsStartAndEndDateTimelinesWithCostProfitAndNetTotal =
             $this->ReportService->startAndEndDateTimelinesWithCostProfitAndNetTotal($startDate, $endDate, $companyClientProjects);
-
+  
             $clientProjectsmonthlyTimelines = $this->ReportService->setUpMontlhyTimelines($clientProjectsStartAndEndDateTimelinesWithCostProfitAndNetTotal);
 
             $currencyNameAndSymbol = $this->CompanySettingService->getCurrencyName($companyId) . ' ' . $this->CompanySettingService->getCurrencySymbol($companyId);
@@ -148,7 +149,8 @@ class ReportsController extends Controller
 
         if ($isRequestedCompanyBelongsToEmployee) {
 
-            $companyInternalProjects                           = $this->CompanyProjectService->getAllInternalProjectsOfCompany($companyId);
+            $companyInternalProjects = $this->CompanyProjectService->getAllInternalProjectsOfCompany($companyId);
+
             $startAndEndDateTimelinesWithCostProfitAndNetTotal =
             $this->ReportService->startAndEndDateTimelinesWithCostProfitAndNetTotal($startDate, $endDate, $companyInternalProjects);
 
@@ -162,6 +164,7 @@ class ReportsController extends Controller
 
                     'monthlyTimelines'      => $monthlyTimelines,
                     'currencyNameAndSymbol' => $currencyNameAndSymbol,
+                    'companyId'             => $companyId,
 
                 ]);
         } else {
@@ -194,6 +197,7 @@ class ReportsController extends Controller
         if ($isRequestedCompanyBelongsToEmployee) {
 
             $companyClientProjects                             = $this->ClientProjectService->getAllClientProjectsOfCompany($companyId);
+
             $startAndEndDateTimelinesWithCostProfitAndNetTotal =
             $this->ReportService->startAndEndDateTimelinesWithCostProfitAndNetTotal($startDate, $endDate, $companyClientProjects);
 
@@ -207,11 +211,43 @@ class ReportsController extends Controller
 
                     'monthlyTimelines'      => $monthlyTimelines,
                     'currencyNameAndSymbol' => $currencyNameAndSymbol,
+                    'companyId'             => $companyId,
 
                 ]);
         } else {
             return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         }
+    }
+    public function generateReport(Request $request)
+    {
+        $monthlyTimelines = unserialize($request->monthlyTimelines);
+
+        if (isset($request->allProjectsReport)) {
+            $this->ReportService->generateAllProjectsReport($monthlyTimelines);
+
+        } elseif ($request->projectsType == "internalProjects") {
+            // dd($monthlyTimelines);
+
+            $reportData = $this->ReportService->generateInternalProjectsReport($monthlyTimelines);
+            return $this->pdfview($request, $reportData);
+
+        } elseif (isset($request->clientProjectsReport)) {
+            $this->ReportService->generateClientProjectsReport($monthlyTimelines);
+        }
+
+    }
+
+    public function pdfview($request, $monthlyTimelines)
+    {
+        //$items = DB::table("items")->get();
+       
+
+       //  //if ($request->has('download')) {
+       //      $pdf = PDF::loadView('reports/pdfview');
+       //      return $pdf->download('reports/pdfview');
+       // // }
+
+        return view('reports/pdfview',$monthlyTimelines);
     }
 
 }

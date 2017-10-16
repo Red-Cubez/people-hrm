@@ -2,6 +2,10 @@
 
 namespace People\Services;
 
+use People\Models\CompanyProject;
+use People\Models\CompanyProjectResource;
+use People\Models\ClientProject;
+use People\Models\ProjectResource;
 use People\Services\Interfaces\IClientProjectService;
 use People\Services\Interfaces\ICompanyProjectResourceService;
 use People\Services\Interfaces\ICompanyProjectService;
@@ -36,6 +40,16 @@ class ProjectMonthlyTimeLine
     public $totalProfit;
 
     public $projectBudget;
+
+}
+class ResourceMonthlyDetail
+{
+    public $resourceId;
+    public $resourceName;
+    public $monthName;
+    public $resourceStartDate;
+    public $resourceEndDate;
+    public $resourceCost;
 
 }
 class MonthlyTimeline
@@ -313,19 +327,19 @@ class ReportService implements IReportService
         $timeline->timelineItems = array();
 
         // $companyInternalProjects = $this->CompanyProjectService->getAllInternalProjectsOfCompany($companyId);
-        $projectsMonthlyTimeLine = $this->getProjectsMonthlyTimeLine($projects, $currentMonthStartDate, $currentMonthEndDate, $startDate, $endDate);
-
-        return $projectsMonthlyTimeLine;
-    }
-
-    public function getProjectsMonthlyTimeLine($projects, $currentMonthStartDate, $currentMonthEndDate, $startDate, $endDate)
-    {
-
         $projectsMonthlyTimeLine = $this->setupCostProfitAndRevenue($projects, $currentMonthStartDate, $currentMonthEndDate, $startDate, $endDate);
 
         return $projectsMonthlyTimeLine;
-
     }
+
+    // public function getProjectsMonthlyTimeLine($projects, $currentMonthStartDate, $currentMonthEndDate, $startDate, $endDate)
+    // {
+
+    //     $projectsMonthlyTimeLine = $this->setupCostProfitAndRevenue($projects, $currentMonthStartDate, $currentMonthEndDate, $startDate, $endDate);
+
+    //     return $projectsMonthlyTimeLine;
+
+    // }
 
     public function setupCostProfitAndRevenue($projects, $currentMonthStartDate, $currentMonthEndDate, $startDate, $endDate)
     {
@@ -344,38 +358,42 @@ class ReportService implements IReportService
 
                 $projectMonthlyTimeLine = new ProjectMonthlyTimeLine();
 
-                $projectMonthlyTimeLine->totalCost     = $monthlyCostSum;
-                $projectMonthlyTimeLine->monthName     = $currentMonthName;
-                $projectMonthlyTimeLine->projectName   = $project->name;
-                $projectMonthlyTimeLine->projectId     = $project->id;
-                $projectMonthlyTimeLine->projectBudget = $project->budget;
-                $projectMonthlyTimeLine->startDate     = $projectStartDate;
-                $projectMonthlyTimeLine->endDate       = $projectEndDate;
-                $projectMonthlyTimeLine->totalRevenue  = $revenue;
-                $projectMonthlyTimeLine->totalProfit   = $profit;
-                $projectMonthlyTimeLine->isActive      = true;
-                $projectMonthlyTimeLine->color         = RandomColorGenerator::one();
+                $projectMonthlyTimeLine->totalCost             = $monthlyCostSum;
+                $projectMonthlyTimeLine->monthName             = $currentMonthName;
+                $projectMonthlyTimeLine->projectName           = $project->name;
+                $projectMonthlyTimeLine->projectId             = $project->id;
+                $projectMonthlyTimeLine->projectBudget         = $project->budget;
+                $projectMonthlyTimeLine->projectStartDate      = $projectStartDate;
+                $projectMonthlyTimeLine->projectEndDate        = $projectEndDate;
+                $projectMonthlyTimeLine->currentMonthStartDate = $currentMonthStartDate;
+                $projectMonthlyTimeLine->currentMonthEndDate   = $currentMonthEndDate;
+                $projectMonthlyTimeLine->totalRevenue          = $revenue;
+                $projectMonthlyTimeLine->totalProfit           = $profit;
+                $projectMonthlyTimeLine->isActive              = true;
+                $projectMonthlyTimeLine->color                 = RandomColorGenerator::one();
 
                 array_push($projectsMonthlyTimeLine, $projectMonthlyTimeLine);
 
-            } elseif(($projectStartDate <= $endDate) && ($startDate <= $projectEndDate)&&
-             ($projectStartDate <= $projectEndDate) && ($startDate <= $endDate)) {
-               
+            } elseif (($projectStartDate <= $endDate) && ($startDate <= $projectEndDate) &&
+                ($projectStartDate <= $projectEndDate) && ($startDate <= $endDate)) {
+
                 $currentMonthName = $this->DateTimeService->getMonthNameAndYear($currentMonthStartDate);
 
                 $projectMonthlyTimeLine = new ProjectMonthlyTimeLine();
 
-                $projectMonthlyTimeLine->totalCost     = null;
-                $projectMonthlyTimeLine->monthName     = $currentMonthName;
-                $projectMonthlyTimeLine->projectName   = $project->name;
-                $projectMonthlyTimeLine->projectId     = $project->id;
-                $projectMonthlyTimeLine->projectBudget = null;
-                $projectMonthlyTimeLine->startDate     = $projectStartDate;
-                $projectMonthlyTimeLine->endDate       = $projectEndDate;
-                $projectMonthlyTimeLine->totalRevenue  = null;
-                $projectMonthlyTimeLine->totalProfit   = null;
-                $projectMonthlyTimeLine->isActive      = false;
-                $projectMonthlyTimeLine->color         = RandomColorGenerator::one();
+                $projectMonthlyTimeLine->totalCost             = null;
+                $projectMonthlyTimeLine->monthName             = $currentMonthName;
+                $projectMonthlyTimeLine->projectName           = $project->name;
+                $projectMonthlyTimeLine->projectId             = $project->id;
+                $projectMonthlyTimeLine->projectBudget         = null;
+                $projectMonthlyTimeLine->projectStartDate      = $projectStartDate;
+                $projectMonthlyTimeLine->projectEndDate        = $projectEndDate;
+                $projectMonthlyTimeLine->currentMonthStartDate = $currentMonthStartDate;
+                $projectMonthlyTimeLine->currentMonthEndDate   = $currentMonthEndDate;
+                $projectMonthlyTimeLine->totalRevenue          = null;
+                $projectMonthlyTimeLine->totalProfit           = null;
+                $projectMonthlyTimeLine->isActive              = false;
+                $projectMonthlyTimeLine->color                 = RandomColorGenerator::one();
 
                 array_push($projectsMonthlyTimeLine, $projectMonthlyTimeLine);
             }
@@ -495,6 +513,8 @@ class ReportService implements IReportService
 
         $resourcesCost = 0;
         $totalCost     = 0;
+        $resources     = null;
+
         foreach ($projectResources as $projectResource) {
 
             //end date
@@ -714,7 +734,7 @@ class ReportService implements IReportService
         $profit    = 0;
         $budget    = 0;
         $revenue   = 0;
-        //  dd($projectsTimelines);
+      
         foreach ($startAndEndDateTimelines as $startAndEndDateTimeline) {
             {
                 foreach ($projectsTimelines as $projectTimelines) {
@@ -746,25 +766,154 @@ class ReportService implements IReportService
     {
 
     }
-    public function generateInternalProjectsReport($monthlyTimelines)
+    public function generateClientProjectsReport($monthlyTimelines)
     {
-        // $counter = 0;
-        // foreach ($monthlyTimelines as $project) {
-        //     if ($counter > 0) {
-        //         foreach($project as $monthlyProjectDetail)
-        //         {
-        //             $this->getResourceDetails
-        //         }
+         $counter   = 0;
+        $projectId = null;
+        $test      = array();
+        foreach ($monthlyTimelines as $projectTimelines) {
+            if ($counter > 0) {
+                $projectId = $projectTimelines[0]->projectId;
+                $project   = ClientProject::find($projectId);
+                $resources = ProjectResource::where('client_project_id', $projectId)->get();
 
-        //     }
-        //     $counter = $counter + 1;
-        // }
+                $resourcesDetails = $this->setupResourcesDetails($resources, $projectTimelines);       
+
+            }
+            $counter++;
+        }
+      
         return $monthlyTimelines;
 
     }
-    public function generateClientProjectsReport($monthlyTimelines)
+    public function generateInternalProjectsReport($monthlyTimelines)
+    {
+       
+        $counter   = 0;
+        $projectId = null;
+        $test      = array();
+        foreach ($monthlyTimelines as $projectTimelines) {
+            if ($counter > 0) {
+                $projectId = $projectTimelines[0]->projectId;
+                $project   = CompanyProject::find($projectId);
+                $resources = CompanyProjectResource::where('company_project_id', $projectId)->get();
+
+                $resourcesDetails = $this->setupResourcesDetails($resources, $projectTimelines);
+
+            }
+            $counter++;
+        }
+       
+        return $monthlyTimelines;
+
+    }
+
+    public function setupResourcesDetails($projectResources, $projectTimelines)
+    {
+        $counter = 0;
+        foreach ($projectTimelines as $projectTimeline) {
+            if ($projectTimeline->isActive) {
+
+                $weeksWorkedInCurrentMonth                = 0;
+                $totalCostPerMonth                        = 0;
+                $costPerMonth                             = 0;
+                $projectCurrentMonthStartDate             = $projectTimeline->currentMonthStartDate;
+                $projectCurrentMonthEndDate               = $projectTimeline->currentMonthEndDate;
+                $projectTimeline->resourcesMonthlyDetails = array();
+
+                foreach ($projectResources as $projectResource) {
+                    list($projectResourceStartDate, $projectResourceEndDate) =
+                    $this->ProjectResourceService->getResourceStartAndEndDate($projectResource);
+
+                    $totalMonths = $this->DateTimeService->calculateMonthsBetweenTwoDates($projectResourceStartDate, $projectResourceEndDate);
+
+                    $resourceTimeLines = array();
+
+                    $projectResourceStartDate = date("Y-m-d", strtotime($projectResourceStartDate));
+
+                    $projectResourceStartInDateTime = new \DateTime($projectResourceStartDate);
+
+                    for ($monthCounter = 0; $monthCounter <= $totalMonths; $monthCounter++) {
+                        $lastDateOfCurrentMonth  = 0;
+                        $firstDateOfCurrentMonth = 0;
+                        $currentMonth            = "";
+
+                        if ($monthCounter == 0) {
+                            $firstDateOfCurrentMonth = $projectResourceStartInDateTime;
+
+                        } else {
+                            $currentMonth = strtotime($projectResourceStartInDateTime->modify('+1 month')->format("Y-m-d"));
+
+                            $firstDateOfCurrentMonth = new \DateTime(date("Y-m-01", $currentMonth));
+                        }
+                        if ($monthCounter == $totalMonths) {
+                            $lastDateOfCurrentMonth = $projectResourceEndDate;
+
+                        } else {
+                            $lastDateOfCurrentMonth = $firstDateOfCurrentMonth->format("Y-m-t");
+                        }
+
+                        $resourceDetails = $this->setupResourceTimeline($firstDateOfCurrentMonth, $lastDateOfCurrentMonth);
+
+                        if ($resourceDetails->startDate >= $projectCurrentMonthStartDate && $resourceDetails->endDate <= $projectCurrentMonthEndDate) {
+                            $resourceMonthlyDetail = new ResourceMonthlyDetail();
+
+                            $difference                = $resourceDetails->noOfDays;
+                            $weeksWorkedInCurrentMonth = ($difference + 1) / 7;
+
+                            $costPerMonth = $weeksWorkedInCurrentMonth * ($projectResource->hourlyBillingRate) * ($projectResource->hoursPerWeek);
+
+                            $totalCostPerMonth = $totalCostPerMonth + $costPerMonth;
+
+                            $resourceMonthlyDetail->resourceCost = round($totalCostPerMonth, 2);
+                            $resourceMonthlyDetail->resourceId   = $projectResource->id;
+        
+                            $resourceMonthlyDetail->resourceName      = $this->getResourceName($projectResource);
+
+                            $resourceMonthlyDetail->monthName         = $resourceDetails->currentMonthName;
+                            $resourceMonthlyDetail->resourceStartDate = $projectResourceStartDate;
+                            $resourceMonthlyDetail->resourceEndDate   = $projectResourceEndDate;
+
+                            array_push($projectTimeline->resourcesMonthlyDetails, $resourceMonthlyDetail);
+                        }
+
+                        
+                    }
+
+                }
+            }
+
+        }
+      
+        return $projectTimelines;
+    }
+
+    public function setupResourceTimeline($currentMonthStartDate, $currentMonthEndDate)
     {
 
+        $currentMonthStartDate = $currentMonthStartDate->format("Y-m-d");
+        $currentMonthName      = date("M-Y", strtotime($currentMonthStartDate));
+
+        $dateDiff = $this->DateTimeService->calculateDifferenceBetweenTwoDates($currentMonthStartDate, $currentMonthEndDate);
+
+        $resourceDetails                   = new ResourceTimeline();
+        $resourceDetails->startDate        = $currentMonthStartDate;
+        $resourceDetails->endDate          = $currentMonthEndDate;
+        $resourceDetails->noOfDays         = $dateDiff->days;
+        $resourceDetails->currentMonthName = $currentMonthName;
+
+        return $resourceDetails;
+    }
+
+    public function getResourceName($projectResource)
+    {
+        $resourceName = null;
+        if (isset($projectResource->employee_id)) {
+            $resourceName = $projectResource->employee->firstName . ' ' . $projectResource->employee->lastName;
+        } else {
+            $resourceName = $projectResource->title;
+        }
+        return $resourceName;
     }
 
 }

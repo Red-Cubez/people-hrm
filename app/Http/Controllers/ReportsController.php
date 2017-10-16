@@ -229,6 +229,7 @@ class ReportsController extends Controller
             // dd($monthlyTimelines);
 
             $reportData = $this->ReportService->generateInternalProjectsReport($monthlyTimelines);
+
             return $this->pdfview($request, $reportData);
 
         } elseif (isset($request->clientProjectsReport)) {
@@ -239,6 +240,8 @@ class ReportsController extends Controller
 
     public function pdfview($request, $monthlyTimelines)
     {
+        
+        dd("pdfview");
         //$items = DB::table("items")->get();
        
 

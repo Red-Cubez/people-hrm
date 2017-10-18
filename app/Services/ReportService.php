@@ -353,6 +353,7 @@ class ReportService implements IReportService
                 && ($currentMonthStartDate <= $currentMonthEndDate) && ($projectStartDate <= $projectEndDate)) {
 
                 list($monthlyCostSum, $revenue, $profit) = $this->projectTimeline($project, $currentMonthStartDate, $currentMonthEndDate, $projectStartDate, $projectEndDate);
+                 
 
                 $currentMonthName = $this->DateTimeService->getMonthNameAndYear($currentMonthStartDate);
 
@@ -399,6 +400,7 @@ class ReportService implements IReportService
             }
 
         }
+
         return $projectsMonthlyTimeLine;
 
     }
@@ -414,6 +416,7 @@ class ReportService implements IReportService
             $monthlyCostSum = $this->getMonthlyCostProfitAndRevenue($resources, $projectCurrentMonthStartDate, $projectCurrentMonthEndDate);
 
         }
+
         $profit  = 0;
         $revenue = 0;
         if ($projectEndDate <= $currentMonthEndDate && $projectEndDate >= $currentMonthStartDate) {
@@ -426,6 +429,7 @@ class ReportService implements IReportService
             $revenue       = $budget;
 
         }
+        
 
         return array($monthlyCostSum, $revenue, $profit);
 
@@ -436,6 +440,7 @@ class ReportService implements IReportService
 
         $monthlyCostSum    = 0;
         $totalCostPerMonth = 0;
+        $costPerMonth=0;
         foreach ($resources as $resource) {
             //dd($resources);
             list($resourceStartDate, $resourceEndDate) = $this->ProjectResourceService->getResourceStartAndEndDate($resource);
@@ -453,7 +458,7 @@ class ReportService implements IReportService
 
                 $totalCostPerMonth = $totalCostPerMonth + $costPerMonth;
                 $monthlyCostSum    = round($totalCostPerMonth, 2);
-
+                 
                 ///profit////
 
                 // $profit=$budget-$monthlyCostSum;
@@ -863,9 +868,9 @@ class ReportService implements IReportService
 
                             $costPerMonth = $weeksWorkedInCurrentMonth * ($projectResource->hourlyBillingRate) * ($projectResource->hoursPerWeek);
 
-                            $totalCostPerMonth = $totalCostPerMonth + $costPerMonth;
+                            //$totalCostPerMonth = $totalCostPerMonth + $costPerMonth;
 
-                            $resourceMonthlyDetail->resourceCost = round($totalCostPerMonth, 2);
+                            $resourceMonthlyDetail->resourceCost = round($costPerMonth, 2);
                             $resourceMonthlyDetail->resourceId   = $projectResource->id;
         
                             $resourceMonthlyDetail->resourceName      = $this->getResourceName($projectResource);
@@ -881,6 +886,10 @@ class ReportService implements IReportService
                     }
 
                 }
+            }
+            else
+            {
+               $projectTimeline->resourcesMonthlyDetails = array();
             }
 
         }

@@ -142,9 +142,6 @@ class ReportsController extends Controller
 
         }
 
-        // $isManager = $this->UserAuthenticationService->isManager();
-        // $isAdmin   = $this->UserAuthenticationService->isAdmin();
-
         $isRequestedCompanyBelongsToEmployee = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($companyId);
 
         if ($isRequestedCompanyBelongsToEmployee) {
@@ -220,6 +217,7 @@ class ReportsController extends Controller
     }
     public function generateReport(Request $request)
     {
+
         $monthlyTimelines = unserialize($request->monthlyTimelines);
 
         if (isset($request->allProjectsReport)) {
@@ -241,16 +239,19 @@ class ReportsController extends Controller
     public function pdfview($request, $monthlyTimelines)
     {
         
-        dd("pdfview");
-        //$items = DB::table("items")->get();
-       
+       //  $items = DB::table("items")->get();
+        view()->share('monthlyTimelines',$monthlyTimelines);
 
-       //  //if ($request->has('download')) {
-       //      $pdf = PDF::loadView('reports/pdfview');
-       //      return $pdf->download('reports/pdfview');
-       // // }
+        
+           // $pdf = PDF::loadView('reports/pdfview');
+           // return $pdf->download('pdfview.pdf');
 
-        return view('reports/pdfview',$monthlyTimelines);
+
+      return view('reports/pdfview');
+
+    //     return view('reports/pdfview',
+    //         ['monthlyTimelines'=>$monthlyTimelines
+    // ]);
     }
 
 }

@@ -15,7 +15,7 @@
                   <form action="{{url('company/projects/report/generateReport')}}" class="form-horizontal" method="POST" role="form">
                         {{ csrf_field() }}
                     <input type="hidden" name="monthlyTimelines" value="{{$data}}">
-                    <input type="hidden" name="projectsType" value="internalProjects">
+                    <input type="hidden" name="projectsType" value={{$projectsType}}>
                         <a href="/company/{{$companyId}}/all-projects/report">
                             <button class="btn btn-primary">
                                 Generate Report

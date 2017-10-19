@@ -96,7 +96,6 @@ class ReportsController extends Controller
             $internalProjectsStartAndEndDateTimelinesWithCostProfitAndNetTotal =
             $this->ReportService->startAndEndDateTimelinesWithCostProfitAndNetTotal($startDate, $endDate, $companyInternalProjects);
 
-
             $internalProjectsmonthlyTimelines = $this->ReportService->setUpMontlhyTimelines($internalProjectsStartAndEndDateTimelinesWithCostProfitAndNetTotal);
 
             //client projects
@@ -105,7 +104,7 @@ class ReportsController extends Controller
             $companyClientProjects                                           = $this->ClientProjectService->getAllClientProjectsOfCompany($companyId);
             $clientProjectsStartAndEndDateTimelinesWithCostProfitAndNetTotal =
             $this->ReportService->startAndEndDateTimelinesWithCostProfitAndNetTotal($startDate, $endDate, $companyClientProjects);
-  
+
             $clientProjectsmonthlyTimelines = $this->ReportService->setUpMontlhyTimelines($clientProjectsStartAndEndDateTimelinesWithCostProfitAndNetTotal);
 
             $currencyNameAndSymbol = $this->CompanySettingService->getCurrencyName($companyId) . ' ' . $this->CompanySettingService->getCurrencySymbol($companyId);
@@ -117,6 +116,7 @@ class ReportsController extends Controller
                     'clientProjectsmonthlyTimelines'   => $clientProjectsmonthlyTimelines,
                     'currencyNameAndSymbol'            => $currencyNameAndSymbol,
                     'isAllProjectsGraphs'              => true,
+                    'companyId'                        => $companyId,
 
                 ]);
         } else {
@@ -162,6 +162,7 @@ class ReportsController extends Controller
                     'monthlyTimelines'      => $monthlyTimelines,
                     'currencyNameAndSymbol' => $currencyNameAndSymbol,
                     'companyId'             => $companyId,
+                    'projectsType'          => "internalProjects",
 
                 ]);
         } else {
@@ -193,7 +194,7 @@ class ReportsController extends Controller
 
         if ($isRequestedCompanyBelongsToEmployee) {
 
-            $companyClientProjects                             = $this->ClientProjectService->getAllClientProjectsOfCompany($companyId);
+            $companyClientProjects = $this->ClientProjectService->getAllClientProjectsOfCompany($companyId);
 
             $startAndEndDateTimelinesWithCostProfitAndNetTotal =
             $this->ReportService->startAndEndDateTimelinesWithCostProfitAndNetTotal($startDate, $endDate, $companyClientProjects);
@@ -209,6 +210,7 @@ class ReportsController extends Controller
                     'monthlyTimelines'      => $monthlyTimelines,
                     'currencyNameAndSymbol' => $currencyNameAndSymbol,
                     'companyId'             => $companyId,
+                    'projectsType'          => "clientProjects",
 
                 ]);
         } else {
@@ -220,38 +222,45 @@ class ReportsController extends Controller
 
         $monthlyTimelines = unserialize($request->monthlyTimelines);
 
-        if (isset($request->allProjectsReport)) {
-            $this->ReportService->generateAllProjectsReport($monthlyTimelines);
-
-        } elseif ($request->projectsType == "internalProjects") {
-            // dd($monthlyTimelines);
-
+         if ($request->projectsType == "internalProjects") {
+           
             $reportData = $this->ReportService->generateInternalProjectsReport($monthlyTimelines);
 
             return $this->pdfview($request, $reportData);
 
-        } elseif (isset($request->clientProjectsReport)) {
-            $this->ReportService->generateClientProjectsReport($monthlyTimelines);
+        } elseif ($request->projectsType == "clientProjects") {
+
+            $reportData=$this->ReportService->generateClientProjectsReport($monthlyTimelines);
+             return $this->pdfview($request, $reportData);
         }
 
     }
 
     public function pdfview($request, $monthlyTimelines)
     {
-        
-       //  $items = DB::table("items")->get();
-        view()->share('monthlyTimelines',$monthlyTimelines);
+// return view('reports/pdfview',
+        //                 ['monthlyTimelines'=>$monthlyTimelines]);
 
-        
-           // $pdf = PDF::loadView('reports/pdfview');
-           // return $pdf->download('pdfview.pdf');
+        $view     = \View::make('reports/pdfview', ['monthlyTimelines' => $monthlyTimelines]);
+        $contents = (string) $view;
 
+// or
+        // dd($contents);
+        // $contents = $view->render();
 
-      return view('reports/pdfview');
+        $pdf = \App::make('dompdf.wrapper');
 
-    //     return view('reports/pdfview',
-    //         ['monthlyTimelines'=>$monthlyTimelines
-    // ]);
+        $pdf->loadHtml($contents);
+        return $pdf->stream();
+
+        // $pdf = PDF::loadView('reports/pdfview');
+        // return $pdf->download('pdfview.pdf');
+
+        //return view('reports/pdfview');
+
+        //     return view('reports/pdfview',
+        //         ['monthlyTimelines'=>$monthlyTimelines
+        // ]);
     }
 
 }

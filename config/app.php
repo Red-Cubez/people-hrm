@@ -183,6 +183,8 @@ return [
 
         Zizaco\Entrust\EntrustServiceProvider::class,
 
+        Barryvdh\DomPDF\ServiceProvider::class,
+
     ],
 
     /*
@@ -234,6 +236,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
         'StandardPermissions' => People\Services\StandardPermissions::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
     
 
     ],

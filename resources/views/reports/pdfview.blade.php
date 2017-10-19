@@ -1,26 +1,36 @@
-@extends('layouts.app')
+<style type="text/css">
+  table td, table th{
+    border:1px solid black;
+  }
+</style>
 
-@section('content')
+<div class="container">
 <?php $counter=0; ?>
 @if (count($monthlyTimelines) > 0)
-    <article class="show-role">
-        <h3>Project Reports</h3>
-        <div class="table-responsive">
-          {{-- table-striped table-bordered table-hover table-condensed --}}
-            <table class="table table-condensed  table-bordered table-striped table-hover ">
+   
+        <h3>Projects Report</h3>
+     
+         
+            <table  >
+              
                 <thead>
+               <tr>   
                 <th>Project Name </th>  
+
                 <th>Month Name</th>
                 <th>Project Cost</th>
                 <th>Resources Cost</th>
                 
                 </thead>
+              </tr>
                 <tbody>
-
+         
                 @foreach ($monthlyTimelines as $key=>$projectMonthlyTimelines )
                     @if (count($monthlyTimelines)>1)
                 @if($counter>0 )
+
                            <tr>
+
                               <td>{{$key++.' . '. $projectMonthlyTimelines[0]->projectName }}
                               </td>
                               
@@ -28,51 +38,54 @@
                                @foreach ($projectMonthlyTimelines as $projectMonthlyTimeline)
                               
                                     @if($projectMonthlyTimeline->isActive)
-                                     
+                                      
                                            {{ $projectMonthlyTimeline->monthName }}
-                                              <br />
+                                            
                                           @if(count($projectMonthlyTimeline->resourcesMonthlyDetails)>0) 
 
                                                 @foreach ($projectMonthlyTimeline->resourcesMonthlyDetails as $key=>$resourcesMonthlyDetail)
-                                            </br>
+                                            <br/>
                                                 @endforeach
+                                             <br/>    
                                            @endif   
-                                         <hr>      
+                                      <hr/>        
                                     @endif         
                                @endforeach
                               </td>
                                <td>  
                                @foreach ($projectMonthlyTimelines as $projectMonthlyTimeline)
                                     @if($projectMonthlyTimeline->isActive)
-                                      
+                                          
                                            {{ $projectMonthlyTimeline->totalCost }}
-                                              <br />
+                                            
                                            @if(count($projectMonthlyTimeline->resourcesMonthlyDetails)>0) 
 
                                                 @foreach ($projectMonthlyTimeline->resourcesMonthlyDetails as $key=>$resourcesMonthlyDetail)
-                                            </br>
+                                           <br/>
                                                 @endforeach
+                                             <br/>    
                                            @endif   
-                                        <hr>      
+                                        <hr/>    
                                     @endif         
                                @endforeach
                               </td>
                               <td>
                                 @foreach ($projectMonthlyTimelines as $projectMonthlyTimeline)
                                     @if($projectMonthlyTimeline->isActive)
-                               				 
+                                     
                                             @if(count($projectMonthlyTimeline->resourcesMonthlyDetails)>0) 
 
                                                 @foreach ($projectMonthlyTimeline->resourcesMonthlyDetails as $key=>$resourcesMonthlyDetail)
-                                    				
-                                                  {{++$key.'.'.$resourcesMonthlyDetail->resourceName .'____Cost:'.$resourcesMonthlyDetail->resourceCost}} </br> 
-                                     
                                             
+                                                  {{++$key.'.'.$resourcesMonthlyDetail->resourceName .'(Cost:'.$resourcesMonthlyDetail->resourceCost.')'}} 
+
+                                                 <br/>     
                                                 @endforeach
                                            
-                                            @endif   </br> 
+                                            @endif   
+                                            <br/> 
                                         
-                                      <hr>
+                                      <hr/>
                                     @endif   
                                 @endforeach        
                               </td>
@@ -90,5 +103,3 @@
 
 
 @endif
-
-@endsection

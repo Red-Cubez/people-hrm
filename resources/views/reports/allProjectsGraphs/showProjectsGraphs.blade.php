@@ -6,6 +6,28 @@
     <div class="row">
         Internal Projects Graphs
            @if(count($internalProjectsmonthlyTimelines)>0)
+
+             <div class="row">
+            <div class="col-sm-8">
+                    <?php
+                    $data=serialize($internalProjectsmonthlyTimelines); 
+                    //$encoded=htmlentities($data); 
+                    ?>
+                    
+                  <form action="{{url('company/projects/report/generateReport')}}" class="form-horizontal" method="POST" role="form">
+                        {{ csrf_field() }}
+                    <input type="hidden" name="monthlyTimelines" value="{{$data}}">
+                    <input type="hidden" name="projectsType" value="internalProjects">
+                        <a href="/company/{{$companyId}}/all-projects/report">
+                            <button class="btn btn-primary">
+                                Generate Internal Projects Report
+                            </button>
+                        </a>
+                       
+                  </form>
+
+            </div>
+        </div>
         <div class="col-sm-8">
     
          
@@ -23,6 +45,25 @@
     <div class="row">
         Client Projects Graphs
          @if(count($clientProjectsmonthlyTimelines)>0)
+          <div class="col-sm-8">
+                    <?php
+                    $data=serialize($clientProjectsmonthlyTimelines); 
+                    //$encoded=htmlentities($data); 
+                    ?>
+                    
+                  <form action="{{url('company/projects/report/generateReport')}}" class="form-horizontal" method="POST" role="form">
+                        {{ csrf_field() }}
+                    <input type="hidden" name="monthlyTimelines" value="{{$data}}">
+                    <input type="hidden" name="projectsType" value="clientProjects">
+                        <a href="/company/{{$companyId}}/all-projects/report">
+                            <button class="btn btn-primary">
+                                Generate Client Projects Report
+                            </button>
+                        </a>
+                       
+                  </form>
+
+            </div>
         <div class="col-sm-8">
 
              

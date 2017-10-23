@@ -31,11 +31,11 @@ class ReportsController extends Controller
             '|' . StandardPermissions::showAllProjectsReport .
             '|' . StandardPermissions::reportOptions, ['only' => ['showOptions']]);
 
-        $this->middleware('permission:' . StandardPermissions::showInternalProjectsReport, ['only' => ['showInternalProjectsReport']]);
+        $this->middleware('permission:' . StandardPermissions::showInternalProjectsReport, ['only' => ['showInternalProjectsReport','generateReport']]);
 
-        $this->middleware('permission:' . StandardPermissions::showClientProjectsReport, ['only' => ['showClientProjectsReport']]);
+        $this->middleware('permission:' . StandardPermissions::showClientProjectsReport, ['only' => ['showClientProjectsReport','generateReport']]);
 
-        $this->middleware('permission:' . StandardPermissions::showAllProjectsReport, ['only' => ['showAllProjectsReport']]);
+        $this->middleware('permission:' . StandardPermissions::showAllProjectsReport, ['only' => ['showAllProjectsReport','generateReport']]);
 
         $this->ReportService             = $reportService;
         $this->UserAuthenticationService = $userAuthenticationService;

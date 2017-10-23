@@ -17,8 +17,8 @@ interface IReportService
 
     public function setUpMontlhyTimelines($monthlyTimelines);
 
-    public function generateAllProjectsReport($monthlyTimelines);
-    public function generateInternalProjectsReport($monthlyTimelines);
-    public function generateClientProjectsReport($monthlyTimelines);
+    // public function generateAllProjectsReport($monthlyTimelines);
+    // public function generateInternalProjectsReport($monthlyTimelines);
+    // public function generateClientProjectsReport($monthlyTimelines);
 
 }

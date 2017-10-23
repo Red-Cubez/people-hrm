@@ -30,7 +30,7 @@
                 @if($counter>0 )
 
                            <tr>
-
+                              
                               <td>{{$key++.' . '. $projectMonthlyTimelines[0]->projectName }}
                               </td>
                               
@@ -95,6 +95,7 @@
                     @endif
                   <?php $counter++; ?>        
                 @endforeach
+
                 
                 </tbody>
             </table>

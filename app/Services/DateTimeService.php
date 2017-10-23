@@ -73,20 +73,6 @@ class DateTimeService implements IDateTimeService
         $from           = \Carbon\Carbon::parse($startDate);
         $totalMonths = $to->diffInMonths($from);
 
-        // if($totalMonths==0)
-        // {
-            //$totalMonths=$totalMonths+1;
-        //}
-
-        // $timeSpan1 = strtotime($startDate);
-        // $timeSpan2 = strtotime($endDate);
-        // $startYear = date('Y', $timeSpan1);
-        // $endYear   = date('Y', $timeSpan2);
-
-        // $startMonth = date('m', $timeSpan1);
-        // $endMonth   = date('m', $timeSpan2);
-
-        // $totalMonths = (($endYear - $startYear) * 12) + ($endMonth - $startMonth);
         return $totalMonths;
     }
 

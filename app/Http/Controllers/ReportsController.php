@@ -150,7 +150,7 @@ class ReportsController extends Controller
 
             $startAndEndDateTimelinesWithCostProfitAndNetTotal =
             $this->ReportService->startAndEndDateTimelinesWithCostProfitAndNetTotal($startDate, $endDate, $companyInternalProjects);
-
+//dd($startAndEndDateTimelinesWithCostProfitAndNetTotal);
             $monthlyTimelines = $this->ReportService->setUpMontlhyTimelines($startAndEndDateTimelinesWithCostProfitAndNetTotal);
 
             $currencyNameAndSymbol = $this->CompanySettingService->getCurrencyName($companyId) . ' ' . $this->CompanySettingService->getCurrencySymbol($companyId);
@@ -186,9 +186,6 @@ class ReportsController extends Controller
 
         }
 
-        // $isManager       = $this->UserAuthenticationService->isManager();
-        // $isAdmin         = $this->UserAuthenticationService->isAdmin();
-        // $isClientManager = $this->UserAuthenticationService->isClientManager();
 
         $isRequestedCompanyBelongsToEmployee = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($companyId);
 
@@ -221,25 +218,27 @@ class ReportsController extends Controller
     {
 
         $monthlyTimelines = unserialize($request->monthlyTimelines);
-
-         if ($request->projectsType == "internalProjects") {
+// dd($monthlyTimelines);
+     //     if ($request->projectsType == "internalProjects") {
            
-            $reportData = $this->ReportService->generateInternalProjectsReport($monthlyTimelines);
+     //        $reportData = $this->ReportService->generateInternalProjectsReport($monthlyTimelines);
+     // dd($monthlyTimelines);
+     //        return $this->pdfview($request, $reportData);
 
-            return $this->pdfview($request, $reportData);
+     //    } elseif ($request->projectsType == "clientProjects") {
 
-        } elseif ($request->projectsType == "clientProjects") {
-
-            $reportData=$this->ReportService->generateClientProjectsReport($monthlyTimelines);
-             return $this->pdfview($request, $reportData);
-        }
+     //        $reportData=$this->ReportService->generateClientProjectsReport($monthlyTimelines);
+     //         return $this->pdfview($request, $reportData);
+     //    }
+        return $this->pdfview($request, $monthlyTimelines);
 
     }
 
     public function pdfview($request, $monthlyTimelines)
     {
-// return view('reports/pdfview',
-        //                 ['monthlyTimelines'=>$monthlyTimelines]);
+        
+return view('reports/pdfview',
+                        ['monthlyTimelines'=>$monthlyTimelines]);
 
         $view     = \View::make('reports/pdfview', ['monthlyTimelines' => $monthlyTimelines]);
         $contents = (string) $view;

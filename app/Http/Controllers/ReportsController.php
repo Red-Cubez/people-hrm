@@ -218,6 +218,9 @@ class ReportsController extends Controller
     {
 
         $monthlyTimelines = unserialize($request->monthlyTimelines);
+
+        $projectsTimelines=$this->ReportService->getProjectsTimelinesFrom($monthlyTimelines);
+    
 // dd($monthlyTimelines);
      //     if ($request->projectsType == "internalProjects") {
            
@@ -230,15 +233,15 @@ class ReportsController extends Controller
      //        $reportData=$this->ReportService->generateClientProjectsReport($monthlyTimelines);
      //         return $this->pdfview($request, $reportData);
      //    }
-        return $this->pdfview($request, $monthlyTimelines);
+        return $this->pdfview($request, $projectsTimelines);
 
     }
 
-    public function pdfview($request, $monthlyTimelines)
+    public function pdfview($request, $projectsTimelines)
     {
         
 return view('reports/pdfview',
-                        ['monthlyTimelines'=>$monthlyTimelines]);
+                        ['projectsTimelines'=>$projectsTimelines]);
 
         $view     = \View::make('reports/pdfview', ['monthlyTimelines' => $monthlyTimelines]);
         $contents = (string) $view;

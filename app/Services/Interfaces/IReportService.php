@@ -16,6 +16,7 @@ interface IReportService
     public function startAndEndDateTimelinesWithCostProfitAndNetTotal($startDate, $endDate, $companyId);
 
     public function setUpMontlhyTimelines($monthlyTimelines);
+    public function getProjectsTimelinesFrom($monthlyTimelines);
 
     // public function generateAllProjectsReport($monthlyTimelines);
     // public function generateInternalProjectsReport($monthlyTimelines);

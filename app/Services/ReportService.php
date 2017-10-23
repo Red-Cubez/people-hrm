@@ -432,11 +432,11 @@ class ReportService implements IReportService
         $profit        = 0;
         $revenue       = 0;
         $resourcesCost = 0;
-         $budget        = $project->budget;
+        $budget        = $project->budget;
         if ($projectEndDate <= $currentMonthEndDate && $projectEndDate >= $currentMonthStartDate) {
-            
-            $budget        = round($budget, 2);
-           // $resourcesCost = $this->getResourcesTotalCostForProject($project, $resources);
+
+            $budget = round($budget, 2);
+            // $resourcesCost = $this->getResourcesTotalCostForProject($project, $resources);
             $resourcesCost = $monthlyCostSum;
             $profit        = $budget - $resourcesCost;
             $profit        = round($profit, 2);
@@ -463,7 +463,7 @@ class ReportService implements IReportService
 
             //if ($projectResourceStartDate >= $projectStartDate && $projectResourceEndDate <= $projectEndDate) {
             if (Max($projectResourceStartDate, $projectStartDate) <= Min($projectResourceEndDate, $projectEndDate)) {
-          
+
                 // if()
                 // {
 
@@ -727,6 +727,23 @@ class ReportService implements IReportService
             $resourceName = $projectResource->title;
         }
         return $resourceName;
+    }
+
+    public function getProjectsTimelinesFrom($monthlyTimelines)
+    {
+        $counter          = 0;
+        $projectTimelinesArray = array();
+        foreach ($monthlyTimelines as $projectsTimelines) {
+            if($counter>0)
+            {
+                array_push($projectTimelinesArray,$projectsTimelines);
+
+            }
+
+            $counter++;
+
+        }
+        return $projectTimelinesArray;
     }
 
     // public function generateAllProjectsReport($monthlyTimelines)

@@ -6,7 +6,7 @@
 
 <div class="container">
 <?php $counter=0; ?>
-@if (count($monthlyTimelines) > 0)
+@if (count($projectsTimelines) > 0)
    
         <h3>Projects Report</h3>
      
@@ -25,13 +25,13 @@
               </tr>
                 <tbody>
          
-                @foreach ($monthlyTimelines as $key=>$projectMonthlyTimelines )
-                    @if (count($monthlyTimelines)>1)
-                @if($counter>0 )
+                @foreach ($projectsTimelines as $key=>$projectMonthlyTimelines )
+                    
+             
 
                            <tr>
                               
-                              <td>{{$key++.' . '. $projectMonthlyTimelines[0]->projectName }}
+                              <td>{{++$key.' . '. $projectMonthlyTimelines[0]->projectName }}
                               </td>
                               
                                <td>  
@@ -91,9 +91,9 @@
                               </td>
                        
                            </tr>
-                        @endif 
-                    @endif
-                  <?php $counter++; ?>        
+             
+                    
+                
                 @endforeach
 
                 

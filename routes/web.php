@@ -115,5 +115,6 @@ Route::post('/company/{companyId}/projects/report', 'ReportsController@showAllPr
 Route::post('/company/{companyId}/internal-projects/report', 'ReportsController@showInternalProjectsReport');
 Route::post('/company/{companyId}/client-projects/report', 'ReportsController@showClientProjectsReport');
 Route::post('/company/projects/report/generateReport', 'ReportsController@generateReport');
+Route::post('/company/projects/report/export', 'ReportsController@export');
 
 //Route::get('pdfview',array('as'=>'pdfview','uses'=>'ItemController@pdfview'));

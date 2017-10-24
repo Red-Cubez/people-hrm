@@ -10,6 +10,7 @@ use People\Services\Interfaces\IDateTimeService;
 use People\Services\Interfaces\IReportService;
 use People\Services\Interfaces\IUserAuthenticationService;
 use People\Services\StandardPermissions;
+use People\Models\Employee;
 
 class ReportsController extends Controller
 {
@@ -31,11 +32,11 @@ class ReportsController extends Controller
             '|' . StandardPermissions::showAllProjectsReport .
             '|' . StandardPermissions::reportOptions, ['only' => ['showOptions']]);
 
-        $this->middleware('permission:' . StandardPermissions::showInternalProjectsReport, ['only' => ['showInternalProjectsReport','generateReport']]);
+        $this->middleware('permission:' . StandardPermissions::showInternalProjectsReport, ['only' => ['showInternalProjectsReport', 'generateReport']]);
 
-        $this->middleware('permission:' . StandardPermissions::showClientProjectsReport, ['only' => ['showClientProjectsReport','generateReport']]);
+        $this->middleware('permission:' . StandardPermissions::showClientProjectsReport, ['only' => ['showClientProjectsReport', 'generateReport']]);
 
-        $this->middleware('permission:' . StandardPermissions::showAllProjectsReport, ['only' => ['showAllProjectsReport','generateReport']]);
+        $this->middleware('permission:' . StandardPermissions::showAllProjectsReport, ['only' => ['showAllProjectsReport', 'generateReport']]);
 
         $this->ReportService             = $reportService;
         $this->UserAuthenticationService = $userAuthenticationService;
@@ -186,7 +187,6 @@ class ReportsController extends Controller
 
         }
 
-
         $isRequestedCompanyBelongsToEmployee = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($companyId);
 
         if ($isRequestedCompanyBelongsToEmployee) {
@@ -219,29 +219,45 @@ class ReportsController extends Controller
 
         $monthlyTimelines = unserialize($request->monthlyTimelines);
 
-        $projectsTimelines=$this->ReportService->getProjectsTimelinesFrom($monthlyTimelines);
-    
+        $projectsTimelines = $this->ReportService->getProjectsTimelinesFrom($monthlyTimelines);
+
 // dd($monthlyTimelines);
-     //     if ($request->projectsType == "internalProjects") {
-           
-     //        $reportData = $this->ReportService->generateInternalProjectsReport($monthlyTimelines);
-     // dd($monthlyTimelines);
-     //        return $this->pdfview($request, $reportData);
+        //     if ($request->projectsType == "internalProjects") {
 
-     //    } elseif ($request->projectsType == "clientProjects") {
+        //        $reportData = $this->ReportService->generateInternalProjectsReport($monthlyTimelines);
+        // dd($monthlyTimelines);
+        //        return $this->pdfview($request, $reportData);
 
-     //        $reportData=$this->ReportService->generateClientProjectsReport($monthlyTimelines);
-     //         return $this->pdfview($request, $reportData);
-     //    }
+        //    } elseif ($request->projectsType == "clientProjects") {
+
+        //        $reportData=$this->ReportService->generateClientProjectsReport($monthlyTimelines);
+        //         return $this->pdfview($request, $reportData);
+        //    }
         return $this->pdfview($request, $projectsTimelines);
 
     }
 
+    public function export(Request $request)
+    {
+
+        $projectsTimelines = unserialize($request->projectsTimelines);
+        //dd($projectsTimelines);
+       // $items = Employee::all();
+
+        \Excel::create('Report', function ($excel) use ($projectsTimelines) {
+            $excel->sheet('ExportFile', function ($sheet) use ($projectsTimelines) {
+                $sheet->loadView('reports/pdfview', ['projectsTimelines' => $projectsTimelines]);
+            });
+        })->export('xls');
+
+        //return back();
+    }
+
     public function pdfview($request, $projectsTimelines)
     {
-        
-return view('reports/pdfview',
-                        ['projectsTimelines'=>$projectsTimelines]);
+
+        return view('reports/pdfview',
+            ['projectsTimelines' => $projectsTimelines]);
 
         $view     = \View::make('reports/pdfview', ['monthlyTimelines' => $monthlyTimelines]);
         $contents = (string) $view;

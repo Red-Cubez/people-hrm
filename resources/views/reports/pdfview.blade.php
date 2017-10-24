@@ -7,7 +7,18 @@
 <div class="container">
 
 @if (count($projectsTimelines) > 0)
-   
+                    <?php
+                    $data=serialize($projectsTimelines); 
+                    
+                    ?>
+   <div class="col-md-2">
+          <form action="{{url('/company/projects/report/export')}}" enctype="multipart/form-data" method="post">
+             {{ csrf_field() }}
+            <input type="hidden" name="projectsTimelines" value="{{$data}}">
+            <button class="btn btn-success" type="submit">Export</button>
+          </form>
+
+    </div>      
         <h3>Projects Report</h3>
      
          

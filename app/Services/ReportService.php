@@ -347,11 +347,17 @@ class ReportService implements IReportService
             list($projectStartDate, $projectEndDate) = $this->ProjectService->getProjectStartAndEndDate($project);
             
 
-            list($projectCurrentMonthStartDate, $projectCurrentMonthEndDate) = $this->getProjectCurrentMonthStartAndEndDate($projectStartDate, $projectEndDate, $currentMonthStartDate, $currentMonthEndDate, $startDate, $endDate);
+            // list($projectCurrentMonthStartDate, $projectCurrentMonthEndDate) = $this->getProjectCurrentMonthStartAndEndDate($projectStartDate, $projectEndDate, $currentMonthStartDate, $currentMonthEndDate, $startDate, $endDate);
 
             if (($currentMonthStartDate <= $projectEndDate) && ($projectStartDate <= $currentMonthEndDate)
                 && ($currentMonthStartDate <= $currentMonthEndDate) && ($projectStartDate <= $projectEndDate)) {
+         
 
+            // if(isset($projectCurrentMonthStartDate) && isset($projectCurrentMonthEndDate))
+            // {
+              
+        // if (($currentMonthStartDate <= $projectEndDate) && ($projectStartDate <= $currentMonthEndDate)
+             //   && ($currentMonthStartDate <= $currentMonthEndDate) && ($projectStartDate <= $projectEndDate)) {
                 list($monthlyCostSum, $revenue, $profit, $resourcesMonthlyDetails) = $this->projectTimeline($project, $currentMonthStartDate, $currentMonthEndDate, $projectStartDate, $projectEndDate);
 
                 $projectMonthlyTimeLine = new ProjectMonthlyTimeLine();
@@ -515,7 +521,8 @@ class ReportService implements IReportService
 
                 // $projectCurrentMonthStartDate=$this->DateTimeService->getfirstAndLastDateOfGivenDate($);
                 // $projectCurrentMonthEndDate=
-            } else {
+            } 
+            else {
 
                 if ($projectStartDate <= $currentMonthStartDate && $projectEndDate >= $currentMonthEndDate ) {
 

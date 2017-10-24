@@ -11,7 +11,7 @@
         <h3>Projects Report</h3>
      
          
-            <table>
+            <table >
               
                 <thead>
                <tr>   
@@ -26,32 +26,67 @@
                 <tbody>
          
                 @foreach ($projectsTimelines as $key=>$projectMonthlyTimelines )
-          
+                    
                            <tr>
                               
-                              <td rowspan="{{count($projectMonthlyTimelines)}}">{{++$key.' . '. $projectMonthlyTimelines[0]->projectName }}
+                              <td>{{++$key.' . '. $projectMonthlyTimelines[0]->projectName }}
                               </td>
                               
-                              
+                               <td>  
                                @foreach ($projectMonthlyTimelines as $projectMonthlyTimeline)
                               
-                               <td >  
+                                    @if($projectMonthlyTimeline->isActive)
                                       
                                            {{ $projectMonthlyTimeline->monthName }}
                                             
                                           @if(count($projectMonthlyTimeline->resourcesMonthlyDetails)>0) 
 
                                                 @foreach ($projectMonthlyTimeline->resourcesMonthlyDetails as $key=>$resourcesMonthlyDetail)
-                                    
+                                            <br/>
                                                 @endforeach
-                                          
+                                             <br/>    
                                            @endif   
-                                  <td >          
-                                           
+                                      <hr/>        
+                                    @endif         
                                @endforeach
                               </td>
-                            
-                            
+                               <td>  
+                               @foreach ($projectMonthlyTimelines as $projectMonthlyTimeline)
+                                    @if($projectMonthlyTimeline->isActive)
+                                          
+                                           {{ $projectMonthlyTimeline->totalCost }}
+                                            
+                                           @if(count($projectMonthlyTimeline->resourcesMonthlyDetails)>0) 
+
+                                                @foreach ($projectMonthlyTimeline->resourcesMonthlyDetails as $key=>$resourcesMonthlyDetail)
+                                           <br/>
+                                                @endforeach
+                                             <br/>    
+                                           @endif   
+                                        <hr/>    
+                                    @endif         
+                               @endforeach
+                              </td>
+                              <td>
+                                @foreach ($projectMonthlyTimelines as $projectMonthlyTimeline)
+                                    @if($projectMonthlyTimeline->isActive)
+                                     
+                                            @if(count($projectMonthlyTimeline->resourcesMonthlyDetails)>0) 
+
+                                                @foreach ($projectMonthlyTimeline->resourcesMonthlyDetails as $key=>$resourcesMonthlyDetail)
+                                            
+                                                  {{++$key.'.'.$resourcesMonthlyDetail->resourceName .'(Cost:'.$resourcesMonthlyDetail->resourceCost.')'}} 
+
+                                                 <br/>     
+                                                @endforeach
+                                           
+                                            @endif   
+                                            <br/> 
+                                        
+                                      <hr/>
+                                    @endif   
+                                @endforeach        
+                              </td>
                        
                            </tr>
              

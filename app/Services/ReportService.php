@@ -743,6 +743,7 @@ class ReportService implements IReportService
             $counter++;
 
         }
+       
         return $projectTimelinesArray;
     }
 

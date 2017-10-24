@@ -47,6 +47,25 @@ class DateTimeService implements IDateTimeService
         return $timeLine;
     }
 
+    public function areDatesInLieInSameMonthAndYear($firstDate, $secondDate)
+    {
+
+        $firstDate=strtotime($firstDate);
+        $secondDate=strtotime($secondDate);
+
+        $date1 = new \DateTime();
+        $date1->setTimestamp($firstDate);
+
+        $date2 = new \DateTime();
+        $date2->setTimestamp($secondDate);
+
+        if ($date1->format('Y-m') === $date2->format('Y-m')) {
+            return true;
+        }
+        else
+            return false;
+    }
+
     public function validateStartAndEndDates($startDate, $endDate)
     {
         if ($endDate <= $startDate) {
@@ -69,8 +88,8 @@ class DateTimeService implements IDateTimeService
 
     public function calculateMonthsBetweenTwoDates($startDate, $endDate)
     {
-        $to             = \Carbon\Carbon::parse($endDate);
-        $from           = \Carbon\Carbon::parse($startDate);
+        $to          = \Carbon\Carbon::parse($endDate);
+        $from        = \Carbon\Carbon::parse($startDate);
         $totalMonths = $to->diffInMonths($from);
 
         return $totalMonths;
@@ -110,6 +129,7 @@ class DateTimeService implements IDateTimeService
 
     public function getFirstAndLastDateCurrentOfMonth($monthCounter, $totalMonths, $startDateInDateTime, $endDate)
     {
+   
         $lastDateOfCurrentMonth  = 0;
         $firstDateOfCurrentMonth = 0;
         $currentMonth            = "";
@@ -130,7 +150,7 @@ class DateTimeService implements IDateTimeService
             $lastDateOfCurrentMonth = $firstDateOfCurrentMonth->format("Y-m-t");
 
         }
-        
+
         return array($firstDateOfCurrentMonth, $lastDateOfCurrentMonth);
     }
 

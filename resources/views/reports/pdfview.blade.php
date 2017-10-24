@@ -5,13 +5,13 @@
 </style>
 
 <div class="container">
-<?php $counter=0; ?>
+
 @if (count($projectsTimelines) > 0)
    
         <h3>Projects Report</h3>
      
          
-            <table  >
+            <table >
               
                 <thead>
                <tr>   
@@ -27,8 +27,6 @@
          
                 @foreach ($projectsTimelines as $key=>$projectMonthlyTimelines )
                     
-             
-
                            <tr>
                               
                               <td>{{++$key.' . '. $projectMonthlyTimelines[0]->projectName }}

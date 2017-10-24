@@ -310,6 +310,7 @@ class ReportService implements IReportService
     {
 
         $currentMonthStartDate = $currentMonthStartDate->format("Y-m-d");
+
         $currentMonthName      = date("M-Y", strtotime($currentMonthStartDate));
         //dd($startDate);
         $timeline = new MonthlyTimeline();
@@ -337,27 +338,30 @@ class ReportService implements IReportService
 
     public function setupCostProfitAndRevenue($projects, $currentMonthStartDate, $currentMonthEndDate, $startDate, $endDate)
     {
+
         $projectsMonthlyTimeLine = array();
+        $currentMonthName        = $this->DateTimeService->getMonthNameAndYear($currentMonthStartDate);
 
         foreach ($projects as $project) {
 
             list($projectStartDate, $projectEndDate) = $this->ProjectService->getProjectStartAndEndDate($project);
+            
+
+            list($projectCurrentMonthStartDate, $projectCurrentMonthEndDate) = $this->getProjectCurrentMonthStartAndEndDate($projectStartDate, $projectEndDate, $currentMonthStartDate, $currentMonthEndDate, $startDate, $endDate);
 
             if (($currentMonthStartDate <= $projectEndDate) && ($projectStartDate <= $currentMonthEndDate)
                 && ($currentMonthStartDate <= $currentMonthEndDate) && ($projectStartDate <= $projectEndDate)) {
 
                 list($monthlyCostSum, $revenue, $profit, $resourcesMonthlyDetails) = $this->projectTimeline($project, $currentMonthStartDate, $currentMonthEndDate, $projectStartDate, $projectEndDate);
 
-                $currentMonthName = $this->DateTimeService->getMonthNameAndYear($currentMonthStartDate);
-
                 $projectMonthlyTimeLine = new ProjectMonthlyTimeLine();
 
                 if ($projectStartDate >= $currentMonthStartDate) {
-                    $currentMonthStartDate = $projectStartDate;
+                  //  $currentMonthStartDate = $projectStartDate;
 
                 }
                 if ($projectEndDate <= $currentMonthEndDate) {
-                    $currentMonthEndDate = $projectEndDate;
+                   //$currentMonthEndDate = $projectEndDate;
 
                 }
                 //dd($currentMonthEndDate);
@@ -379,19 +383,18 @@ class ReportService implements IReportService
 
                 array_push($projectsMonthlyTimeLine, $projectMonthlyTimeLine);
 
-            } elseif (($projectStartDate <= $endDate) && ($startDate <= $projectEndDate) &&
-                ($projectStartDate <= $projectEndDate) && ($startDate <= $endDate)) {
-
-                $currentMonthName = $this->DateTimeService->getMonthNameAndYear($currentMonthStartDate);
-
+            }
+            // elseif (($projectStartDate <= $endDate) && ($startDate <= $projectEndDate) &&
+            //     ($projectStartDate <= $projectEndDate) && ($startDate <= $endDate)) {
+            else {
                 $projectMonthlyTimeLine = new ProjectMonthlyTimeLine();
 
                 if ($projectStartDate >= $currentMonthStartDate) {
-                    $currentMonthStartDate = $projectStartDate;
+                    //$currentMonthStartDate = $projectStartDate;
 
                 }
                 if ($projectEndDate <= $currentMonthEndDate) {
-                    $currentMonthEndDate = $projectEndDate;
+                   // $currentMonthEndDate = $projectEndDate;
 
                 }
                 $projectMonthlyTimeLine->totalCost             = null;
@@ -486,6 +489,48 @@ class ReportService implements IReportService
         }
 
         return $totalCost;
+    }
+    public function getProjectCurrentMonthStartAndEndDate($projectStartDate, $projectEndDate, $currentMonthStartDate, $currentMonthEndDate, $startDate, $endDate)
+    {
+
+        $projectCurrentMonthStartDate    = null;
+        $projectCurrentMonthEndDate      = null;
+        $areDatesInLieInSameMonthAndYear = null;
+
+        if (Max($projectStartDate, $startDate) <= Min($projectEndDate, $endDate)) {
+
+            $areDatesInLieInSameMonthAndYear = $this->DateTimeService->areDatesInLieInSameMonthAndYear($projectStartDate, $currentMonthStartDate);
+
+            if ($areDatesInLieInSameMonthAndYear) {
+                if ($projectEndDate >= $currentMonthEndDate) {
+                    $projectCurrentMonthStartDate = $projectStartDate;
+                    $projectCurrentMonthEndDate   = $currentMonthEndDate;
+                }
+
+                elseif ($projectEndDate < $currentMonthEndDate) {
+                    $projectCurrentMonthStartDate = $projectStartDate;
+                    $projectCurrentMonthEndDate   = $projectEndDate;
+                }
+             
+
+                // $projectCurrentMonthStartDate=$this->DateTimeService->getfirstAndLastDateOfGivenDate($);
+                // $projectCurrentMonthEndDate=
+            } else {
+
+                if ($projectStartDate <= $currentMonthStartDate && $projectEndDate >= $currentMonthEndDate ) {
+
+                    $projectCurrentMonthStartDate = $currentMonthStartDate;
+                    $projectCurrentMonthEndDate = $currentMonthEndDate;
+                }
+         
+                   //dd($currentMonthStartDate);
+            }
+
+        }
+
+        // dd($projectCurrentMonthEndDate);
+//dd($projectCurrentMonthStartDate);
+        return array($projectCurrentMonthStartDate, $projectCurrentMonthEndDate);
     }
 
     public function getMonthlyCostProfitAndRevenue($resources, $projectCurrentMonthStartDate, $projectCurrentMonthEndDate)
@@ -731,19 +776,28 @@ class ReportService implements IReportService
 
     public function getProjectsTimelinesFrom($monthlyTimelines)
     {
-        $counter          = 0;
+        $monthlyTimelines;
+        $counter               = 0;
         $projectTimelinesArray = array();
-        foreach ($monthlyTimelines as $projectsTimelines) {
-            if($counter>0)
-            {
-                array_push($projectTimelinesArray,$projectsTimelines);
+        $test                  = array();
+
+        foreach ($monthlyTimelines as $projectTimelines) {
+            if ($counter > 0) {
+                $test = array();
+                foreach ($projectTimelines as $projectTimeline) {
+                    if ($projectTimeline->isActive) {
+                        array_push($test, $projectTimeline);
+                    }
+                }
+
+                array_push($projectTimelinesArray, $test);
 
             }
 
             $counter++;
 
         }
-       
+       // dd($projectTimelinesArray);
         return $projectTimelinesArray;
     }
 

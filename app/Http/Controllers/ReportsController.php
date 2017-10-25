@@ -221,7 +221,7 @@ class ReportsController extends Controller
 
         $projectsTimelines = $this->ReportService->getProjectsTimelinesFrom($monthlyTimelines);
 
-// dd($monthlyTimelines);
+//dd($projectsTimelines);
         //     if ($request->projectsType == "internalProjects") {
 
         //        $reportData = $this->ReportService->generateInternalProjectsReport($monthlyTimelines);
@@ -239,10 +239,10 @@ class ReportsController extends Controller
 
     public function export(Request $request)
     {
-
+  
         $projectsTimelines = unserialize($request->projectsTimelines);
         $projectsTimelines = $this->ReportService->getProjectsTimelinesFrom($projectsTimelines);
-       // dd($projectsTimelines);
+      // dd($projectsTimelines);
        // $items = Employee::all();
 
         \Excel::create('Report', function ($excel) use ($projectsTimelines) {
@@ -257,8 +257,8 @@ class ReportsController extends Controller
     public function pdfview($request, $projectsTimelines)
     {
 
-        // return view('reports/pdfview',
-        //     ['projectsTimelines' => $projectsTimelines]);
+        return view('reports/pdfview',
+            ['projectsTimelines' => $projectsTimelines]);
 
         $view     = \View::make('reports/pdfview', ['projectsTimelines' => $projectsTimelines]);
         $contents = (string) $view;

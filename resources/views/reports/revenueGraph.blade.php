@@ -1,5 +1,5 @@
 <?php $i=0; ?>
-@if(count($monthlyTimelines)>1)
+{{-- @if(count($monthlyTimelines)>1) --}}
 
  <div class="panel panel-default">
         <div class="panel-body">
@@ -135,6 +135,6 @@
         
     
     </script>
-@else
+{{-- @else
 No Record Found    
-@endif
+@endif --}}

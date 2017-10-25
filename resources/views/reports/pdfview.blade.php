@@ -1,8 +1,14 @@
-<style type="text/css">
-  table td, table th{
-    border:1px solid black;
-  }
+<html>
+<head>
+
+<link rel="stylesheet" href="{{ asset('css/index.css') }}" type="text/css">
+<style>
+
+
+
 </style>
+</head>
+<body>
 
 <div class="container">
 
@@ -17,73 +23,84 @@
 
     </div>       --}} 
         <h3>Projects Report</h3>
-     
-         
-            <table >
-              
+            <table style="" >
                 <thead>
-               <tr>   
-                <th>Project Name </th>  
-
-                <th>Month Name</th>
-                <th>Project Cost</th>
-                <th>Resources Details</th>
+                   <tr>  
+                        <th>#</th> 
+                        <th>Project</th>  
+                        <th>Month</th>
+                        <th>Project Cost</th> 
+                        <th style=""> 
+                          <table>
+                    
+                               <tr> 
+                               <th colspan="2" > Resources Details</th>
+                               </tr>
+                               <tr style="background-color: #ffffff">
+                                <th >Name</th>
+                                <th>Cost</th>
+                                </tr>
+                         </table>
+                            </tr>
+                        </th>
+                  </tr>
                 
                 </thead>
-              </tr>
                 <tbody>
          
-                @foreach ($projectsTimelines as $key=>$projectMonthlyTimelines )
-                    <?php 
-                    $counter=0;
-                    ?>
-                   @foreach ($projectMonthlyTimelines as $projectMonthlyTimeline)
-                        <tr>
-
-                            <td>@if($counter==0){{$projectMonthlyTimelines[0]->projectName}}@endif</td>
-                            <td>{{$projectMonthlyTimeline->monthName}}</td>
-                            <td>{{$projectMonthlyTimeline->totalCost}}</td>
-                            <td>
-                              @if(count($projectMonthlyTimeline->resourcesMonthlyDetails))
-                                  
-                                       <table>
-                                        <tr>
-                                        <th>
-                                          Resource Name
-                                        </th>
-                                          <th>
-                                          Resource Cost
-                                        </th>
-                                      </tr>
-                                        @foreach($projectMonthlyTimeline->resourcesMonthlyDetails as $resourceDetail)
-                                        <tr>
-
-                                          <td>{{$resourceDetail->resourceName}}</td>   
-                                           <td>{{$resourceDetail->resourceCost}}</td>   
-                                          
-                                        </tr> 
-                                      
-                                        @endforeach  
-                                       </table> 
-                                   
-                               @endif  
-                            </td>   
-                        </tr>
-                       
+                    @foreach ($projectsTimelines as $key=>$projectMonthlyTimelines )
                         <?php 
-                        $counter++;
-                        ?>        
-                        
-             
-                    @endforeach
-                
-                @endforeach
+                        $counter=0;
+                        ?>
+                        @foreach ($projectMonthlyTimelines as $projectMonthlyTimeline)
+                            <tr>
+                                <td>@if($counter==0){{++$key}}@endif</td>
+                                <td>@if($counter==0){{$projectMonthlyTimelines[0]->projectName}}@endif</td>
+                                <td>{{$projectMonthlyTimeline->monthName}}</td>
+                                <td>{{$projectMonthlyTimeline->totalCost}}</td>
+                                <td>
+                                  @if(count($projectMonthlyTimeline->resourcesMonthlyDetails) > 0)
+                                         <table>
+                                          <tr></tr>
 
-                
+                                        </table>
+                                          @foreach($projectMonthlyTimeline->resourcesMonthlyDetails as $key=>$resourceDetail)
+
+                                             <table>
+
+                                            <tr style="background: #ffffff;" >
+                                               <td>{{++$key.' . '.$resourceDetail->resourceName}}</td>  
+                                               <td>{{++$key.' . '.$resourceDetail->resourceCost}}</td>                                    
+                                            </tr> 
+                                              </table>
+                                            @endforeach
+                                   @endif  
+                                </td>   
+                               {{--  <td>
+                                  @if(count($projectMonthlyTimeline->resourcesMonthlyDetails) > 0)
+                                                                                                               
+                                            @foreach($projectMonthlyTimeline->resourcesMonthlyDetails as $resourceDetail)
+                                             <table>
+                                            <tr>                                                
+                                               <td>{{$resourceDetail->resourceCost}}</td>
+                                            </tr> 
+                                           </table> 
+                                            @endforeach  
+                                                                                 
+                                   @endif  
+                                </td>    --}}
+                            </tr>
+                           
+                            <?php 
+                            $counter++;
+                            ?>                 
+                        @endforeach
+                    @endforeach  
                 </tbody>
             </table>
         </div>
     </article>
-
-
 @endif
+</body>
+
+

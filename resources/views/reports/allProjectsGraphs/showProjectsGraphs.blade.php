@@ -10,6 +10,7 @@
              <div class="row">
             <div class="col-sm-8">
                     <?php
+                    $data=null;
                     $data=serialize($internalProjectsmonthlyTimelines); 
                     //$encoded=htmlentities($data); 
                     ?>
@@ -27,6 +28,14 @@
                   </form>
 
             </div>
+        <div class="col-md-2">
+          <form action="{{url('/company/projects/report/export')}}" enctype="multipart/form-data" method="post">
+             {{ csrf_field() }}
+            <input type="hidden" name="projectsTimelines" value="{{$data}}">
+            <button class="btn btn-primary" type="submit">Export Internal Projects Report to Ms Excel</button>
+          </form>
+
+        </div>   
         </div>
         <div class="col-sm-8">
     
@@ -47,6 +56,7 @@
          @if(count($clientProjectsmonthlyTimelines)>0)
           <div class="col-sm-8">
                     <?php
+                    $data=null;
                     $data=serialize($clientProjectsmonthlyTimelines); 
                     //$encoded=htmlentities($data); 
                     ?>
@@ -57,13 +67,20 @@
                     <input type="hidden" name="projectsType" value="clientProjects">
                         <a href="/company/{{$companyId}}/all-projects/report">
                             <button class="btn btn-primary">
-                                Generate Client Projects Report
+                                Generate Client Projects Report 
                             </button>
                         </a>
                        
                   </form>
 
             </div>
+      <div class="col-md-2">
+          <form action="{{url('/company/projects/report/export')}}" enctype="multipart/form-data" method="post">
+             {{ csrf_field() }}
+            <input type="hidden" name="projectsTimelines" value="{{$data}}">
+            <button class="btn btn-primary" type="submit">Export Clinet Projects Report to Ms Excel</button>
+          </form>
+      </div>2
         <div class="col-sm-8">
 
              

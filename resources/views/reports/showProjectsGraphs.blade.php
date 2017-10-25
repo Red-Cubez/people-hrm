@@ -3,11 +3,13 @@
 
 @section('content')
 
+        
 @if(count($monthlyTimelines) > 0)
     <div class="container">
         <div class="row">
             <div class="col-sm-8">
                     <?php
+                    $data=null;
                     $data=serialize($monthlyTimelines); 
                     //$encoded=htmlentities($data); 
                     ?>
@@ -18,13 +20,21 @@
                     <input type="hidden" name="projectsType" value={{$projectsType}}>
                         <a href="/company/{{$companyId}}/all-projects/report">
                             <button class="btn btn-primary">
-                                Generate Report
+                                Generate Pdf Report
                             </button>
                         </a>
                        
                     </form>
 
             </div>
+            <div class="col-sm-8">
+          <form action="{{url('/company/projects/report/export')}}" enctype="multipart/form-data" method="post">
+             {{ csrf_field() }}
+            <input type="hidden" name="projectsTimelines" value="{{$data}}">
+            <button class="btn btn-primary" type="submit">Export to Ms Excel</button>
+          </form>
+
+    </div> 
         </div>
         <div class="row">
             <div class="col-sm-8">

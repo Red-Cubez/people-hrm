@@ -241,7 +241,8 @@ class ReportsController extends Controller
     {
 
         $projectsTimelines = unserialize($request->projectsTimelines);
-        //dd($projectsTimelines);
+        $projectsTimelines = $this->ReportService->getProjectsTimelinesFrom($projectsTimelines);
+       // dd($projectsTimelines);
        // $items = Employee::all();
 
         \Excel::create('Report', function ($excel) use ($projectsTimelines) {
@@ -256,10 +257,10 @@ class ReportsController extends Controller
     public function pdfview($request, $projectsTimelines)
     {
 
-        return view('reports/pdfview',
-            ['projectsTimelines' => $projectsTimelines]);
+        // return view('reports/pdfview',
+        //     ['projectsTimelines' => $projectsTimelines]);
 
-        $view     = \View::make('reports/pdfview', ['monthlyTimelines' => $monthlyTimelines]);
+        $view     = \View::make('reports/pdfview', ['projectsTimelines' => $projectsTimelines]);
         $contents = (string) $view;
 
 // or

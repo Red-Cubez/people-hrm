@@ -392,7 +392,8 @@ class ReportService implements IReportService
             }
             // elseif (($projectStartDate <= $endDate) && ($startDate <= $projectEndDate) &&
             //     ($projectStartDate <= $projectEndDate) && ($startDate <= $endDate)) {
-            else {
+             elseif ((Max($projectStartDate, $startDate) <= Min($projectEndDate, $endDate))){
+
                 $projectMonthlyTimeLine = new ProjectMonthlyTimeLine();
 
                 if ($projectStartDate >= $currentMonthStartDate) {

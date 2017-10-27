@@ -239,26 +239,29 @@ class ReportsController extends Controller
 
     public function export(Request $request)
     {
-  
+       
+
         $projectsTimelines = unserialize($request->projectsTimelines);
         $projectsTimelines = $this->ReportService->getProjectsTimelinesFrom($projectsTimelines);
-      // dd($projectsTimelines);
-       // $items = Employee::all();
+        
+         // return view('reports/excelView',
+         //    ['projectsTimelines' => $projectsTimelines]);
 
-        \Excel::create('Report', function ($excel) use ($projectsTimelines) {
+        $excelSheet=\Excel::create('Report', function ($excel) use ($projectsTimelines) {
             $excel->sheet('ExportFile', function ($sheet) use ($projectsTimelines) {
-                $sheet->loadView('reports/pdfview', ['projectsTimelines' => $projectsTimelines]);
+                $sheet->loadView('reports/excelView', ['projectsTimelines' => $projectsTimelines]);
             });
-        })->export('xls');
+        });
 
-        //return back();
+        $excelSheet->export('xls');
+
     }
 
     public function pdfview($request, $projectsTimelines)
     {
 
-        return view('reports/pdfview',
-            ['projectsTimelines' => $projectsTimelines]);
+        // return view('reports/pdfview',
+        //     ['projectsTimelines' => $projectsTimelines]);
 
         $view     = \View::make('reports/pdfview', ['projectsTimelines' => $projectsTimelines]);
         $contents = (string) $view;

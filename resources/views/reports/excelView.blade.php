@@ -12,7 +12,24 @@
 <div class="container">
 
 @if (count($projectsTimelines) > 0)
-              
+     {{-- <div class="row">
+            <div class="col-sm-8">
+                @include('reports/revenueGraph')
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-8">
+                @include('reports/monthlyCostGraph')
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-8">
+                @include('reports/monthlyProfitGraph')
+
+            </div>
+        </div>           --}}
         <h3>Projects Report</h3>
             <table style="" >
                 <thead>
@@ -43,31 +60,26 @@
                         <?php 
                         $counter=0;
                         ?>
-
-                        @foreach ($projectMonthlyTimelines as $projectMonthlyTimeline)
-                          
-                                @if($counter==0)
-                               <tr>
+                         <tr>
                                 <td >
                                 {{$projectMonthlyTimelines[0]->projectName}}
                                 </td>
-                               </tr> 
-                            
-                                  @else
-                               
-                                  <td></td>
-                                @endif
-                     
-                                @if($counter>0)
-                                  <tr>
+                                              <td></td>
+                                               <td></td>
+                                              <td></td>
+                                               <td></td>
+                         </tr> 
+                        @foreach ($projectMonthlyTimelines as $projectMonthlyTimeline)
+ 
+                                <tr>
                                     <td>
                                     </td>
                                     <td>{{$projectMonthlyTimeline->monthName}}</td>
                                     <td>{{$projectMonthlyTimeline->totalCost}}</td>
-                                  </tr>
-                                @endif
+                                </tr>
+             
                                 
-                                @if(($counter>0) && (count($projectMonthlyTimeline->resourcesMonthlyDetails) > 0))
+                                @if(count($projectMonthlyTimeline->resourcesMonthlyDetails) > 0)
 
                                                                              
                                         @foreach($projectMonthlyTimeline->resourcesMonthlyDetails as $key=>$resourceDetail)

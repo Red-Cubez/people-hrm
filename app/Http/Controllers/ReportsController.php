@@ -241,8 +241,8 @@ class ReportsController extends Controller
     {
        
 
-        $projectsTimelines = unserialize($request->projectsTimelines);
-        $projectsTimelines = $this->ReportService->getProjectsTimelinesFrom($projectsTimelines);
+        $monthlyTimelines = unserialize($request->projectsTimelines);
+        $projectsTimelines = $this->ReportService->getProjectsTimelinesFrom($monthlyTimelines);
         
          // return view('reports/excelView',
          //    ['projectsTimelines' => $projectsTimelines]);

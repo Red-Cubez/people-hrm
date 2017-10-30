@@ -3,9 +3,10 @@
 <style>
 
 th, td {
-  border: 1px solid #ddd;
+    border: 1px solid #ddd;
     text-align: left;
     padding: 8px;
+    
 }
 
 tr:nth-child(even){background-color: #f2f2f2}
@@ -18,18 +19,11 @@ tr:nth-child(even){background-color: #f2f2f2}
 
 @if (count($projectsTimelines) > 0)
                
-   {{-- <div class="col-md-2">
-          <form action="{{url('/company/projects/report/export')}}" enctype="multipart/form-data" method="post">
-             {{ csrf_field() }}
-            <input type="hidden" name="projectsTimelines" value="{{$data}}">
-            <button class="btn btn-success" type="submit">Export</button>
-          </form>
 
-    </div>       --}} 
         <h3>Projects Report</h3>
      
          
-            <table style="" >
+            <table style="border-collapse: collapse;" >
               
                 <thead>
                  <tr>  
@@ -62,43 +56,64 @@ tr:nth-child(even){background-color: #f2f2f2}
                             <tr>
                                 <td>@if($counter==0){{++$key}}@endif</td>
                                 <td>@if($counter==0){{$projectMonthlyTimelines[0]->projectName}}@endif</td>
-
+                                @if($counter>0)
                                 <td>{{$projectMonthlyTimeline->monthName}}</td>
                                 <td>{{$projectMonthlyTimeline->totalCost}}</td>
-                                <td>
-                                  @if(count($projectMonthlyTimeline->resourcesMonthlyDetails))
-                        
-                                          @foreach($projectMonthlyTimeline->resourcesMonthlyDetails as $resourceDetail)
+                                    <td>
+                                      @if(count($projectMonthlyTimeline->resourcesMonthlyDetails))
+                                        @for($count=0; $count<=count($projectMonthlyTimeline->resourcesMonthlyDetails);$count++)
+                                     
+                                               
+                                        @endfor     
 
-                                             <table>
-                                              
-                                            <tr>
+                                              @foreach($projectMonthlyTimeline->resourcesMonthlyDetails as $resourceDetail)
+
+                                                 <table>
+                                                  
+                                                <tr>
+                                               
+                                                  <td style="border: none;">{{$resourceDetail->resourceName}}</td>   
+                                                                                                
+                                                </tr> 
+                                                  </table> 
+                                                  
+                                                @endforeach  
+                                                                                
+                                       @endif  
+                                    </td>   
+                                    <td>
+                                      @if(count($projectMonthlyTimeline->resourcesMonthlyDetails))
+                                             
+                                       @for($count=0; $count<=count($projectMonthlyTimeline->resourcesMonthlyDetails);$count++)
                                            
-                                              <td>{{$resourceDetail->resourceName}}</td>   
-                                                                                            
-                                            </tr> 
-                                              </table> 
-                                              
-                                            @endforeach  
-                                                                            
-                                   @endif  
-                                </td>   
-                                <td>
-                                  @if(count($projectMonthlyTimeline->resourcesMonthlyDetails))
-                                                                                                               
-                                            @foreach($projectMonthlyTimeline->resourcesMonthlyDetails as $resourceDetail)
-                                             <table>
-                                            <tr>
-                                                                                              
-                                               <td>{{$resourceDetail->resourceCost}}</td>
+                                               
+                                        @endfor
+                                             
+                                              @foreach($projectMonthlyTimeline->resourcesMonthlyDetails as $resourceDetail)
+                                               <table >
+                                              <tr >
+                                                                                                
+                                                 <td style="border: none;">{{$resourceDetail->resourceCost}}</td>
 
-                                              
-                                            </tr> 
-                                           </table> 
-                                            @endforeach  
-                                                                                 
-                                   @endif  
-                                </td>   
+                                                
+                                              </tr> 
+                                             </table> 
+                                              @endforeach  
+                                                                                   
+                                     @endif  
+                                  </td>
+                                @else 
+                                <td>
+                                </td>  
+                                <td>
+                                </td>  
+                                <td>
+                                </td>  
+                                <td>
+                                </td>  
+                                @endif
+                               
+
                             </tr>
                            
                             <?php 

@@ -79,7 +79,16 @@ class ProjectGrapher implements IProjectGrapher
 
             list($projectResourceStartDate, $projectResourceEndDate) = $this->getStartAndEndDateFrom($projectResource);
 
-            if ($projectResourceStartDate >= $projectStartDate && $projectResourceEndDate <= $projectEndDate) {
+            if (Max($projectResourceStartDate, $projectStartDate) <= Min($projectResourceEndDate, $projectEndDate))  {
+                
+                if($projectResourceStartDate<=$projectStartDate)
+                {
+                    $projectResourceStartDate=$projectStartDate;
+                }
+                 if($projectResourceEndDate>=$projectEndDate)
+                {
+                    $projectResourceEndDate=$projectEndDate;
+                }
 
                 $difference = $this->calculateDiffernceBetweenTwoDates($projectResourceStartDate, $projectResourceEndDate);
 

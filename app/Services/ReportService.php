@@ -447,7 +447,7 @@ class ReportService implements IReportService
 
             if (count($resources) > 0) {
 
-                $totalCost = $this->getProjectTotalCost($project, $resources);
+                $totalCost = $this->getResourcesTotalCostForProject($project, $resources);
 
             }
 
@@ -465,16 +465,16 @@ class ReportService implements IReportService
         return array($monthlyCostSum, $revenue, $profit, $resourcesMonthlyDetails);
 
     }
-    public function getProjectTotalCost($project, $resources)
-    {
-        $costSum=0;
-        // foreach ($resources as $resource) {
+    // public function getProjectTotalCost($project, $resources)
+    // {
+    //     $costSum=0;
+    //     // foreach ($resources as $resource) {
             
-        // }
-        $totalCost=$this->getResourcesTotalCostForProject($project,$resources);
-       return $totalCost;
+    //     // }
+    //     $totalCost=$this->getResourcesTotalCostForProject($project,$resources);
+    //    return $totalCost;
 
-    }
+    // }
     /////////////////// to be checked
     public function getResourcesTotalCostForProject($project, $projectResources)
     {
@@ -502,10 +502,10 @@ class ReportService implements IReportService
 
                 }
                 $dateDiff = $this->DateTimeService->calculateDifferenceBetweenTwoDates($projectResourceStartDate, $projectResourceEndDate);
-
+               // $noOfMonths=$this->DateTimeService->calculateMonthsBetweenTwoDates($projectResourceStartDate, $projectResourceEndDate);
                 $difference = $dateDiff->days;
 
-                $weeksWorked = ($difference + 1) / 7;
+                $weeksWorked = ($difference+1) / 7;
 
                 $cost      = $weeksWorked * ($projectResource->hourlyBillingRate) * ($projectResource->hoursPerWeek);
                 $totalCost = $totalCost + $cost;
@@ -520,6 +520,7 @@ class ReportService implements IReportService
 
         return $totalCost;
     }
+
     public function getProjectCurrentMonthStartAndEndDate($projectStartDate, $projectEndDate, $currentMonthStartDate, $currentMonthEndDate, $startDate, $endDate)
     {
 

@@ -52,13 +52,21 @@ tr:nth-child(even){background-color: #f2f2f2}
                         <?php 
                         $counter=0;
                         ?>
-                        @foreach ($projectMonthlyTimelines as $projectMonthlyTimeline)
-                            <tr>
+                         <tr>
                                 <td>@if($counter==0){{++$key}}@endif</td>
                                 <td>@if($counter==0){{$projectMonthlyTimelines[0]->projectName}}@endif</td>
-                                @if($counter>0)
-                                <td>{{$projectMonthlyTimeline->monthName}}</td>
-                                <td>{{$projectMonthlyTimeline->totalCost}}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                         </tr>       
+                        @foreach ($projectMonthlyTimelines as $projectMonthlyTimeline)
+                            <tr>
+                              
+                                  <td></td>
+                                  <td></td>
+                                  <td>{{$projectMonthlyTimeline->monthName}}</td>
+                                  <td>{{$projectMonthlyTimeline->totalCost}}</td>
                                     <td>
                                       @if(count($projectMonthlyTimeline->resourcesMonthlyDetails))
                                         @for($count=0; $count<=count($projectMonthlyTimeline->resourcesMonthlyDetails);$count++)
@@ -83,12 +91,7 @@ tr:nth-child(even){background-color: #f2f2f2}
                                     </td>   
                                     <td>
                                       @if(count($projectMonthlyTimeline->resourcesMonthlyDetails))
-                                             
-                                       @for($count=0; $count<=count($projectMonthlyTimeline->resourcesMonthlyDetails);$count++)
-                                           
-                                               
-                                        @endfor
-                                             
+      
                                               @foreach($projectMonthlyTimeline->resourcesMonthlyDetails as $resourceDetail)
                                                <table >
                                               <tr >
@@ -102,24 +105,11 @@ tr:nth-child(even){background-color: #f2f2f2}
                                                                                    
                                      @endif  
                                   </td>
-                                @else 
-                                <td>
-                                </td>  
-                                <td>
-                                </td>  
-                                <td>
-                                </td>  
-                                <td>
-                                </td>  
-                                @endif
+                               
                                
 
                             </tr>
-                           
-                            <?php 
-                            $counter++;
-                            ?>        
-                                            
+                                                 
                         @endforeach
                     
                     @endforeach

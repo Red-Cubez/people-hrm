@@ -16,6 +16,8 @@ interface IDateTimeService
 
     public function validateStartAndEndDates($startDate, $endDate);
 
+    public function areDatesInLieInSameMonthAndYear($firstDate,$secondDate);
+
     // public function getfirstAndLastDateFromGivenMonthAndYear($request);
 
 }

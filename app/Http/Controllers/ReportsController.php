@@ -10,6 +10,7 @@ use People\Services\Interfaces\IDateTimeService;
 use People\Services\Interfaces\IReportService;
 use People\Services\Interfaces\IUserAuthenticationService;
 use People\Services\StandardPermissions;
+use People\Models\Employee;
 
 class ReportsController extends Controller
 {
@@ -31,11 +32,11 @@ class ReportsController extends Controller
             '|' . StandardPermissions::showAllProjectsReport .
             '|' . StandardPermissions::reportOptions, ['only' => ['showOptions']]);
 
-        $this->middleware('permission:' . StandardPermissions::showInternalProjectsReport, ['only' => ['showInternalProjectsReport']]);
+        $this->middleware('permission:' . StandardPermissions::showInternalProjectsReport, ['only' => ['showInternalProjectsReport', 'generateReport']]);
 
-        $this->middleware('permission:' . StandardPermissions::showClientProjectsReport, ['only' => ['showClientProjectsReport']]);
+        $this->middleware('permission:' . StandardPermissions::showClientProjectsReport, ['only' => ['showClientProjectsReport', 'generateReport']]);
 
-        $this->middleware('permission:' . StandardPermissions::showAllProjectsReport, ['only' => ['showAllProjectsReport']]);
+        $this->middleware('permission:' . StandardPermissions::showAllProjectsReport, ['only' => ['showAllProjectsReport', 'generateReport']]);
 
         $this->ReportService             = $reportService;
         $this->UserAuthenticationService = $userAuthenticationService;
@@ -98,8 +99,6 @@ class ReportsController extends Controller
 
             $internalProjectsmonthlyTimelines = $this->ReportService->setUpMontlhyTimelines($internalProjectsStartAndEndDateTimelinesWithCostProfitAndNetTotal);
 
-            //client projects
-
             list($startDate, $endDate)                                       = $this->DateTimeService->getfirstAndLastDateOfGivenDate($request->startDate, $request->endDate);
             $companyClientProjects                                           = $this->ClientProjectService->getAllClientProjectsOfCompany($companyId);
             $clientProjectsStartAndEndDateTimelinesWithCostProfitAndNetTotal =
@@ -116,6 +115,7 @@ class ReportsController extends Controller
                     'clientProjectsmonthlyTimelines'   => $clientProjectsmonthlyTimelines,
                     'currencyNameAndSymbol'            => $currencyNameAndSymbol,
                     'isAllProjectsGraphs'              => true,
+                    'companyId'                        => $companyId,
 
                 ]);
         } else {
@@ -138,17 +138,14 @@ class ReportsController extends Controller
         if (!$this->DateTimeService->validateStartAndEndDates($startDate, $endDate)) {
             $errosMessage = "End date can not be a date before start date";
             return back()->withErrors($errosMessage);
-
         }
-
-        // $isManager = $this->UserAuthenticationService->isManager();
-        // $isAdmin   = $this->UserAuthenticationService->isAdmin();
 
         $isRequestedCompanyBelongsToEmployee = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($companyId);
 
         if ($isRequestedCompanyBelongsToEmployee) {
 
-            $companyInternalProjects                           = $this->CompanyProjectService->getAllInternalProjectsOfCompany($companyId);
+            $companyInternalProjects = $this->CompanyProjectService->getAllInternalProjectsOfCompany($companyId);
+
             $startAndEndDateTimelinesWithCostProfitAndNetTotal =
             $this->ReportService->startAndEndDateTimelinesWithCostProfitAndNetTotal($startDate, $endDate, $companyInternalProjects);
 
@@ -162,6 +159,8 @@ class ReportsController extends Controller
 
                     'monthlyTimelines'      => $monthlyTimelines,
                     'currencyNameAndSymbol' => $currencyNameAndSymbol,
+                    'companyId'             => $companyId,
+                    'projectsType'          => "internalProjects",
 
                 ]);
         } else {
@@ -185,15 +184,12 @@ class ReportsController extends Controller
 
         }
 
-        // $isManager       = $this->UserAuthenticationService->isManager();
-        // $isAdmin         = $this->UserAuthenticationService->isAdmin();
-        // $isClientManager = $this->UserAuthenticationService->isClientManager();
-
         $isRequestedCompanyBelongsToEmployee = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($companyId);
 
         if ($isRequestedCompanyBelongsToEmployee) {
 
-            $companyClientProjects                             = $this->ClientProjectService->getAllClientProjectsOfCompany($companyId);
+            $companyClientProjects = $this->ClientProjectService->getAllClientProjectsOfCompany($companyId);
+
             $startAndEndDateTimelinesWithCostProfitAndNetTotal =
             $this->ReportService->startAndEndDateTimelinesWithCostProfitAndNetTotal($startDate, $endDate, $companyClientProjects);
 
@@ -207,11 +203,92 @@ class ReportsController extends Controller
 
                     'monthlyTimelines'      => $monthlyTimelines,
                     'currencyNameAndSymbol' => $currencyNameAndSymbol,
+                    'companyId'             => $companyId,
+                    'projectsType'          => "clientProjects",
 
                 ]);
         } else {
             return $this->UserAuthenticationService->redirectToErrorMessageView(null);
         }
+    }
+    public function generateReport(Request $request)
+    {
+
+        $monthlyTimelines = unserialize($request->monthlyTimelines);
+
+        $projectsTimelines = $this->ReportService->getProjectsTimelinesFrom($monthlyTimelines);
+
+        return $this->pdfview($request, $projectsTimelines,$monthlyTimelines);
+
+    }
+
+    public function export(Request $request)
+    {
+       
+
+        $monthlyTimelines = unserialize($request->projectsTimelines);
+        $projectsTimelines = $this->ReportService->getProjectsTimelinesFrom($monthlyTimelines);
+        //to test excel view and graphs view
+         // return view('reports/excelView',
+         //    [
+         //        'projectsTimelines' => $projectsTimelines,
+         //        'monthlyTimelines'=>$monthlyTimelines,
+         //    ]);
+          // return view('reports/graphs',
+          //   [
+        
+          //       'monthlyTimelines'=>$monthlyTimelines,
+
+          //   ]);
+
+        $excelSheet=\Excel::create('Report', function ($excel) use ($projectsTimelines,$monthlyTimelines) {
+            $excel->sheet('ExportFile', function ($sheet) use ($projectsTimelines,$monthlyTimelines) {
+                $sheet->loadView('reports/excelView',
+                 [
+                    'projectsTimelines' => $projectsTimelines,
+                    'monthlyTimelines'=>$monthlyTimelines,
+                ]);
+            });
+        });
+
+        $excelSheet->export('xls');
+
+    }
+
+    public function pdfview($request, $projectsTimelines,$monthlyTimelines)
+    {
+        //to test pdf view and graphs view
+        // return view('reports/pdfview',
+        //     [
+        //         'projectsTimelines' => $projectsTimelines,
+        //     
+
+        //     ]);
+         // return view('reports/graphs',
+        //     [
+        
+        //         'monthlyTimelines'=>$monthlyTimelines,
+
+        //     ]);
+
+        $pdfView     = \View::make('reports/pdfview', 
+            [
+                'projectsTimelines' => $projectsTimelines,
+                'monthlyTimelines'=>$monthlyTimelines,
+              
+            ]);
+        $pdfViewContents = (string) $pdfView;
+
+        // or
+        
+        // $pdfViewContents = $view->render();
+
+        $pdf = \App::make('dompdf.wrapper');
+
+        $pdf->loadHtml($pdfViewContents);
+
+        return $pdf->stream();
+
     }
 
 }

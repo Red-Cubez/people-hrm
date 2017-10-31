@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use People\Models\Client;
 use People\Models\Employee;
 use People\Services\Interfaces\IUserAuthenticationService;
+use People\Services\StandardPermissions;
 
 //use Zizaco\Entrust\Entrust;
 class UserAuthenticationService implements IUserAuthenticationService
@@ -55,13 +56,13 @@ class UserAuthenticationService implements IUserAuthenticationService
         $canViewOthersProfile = false;
         $logedInUser          = $this->getCurrrentLogedInUserDetails();
 
-        if ($logedInUser->can('view-ownProfile')) {
+        if ($logedInUser->can(StandardPermissions::viewOwnProfile)) {
             if ($logedInUser->employee->id == $requestId) {
                 $canViewOwnProfile = true;
             }
 
         }
-        if ($logedInUser->can('view-othersProfile')) {
+        if ($logedInUser->can(StandardPermissions::viewOthersProfile)) {
             $canViewOthersProfile = true;
 
         }

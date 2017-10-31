@@ -44,3 +44,11 @@ form > h4 {
     margin: 0 0 10px 0;
     border-bottom: 2px solid green;
 }
+
+th, td {
+  border: 1px solid #ddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}

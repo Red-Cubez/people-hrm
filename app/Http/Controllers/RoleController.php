@@ -18,7 +18,7 @@ class RoleController extends Controller
     {
 
         $this->middleware('auth');
-
+        //use this permission for role crud
         //$this->middleware('permission:'.StandardPermissions::crudRole);
 
         $this->RoleService               = $roleService;

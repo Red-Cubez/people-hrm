@@ -99,8 +99,6 @@ class ReportsController extends Controller
 
             $internalProjectsmonthlyTimelines = $this->ReportService->setUpMontlhyTimelines($internalProjectsStartAndEndDateTimelinesWithCostProfitAndNetTotal);
 
-            //client projects
-
             list($startDate, $endDate)                                       = $this->DateTimeService->getfirstAndLastDateOfGivenDate($request->startDate, $request->endDate);
             $companyClientProjects                                           = $this->ClientProjectService->getAllClientProjectsOfCompany($companyId);
             $clientProjectsStartAndEndDateTimelinesWithCostProfitAndNetTotal =
@@ -230,7 +228,7 @@ class ReportsController extends Controller
 
         $monthlyTimelines = unserialize($request->projectsTimelines);
         $projectsTimelines = $this->ReportService->getProjectsTimelinesFrom($monthlyTimelines);
-        
+        //to test excel view and graphs view
          // return view('reports/excelView',
          //    [
          //        'projectsTimelines' => $projectsTimelines,
@@ -259,7 +257,7 @@ class ReportsController extends Controller
 
     public function pdfview($request, $projectsTimelines,$monthlyTimelines)
     {
-
+        //to test pdf view and graphs view
         // return view('reports/pdfview',
         //     [
         //         'projectsTimelines' => $projectsTimelines,
@@ -281,23 +279,16 @@ class ReportsController extends Controller
             ]);
         $pdfViewContents = (string) $pdfView;
 
-// or
-        // dd($contents);
-        // $contents = $view->render();
+        // or
+        
+        // $pdfViewContents = $view->render();
 
         $pdf = \App::make('dompdf.wrapper');
 
         $pdf->loadHtml($pdfViewContents);
+
         return $pdf->stream();
 
-        // $pdf = PDF::loadView('reports/pdfview');
-        // return $pdf->download('pdfview.pdf');
-
-        //return view('reports/pdfview');
-
-        //     return view('reports/pdfview',
-        //         ['monthlyTimelines'=>$monthlyTimelines
-        // ]);
     }
 
 }

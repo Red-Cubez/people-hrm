@@ -3,8 +3,6 @@
 
 {{-- <link rel="stylesheet" href="{{ asset('css/index.css') }}" type="text/css"> --}}
 <style>
-
-
 </style>
 </head>
 <body>
@@ -12,24 +10,7 @@
 <div class="container">
 
 @if (count($projectsTimelines) > 0)
-     {{-- <div class="row">
-            <div class="col-sm-8">
-                @include('reports/revenueGraph')
-
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-8">
-                @include('reports/monthlyCostGraph')
-
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-8">
-                @include('reports/monthlyProfitGraph')
-
-            </div>
-        </div>           --}}
+    
         <h3>Projects Report</h3>
             <table style="" >
                 <thead>
@@ -99,8 +80,7 @@
                                         @endforeach
                                  
                                
-                                @endif  
-                   
+                                @endif              
 
                             <?php 
                             $counter++;

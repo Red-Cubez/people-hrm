@@ -1,50 +1,71 @@
 
 @permission(StandardPermissions::createEditEmployee)
-
+<div class="row ">
+        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
 <div id="name" class="form-group">
-    <label for="name" class="col-sm-3 control-label">First Name</label>
-    <div class="col-sm-6">
+    <label for="name"  >First Name</label>
+    
         <input type="text" name="firstName" id="firstName" class="form-control"
                @if(isset($editEmployeeModel->employeeProfile->firstName)) value="{{ $editEmployeeModel->employeeProfile->firstName }}"
                @else placeholder="First Name" @endif required>
-    </div>
+    
 </div>
+</div>
+</div>
+<div class="row">
+        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
 <div class="form-group">
-    <label for="name" class="col-sm-3 control-label">Last Name</label>
-    <div class="col-sm-6">
+    <label for="name"  >Last Name</label>
+     
         <input type="text" name="lastName" id="lastName" class="form-control"
                @if(isset($editEmployeeModel->employeeProfile->lastName)) value="{{ $editEmployeeModel->employeeProfile->lastName }}"
                @else placeholder="Last Name" @endif  required>
-    </div>
+     
 </div>
+</div>
+</div>
+<div class="row ">
+        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
 <div class="form-group">
-    <label for="name" class="col-sm-3 control-label">Date of Birth</label>
-    <div class="col-sm-6">
+    <label for="name"  >Date of Birth</label>
+     
         <input type="date" name="birthDate" id="birthDate" class="form-control"
                @if(isset($editEmployeeModel->employeeProfile->birthDate)) value="{{ $editEmployeeModel->employeeProfile->birthDate }}"
                @else placeholder="Hire Date" @endif required>
-    </div>
+   
 </div>
+</div>
+</div>
+<div class="row ">
+        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
 <div class="form-group">
-    <label for="name" class="col-sm-3 control-label">Hire Date</label>
-    <div class="col-sm-6">
+    <label for="name"  >Hire Date</label>
+   
         <input type="date" name="hireDate" id="hireDate" class="form-control"
                @if(isset($editEmployeeModel->employeeProfile->hireDate)) value="{{ $editEmployeeModel->employeeProfile->hireDate }}"
                @else placeholder="Hire Date" @endif required>
-    </div>
+     
 </div>
+</div>
+</div>
+<div class="row ">
+        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
 <div class="form-group">
-    <label for="name" class="col-sm-3 control-label">Termination Date</label>
-    <div class="col-sm-6">
+    <label for="name"  >Termination Date</label>
+    
         <input type="date" name="terminationDate" id="terminationDate" class="form-control"
                @if(isset($editEmployeeModel->employeeProfile->terminationDate)) value="{{ $editEmployeeModel->employeeProfile->terminationDate }}"
                @else placeholder="Termination Date" @endif>
-    </div>
+    
 </div>
+</div>
+</div>
+<div class="row ">
+        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
 <div class="form-group">
-    <label for="Select Job Title" class="col-sm-3 control-label">Job Title</label>
-    <div class="col-sm-6">
-        <select class="col-sm-3 " name="jobTitleId" id="jobTitleId" required>
+    <label for="Select Job Title"  >Job Title</label>
+     
+        <select   name="jobTitleId" id="jobTitleId" required class="form-control">
             <option>
                 @if(!isset($editEmployeeModel->employeeProfile->jobTitle))
 
@@ -67,40 +88,55 @@
             @endforeach
         </select>
 
-    </div>
+   
 </div>
+</div>
+</div>
+<div class="row ">
+        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
 <div class="form-group">
-    <label for="name" class="col-sm-3 control-label">Annual Salary</label>
-    <div class="col-sm-6">
+    <label for="name"  >Annual Salary</label>
+     
         <input type="number" name="annualSalary" id="employee-annualSalary" class="form-control"
                @if(isset($employeeModel->employeeProfile->annualSalary)) value="{{ $employeeModel->employeeProfile->annualSalary }}"
                @else placeholder="Annual Salary" @endif>
-    </div>
+   
 </div>
+</div>
+</div>
+<div class="row ">
+        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
 
 <div class="form-group">
-    <label for="name" class="col-sm-3 control-label">Hourly Rate</label>
-    <div class="col-sm-6">
+    <label for="name"  >Hourly Rate</label>
+    
         <input type="number" name="hourlyRate" id="employee-hourlyRate" class="form-control"
                @if(isset($editEmployeeModel->employeeProfile->hourlyRate)) value="{{ $editEmployeeModel->employeeProfile->hourlyRate }}"
                @else placeholder="Hourly Rate" @endif>
-    </div>
+   
 </div>
+</div>
+</div>
+<div class="row ">
+        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
 <div class="form-group">
-    <label for="Over time rate" class="col-sm-3 control-label">Over Time Rate</label>
-    <div class="col-sm-6">
+    <label for="Over time rate"  >Over Time Rate</label>
+    
         <input type="number" step="any" name="overTimeRate" id="employee-overTimeRate" class="form-control"
                @if(isset($editEmployeeModel->employeeProfile->overTime)) value="{{ $editEmployeeModel->employeeProfile->overTimeRate }}"
                @else placeholder="Over Time Rate" @endif>
-    </div>
+    
+</div>
+</div>
 </div>
 
 @include('address/addressForm')
 
-
+<div class="row ">
+        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
 <div class="form-group">
-    <label for="name" class="col-sm-3 control-label">Select Department</label>
-    <div class="col-sm-6">
+    <label for="name"  >Select Department</label>
+     
         @if (count($departments) > 0)
             <select class="form-control" name="departmentList[]" multiple="multiple" id="departmentList">
                 @foreach ($departments as $department)
@@ -109,15 +145,21 @@
                             @if(isset($editEmployeeModel->employeeDepartmentIds) && in_array($department->id, $editEmployeeModel->employeeDepartmentIds)) selected="selected" @endif >{{ $department->name}} </option>
                 @endforeach
             </select>
-    </div>
+    
     @endif
 </div>
+</div>
+</div>
+<div class="row ">
+        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
 <div class="form-group">
-    <div class="col-sm-offset-3 col-sm-6">
+    
         <button type="submit" class="btn btn-default">
             <i class="fa fa-plus"></i> {{isset($editEmployeeModel)? "Update": "Add"}} Employee
         </button>
-    </div>
+    
+</div>
+</div>
 </div>
 @endpermission
 <script type="text/javascript">

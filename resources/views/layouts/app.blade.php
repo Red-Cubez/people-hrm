@@ -13,7 +13,8 @@
 <!-- Styles -->
 <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('css/index.css') }}" type="text/css">
-<!-- Scripts -->
+<link rel="stylesheet" href="{{ asset('css/websiteStyle.css') }}" type="text/css">
+
 <script>
     window.Laravel = {!! json_encode([
             'csrfToken' => csrf_token(),
@@ -27,7 +28,6 @@
 <script src="{{ asset('js/confirmationBox/bootstrap-confirmation.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js" ></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
-
 @yield('page-scripts')
 </head>
 <body>
@@ -92,6 +92,8 @@
     </nav>
     @yield('content')
 </div>
+<!-- Scripts -->
+
 <script type="text/javascript" src="{{ URL::asset('js/index.js')}}"></script>
 </body>
 </html>

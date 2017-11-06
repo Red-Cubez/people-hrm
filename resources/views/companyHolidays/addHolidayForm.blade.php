@@ -1,26 +1,38 @@
-
+<div class="row ">
+        <div class="col-xs-12  col-md-6 col-md-offset-3 col-sm-7 ">
 <div class="form-group">
-    <label for="companyproject" class="col-sm-3 control-label">Holiday Name</label>
-    <div class="col-sm-6">
+    <label for="companyproject"  >Holiday Name</label>
+    
         <input type="text" name="name" id="name" class="form-control" @if(isset($holiday->name)) value="{{$holiday->name}}"  @else placeholder="Enter Name" @endif required>
-    </div>
+    
 </div>
+</div>
+</div>
+<div class="row ">
+        <div class="col-xs-12  col-md-6 col-md-offset-3 col-sm-7 ">
 <div class="form-group">
-    <label for="companyproject" class="col-sm-3 control-label">Start Date</label>
+    <label for="companyproject" >Start Date</label>
 
-    <div class="col-sm-6">
+    
         <input type="date" name="startDate" id="startDate" class="form-control"
                @if(isset($holiday->startDate)) value="{{$holiday->startDate}}" @else placeholder="Enter expected Start Date" @endif required >
-    </div>
+     
 </div>
+</div>
+</div>
+<div class="row ">
+        <div class="col-xs-12  col-md-6 col-md-offset-3 col-sm-7 ">
 <div id="endDateDiv" class="form-group">
-    <label for="companyproject" class="col-sm-3 control-label">End Date</label>
+    <label for="companyproject"  >End Date</label>
 
-    <div class="col-sm-6">
+    
         <input type="date" name="endDate" id="endDate" class="form-control" @if(isset($holiday->endDate)) value="{{$holiday->endDate}}" @else placeholder="Enter Expected End Date" @endif >
-    </div>
+   
 </div>
-
+</div>
+</div>
+<div class="row ">
+        <div class="col-xs-12  col-md-6 col-md-offset-3 col-sm-7 ">
 <div class="form-group">
     <div class="col-sm-offset-3 col-sm-6">
         <button type="button" id="save" class="btn btn-default" onclick="formSubmit();">
@@ -29,6 +41,8 @@
         </button>
 
     </div>
+</div>
+</div>
 </div>
 
 

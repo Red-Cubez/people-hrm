@@ -270,13 +270,14 @@ class ReportsController extends Controller
         //         'monthlyTimelines'=>$monthlyTimelines,
 
         //     ]);
-
+// dd($projectsTimelines);
         $pdfView     = \View::make('reports/pdfview', 
             [
                 'projectsTimelines' => $projectsTimelines,
                 'monthlyTimelines'=>$monthlyTimelines,
               
             ]);
+       
         $pdfViewContents = (string) $pdfView;
 
         // or

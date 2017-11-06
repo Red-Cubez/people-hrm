@@ -237,7 +237,7 @@ class EmployeeService implements IEmployeeService
 
         foreach ($companyProjectResources as $companyProjectResource) {
 
-            list($startDate,$endDate)=$this->ClientProjectResourceService->getResourceStartAndEndDate($clientProjectResource);
+            list($startDate,$endDate)=$this->ClientProjectResourceService->getResourceStartAndEndDate($companyProjectResource);
 
             $projectModel = new EmployeeProjectModel();
 

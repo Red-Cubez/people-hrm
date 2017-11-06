@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 <div>
-    <div class="panel-body col-sm-4" >
+    <div class="panel-body col-sm-12" >
         <!-- Display Validation Errors -->
         @include('common.errors')
         <!-- New company Project Form -->

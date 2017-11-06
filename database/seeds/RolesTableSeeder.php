@@ -15,13 +15,13 @@ class RolesTableSeeder extends Seeder
     {
         $roles = [
         	 [
-        	 'id'=>'1',
+        	 // 'id'=>1
             'name' => 'super-admin',
             'display_name' => 'Super Admin',
             'description'  => 'This is super Admin',
           ],
           [
-          	'id'=>'2',
+          	// 'id'=>2,
             'name' => 'admin',
             'display_name' => 'Admin',
             'description'  => 'This is Admin',

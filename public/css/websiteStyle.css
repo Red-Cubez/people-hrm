@@ -1,0 +1,165 @@
+ul {
+    list-style: none;
+}
+
+.figure {
+    margin: 0px;
+}
+
+img {
+    max-width: 100%;
+}
+
+a, a:hover, a:active {
+    outline: 0px !important;
+}
+
+.clear {
+    clear: both;
+    display: block;
+    overflow: hidden;
+    visibility: hidden;
+    width: 0;
+    height: 0;
+}
+
+.clearfix:before,
+.clearfix:after {
+    content: '\0020';
+    display: block;
+    overflow: hidden;
+    visibility: hidden;
+    width: 0;
+    height: 0;
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+/* Styles
+---------------------------------*/
+body {
+
+    font-family: 'Open Sans',sans-serif;
+    font-size:14px;
+    line-height: 24px;
+    background-color: #eafaea;
+
+}
+.body-background{
+    background-color: #eafaea;
+}
+.row-content{
+    margin: 0 auto;
+    padding: 50px 0px 50px 0px;
+    border-bottom: 1px solid #656665;
+    min-height: 400px;
+}
+.row-content200{
+    margin: 0 auto;
+    padding: 50px 0px 50px 0px;
+    border-bottom: 1px solid #656665;
+    min-height: 200px;
+}
+.row-content100{
+    margin: 0 auto;
+    padding: 50px 0px 50px 0px;
+    min-height: 100px;
+}
+p{
+    margin: 0 0 15px;
+}
+h1,h2,h3,h4{
+    font-family: 'Roboto Slab', serif;
+    font-weight: 700;
+    color:#282428;
+    margin: 0;
+}
+h1{
+    font-size: 30px;
+    text-transform: uppercase;
+}
+h2{
+    font-size: 26px;
+}
+h3 {
+    font-size: 22px;
+}
+
+h4 {
+    font-size: 18px;
+}
+
+h5 {
+    font-size: 14px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+    margin: 0;
+    color: #282428 ;
+    line-height: 30px;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+}
+
+a,
+a:focus,
+a:active {
+    outline: none!important;
+}
+
+img {
+    max-width: 100%;
+}
+/*button*/
+.button,
+.button:hover {
+    padding: 0;
+    background-color: #49c32c ;
+    text-transform: uppercase;
+    color: #fff;
+    border-color: #49c32c ;
+    height: 42px;
+    line-height: 42px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+}
+.button10{
+  border: none;
+    padding: 0 10px;  
+}
+.button10:hover{
+    border: none;
+    padding: 0 10px; 
+}
+.button40{
+   border: none;
+    padding: 0 40px; 
+}
+.button40:hover{
+   border: none;
+    padding: 0 40px; 
+}
+.button1520{
+    border: none;
+    padding: 15px 20px;
+}
+.button1520:hover{
+    border: none;
+}
+.button20{
+     /*border: none;*/
+    /*padding: 15px 20px; */
+    background-color: transparent;
+    border: none;
+}
+.button20:hover{
+     border: none;
+}
+.button:hover {
+    background-color: rgba(73, 195, 44, .95);
+}

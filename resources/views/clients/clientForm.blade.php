@@ -1,6 +1,6 @@
 @permission(StandardPermissions::createEditClient)
 <div class="row ">
-        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+        <div class="col-xs-12 col-sm-7   ">
 <div class="form-group">
     <label for="name"  >Name</label>
 
@@ -13,7 +13,7 @@
 </div>
 </div>
 <div class="row ">
-        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+        <div class="col-xs-12 col-sm-7   ">
 <div class="form-group">
     <label for="contactPerson"  >Contact Person</label>
 
@@ -26,7 +26,7 @@
 </div>
 </div>
 <div class="row ">
-        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+        <div class="col-xs-12 col-sm-7   ">
 <div class="form-group">
     <label for="contactNumber"  >Contact Number</label>
 
@@ -39,7 +39,7 @@
 </div>
 </div>
 <div class="row ">
-        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+        <div class="col-xs-12 col-sm-7   ">
 <div class="form-group">
     <label for="contactEmail"  >Contact Email</label>
 
@@ -53,14 +53,16 @@
 </div>
 
 @include('address/addressForm')
-<div class="row ">
-        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+<div class="row">
+        <div class="row-content100">
+ <div class="col-xs-12 col-sm-3 col-sm-offset-4">
 <div class="form-group">
     
-        <button type="submit" class="btn btn-default">
+        <button type="submit" class="button button40">
             <i class="fa fa-plus"></i> {{isset($client)? "Update": "Add"}} client
         </button>
     
+</div>
 </div>
 </div>
 </div>

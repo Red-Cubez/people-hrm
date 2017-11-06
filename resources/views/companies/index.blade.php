@@ -9,7 +9,8 @@
 
     <!-- Current Companies -->
     @if(count($companies)>0)
-        <div class="panel panel-default">
+    <section>
+      <div class="panel panel-default">
             <div class="panel-heading">
                 {{-- display all Companies --}}
                 <h3>Current Companies</h3>
@@ -73,7 +74,9 @@
                 </table>
 
             </div>
-        </div>
+        </div>  
+    </section>
+        
     @endif
 <script type="text/javascript">
 $('[data-toggle=confirmation]').confirmation({

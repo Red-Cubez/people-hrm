@@ -3,12 +3,12 @@
 @section('content')
 
 @permission(StandardPermissions::viewCompany)
-<div class="container">
+<div class="container-fluid">
     <div class="row">
         <div class="col-sm-3">
             @include('companies/showCompanyProfile')
         </div>
-        <div class="col-sm-7">
+        <div class="col-sm-9">
             @include('companyHolidays/showHolidays')
         </div>
     </div>
@@ -19,7 +19,7 @@
             @include('companies/showCompanyJobTitles')
         </div>
         @permission(StandardPermissions::showCompanyProjects)
-        <div class="col-sm-8">
+        <div class="col-sm-9">
             @include('companyProjects/showProjects')
         </div>
         @endpermission

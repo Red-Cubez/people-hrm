@@ -4,17 +4,12 @@
             Company Job Titles
         </h3>
     </div>
-    <div class="panel-body">
-
-        <table id="jobTitleTable" class="table table-striped task-table">
-
-
-            <!-- Table Headings -->
-
-            <thead>
-            <th>
-                Job Title Name
-            </th>
+    <table id="jobTitleTable" class="table table-fixed table-condensed">
+        <thead>
+        <tr>
+            <th class="col-xs-6">Job Title Name</th>
+            <th class="col-xs-6">Operations</th>
+        </tr>
             </thead>
 
             <!-- Table Body -->
@@ -24,26 +19,32 @@
                     <tr id="jobTitle_{{$companyJobTitle->jobTitleId}}">
 
                         <!--  Name -->
-                        <td class="table-text">
+                        <td class="col-xs-6">
                             <div id="jobTitleName_{{$companyJobTitle->jobTitleId}}">
                                 {{$companyJobTitle->jobTitle }}
                             </div>
                         </td>
             @permission(StandardPermissions::createEditDeleteJobTitle)
-                        <td>
+                        <td class="col-xs-6">
+                            <ul class="list-inline">
+                                <li class="list-inline-item">
                             <button
-                                    class="btn btn-primary"
+                                    class="button20"
                                     onclick="openJobTitleModal({{$companyJobTitle->jobTitleId}},null);"
                                     type="button">
-                                Edit
+                                <i class="fa fa-pencil-square-o fa-2x"></i>
                             </button>
+                                </li>
+                                <li>
                              <form action="{{url('jobtitle/'.$companyJobTitle->jobTitleId) }}" method="POST">
                                     {{ csrf_field() }}
                                     {{ method_field('DELETE') }}
-                                    <button type="submit" class="btn btn-danger" data-toggle="confirmation" data-singleton="true">
-                                        Delete
+                                    <button type="submit" class="button20" data-toggle="confirmation" data-singleton="true">
+                                        <i class="fa fa-trash fa-2x"></i>
                                     </button>
                             </form>
+                                </li>
+                            </ul>
                            
                         </td>
              @endpermission
@@ -56,13 +57,13 @@
         </table>
     </div>
     @permission(StandardPermissions::createEditDeleteJobTitle)
-    <div>
-    <button class="btn btn-primary btn-lg" onclick="openJobTitleModal(null,null);" type="button">
+<div class="panel-body">
+    <button class="button button40 pull-right" onclick="openJobTitleModal(null,null);" type="button">
         Add New Job Title
     </button>
     </div>
     @endpermission
-</div>
+
 @permission(StandardPermissions::createEditDeleteJobTitle)
 @include('jobTitles/jobTitleModal')
 @endpermission

@@ -144,6 +144,16 @@ img {
    border: none;
     padding: 0 40px; 
 }
+.button50{
+    border: none;
+    padding: 0 30px;
+    width: 230px;
+}
+.button50:hover{
+    border: none;
+    padding: 0 30px;
+    width: 230px;
+}
 .button1520{
     border: none;
     padding: 15px 20px;
@@ -162,4 +172,31 @@ img {
 }
 .button:hover {
     background-color: rgba(73, 195, 44, .95);
+}
+.padTop30{
+    padding-top: 30px;
+}
+.padTop5{
+    padding-top: 5px;
+}
+.table-fixed thead {
+  width: 100%;
+}
+.table-fixed tbody {
+  height: 300px;
+  overflow-y: auto;
+  width: 100%;
+}
+.table-fixed thead, .table-fixed tbody, .table-fixed tr, .table-fixed td, .table-fixed th {
+  display: block;
+}
+.table-fixed tbody td, .table-fixed thead > tr> th {
+  float: left;
+  border-bottom-width: 0;
+}
+.fa-pencil-square-o,.fa-eye,.green-text{
+    color: #49c32c ;
+}
+.fa-trash,.red-text{
+    color:#f00;
 }

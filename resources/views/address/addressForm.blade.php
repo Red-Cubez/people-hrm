@@ -1,5 +1,6 @@
-<div class="row ">
-        <div class="col-xs-12  col-md-6 col-md-offset-3 col-sm-7 ">
+<article class="addressFormArticle">
+  <div class="row ">
+        <div class="col-xs-12 col-sm-7">
 <div class="form-group">
     <label for="contactPerson">Street Line 1</label>
      
@@ -15,7 +16,7 @@
 </div>
 </div>
 <div class="row ">
-        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+        <div class="col-xs-12 col-sm-7">
 <div class="form-group">
     <label for="contactPerson" >Street Line 2</label>
      
@@ -30,8 +31,8 @@
 </div>
 </div>
 </div>
-<div class="row ">
-        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+<div class="row">
+        <div class="col-xs-12 col-sm-7">
 
 <div class="form-group">
     <label for="contactPerson">City</label>
@@ -46,7 +47,7 @@
 </div>
 </div>
 <div class="row ">
-        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+        <div class="col-xs-12 col-sm-7">
 <div class="form-group">
     <label for="contactPerson"  >State / Province</label>
     
@@ -62,7 +63,7 @@
 </div>
 </div>
 <div class="row ">
-        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+        <div class="col-xs-12 col-sm-7">
 <div class="form-group">
     <label for="contactPerson" >Country</label>
     
@@ -76,7 +77,4 @@
 </div>
 </div>
 
-
-
-
-
+</article>

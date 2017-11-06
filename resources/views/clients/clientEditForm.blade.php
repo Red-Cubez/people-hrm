@@ -1,8 +1,10 @@
 @extends('layouts.app')
-
 @section('content')
 
-    <div class="panel-body">
+    <section class="clientEditForm">
+        <div class="container">
+            <div class="row row-content">
+                <div class="col-xs-12 col-md-9 col-md-offset-3">
         <!-- Display Validation Errors -->
         @include('common.errors')
 
@@ -13,5 +15,8 @@
       <!-- Client Name -->
       @include('clients/clientForm')
     </form>
-  </div>
-  @endsection
+    </div>
+    </div>
+    </div>
+    </section>
+@endsection

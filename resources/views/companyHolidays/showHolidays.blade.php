@@ -4,11 +4,15 @@
             Company Holidays
         </h3>
     </div>
-    <div class="panel-body">
-
-        <table class="table table-striped task-table">
-            <!-- Table Headings -->
-            <thead>
+    <table class="table table-fixed table-condensed">
+        <thead>
+            <tr>
+              <th class="col-xs-2"> Holiday Name</th><th class="col-xs-2">Start Date</th><th class="col-xs-2">End Date</th>
+              <th class="col-xs-2"> Total Holidays</th>  @permission(StandardPermissions::createEditDeleteHoliday)
+              <th class="col-xs-4"> Operations</th>  @endpermission
+            </tr>
+          </thead>
+            {{-- <thead>
             <th>
                 Holiday Name
             </th>
@@ -28,65 +32,73 @@
            
             @endpermission
             
-            </thead>
-            <!-- Table Body -->
-            <tbody id="holidayTableBody">
+            </thead> --}}
+        <tbody id="holidayTableBody">
             @if (count($companyProfileModel->companyHolidays) > 0)
                 @foreach ($companyProfileModel->companyHolidays as $companyHoliday)
+                 {{-- <tr>
+              <td class="col-xs-2">1</td><td class="col-xs-8">Mike Adams</td><td class="col-xs-2">23</td>
+            </tr> --}}
                     <tr id="holiday_{{$companyHoliday->holidayId}}">
                         <!--  Name -->
-                        <td id="holidayName_{{$companyHoliday->holidayId}}" class="table-text">
-                            <div>
+                        <td id="holidayName_{{$companyHoliday->holidayId}}" class="col-xs-2 ">
+                             <div class="padTop30">
                                 {{ $companyHoliday->holidayName }}
-                            </div>
+                             </div>
                         </td>
-                        <td id="startDate_{{$companyHoliday->holidayId}}" class="table-text">
-                            <div>
+                        <td id="startDate_{{$companyHoliday->holidayId}}" class="col-xs-2 ">
+                             <div class="padTop30">
                                 {{ $companyHoliday->startDate }}
-                            </div>
+                             </div>
                         </td>
-                        <td id="endDate_{{$companyHoliday->holidayId}}" class="table-text">
-                            <div>
+                        <td id="endDate_{{$companyHoliday->holidayId}}" class="col-xs-2 ">
+                             <div class="padTop30">
                                 {{ $companyHoliday->endDate }}
-                            </div>
+                             </div>
                         </td>
-                        <td id="countHolidays_{{$companyHoliday->holidayId}}" class="table-text">
-                            <div>
+                        <td id="countHolidays_{{$companyHoliday->holidayId}}" class="col-xs-2 text-center">
+                             <div class="padTop30">
                                 {{ $companyHoliday->countHolidays }}
-                            </div>
+                             </div>
                         </td>
             @permission(StandardPermissions::createEditDeleteHoliday)
-                        <td>
-                            <button class="btn btn-primary"
+                        <td class="col-xs-4">
+                        <ul class="list-inline">
+                        <li class="list-inline-item">
+                           <button class="button20"
                                     onclick="openHolidayModal({{$companyHoliday->holidayId}},null,null,null);"
                                     type="button">
-                                <i class="">
+                                {{-- <i class="">
                                     Edit
-                                </i>
-                            </button>
-                     
-                            <form  action="{{url('companyholidays/'.$companyHoliday->holidayId) }}" method="POST">
+                                </i> --}}
+                                <i class="fa fa-pencil-square-o fa-2x"></i>
+                            </button> 
+                            </li>
+                            <li class="list-inline-item">
+                             <form  action="{{url('companyholidays/'.$companyHoliday->holidayId) }}" method="POST">
                                     {{ csrf_field() }}
                                     {{ method_field('DELETE') }}
-                                    <button type="submit" class="btn btn-danger" data-toggle="confirmation" data-singleton="true">
-                                        Delete
+                                    <button type="submit" class="button20" data-toggle="confirmation" data-singleton="true">
+                                         <i class="fa fa-trash fa-2x"></i>
                                     </button>
-                            </form>
+                            </form> 
+                          </li>
+                        </ul>
                         </td>
             @endpermission
                     </tr>
                 @endforeach
-
             @endif
             </tbody>
         </table>
-    </div>
-@permission(StandardPermissions::createEditDeleteHoliday)
-    <button class="btn btn-primary btn-lg" onclick="openHolidayModal(null,null,null,null);" type="button">
+    @permission(StandardPermissions::createEditDeleteHoliday)
+<div class="panel-body">
+    <button class="button button40 pull-right" onclick="openHolidayModal(null,null,null,null);" type="button">
         Add Holiday
     </button>
-@endpermission
 </div>
+     </div>
+@endpermission
 @permission(StandardPermissions::createEditDeleteHoliday)
     @include('companyHolidays/companyHolidayModal')
 @endpermission
@@ -231,43 +243,49 @@
                 },
             });
         }
-      function createHtmlRow(data)
+        function createHtmlRow(data)
       {
            return '\
-              <td id="holidayName_' + data.holidayId + ' " class="table-text" >\
-                        <div >\
+              <td id="holidayName_' + data.holidayId + ' " class="col-xs-2" >\
+                        <div class="padTop30">\
                             ' + data.holidayName + '\
                         </div>\
                     </td>\
-                    <td id="startDate_' + data.holidayId + ' " class="table-text">\
-                        <div >\
+                    <td id="startDate_' + data.holidayId + ' " class="col-xs-2">\
+                        <div class="padTop30">\
                             ' + data.startDate + '\
                         </div>\
                     </td>\
-                    <td id="endDate_' + data.holidayId + ' " class="table-text">\
-                        <div >\
+                    <td id="endDate_' + data.holidayId + ' " class="col-xs-2">\
+                        <div class="padTop30" >\
                             ' + data.endDate + '\
                         </div>\
                     </td>\
-                    <td id="countHolidays_' + data.holidayId + ' " class="table-text">\
-                        <div >\
+                    <td id="countHolidays_' + data.holidayId + ' " class="col-xs-2 text-center">\
+                        <div class="padTop30">\
                             ' + data.holidays + '\
                         </div>\
                     </td>\
-                    <td >\
+                    <td class="col-xs-4">\
+                    <ul class="list-inline">\
+               <li class="list-inline-item">\
                         <button \
-                        class="btn btn-primary" \
+                        class="button20" \
                         onclick="openHolidayModal(\'' + data.holidayId + '\',\'' + data.holidayName + '\',\'' + data.startDate + '\',\'' + data.endDate + '\');" \
                         type="button"> \
-                        Edit \
+                       <i class="fa fa-pencil-square-o fa-2x"></i> \
                         </button> \
+                        </li>\
+                        <li class="list-inline-item">\
                             <form action="{{url('companyholidays')}}/' + data.holidayId + ' " method="POST">\
                                     {{ csrf_field() }}\
                                     {{ method_field('DELETE') }}\
-                                    <button type="submit" class="btn btn-danger" data-toggle="confirmation"\ data-singleton="true">\
-                                        Delete\
+                                    <button type="submit" class="button20" data-toggle="confirmation"\ data-singleton="true">\
+                                        <i class="fa fa-trash fa-2x"></i>\
                                     </button>\
                             </form>\
+                            </li>\
+                            </ul>\
                     </td>';
       }
     

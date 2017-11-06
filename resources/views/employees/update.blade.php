@@ -1,6 +1,9 @@
   @extends('layouts.app')
   @section('content')
-  <div class="panel-body">
+   <section class="editEmployeeSection">
+        <div class="container">
+            <div class="row row-content">
+                <div class="col-xs-12 col-md-9 col-md-offset-3">
     <!-- Display Validation Errors -->
     @include('common.errors')
 
@@ -12,6 +15,8 @@
 
       @include('employees/employeeForm')
     </form>
-
-  </div>
-  @endsection
+</div>
+</div>
+</div>
+</section>
+@endsection

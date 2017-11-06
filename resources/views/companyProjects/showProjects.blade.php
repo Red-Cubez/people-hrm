@@ -109,7 +109,7 @@
     </div>
     @permission(StandardPermissions::createEditCompanyProject)
     <a href="/companies/{{$companyProfileModel->companyId}}/companyprojects">
-        <button class="btn btn-primary"> Add New Projects
+        <button class="button button10"> Add New Projects
 
         </button></a>
     @endpermission

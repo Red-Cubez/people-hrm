@@ -4,129 +4,127 @@
     <main>
         <div class="container">
             <div class="row">
-                <div class="panel-body">
-                    @include('common.errors')
-                    <div class="row">
-                        <div class="col-sm-3">
-                        <div class="panel panel-default">
-                            <div>
-                                <label class="control-label" for="name">
-                                    First Name :
-                                </label>
-                                {{$employeeModel->employeeProfile->firstName}}
-                            </div>
-                            <div>
-                                <label class="control-label" for="name">
-                                    Last Name :
-                                </label>
-                                {{$employeeModel->employeeProfile->lastName}}
-                            </div>
-                            <div>
-                                <label class="control-label" for="name">
-                                    Hire Date :
-                                </label>
-                                {{$employeeModel->employeeProfile->hireDate}}
-                            </div>
-                            <div>
-                                <label class="control-label" for="name">
-                                    Job Title :
-                                </label>
-                                {{$employeeModel->employeeProfile->jobTitle}}
-                            </div>
-                            <div>
-                                <label class="control-label" for="name">
-                                    Annual Salary :
-                                </label>
-                                {{$employeeModel->employeeProfile->annualSalary}}
-                            </div>
-                            <div>
-                                <label class="control-label" for="name">
-                                    Hourly Rate :
-                                </label>
-                                {{$employeeModel->employeeProfile->hourlyRate}}
-                            </div>
-                            <div>
-                                <label class="control-label" for="name">
-                                    Overtime Rate :
-                                </label>
-                                {{$employeeModel->employeeProfile->overTimeRate}}
-                            </div>
-                            <div>
-                                <label class="control-label" for="name">
-                                    streetLine1 :
-                                </label>
-                                {{$employeeModel->employeeProfile->streetLine1}}
-                            </div>
-                            <div>
-                                <label class="control-label" for="name">
-                                    streetLine2 :
-                                </label>
-                                {{$employeeModel->employeeProfile->streetLine2}}
-                            </div>
-                            <div>
-                                <label class="control-label" for="name">
-                                    country :
-                                </label>
-                                {{$employeeModel->employeeProfile->country}}
-                            </div>
-                            <div>
-                                <label class="control-label" for="name">
-                                    state / Province :
-                                </label>
-                                {{$employeeModel->employeeProfile->stateProvince}}
-                            </div>
-                            <div>
-                                <label class="control-label" for="name">
-                                    city :
-                                </label>
-                                {{$employeeModel->employeeProfile->city}}
-                            </div>
-                            <div>
-                                <label class="control-label" for="name">
-                                    Departments :
-                                </label>
-                                @foreach ($employeeModel->employeeDepartmentIds as $departmentName)
-                                    {{$departmentName}}
-                                    {{ "|" }}
-                                @endforeach
-                            </div>
-                            <label class="control-label" for="name">
-                                Hours Worked :
-                            </label>
-                            {{$employeeModel->totalHoursWorked()}}
-                            <div>
-                                Employee is
-                                @if(!isset($employeeModel->isWorkingOverTime))
-                                    Not
-                                @endif
-                                Working Over Time.
-                            </div>
-                        
-                               
-                    @permission(StandardPermissions::createEditEmployee)
-                            <br>
-                            <a href="/employees/{{$employeeModel->employeeProfile->employeeId}}/edit">
-                                <button class="btn btn-primary"> Edit
+                @include('common.errors')
+                    <div class="col-xs-12">
+                        <div class="panel-body">
+                          <div class="col-md-6 col-md-offset-3">
+                              <ul class="list-group">
+                                  <li class="list-group-item">
+                                      <label class="control-label" for="name">
+                                          First Name :
+                                      </label>
+                                      {{$employeeModel->employeeProfile->firstName}}
+                                  </li>
+                                  <li class="list-group-item">
+                                      <label class="control-label" for="name">
+                                          Last Name :
+                                      </label>
+                                      {{$employeeModel->employeeProfile->lastName}}
+                                  </li>
+                                  <li class="list-group-item">
+                                      <label class="control-label" for="name">
+                                          Hire Date :
+                                      </label>
+                                      {{$employeeModel->employeeProfile->hireDate}}
+                                  </li>
+                                  <li class="list-group-item">
+                                      <label class="control-label" for="name">
+                                          Job Title :
+                                      </label>
+                                      {{$employeeModel->employeeProfile->jobTitle}}
+                                  </li>
+                                  <li class="list-group-item">
+                                      <label class="control-label" for="name">
+                                          Annual Salary :
+                                      </label>
+                                      {{$employeeModel->employeeProfile->annualSalary}}
+                                  </li>
+                                  <li class="list-group-item">
+                                      <label class="control-label" for="name">
+                                          Hourly Rate :
+                                      </label>
+                                      {{$employeeModel->employeeProfile->hourlyRate}}
+                                  </li>
+                                  <li class="list-group-item">
+                                      <label class="control-label" for="name">
+                                          Overtime Rate :
+                                      </label>
+                                      {{$employeeModel->employeeProfile->overTimeRate}}
+                                  </li>
+                                  <li class="list-group-item">
+                                      <label class="control-label" for="name">
+                                          streetLine1 :
+                                      </label>
+                                      {{$employeeModel->employeeProfile->streetLine1}}
+                                  </li>
+                                  <li class="list-group-item">
+                                      <label class="control-label" for="name">
+                                          streetLine2 :
+                                      </label>
+                                      {{$employeeModel->employeeProfile->streetLine2}}
+                                  </li>
+                                  <li class="list-group-item">
+                                      <label class="control-label" for="name">
+                                          country :
+                                      </label>
+                                      {{$employeeModel->employeeProfile->country}}
+                                  </li>
+                                  <li class="list-group-item">
+                                      <label class="control-label" for="name">
+                                          state / Province :
+                                      </label>
+                                      {{$employeeModel->employeeProfile->stateProvince}}
+                                  </li>
+                                  <li class="list-group-item">
+                                      <label class="control-label" for="name">
+                                          city :
+                                      </label>
+                                      {{$employeeModel->employeeProfile->city}}
+                                  </li>
+                                  <li class="list-group-item">
+                                      <label class="control-label" for="name">
+                                          Departments :
+                                      </label>
+                                      @foreach ($employeeModel->employeeDepartmentIds as $departmentName)
+                                          {{$departmentName}}
+                                          {{ "|" }}
+                                      @endforeach
+                                  </li>
+                                  <li class="list-group-item">
+                                      <label class="control-label" for="name">
+                                          Hours Worked :
+                                      </label>
+                                      {{$employeeModel->totalHoursWorked()}}
+                                  </li>
+                                  <li class="list-group-item">
+                                      Employee is
+                                      @if(!isset($employeeModel->isWorkingOverTime))
+                                          Not
+                                      @endif
+                                      Working Over Time.
+                                  </li>
+                                  <li class="list-group-item">
+                                      @permission(StandardPermissions::createEditEmployee)
 
-                                </button>
-                            </a>
-                     @endpermission
-                            
-                    @permission(StandardPermissions::deleteEmployee)
-                            <form action="{{ url('employees/'.$employeeModel->employeeProfile->employeeId) }}"
-                                  method="POST">
-                                {{ csrf_field() }}
-                                {{ method_field('DELETE') }}
-                                <button class="btn btn-danger" data-toggle="confirmation" data-singleton="true" type="submit">
-                                    <i c="" lass="fa fa-trash">
-                                        DELETE
-                                    </i>
-                                </button>
-                            </form>
-                    @endpermission
-
-                        </div>
-                        </div>
+                                      <a href="/employees/{{$employeeModel->employeeProfile->employeeId}}/edit" class="pull-right padTop20">
+                                          <button class="button20">
+                                              <i class="fa fa-pencil-square-o fa-2x"></i>
+                                          </button>
+                                      </a>
+                                      @endpermission
+                                      @permission(StandardPermissions::deleteEmployee)
+                                      <form action="{{ url('employees/'.$employeeModel->employeeProfile->employeeId) }}"
+                                            method="POST">
+                                          {{ csrf_field() }}
+                                          {{ method_field('DELETE') }}
+                                          <button class="button20 col-xs-offset-9"  data-toggle="confirmation" data-singleton="true" type="submit">
+                                              <i class="fa fa-trash fa-2x"></i>
+                                          </button>
+                                      </form>
+                                      @endpermission
+                                  </li>
+                              </ul>
+                          </div>
                         <div class="col-sm-5">
 
                             @include('employees/showCompanyHolidays')
@@ -137,8 +135,9 @@
                             @include('employees/showEmployeesWithBirthdayThisMonth')
 
                         </div>
+                        </div>
                     </div>
-                </div>
+
                 </div>
                   @permission(StandardPermissions::createEditTimesheet)
                     <div class="row">

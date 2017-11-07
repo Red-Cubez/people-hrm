@@ -3,12 +3,12 @@
 @section('content')
 
 @permission(StandardPermissions::viewCompany)
-<div class="container">
+<div class="container-fluid">
     <div class="row">
         <div class="col-sm-3">
             @include('companies/showCompanyProfile')
         </div>
-        <div class="col-sm-7">
+        <div class="col-sm-9">
             @include('companyHolidays/showHolidays')
         </div>
     </div>
@@ -19,7 +19,7 @@
             @include('companies/showCompanyJobTitles')
         </div>
         @permission(StandardPermissions::showCompanyProjects)
-        <div class="col-sm-8">
+        <div class="col-sm-9">
             @include('companyProjects/showProjects')
         </div>
         @endpermission
@@ -27,32 +27,31 @@
     </div>
 
     <div class="row">
-        
-        @permission(StandardPermissions::showClientProjects)
-        <div class="col-sm-8">
-            @include('companyProjects/showClientProjectsOfCompany')
-        </div>
-        @endpermission
-        
         @permission([
-            StandardPermissions::reportOptions,
-            StandardPermissions::showAllProjectsReport,
-            StandardPermissions::showClientProjectsReport,
-            StandardPermissions::showInternalProjectsReport,
-            ])
+           StandardPermissions::reportOptions,
+           StandardPermissions::showAllProjectsReport,
+           StandardPermissions::showClientProjectsReport,
+           StandardPermissions::showInternalProjectsReport,
+           ])
         <div class="col-sm-3">
             @include('companies/companyReports')
+        </div>
+        @endpermission
+        @permission(StandardPermissions::showClientProjects)
+        <div class="col-sm-9">
+            @include('companyProjects/showClientProjectsOfCompany')
         </div>
         @endpermission
     </div>
 
     <div class="row">
-        <div class="col-sm-6">
-            @include('employees/showEmployeesWithBirthdayThisMonth')
-        </div>
-        <div class="col-sm-5">
+        <div class="col-sm-3">
             @include('companyDepartments/showDepartments')
         </div>
+        <div class="col-sm-9">
+            @include('employees/showEmployeesWithBirthdayThisMonth')
+        </div>
+
     </div>
     <div class="row">
         
@@ -62,11 +61,11 @@
         StandardPermissions::viewOwnProfile,
         StandardPermissions::showEmployees
        ])
-        <div class="col-sm-5">
+        <div class="col-sm-6">
             @include('companies/showCompanyCurrentEmployees')
         </div>
        @endpermission 
-        <div class="col-sm-5">
+        <div class="col-sm-6">
             @include('companies/showCompanyCurrentClients')
         </div>
     </div>

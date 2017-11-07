@@ -1,71 +1,72 @@
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h3>
-            Company Departments
-        </h3>
-    </div>
-    <div class="panel-body">
-
-        <table class="table table-striped task-table">
-            <!-- Table Headings -->
+<section class="showDepartmentsView">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3>
+                Company Departments
+            </h3>
+        </div>
+        <table  class="table table-fixed table-condensed">
             <thead>
-            <th>
-                Department Name
-            </th>
-            @permission(StandardPermissions::createEditDeleteDepartment)
-            <th>
-                Operations
-            </th> 
-            @endpermission
+            <tr>
+                <th class="col-xs-6">Department Name</th>
+                @permission(StandardPermissions::createEditDeleteDepartment)
+                <th class="col-xs-6">Operations</th>
+                @endpermission
+            </tr>
             </thead>
-         
             <tbody id="departmentTableBody">
             @if (count($companyProfileModel->departments) > 0)
                 @foreach ($companyProfileModel->departments as $department)
                     <tr id="department_{{$department->departmentId}}">
                         <!--  Name -->
-                        <td id="departmentName_{{$department->departmentId}}" class="table-text">
-                            <div>
+                        <td id="departmentName_{{$department->departmentId}}" class="col-xs-6 ">
+                            <div class="padTop20">
                                 {{ $department->departmentName }}
                             </div>
                         </td>
 
-            @permission(StandardPermissions::createEditDeleteDepartment)
-                        <td>
-                            <button class="btn btn-primary"
-                                    onclick="openDepartmentModal({{$department->departmentId}},null);"
-                                    type="button">
-                                <i class="">
-                                    Edit
-                                </i>
-                            </button>
-                     
-                            <form  action="{{url('company/department/'.$department->departmentId) }}" method="POST">
-                                    {{ csrf_field() }}
-                                    {{ method_field('DELETE') }}
-                                    <button type="submit" class="btn btn-danger" data-toggle="confirmation" data-singleton="true">
-                                        Delete
+                        @permission(StandardPermissions::createEditDeleteDepartment)
+                        <td class="col-xs-6">
+                            <ul class="list-inline">
+                                <li class="list-inline-item">
+                                    <button class="button20"
+                                            onclick="openDepartmentModal({{$department->departmentId}},null);"
+                                            type="button">
+                                        <i class="fa fa-pencil-square-o fa-2x"></i>
                                     </button>
-                            </form>
+                                </li>
+                                <li class="list-inline-item">
+                                    <form  action="{{url('company/department/'.$department->departmentId) }}" method="POST">
+                                        {{ csrf_field() }}
+                                        {{ method_field('DELETE') }}
+                                        <button type="submit" class="button20" data-toggle="confirmation" data-singleton="true">
+                                            <i class="fa fa-trash fa-2x"></i>
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
                         </td>
-            @endpermission
+                        @endpermission
                     </tr>
                 @endforeach
 
             @endif
             </tbody>
         </table>
-    </div>
- @permission(StandardPermissions::createEditDeleteDepartment)
-    <button class="btn btn-primary btn-lg" onclick="openDepartmentModal(null,null);" type="button">
-        Add Department
-    </button>
- @endpermission  
 
-</div>
- @permission(StandardPermissions::createEditDeleteDepartment)
- @include('companyDepartments/companyDepartmentModal')
-@endpermission
+        @permission(StandardPermissions::createEditDeleteDepartment)
+        <div class="panel-body">
+            <button class="button button40 pull-right" onclick="openDepartmentModal(null,null);" type="button">
+                Add Department
+            </button>
+            @endpermission
+        </div>
+    </div>
+    @permission(StandardPermissions::createEditDeleteDepartment)
+    @include('companyDepartments/companyDepartmentModal')
+    @endpermission
+</section>
+
 @section('page-scripts')
     @parent
     <script type="text/javascript">
@@ -169,28 +170,34 @@
                 },
             });
         }
-      function createDepartmentHtmlRow(data)
+        function createDepartmentHtmlRow(data)
       {
            return '\
-                     <td id="departmentName_' + data.departmentId + ' " class="table-text" >\
-                        <div >\
+                     <td id="departmentName_' + data.departmentId + ' " class="col-xs-6 " >\
+                        <div class="padTop20">\
                             ' + data.departmentName + '\
                         </div>\
                     </td>\
-                    <td >\
+                    <td class="col-xs-6">\
+                    <ul class="list-inline">\
+                    <li class="list-inline-item">\
                         <button \
-                        class="btn btn-primary" \
+                        class="button20" \
                         onclick="openDepartmentModal(\'' + data.departmentId + '\',\'' + data.departmentName + '\');" \
                         type="button"> \
-                        Edit \
+                        <i class="fa fa-pencil-square-o fa-2x"></i> \
                         </button> \
+                         </li>\
+                          <li class="list-inline-item">\
                             <form action="{{url('company/department')}}/' + data.departmentId + ' " method="POST">\
                                     {{ csrf_field() }}\
                                     {{ method_field('DELETE') }}\
-                                    <button type="submit" class="btn btn-danger" data-toggle="confirmation"\ data-singleton="true">\
-                                        Delete\
+                                    <button type="submit" class="button20" data-toggle="confirmation"\ data-singleton="true">\
+                                      <i class="fa fa-trash fa-2x"></i>\
                                     </button>\
                             </form>\
+                             </li>\
+                               </ul>\
                     </td>';
       }
     

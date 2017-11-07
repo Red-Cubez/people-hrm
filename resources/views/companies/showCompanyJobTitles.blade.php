@@ -1,20 +1,16 @@
-<div class="panel panel-default" id="jobTitlePage">
-    <div class="panel-heading">
-        <h3>
-            Company Job Titles
-        </h3>
-    </div>
-    <div class="panel-body">
-
-        <table id="jobTitleTable" class="table table-striped task-table">
-
-
-            <!-- Table Headings -->
-
+<section class="jobTitleForm">
+    <div class="panel panel-default" id="jobTitlePage">
+        <div class="panel-heading">
+            <h3>
+                Company Job Titles
+            </h3>
+        </div>
+        <table id="jobTitleTable" class="table table-fixed table-condensed">
             <thead>
-            <th>
-                Job Title Name
-            </th>
+            <tr>
+                <th class="col-xs-6">Job Title Name</th>
+                <th class="col-xs-6">Operations</th>
+            </tr>
             </thead>
 
             <!-- Table Body -->
@@ -22,31 +18,35 @@
             @if (count($companyProfileModel->jobTitles) > 0)
                 @foreach ($companyProfileModel->jobTitles as $companyJobTitle)
                     <tr id="jobTitle_{{$companyJobTitle->jobTitleId}}">
-
-                        <!--  Name -->
-                        <td class="table-text">
-                            <div id="jobTitleName_{{$companyJobTitle->jobTitleId}}">
+                        <td class="col-xs-6">
+                            <div id="jobTitleName_{{$companyJobTitle->jobTitleId}}" class="padTop30">
                                 {{$companyJobTitle->jobTitle }}
                             </div>
                         </td>
-            @permission(StandardPermissions::createEditDeleteJobTitle)
-                        <td>
-                            <button
-                                    class="btn btn-primary"
-                                    onclick="openJobTitleModal({{$companyJobTitle->jobTitleId}},null);"
-                                    type="button">
-                                Edit
-                            </button>
-                             <form action="{{url('jobtitle/'.$companyJobTitle->jobTitleId) }}" method="POST">
-                                    {{ csrf_field() }}
-                                    {{ method_field('DELETE') }}
-                                    <button type="submit" class="btn btn-danger" data-toggle="confirmation" data-singleton="true">
-                                        Delete
+                        @permission(StandardPermissions::createEditDeleteJobTitle)
+                        <td class="col-xs-6">
+                            <ul class="list-inline">
+                                <li class="list-inline-item">
+                                    <button
+                                            class="button20"
+                                            onclick="openJobTitleModal({{$companyJobTitle->jobTitleId}},null);"
+                                            type="button">
+                                        <i class="fa fa-pencil-square-o fa-2x"></i>
                                     </button>
-                            </form>
-                           
+                                </li>
+                                <li class="list-inline-item">
+                                    <form action="{{url('jobtitle/'.$companyJobTitle->jobTitleId) }}" method="POST">
+                                        {{ csrf_field() }}
+                                        {{ method_field('DELETE') }}
+                                        <button type="submit" class="button20" data-toggle="confirmation" data-singleton="true">
+                                            <i class="fa fa-trash fa-2x"></i>
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+
                         </td>
-             @endpermission
+                        @endpermission
                     </tr>
                 @endforeach
 
@@ -54,18 +54,21 @@
 
             </tbody>
         </table>
+        @permission(StandardPermissions::createEditDeleteJobTitle)
+        <div class="panel-body">
+            <button class="button button40 pull-right" onclick="openJobTitleModal(null,null);" type="button">
+                Add New Job Title
+            </button>
+        </div>
+        @endpermission
+
+        @permission(StandardPermissions::createEditDeleteJobTitle)
     </div>
-    @permission(StandardPermissions::createEditDeleteJobTitle)
-    <div>
-    <button class="btn btn-primary btn-lg" onclick="openJobTitleModal(null,null);" type="button">
-        Add New Job Title
-    </button>
-    </div>
+
+    @include('jobTitles/jobTitleModal')
     @endpermission
-</div>
-@permission(StandardPermissions::createEditDeleteJobTitle)
-@include('jobTitles/jobTitleModal')
-@endpermission
+</section>
+
 @section('page-scripts')
     @parent
     <script type="text/javascript">
@@ -177,26 +180,32 @@
         {
                  var htmlRow=null;
                  htmlRow= '\
-                    <td class="table-text">\
-                        <div id="jobTitleName_' + data.jobTitleId + ' ">\
+                    <td class="col-xs-6">\
+                        <div class="padTop30" id="jobTitleName_' + data.jobTitleId + ' ">\
                             ' + data.jobTitle + '\
                         </div>\
                     </td>\
-                    <td >\
+                    <td class="col-xs-6" >\
+                    <ul class="list-inline">\
+                    <li class="list-inline-item">\
                         <button \
-                        class="btn btn-primary" \
+                        class="button20" \
                         onclick="openJobTitleModal(\'' + data.jobTitleId + '\',\'' + data.jobTitle + '\');" \
                         type="button"> \
-                        Edit \
+                       <i class="fa fa-pencil-square-o fa-2x"></i>\
                         </button> \
+                        </li>\
+                        <li class="list-inline-item">\
                         <form action="{{url('jobtitle')}}/' + data.jobTitleId + ' " method="POST">\
                                     {{ csrf_field() }}\
                                     {{ method_field('DELETE') }}\
-                                    <button type="submit" class="btn btn-danger" data-toggle="confirmation"\ data-singleton="true">\
-                                        Delete\
+                                    <button type="submit" class="button20" data-toggle="confirmation"\ data-singleton="true">\
+                                        <i class="fa fa-trash fa-2x"></i>\
                                     </button>\
                             </form>\
+                             </li>\
                     </td> \
+                    </ul>\
                     </tr>';
                     return htmlRow;
         }

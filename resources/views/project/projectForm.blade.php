@@ -1,6 +1,6 @@
 <article class="form-project">
-    <div class="row ">
-        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
 <div class="form-group">
         <label for="clientProject" >Name</label>
         
@@ -9,8 +9,8 @@
 </div>
 </div>
 </div>
-<div class="row ">
-        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+<div class="row">
+        <div class="col-xs-12 col-sm-7">
     <div class="form-group">
         <label for="clientProject"  >Expected Start Date</label>
 
@@ -21,8 +21,8 @@
     </div>
     </div>
     </div>
-    <div class="row ">
-        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
     <div class="form-group">
         <label for="clientProject"  >Expected End Date</label>
 
@@ -32,8 +32,8 @@
     </div>
     </div>
     </div>
-    <div class="row ">
-        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
     <div class="form-group">
         <label for="clientProject"  >Actual Start Date</label>
 
@@ -43,8 +43,8 @@
     </div>
     </div>
     </div>
-    <div class="row ">
-        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
     <div class="form-group">
         <label for="clientProject"  >Actual End Date</label>
 
@@ -54,8 +54,8 @@
     </div>
     </div>
     </div>
-    <div class="row ">
-        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
     <div class="form-group">
         <label for="clientProject"  >Budget</label>
 
@@ -65,8 +65,8 @@
     </div>
     </div>
     </div>
-    <div class="row ">
-        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7">
     <div class="form-group">
         <label for="clientProject" >Cost</label>
 
@@ -77,14 +77,16 @@
     </div>
     </div>
           <!-- Add clientProject Button -->
-          <div class="row ">
-        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+          <div class="row">
+        <div class="row-content100">
+ <div class="col-xs-12 col-sm-3 col-sm-offset-4">
     <div class="form-group">
          
-            <button type="submit" class="btn btn-default">
+            <button type="submit" class="button button40">
                 <i class="fa fa-plus"></i> {{isset($companyproject)? "Update": "Add"}} Project
             </button>
         
+    </div>
     </div>
     </div>
     </div>

@@ -1,19 +1,19 @@
 @if (count($companyProfileModel->companyName) > 0)
-    <div class="panel panel-default">
+<article class="showCompanyProfile">
+      <div class="panel panel-default">
         <div class="panel-heading">
             <h3>Company Profile</h3>
         </div>
-
-        <div class="panel-body">
-            <table class="table table-striped task-table">
+         <div class="panel-body">
+            {{--<table class="table table-striped task-table">--}}
                 <!-- Table Headings -->
-                <div>
+
 
                     <label for="name" class="control-label">Name : </label>
 
                     {{$companyProfileModel->companyName}}
 
-                </div>
+
                 <div>
 
                     <label for="normalHoursPerWeek" class="control-label">Normal Hours / Week : </label>
@@ -62,29 +62,36 @@
 
                     {{$companyProfileModel->city }}
                 </div>
-            </table>
+            {{--</table>--}}
 
-        </div>
+
+       
         @permission(StandardPermissions::editUpdateCompany)
+           <div class="pull-right padTop5">
         <a href="/companies/{{$companyProfileModel->companyId}}/edit">
-            <button class="btn btn-primary"> Edit Company
+            <button class="button button50"> Edit Company
 
             </button></a>
+           </div>
+             <div class="pull-right padTop5">
          <a href="/company-settings/{{$companyProfileModel->companyId}}">
-            <button class="btn btn-primary"> Company Settings
-
-            </button></a>   
+            <button class="button button50"> Company Settings
+            </button></a>
+             </div>
         @endpermission
         @permission(StandardPermissions::registerUser)
+        <div class="pull-right padTop5">
         <a href="/register-user/{{$companyProfileModel->companyId}}">
-            <button class="btn btn-primary"> Setup New User
+            <button class="button button50"> Setup New User
 
             </button>
-         </a> 
+         </a>
+        </div>
+         </div>
          @endpermission  
     </div>
-
-@endif
+</article>
+  @endif
 
 
 

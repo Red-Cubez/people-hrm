@@ -1,7 +1,7 @@
-
-@permission(StandardPermissions::createEditEmployee)
+<article class="employeeForm">
+   @permission(StandardPermissions::createEditEmployee)
 <div class="row ">
-        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+        <div class="col-xs-12 col-sm-7   ">
 <div id="name" class="form-group">
     <label for="name"  >First Name</label>
     
@@ -13,7 +13,7 @@
 </div>
 </div>
 <div class="row">
-        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+        <div class="col-xs-12 col-sm-7   ">
 <div class="form-group">
     <label for="name"  >Last Name</label>
      
@@ -25,7 +25,7 @@
 </div>
 </div>
 <div class="row ">
-        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+        <div class="col-xs-12 col-sm-7   ">
 <div class="form-group">
     <label for="name"  >Date of Birth</label>
      
@@ -37,7 +37,7 @@
 </div>
 </div>
 <div class="row ">
-        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+        <div class="col-xs-12 col-sm-7   ">
 <div class="form-group">
     <label for="name"  >Hire Date</label>
    
@@ -49,7 +49,7 @@
 </div>
 </div>
 <div class="row ">
-        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+        <div class="col-xs-12 col-sm-7   ">
 <div class="form-group">
     <label for="name"  >Termination Date</label>
     
@@ -61,7 +61,7 @@
 </div>
 </div>
 <div class="row ">
-        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+        <div class="col-xs-12 col-sm-7  ">
 <div class="form-group">
     <label for="Select Job Title"  >Job Title</label>
      
@@ -93,7 +93,7 @@
 </div>
 </div>
 <div class="row ">
-        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+        <div class="col-xs-12 col-sm-7  ">
 <div class="form-group">
     <label for="name"  >Annual Salary</label>
      
@@ -105,7 +105,7 @@
 </div>
 </div>
 <div class="row ">
-        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+        <div class="col-xs-12 col-sm-7   ">
 
 <div class="form-group">
     <label for="name"  >Hourly Rate</label>
@@ -118,7 +118,7 @@
 </div>
 </div>
 <div class="row ">
-        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+        <div class="col-xs-12 col-sm-7   ">
 <div class="form-group">
     <label for="Over time rate"  >Over Time Rate</label>
     
@@ -133,7 +133,7 @@
 @include('address/addressForm')
 
 <div class="row ">
-        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+        <div class="col-xs-12 col-sm-7   ">
 <div class="form-group">
     <label for="name"  >Select Department</label>
      
@@ -150,18 +150,22 @@
 </div>
 </div>
 </div>
-<div class="row ">
-        <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+<div class="row">
+        <div class="row-content100">
+ <div class="col-xs-12 col-sm-3 col-sm-offset-4">
 <div class="form-group">
     
-        <button type="submit" class="btn btn-default">
+        <button type="submit" class="button button40">
             <i class="fa fa-plus"></i> {{isset($editEmployeeModel)? "Update": "Add"}} Employee
         </button>
     
 </div>
 </div>
 </div>
-@endpermission
+</div>
+@endpermission 
+</article>
+
 <script type="text/javascript">
 
     $(document).ready(function () {

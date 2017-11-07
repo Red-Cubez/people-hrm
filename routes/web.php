@@ -49,6 +49,8 @@ Route::delete('/task/{task}', function (People\Models\Task $task) {
 
 Auth::routes();
 
+Route::get('/reports', 'ReportsController@index');
+
 Route::get('/home', 'HomeController@index');
 
 Route::get('/employees/showemployeeform/{companyId}', 'EmployeeController@showEmployeeForm');

@@ -11,6 +11,7 @@ use People\Services\Interfaces\IReportService;
 use People\Services\Interfaces\IUserAuthenticationService;
 use People\Services\StandardPermissions;
 use People\Models\Employee;
+use People\Reports\MyReport;
 
 class ReportsController extends Controller
 {
@@ -45,6 +46,13 @@ class ReportsController extends Controller
         $this->ClientProjectService      = $clientProjectService;
         $this->CompanySettingService     = $companySettingService;
 
+    }
+    public function index()
+    {
+          $report = new MyReport;
+          dd($report);
+        $report->run();
+        return view("report",["report"=>$report]);
     }
 
     public function showOptions($companyId)

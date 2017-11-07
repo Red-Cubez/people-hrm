@@ -176,6 +176,9 @@ img {
 .padTop30{
     padding-top: 30px;
 }
+.padTop20{
+    padding-top: 20px;
+}
 .padTop5{
     padding-top: 5px;
 }
@@ -199,4 +202,14 @@ img {
 }
 .fa-trash,.red-text{
     color:#f00;
+}
+.jobTitleForm .table-fixed tbody {
+    height: 320px;
+    overflow-y: auto;
+    width: 100%;
+}
+.currentInternalProjectsView .table-fixed tbody {
+    height: 400px;
+    overflow-y: auto;
+    width: 100%;
 }

@@ -7,7 +7,7 @@
                 <div class="panel-body">
                     @include('common.errors')
                     <div class="row">
-                        <div class="col-sm-3">
+                        <div class="col-sm-12">
                         <div class="panel panel-default">
                             <div>
                                 <label class="control-label" for="name">

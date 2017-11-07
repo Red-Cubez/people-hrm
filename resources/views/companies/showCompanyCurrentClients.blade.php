@@ -5,48 +5,40 @@
             Current Clients
         </h3>
     </div>
-    <div class="panel-body">
+
         @if (count($companyProfileModel->companyClients) > 0)
-            <table class="table table-striped task-table">
-                <!-- Table Headings -->
+            <table class="table table-fixed table-condensed">
                 <thead>
-                <th>
-                    Client Name
-                </th>
-                <th>
-                    Contact Person
-                </th>
-                <th>
-                    Contact Number
-                </th>
-                <th>
-                    Operation
-                </th>
+                <tr>
+                <th class="col-xs-3">Client Name</th>
+                <th class="col-xs-3">Contact Person</th>
+                <th class="col-xs-3">Contact Number</th>
+                <th class="col-xs-3">Operation</th>
+                </tr>
                 </thead>
-                <!-- Table Body -->
                 <tbody>
                 @foreach ($companyProfileModel->companyClients as $client)
                     <tr>
-                        <!--  Name -->
-                        <td class="table-text">
+
+                        <td class="col-xs-3">
                             <div>
                                 {{ $client->clientName }}
                             </div>
                         </td>
-                        <td class="table-text">
+                        <td class="col-xs-3">
                             <div>
                                 {{ $client->contactPerson}}
                             </div>
                         </td>
-                        <td class="table-text">
+                        <td class="col-xs-3">
                             <div>
                                 {{ $client->contactNumber}}
                             </div>
                         </td>
-                        <td>
+                        <td class="col-xs-3">
                             <a href="/clients/{{$client->clientId}}">
-                                <button class="btn btn-primary"> View
-
+                                <button class="button20">
+                                    <i class="fa fa-eye fa-2x" aria-hidden="true"></i>
                                 </button></a>
                             
                         </td>
@@ -57,12 +49,14 @@
         @else
             No Record Found
         @endif
-    </div>
-    @permission(StandardPermissions::createEditClient)
-    <a href="/clients/showclientform/{{$companyProfileModel->companyId}}">
-        <button class="btn btn-primary"> Add New Client
 
+    @permission(StandardPermissions::createEditClient)
+    <div class="panel-body">
+    <a href="/clients/showclientform/{{$companyProfileModel->companyId}}">
+        <button class="button button40 pull-right">
+            Add New Client
         </button></a>
+    </div>
      @endpermission  
 </div>
 @endpermission

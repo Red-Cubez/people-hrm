@@ -5,9 +5,9 @@
             Current Clients
         </h3>
     </div>
-
-        @if (count($companyProfileModel->companyClients) > 0)
-            <table class="table table-fixed table-condensed">
+    @if (count($companyProfileModel->companyClients) > 0)
+        <div class="panel-body">
+            <table class="table table-fixed table-condensed table-border-grey">
                 <thead>
                 <tr>
                 <th class="col-xs-3">Client Name</th>
@@ -38,9 +38,8 @@
                         <td class="col-xs-3">
                             <a href="/clients/{{$client->clientId}}">
                                 <button class="button20">
-                                    <i class="fa fa-eye fa-2x" aria-hidden="true"></i>
+                                    <i class="fa fa-list-alt fa-2x" aria-hidden="true"></i>
                                 </button></a>
-                            
                         </td>
                     </tr>
                 @endforeach
@@ -49,13 +48,10 @@
         @else
             No Record Found
         @endif
-
-    @permission(StandardPermissions::createEditClient)
-    <div class="panel-body">
-    <a href="/clients/showclientform/{{$companyProfileModel->companyId}}">
-        <button class="button button40 pull-right">
-            Add New Client
-        </button></a>
+            @permission(StandardPermissions::createEditClient)
+            <a href="/clients/showclientform/{{$companyProfileModel->companyId}}" class="button button40 pull-right">
+                Add New Client
+            </a>
     </div>
      @endpermission  
 </div>

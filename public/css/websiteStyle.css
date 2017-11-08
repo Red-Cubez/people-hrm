@@ -186,7 +186,7 @@ img {
   width: 100%;
 }
 .table-fixed tbody {
-  height: 300px;
+  height: 275px;
   overflow-y: auto;
   width: 100%;
 }
@@ -197,19 +197,45 @@ img {
   float: left;
   border-bottom-width: 0;
 }
-.fa-pencil-square-o,.fa-eye,.green-text{
+.fa-pencil-square-o,.fa-eye,.green-text,.fa-list-alt{
     color: #49c32c ;
 }
 .fa-trash,.red-text{
     color:#f00;
 }
 .jobTitleForm .table-fixed tbody {
-    height: 320px;
+    height: 275px;
     overflow-y: auto;
     width: 100%;
+}
+.scroll-panel-table {
+    max-height:330px;
+    overflow-y: auto;
+    overflow-x: auto;
+
 }
 .currentInternalProjectsView .table-fixed tbody {
     height: 400px;
     overflow-y: auto;
     width: 100%;
+}
+.showDepartmentsView .table-fixed tbody {
+    height: 235px;
+    overflow-y: auto;
+    width: 100%;
+}
+.aParent {
+    display: flex;
+    flex-direction: row;
+}
+.test-flex{
+   display: flex;
+    align-items: flex-start;
+}
+.table-border-grey{
+    border: 1px solid #d3e0e9;
+}
+.nopadding {
+    padding-right: 0 !important;
+
 }

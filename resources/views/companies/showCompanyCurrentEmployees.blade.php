@@ -5,7 +5,8 @@
         </h3>
     </div>
     @if (count($companyProfileModel->companyEmployees) > 0)
-            <table class="table table-fixed table-condensed">
+        <div class="panel-body">
+            <table class="table table-fixed table-condensed table-border-grey">
                 <thead>
                 <tr>
                 <th class="col-xs-3">First Name</th>
@@ -42,7 +43,7 @@
                           @permission(StandardPermissions::viewOthersProfile)
                             <a href="/employees/{{$employee->employeeId}}">
                                 <button  class="button20">
-                                    <i class="fa fa-eye fa-2x" aria-hidden="true"></i>
+                                    <i class="fa fa-list-alt fa-2x" aria-hidden="true"></i>
                                 </button></a>
                          @endpermission
                         </td>
@@ -55,7 +56,7 @@
         @endif
 
     @permission(StandardPermissions::createEditEmployee)
-    <div class="panel-body">
+
     <a href="/employees/showemployeeform/{{$companyProfileModel->companyId}}">
         <button class="button button40 pull-right"> Add New Employee
 

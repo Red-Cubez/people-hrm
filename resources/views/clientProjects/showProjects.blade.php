@@ -72,7 +72,7 @@
 
                     @permission(StandardPermissions::createEditClientProjectResource)
                             <a href="/clientprojects/{{$clientProject->id}}/projectresources">
-                                <button class="btn btn-primary"> Manage Resource
+                                <button class="btn btn-primary"> Manage Resources
 
                                 </button></a>
                     @endpermission    

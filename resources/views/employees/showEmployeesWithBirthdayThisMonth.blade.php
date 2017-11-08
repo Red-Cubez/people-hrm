@@ -7,36 +7,29 @@
     <div class="panel-body">
         @if (count($employeesWithBirthday) >0)
 
-            <table class="table table-striped task-table">
-                <!-- Table Headings -->
+            <table class="table table-fixed table-condensed table-border-grey">
                 <thead>
-                <th>
-                    Employee First Name
-                </th>
-                <th>
-                    Employee Last Name
-                </th>
-                <th>
-                    Date of Birth
-                </th>
+                <tr>
+                <th class="col-xs-4">First Name</th>
+                <th class="col-xs-4">Last Name</th>
+                <th class="col-xs-4">DoB</th>
+                </tr>
                 </thead>
-                <!-- Table Body -->
                 <tbody>
 
                 @foreach ($employeesWithBirthday as $employee)
                     <tr>
-                        <!--  Name -->
-                        <td class="table-text">
+                        <td class="col-xs-4">
                             <div>
                                 {{ $employee->firstName }}
                             </div>
                         </td>
-                        <td class="table-text">
+                        <td class="col-xs-4">
                             <div>
                                 {{ $employee->lastName}}
                             </div>
                         </td>
-                        <td class="table-text">
+                        <td class="col-xs-4">
                             <div>
                                 {{ date("d-M",strtotime(($employee->birthDate))) }}
                             </div>

@@ -5,7 +5,8 @@
                 Company Departments
             </h3>
         </div>
-        <table  class="table table-fixed table-condensed">
+        <div class="panel-body">
+        <table  class="table table-fixed table-condensed table-border-grey">
             <thead>
             <tr>
                 <th class="col-xs-6">Department Name</th>
@@ -20,22 +21,24 @@
                     <tr id="department_{{$department->departmentId}}">
                         <!--  Name -->
                         <td id="departmentName_{{$department->departmentId}}" class="col-xs-6 ">
-                            <div class="padTop20">
+                            <div  >
                                 {{ $department->departmentName }}
                             </div>
                         </td>
 
                         @permission(StandardPermissions::createEditDeleteDepartment)
                         <td class="col-xs-6">
-                            <ul class="list-inline">
-                                <li class="list-inline-item">
+                            <div class="aParent">
+                                <div>
+
                                     <button class="button20"
                                             onclick="openDepartmentModal({{$department->departmentId}},null);"
                                             type="button">
                                         <i class="fa fa-pencil-square-o fa-2x"></i>
                                     </button>
-                                </li>
-                                <li class="list-inline-item">
+
+                                </div>
+                                <div>
                                     <form  action="{{url('company/department/'.$department->departmentId) }}" method="POST">
                                         {{ csrf_field() }}
                                         {{ method_field('DELETE') }}
@@ -43,8 +46,9 @@
                                             <i class="fa fa-trash fa-2x"></i>
                                         </button>
                                     </form>
-                                </li>
-                            </ul>
+                                </div>
+                            </div>
+
                         </td>
                         @endpermission
                     </tr>
@@ -55,7 +59,7 @@
         </table>
 
         @permission(StandardPermissions::createEditDeleteDepartment)
-        <div class="panel-body">
+
             <button class="button button40 pull-right" onclick="openDepartmentModal(null,null);" type="button">
                 Add Department
             </button>
@@ -170,25 +174,26 @@
                 },
             });
         }
+
         function createDepartmentHtmlRow(data)
       {
            return '\
                      <td id="departmentName_' + data.departmentId + ' " class="col-xs-6 " >\
-                        <div class="padTop20">\
+                        <div >\
                             ' + data.departmentName + '\
                         </div>\
                     </td>\
                     <td class="col-xs-6">\
-                    <ul class="list-inline">\
-                    <li class="list-inline-item">\
+                      <div class="aParent">\
+                    <div>\
                         <button \
                         class="button20" \
                         onclick="openDepartmentModal(\'' + data.departmentId + '\',\'' + data.departmentName + '\');" \
                         type="button"> \
                         <i class="fa fa-pencil-square-o fa-2x"></i> \
                         </button> \
-                         </li>\
-                          <li class="list-inline-item">\
+                         </div>\
+                           <div>\
                             <form action="{{url('company/department')}}/' + data.departmentId + ' " method="POST">\
                                     {{ csrf_field() }}\
                                     {{ method_field('DELETE') }}\
@@ -196,8 +201,8 @@
                                       <i class="fa fa-trash fa-2x"></i>\
                                     </button>\
                             </form>\
-                             </li>\
-                               </ul>\
+                             </div>\
+                             </div>\
                     </td>';
       }
     

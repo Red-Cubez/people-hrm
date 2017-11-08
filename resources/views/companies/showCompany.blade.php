@@ -43,7 +43,6 @@
         </div>
         @endpermission
     </div>
-
     <div class="row">
         <div class="col-sm-3 nopadding">
             @include('companyDepartments/showDepartments')

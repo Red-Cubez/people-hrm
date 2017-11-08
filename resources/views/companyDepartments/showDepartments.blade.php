@@ -6,12 +6,13 @@
             </h3>
         </div>
         <div class="panel-body">
-        <table  class="table table-fixed table-condensed table-border-grey">
+            <div class="scroll-panel-table table-responsive">
+        <table  class="table table-border-grey">
             <thead>
             <tr>
-                <th class="col-xs-6">Department Name</th>
+                <th >Department Name</th>
                 @permission(StandardPermissions::createEditDeleteDepartment)
-                <th class="col-xs-6">Operations</th>
+                <th>Operations</th>
                 @endpermission
             </tr>
             </thead>
@@ -19,26 +20,18 @@
             @if (count($companyProfileModel->departments) > 0)
                 @foreach ($companyProfileModel->departments as $department)
                     <tr id="department_{{$department->departmentId}}">
-                        <!--  Name -->
-                        <td id="departmentName_{{$department->departmentId}}" class="col-xs-6 ">
-                            <div  >
-                                {{ $department->departmentName }}
-                            </div>
+                        <td id="departmentName_{{$department->departmentId}}" >
+                            {{ $department->departmentName }}
                         </td>
-
                         @permission(StandardPermissions::createEditDeleteDepartment)
-                        <td class="col-xs-6">
+                        <td>
                             <div class="aParent">
-                                <div>
-
-                                    <button class="button20"
+                                <button class="button20"
                                             onclick="openDepartmentModal({{$department->departmentId}},null);"
                                             type="button">
                                         <i class="fa fa-pencil-square-o fa-2x"></i>
                                     </button>
 
-                                </div>
-                                <div>
                                     <form  action="{{url('company/department/'.$department->departmentId) }}" method="POST">
                                         {{ csrf_field() }}
                                         {{ method_field('DELETE') }}
@@ -46,9 +39,7 @@
                                             <i class="fa fa-trash fa-2x"></i>
                                         </button>
                                     </form>
-                                </div>
                             </div>
-
                         </td>
                         @endpermission
                     </tr>
@@ -57,7 +48,7 @@
             @endif
             </tbody>
         </table>
-
+            </div>
         @permission(StandardPermissions::createEditDeleteDepartment)
 
             <button class="button button40 pull-right" onclick="openDepartmentModal(null,null);" type="button">
@@ -178,23 +169,20 @@
         function createDepartmentHtmlRow(data)
       {
            return '\
-                     <td id="departmentName_' + data.departmentId + ' " class="col-xs-6 " >\
+                     <td id="departmentName_' + data.departmentId + ' "   >\
                         <div >\
                             ' + data.departmentName + '\
                         </div>\
                     </td>\
-                    <td class="col-xs-6">\
+                    <td>\
                       <div class="aParent">\
-                    <div>\
                         <button \
                         class="button20" \
                         onclick="openDepartmentModal(\'' + data.departmentId + '\',\'' + data.departmentName + '\');" \
                         type="button"> \
                         <i class="fa fa-pencil-square-o fa-2x"></i> \
                         </button> \
-                         </div>\
-                           <div>\
-                            <form action="{{url('company/department')}}/' + data.departmentId + ' " method="POST">\
+                        <form action="{{url('company/department')}}/' + data.departmentId + ' " method="POST">\
                                     {{ csrf_field() }}\
                                     {{ method_field('DELETE') }}\
                                     <button type="submit" class="button20" data-toggle="confirmation"\ data-singleton="true">\
@@ -202,8 +190,7 @@
                                     </button>\
                             </form>\
                              </div>\
-                             </div>\
-                    </td>';
+                           </td>';
       }
     
         function addDepartment() {

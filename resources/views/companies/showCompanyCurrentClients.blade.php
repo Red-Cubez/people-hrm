@@ -7,35 +7,24 @@
     </div>
     @if (count($companyProfileModel->companyClients) > 0)
         <div class="panel-body">
-            <table class="table table-fixed table-condensed table-border-grey">
+            <div class="scroll-panel-table table-responsive">
+            <table class="table table-border-grey">
                 <thead>
                 <tr>
-                <th class="col-xs-3">Client Name</th>
-                <th class="col-xs-3">Contact Person</th>
-                <th class="col-xs-3">Contact Number</th>
-                <th class="col-xs-3">Operation</th>
+                <th  >Client Name</th>
+                <th  >Contact Person</th>
+                <th  >Contact Number</th>
+                <th  >Operation</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach ($companyProfileModel->companyClients as $client)
                     <tr>
 
-                        <td class="col-xs-3">
-                            <div>
-                                {{ $client->clientName }}
-                            </div>
-                        </td>
-                        <td class="col-xs-3">
-                            <div>
-                                {{ $client->contactPerson}}
-                            </div>
-                        </td>
-                        <td class="col-xs-3">
-                            <div>
-                                {{ $client->contactNumber}}
-                            </div>
-                        </td>
-                        <td class="col-xs-3">
+                        <td  >{{ $client->clientName }}</td>
+                        <td>{{ $client->contactPerson}}</td>
+                        <td >{{ $client->contactNumber}}</td>
+                        <td >
                             <a href="/clients/{{$client->clientId}}">
                                 <button class="button20">
                                     <i class="fa fa-list-alt fa-2x" aria-hidden="true"></i>
@@ -54,5 +43,6 @@
             </a>
     </div>
      @endpermission  
+</div>
 </div>
 @endpermission

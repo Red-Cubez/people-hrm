@@ -10,7 +10,7 @@
     <div class="panel-body ">
         @if (count($companyProfileModel->companyProjects) > 0)
             <div class="scroll-panel-table table-responsive">
-        <table class="table   table-border-grey">
+        <table class="table table-hover  table-border-grey">
             <thead>
             <tr>
                 <th>Name</th>

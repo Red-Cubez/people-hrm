@@ -5,8 +5,8 @@
         </h3>
     </div>
     <div class="panel-body">
-
-        <table class="table table-striped ">
+        <div class="scroll-panel-table table-responsive">
+        <table class="table table-border-grey">
             <thead>
             <tr>
             <th>Name</th>
@@ -18,31 +18,23 @@
             @if (count($companyHolidays) > 0)
                 @foreach ($companyHolidays as $companyHoliday)
                     <tr >
-                        <!--  Name -->
                         <td id="holidayName_{{$companyHoliday->holidayId}}" >
-                            <div>
-                                {{ $companyHoliday->name }}
-                            </div>
+                            {{ $companyHoliday->name }}
                         </td>
                         <td id="startDate_{{$companyHoliday->holidayId}}">
-                            <div>
-                                {{ $companyHoliday->startDate }}
-                            </div>
+                            {{ $companyHoliday->startDate }}
                         </td>
                         <td id="endDate_{{$companyHoliday->holidayId}}" >
-                            <div>
-                                {{ $companyHoliday->endDate }}
-                            </div>
+                            {{ $companyHoliday->endDate }}
                         </td>
                         <td id="countHolidays_{{$companyHoliday->holidayId}}" >
-                            <div>
+
                                 {{ $companyHoliday->holidays }}
-                            </div>
                         </td>
                 @endforeach
             @endif
             </tbody>
         </table>
+        </div>
     </div>
-
 </div>

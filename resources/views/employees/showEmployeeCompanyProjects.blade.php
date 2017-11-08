@@ -4,10 +4,10 @@
     </div>
     <div class="panel-body">
         @if (!is_null($employeeModel->companyProjects))
-
-            <table class="table table-striped task-table">
-                <!-- Table Headings -->
+            <div class="scroll-panel-table table-responsive">
+            <table class="table table-border-grey">
                 <thead>
+                <tr>
                 <th>Project Name</th>
                 <th>Company Name</th>
                 <th>Start Date</th>
@@ -17,40 +17,26 @@
                  @permission(StandardPermissions::showCompanyProjects)
                               <th>Operations</th>
                  @endpermission
+                </tr>
                 </thead>
-                <!-- Table Body -->
                 <tbody>
                 @foreach ($employeeModel->companyProjects as $companyProject )
 
                         <tr>
-                            <!-- Project Name -->
-                            <td class="table-text">
-                                <div>{{ $companyProject->projectName }}</div>
-                            </td>
-                            <td class="table-text">
-                                <div>{{ $companyProject->companyName}}</div>
-                            </td>
-                            <td class="table-text">
-                                <div>{{ $companyProject->projectStartDate }}</div>
-                            </td>
-                            <td class="table-text">
-                                <div>{{ $companyProject->projectEndDate }}</div>
-                            </td>
-                            <td class="table-text">
-                                <div>{{ $companyProject->hoursPerWeek }}</div>
-                            </td>
+
+                            <td >{{ $companyProject->projectName }}</td>
+                            <td >{{ $companyProject->companyName}}</td>
+                            <td >{{ $companyProject->projectStartDate }}</td>
+                            <td >{{ $companyProject->projectEndDate }}</td>
+                            <td >{{ $companyProject->hoursPerWeek }}</td>
                     @permission(StandardPermissions::viewCompanyProject)
                                     <td>
-         
-                                         <a href="/companyprojects/{{$companyProject->projectId}}">
-                                         <button class="btn btn-primary"> View
-
+                                        <a href="/companyprojects/{{$companyProject->projectId}}">
+                                         <button class="button20">
+                                             <i class="fa fa-list-alt fa-2x" aria-hidden="true"></i>
                                          </button></a>
                                     </td>
-
-                    @endpermission
-                                    
-
+                            @endpermission
                         </tr>
                 @endforeach
                 </tbody>
@@ -59,4 +45,5 @@
             No Record Found
         @endif
     </div>
+</div>
 </div>

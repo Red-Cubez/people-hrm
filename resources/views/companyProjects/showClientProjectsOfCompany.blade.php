@@ -7,72 +7,40 @@
 
         @if (count($companyProfileModel->clientProjects) > 0)
         <div class="panel-body">
-        <table class="table table-fixed table-condensed table-border-grey">
+            <div class="scroll-panel-table table-responsive">
+        <table class="table table-border-grey">
             <thead>
             <tr>
-                <th class="col-xs-1">Name</th>
-                <th class="col-xs-2">Expected Start Date</th>
-                <th class="col-xs-2">Expected End Date</th>
-                <th class="col-xs-2">Actual Start Date</th>
-                <th class="col-xs-2">Actual End Date</th>
-                <th class="col-xs-1">Budget</th>
-                <th class="col-xs-1">Cost</th>
+                <th >Name</th>
+                <th >Expected Start Date</th>
+                <th  >Expected End Date</th>
+                <th >Actual Start Date</th>
+                <th  >Actual End Date</th>
+                <th  >Budget</th>
+                <th  >Cost</th>
                @permission([ StandardPermissions::viewClientProject,StandardPermissions::deleteClientProject])
-                <th class="col-xs-1">Operations</th>
+                <th  >Operations</th>
                 @endpermission
             <tr>
             </thead>
             <tbody>
                 @foreach ($companyProfileModel->clientProjects as $project)
                 <tr>
-                    <td class="col-xs-1 ">
-                        <div >
-                            {{ $project->projectName }}
-                        </div>
-                    </td>
-                    <td  class="col-xs-2 ">
-                        <div >
-                            {{ $project->expectedStartDate }}
-                        </div>
-                    </td>
-                    <td  class="col-xs-2 ">
-                        <div >
-                            {{ $project->expectedEndDate }}
-                        </div>
-                    </td>
-                    <td  class="col-xs-2 ">
-                        <div >
-                            {{ $project->actualStartDate }}
-                        </div>
-                    </td>
-                    <td  class="col-xs-2 ">
-                        <div >
-                            {{ $project->actualEndDate }}
-                        </div>
-                    </td>
-                    <td class="col-xs-1 ">
-                        <div >
-                            {{ $project->budget}}
-                        </div>
-                    </td>
-                    <td  class="col-xs-1 ">
-                        <div >
-                            {{ $project->cost }}
-                        </div>
-                    </td>
-               
-                    <td class="col-xs-1">
-
+                    <td>{{ $project->projectName }}</td>
+                    <td>{{ $project->expectedStartDate }}</td>
+                    <td>{{ $project->expectedEndDate }}</td>
+                    <td >{{ $project->actualStartDate }}</td>
+                    <td>{{ $project->actualEndDate }}</td>
+                    <td >{{ $project->budget}}</td>
+                    <td>{{ $project->cost }}</td>
+                    <td>
                         <div class="aParent">
-                             <span>
-                                 @permission(StandardPermissions::viewClientProject)
+                            @permission(StandardPermissions::viewClientProject)
                                  <a href="{{route('clientprojects.show', $project->projectId)}}" class="button20">
                             <i class="fa fa-list-alt" aria-hidden="true"></i>
-                        </a>
-                                 @endpermission
-                            </span>
-                                <div>
-                                    @permission(StandardPermissions::deleteClientProject)
+                         </a>
+                            @endpermission
+                            @permission(StandardPermissions::deleteClientProject)
                         <form action="{{ url('clientprojects/'.$project->projectId) }}" method="POST">
                             {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
@@ -82,14 +50,14 @@
                                 </button>
                             {{--</input>--}}
                         </form>
-                                    @endpermission
-                                </div>
+                            @endpermission
                         </div>
                     </td>
                 </tr>
                 @endforeach
             </tbody>
         </table>
+            </div>
         @else
                 No Record Found
         @endif

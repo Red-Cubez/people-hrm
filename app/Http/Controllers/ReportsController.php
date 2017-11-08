@@ -11,7 +11,7 @@ use People\Services\Interfaces\IReportService;
 use People\Services\Interfaces\IUserAuthenticationService;
 use People\Services\StandardPermissions;
 use People\Models\Employee;
-use People\Reports\MyReport;
+use People\Services\Reports\MyReport;
 
 class ReportsController extends Controller
 {
@@ -50,8 +50,10 @@ class ReportsController extends Controller
     public function index()
     {
           $report = new MyReport;
-          dd($report);
+          // dd($report);
+          // dd($report);
         $report->run();
+       
         return view("report",["report"=>$report]);
     }
 

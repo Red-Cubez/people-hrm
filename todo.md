@@ -17,3 +17,9 @@ select datess,month--done
 
 getCompanyProjectResourcesOnActiveProjects($employeeId)----set function
 
+//////////////////
+we can draw differnct charts without specifying extra parameters,just Call class for required chart.
+We have to pass query to get results.
+there is option to export data to excel,but chat will not export,only data will export.
+Only excel report is free.
+we have to make separtes files for diffenret queries.One file for one query.

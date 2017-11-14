@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.4.3.final using JasperReports Library version 6.4.3  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="employees" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a07bc26a-3861-428f-ac81-a8a02577ec8b">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="host" class="java.lang.String"/>
+	<parameter name="driver" class="java.lang.String"/>
+	<parameter name="username" class="java.lang.String"/>
+	<parameter name="database" class="java.lang.String"/>
+	<parameter name="password" class="java.lang.String"/>
+	<parameter name="jdbc_driver" class="java.lang.String"/>
+	<parameter name="port" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[select firstName,lastName,hourlyRate from employees]]>
+	</queryString>
+	<field name="firstName" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="firstName"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="employees"/>
+	</field>
+	<field name="lastName" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="lastName"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="employees"/>
+	</field>
+	<field name="hourlyRate" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="hourlyRate"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="employees"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="38" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="30" uuid="817bd821-b16c-4bf4-8888-531070080f01"/>
+				<textFieldExpression><![CDATA["First Name "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="80" y="0" width="100" height="30" uuid="2cab7940-ece6-433d-961e-5dac99e52c48"/>
+				<textFieldExpression><![CDATA["Last Name"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="180" y="0" width="100" height="30" uuid="5c693971-5216-4e3d-9058-8e562ea70863"/>
+				<textFieldExpression><![CDATA["Hourly Rate"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="6" width="100" height="30" uuid="1fcbce4c-53e7-4bfe-b1db-a41d2f91ad87"/>
+				<textFieldExpression><![CDATA[$F{firstName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="90" y="6" width="100" height="30" uuid="65941630-85f6-4b79-9daa-a8203e201000"/>
+				<textFieldExpression><![CDATA[$F{lastName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="180" y="6" width="100" height="30" uuid="55bfd17a-0065-47c9-9eec-6e21c53b394f"/>
+				<textFieldExpression><![CDATA[$F{hourlyRate}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -186,6 +186,8 @@ return [
         Barryvdh\DomPDF\ServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
 
+        JasperPHP\JasperPHPServiceProvider::class
+
     ],
 
     /*

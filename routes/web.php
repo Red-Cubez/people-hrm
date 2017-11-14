@@ -49,8 +49,6 @@ Route::delete('/task/{task}', function (People\Models\Task $task) {
 
 Auth::routes();
 
-Route::get('/reports', 'ReportsController@index');
-
 Route::get('/home', 'HomeController@index');
 
 Route::get('/employees/showemployeeform/{companyId}', 'EmployeeController@showEmployeeForm');
@@ -120,3 +118,6 @@ Route::post('/company/projects/report/generateReport', 'ReportsController@genera
 Route::post('/company/projects/report/export', 'ReportsController@export');
 
 //Route::get('pdfview',array('as'=>'pdfview','uses'=>'ItemController@pdfview'));
+//jasper reports
+Route::get('/company-reports', 'JasperReportController@index');
+Route::get('/company-reports/employees-with-hourly-rate/{fileExtension}', 'JasperReportController@employeesWithHourlyRate');

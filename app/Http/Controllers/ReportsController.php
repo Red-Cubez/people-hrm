@@ -10,8 +10,6 @@ use People\Services\Interfaces\IDateTimeService;
 use People\Services\Interfaces\IReportService;
 use People\Services\Interfaces\IUserAuthenticationService;
 use People\Services\StandardPermissions;
-use People\Models\Employee;
-use People\Services\Reports\MyReport;
 
 class ReportsController extends Controller
 {
@@ -47,14 +45,10 @@ class ReportsController extends Controller
         $this->CompanySettingService     = $companySettingService;
 
     }
+
     public function index()
     {
-          $report = new MyReport;
-          // dd($report);
-          // dd($report);
-        $report->run();
-       
-        return view("report",["report"=>$report]);
+
     }
 
     public function showOptions($companyId)
@@ -228,36 +222,35 @@ class ReportsController extends Controller
 
         $projectsTimelines = $this->ReportService->getProjectsTimelinesFrom($monthlyTimelines);
 
-        return $this->pdfview($request, $projectsTimelines,$monthlyTimelines);
+        return $this->pdfview($request, $projectsTimelines, $monthlyTimelines);
 
     }
 
     public function export(Request $request)
     {
-       
 
-        $monthlyTimelines = unserialize($request->projectsTimelines);
+        $monthlyTimelines  = unserialize($request->projectsTimelines);
         $projectsTimelines = $this->ReportService->getProjectsTimelinesFrom($monthlyTimelines);
         //to test excel view and graphs view
-         // return view('reports/excelView',
-         //    [
-         //        'projectsTimelines' => $projectsTimelines,
-         //        'monthlyTimelines'=>$monthlyTimelines,
-         //    ]);
-          // return view('reports/graphs',
-          //   [
-        
-          //       'monthlyTimelines'=>$monthlyTimelines,
+        // return view('reports/excelView',
+        //    [
+        //        'projectsTimelines' => $projectsTimelines,
+        //        'monthlyTimelines'=>$monthlyTimelines,
+        //    ]);
+        // return view('reports/graphs',
+        //   [
 
-          //   ]);
+        //       'monthlyTimelines'=>$monthlyTimelines,
 
-        $excelSheet=\Excel::create('Report', function ($excel) use ($projectsTimelines,$monthlyTimelines) {
-            $excel->sheet('ExportFile', function ($sheet) use ($projectsTimelines,$monthlyTimelines) {
+        //   ]);
+
+        $excelSheet = \Excel::create('Report', function ($excel) use ($projectsTimelines, $monthlyTimelines) {
+            $excel->sheet('ExportFile', function ($sheet) use ($projectsTimelines, $monthlyTimelines) {
                 $sheet->loadView('reports/excelView',
-                 [
-                    'projectsTimelines' => $projectsTimelines,
-                    'monthlyTimelines'=>$monthlyTimelines,
-                ]);
+                    [
+                        'projectsTimelines' => $projectsTimelines,
+                        'monthlyTimelines'  => $monthlyTimelines,
+                    ]);
             });
         });
 
@@ -265,32 +258,32 @@ class ReportsController extends Controller
 
     }
 
-    public function pdfview($request, $projectsTimelines,$monthlyTimelines)
+    public function pdfview($request, $projectsTimelines, $monthlyTimelines)
     {
         //to test pdf view and graphs view
         // return view('reports/pdfview',
         //     [
         //         'projectsTimelines' => $projectsTimelines,
-        //     
+        //
 
         //     ]);
-         // return view('reports/graphs',
+        // return view('reports/graphs',
         //     [
-        
+
         //         'monthlyTimelines'=>$monthlyTimelines,
 
         //     ]);
 
-        $pdfView     = \View::make('reports/pdfview', 
+        $pdfView = \View::make('reports/pdfview',
             [
                 'projectsTimelines' => $projectsTimelines,
-                'monthlyTimelines'=>$monthlyTimelines,
-              
+                'monthlyTimelines'  => $monthlyTimelines,
+
             ]);
         $pdfViewContents = (string) $pdfView;
 
         // or
-        
+
         // $pdfViewContents = $view->render();
 
         $pdf = \App::make('dompdf.wrapper');

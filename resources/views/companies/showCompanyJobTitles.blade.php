@@ -7,11 +7,11 @@
         </div>
         <div class="panel-body">
             <div class="scroll-panel-table table-responsive">
-        <table id="jobTitleTable" class="table table-border-grey">
+        <table id="jobTitleTable" class="table table-bordered table-hover table-striped">
             <thead>
             <tr>
                 <th  >Job Title Name</th>
-                <th  >Operations</th>
+                <th  ></th>
             </tr>
             </thead>
             <tbody id="jobTitleTableBody">
@@ -48,11 +48,12 @@
         </table>
             </div>
         @permission(StandardPermissions::createEditDeleteJobTitle)
-
-            <button class="button button40 pull-right" onclick="openJobTitleModal(null,null);" type="button">
+           <div class="padTop20">
+               <button class="button button40 pull-right" onclick="openJobTitleModal(null,null);" type="button">
                 Add New Job Title
             </button>
-        </div>
+           </div>
+            </div>
         @endpermission
 
         @permission(StandardPermissions::createEditDeleteJobTitle)

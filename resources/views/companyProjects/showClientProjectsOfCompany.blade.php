@@ -8,7 +8,7 @@
         @if (count($companyProfileModel->clientProjects) > 0)
         <div class="panel-body">
             <div class="scroll-panel-table table-responsive">
-        <table class="table table-border-grey">
+        <table class="table table-bordered table-hover table-striped">
             <thead>
             <tr>
                 <th >Name</th>
@@ -19,7 +19,7 @@
                 <th  >Budget</th>
                 <th  >Cost</th>
                @permission([ StandardPermissions::viewClientProject,StandardPermissions::deleteClientProject])
-                <th  >Operations</th>
+                <th  ></th>
                 @endpermission
             <tr>
             </thead>
@@ -37,7 +37,7 @@
                         <div class="aParent">
                             @permission(StandardPermissions::viewClientProject)
                                  <a href="{{route('clientprojects.show', $project->projectId)}}" class="button20">
-                            <i class="fa fa-list-alt" aria-hidden="true"></i>
+                            <i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>
                          </a>
                             @endpermission
                             @permission(StandardPermissions::deleteClientProject)
@@ -46,7 +46,7 @@
                                 {{ method_field('DELETE') }}
                             {{--<input name="_method" type="hidden" value="DELETE">--}}
                                 <button class="button20" data-toggle="confirmation" data-singleton="true"  type="submit">
-                                    <i class="fa fa-trash "></i>
+                                    <i class="fa fa-trash fa-2x"></i>
                                 </button>
                             {{--</input>--}}
                         </form>

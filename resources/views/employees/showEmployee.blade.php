@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <main>
+    <main class="mainShowEmployeeSection">
         <div class="container">
             <div class="row">
                 @include('common.errors')
@@ -130,7 +130,7 @@
                     </div>
             </div>
                 @permission(StandardPermissions::createEditTimesheet)
-                    <div class="row row-content100">
+                    <div class="row padTop5">
                         <div class="col-sm-12 col-md-11 col-md-offset-1">
                             <a href="/employeetimesheet/{{$employeeModel->employeeProfile->employeeId}}/create">
                                 <button class="button button50"> Add Timesheet</button>
@@ -153,7 +153,7 @@
             @endpermission
                         </div>
                     </div>
-            <div class="row">
+            <div class="row row-content100">
                 <div class="col-sm-5">
                     @include('employees/showCompanyHolidays')
                 </div>

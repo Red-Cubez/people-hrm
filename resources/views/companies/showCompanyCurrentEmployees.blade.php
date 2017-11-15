@@ -7,7 +7,7 @@
     @if (count($companyProfileModel->companyEmployees) > 0)
         <div class="panel-body">
             <div class="scroll-panel-table table-responsive">
-            <table class="table table-border-grey">
+            <table class="table table-bordered table-hover table-striped ">
                 <thead>
                 <tr>
                 <th  >First Name</th>
@@ -31,7 +31,7 @@
                             @permission(StandardPermissions::viewOthersProfile)
                             <a href="/employees/{{$employee->employeeId}}">
                                 <button  class="button20">
-                                    <i class="fa fa-list-alt fa-2x" aria-hidden="true"></i>
+                                   <i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>
                                 </button></a>
                          @endpermission
                         </td>

@@ -48,7 +48,8 @@
             @include('companyDepartments/showDepartments')
         </div>
         <div class="col-sm-9">
-            @include('employees/showEmployeesWithBirthdayThisMonth')
+        @include('companies/showCompanyCurrentEmployees')
+           
         </div>
 
     </div>
@@ -60,11 +61,11 @@
         StandardPermissions::viewOwnProfile,
         StandardPermissions::showEmployees
        ])
-        <div class="col-sm-6 nopadding">
-            @include('companies/showCompanyCurrentEmployees')
+        <div class="col-sm-3 nopadding">
+             @include('employees/showEmployeesWithBirthdayThisMonth')
         </div>
        @endpermission 
-        <div class="col-sm-6">
+        <div class="col-sm-9">
             @include('companies/showCompanyCurrentClients')
         </div>
     </div>

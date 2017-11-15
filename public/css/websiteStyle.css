@@ -182,6 +182,9 @@ img {
 .padTop5{
     padding-top: 5px;
 }
+.padTop10{
+    padding-top: 10px;
+}
 .table-fixed thead {
   width: 100%;
 }
@@ -197,7 +200,7 @@ img {
   float: left;
   border-bottom-width: 0;
 }
-.fa-pencil-square-o,.fa-eye,.green-text,.fa-list-alt{
+.fa-pencil-square-o,.fa-eye,.green-text,.fa-info-circle{
     color: #49c32c ;
 }
 .fa-trash,.red-text{
@@ -238,4 +241,8 @@ img {
 .nopadding {
     padding-right: 0 !important;
 
+}
+.currentInternalProjectsView a,
+.mainShowEmployeeSection a{
+text-decoration: none;
 }

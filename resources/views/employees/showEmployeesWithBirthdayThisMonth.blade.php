@@ -7,7 +7,7 @@
     <div class="panel-body">
         @if (count($employeesWithBirthday) >0)
             <div class="scroll-panel-table table-responsive">
-            <table class="table table-border-grey">
+            <table class="table table-bordered table-hover table-striped">
                 <thead>
                 <tr>
                 <th>First Name</th>

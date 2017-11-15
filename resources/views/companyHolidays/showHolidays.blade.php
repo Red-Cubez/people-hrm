@@ -6,14 +6,14 @@
     </div>
     <div class="panel-body">
         <div class="scroll-panel-table table-responsive">
-    <table class="table table-border-grey">
+    <table class="table table-bordered table-hover table-striped">
         <thead>
             <tr>
               <th> Holiday Name</th>
                 <th >Start Date</th>
                 <th >End Date</th>
                <th > Total Holidays</th>  @permission(StandardPermissions::createEditDeleteHoliday)
-              <th > Operations</th>  @endpermission
+              <th ></th>  @endpermission
             </tr>
           </thead>
         <tbody id="holidayTableBody">
@@ -57,11 +57,12 @@
         </table>
         </div>
     @permission(StandardPermissions::createEditDeleteHoliday)
-
-    <button class="button button40 pull-right" onclick="openHolidayModal(null,null,null,null);" type="button">
+    <div class="padTop20">
+       <button class="button button40 pull-right " onclick="openHolidayModal(null,null,null,null);" type="button">
         Add Holiday
-    </button>
-</div>
+    </button>   
+    </div>
+   </div>
      </div>
 @endpermission
 @permission(StandardPermissions::createEditDeleteHoliday)

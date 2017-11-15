@@ -7,7 +7,7 @@
         </div>
         <div class="panel-body">
             <div class="scroll-panel-table table-responsive">
-        <table  class="table table-border-grey">
+        <table  class="table table-bordered table-hover table-striped">
             <thead>
             <tr>
                 <th >Department Name</th>
@@ -50,11 +50,12 @@
         </table>
             </div>
         @permission(StandardPermissions::createEditDeleteDepartment)
-
+          <div class="padTop20">
             <button class="button button40 pull-right" onclick="openDepartmentModal(null,null);" type="button">
                 Add Department
             </button>
             @endpermission
+            </div>
         </div>
     </div>
     @permission(StandardPermissions::createEditDeleteDepartment)

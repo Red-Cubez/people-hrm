@@ -5,16 +5,16 @@
                 <div class="panel-body">
   @if (!is_null($employeeModel->clientProjects))
                         <div class="scroll-panel-table table-responsive">
-                    <table class="table table-border-grey">
+                    <table class="table table-bordered table-hover table-striped">
                         <thead>
                         <tr>
-                            <th>Project Name </th>
-                            <th>Client Name</th>
+                            <th>Project</th>
+                            <th>Client</th>
                             <th>Start Date</th>
                             <th>End Date</th>
-                            <th>Hours Per Week</th>
+                            <th>Hours/Week</th>
                             @permission(StandardPermissions::showClientProjects)
-                            <th>Operations</th>
+                            <th></th>
                            @endpermission
                         </tr>
                         </thead>
@@ -31,7 +31,7 @@
                                     <td>
                                         <a href="/clientprojects/{{$clientProject->projectId}}">
                                          <button class="button20">
-                                             <i class="fa fa-list-alt fa-2x" aria-hidden="true"></i>
+                                           <i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>
                                          </button></a>
                                     </td>
                                     @endpermission

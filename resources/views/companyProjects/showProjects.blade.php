@@ -1,6 +1,4 @@
 <section class="currentInternalProjectsView">
-
-</section>
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3>
@@ -10,7 +8,7 @@
     <div class="panel-body ">
         @if (count($companyProfileModel->companyProjects) > 0)
             <div class="scroll-panel-table table-responsive">
-        <table class="table table-hover  table-border-grey">
+        <table class="table table-bordered table-hover table-striped">
             <thead>
             <tr>
                 <th>Name</th>
@@ -21,7 +19,7 @@
                 <th>Budget</th>
                 <th>Cost</th>
                  @permission([StandardPermissions::deleteCompanyProject,StandardPermissions::viewCompanyProject])
-                <th>Operations</th>
+                <th></th>
                 @endpermission
             </tr>
             </thead>
@@ -42,7 +40,7 @@
                                     @permission(StandardPermissions::viewCompanyProject)
                             <a href="/companyprojects/{{$project->projectId}}">
                                  <button class="button20">
-                                    <i class="fa fa-list-alt" aria-hidden="true"></i>
+                                  <i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>
                                  </button>
                             </a>
                                 </span>
@@ -53,7 +51,7 @@
                             <span >
                                     <input name="_method" type="hidden" value="DELETE">
                                     <button class="button20" data-toggle="confirmation" data-singleton="true" type="submit">
-                                        <i class="fa fa-trash"></i>
+                                        <i class="fa fa-trash fa-2x"></i>
                                     </button>
                                  </span>
                             @endpermission
@@ -69,14 +67,18 @@
         </table>
             </div>
     @permission(StandardPermissions::createEditCompanyProject)
+    <div class="padTop20">
+        <a href="/companies/{{$companyProfileModel->companyId}}/companyprojects" class="button button40 pull-right">
+         Add New Projects
 
-    <a href="/companies/{{$companyProfileModel->companyId}}/companyprojects">
-        <button class="button button40 pull-right"> Add New Projects
-
-        </button></a>
+        </a> 
+    </div>
+   
     @endpermission
         </div>
 </div>
+</section>
+
 <script type="text/javascript">
 $('[data-toggle=confirmation]').confirmation({
   rootSelector: '[data-toggle=confirmation]',

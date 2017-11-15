@@ -6,7 +6,7 @@
     </div>
     <div class="panel-body">
         <div class="scroll-panel-table table-responsive">
-        <table class="table table-border-grey">
+        <table class="table table-bordered table-hover table-striped">
             <thead>
             <tr>
             <th>Name</th>

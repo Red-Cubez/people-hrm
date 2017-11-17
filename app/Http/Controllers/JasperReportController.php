@@ -2,6 +2,7 @@
 
 namespace People\Http\Controllers;
 
+use Illuminate\Http\Request;
 use JasperPHP;
 
 class JasperReportController extends Controller
@@ -13,19 +14,36 @@ class JasperReportController extends Controller
 
     public function index()
     {
-    	dd("show all report button here");
-       
+        // dd("show all report button here");
+        return view
+            ('jasperReport/index',
+            [
+
+            ]);
+
     }
 
-    public function employeesWithHourlyRate($fileExtension)
+    public function internalProjectsReport(Request $request)
     {
-        return $this->processJasperReport('employees_with_hourly_rate',$fileExtension);
+
+        // $this->validate($request, [
+        //     'fileExtension' => 'required',
+
+        // ]);
+
+        // if ($this->validateFileExtension($request->fileExtension)) {
+        //     $errosMessage = "Please select option from  list";
+        //     return back()->withErrors($errosMessage);
+        // }
+
+ 
+        return $this->processJasperReport('internal_projects_report', $request->fileExtension);
 
     }
 
-    public function processJasperReport($fileName,$fileExtension)
+    public function processJasperReport($fileName, $fileExtension)
     {
-        
+
         // JasperPHP::compile(base_path() . '/public/report/employees.jrxml')->execute();
         $output = public_path() . '/report/' . time() . '_' . $fileName;
 
@@ -38,7 +56,7 @@ class JasperReportController extends Controller
 
         )->execute();
 
-        $file = $output . '.'.$fileExtension;
+        $file = $output . '.' . $fileExtension;
 
         $path = $file;
 
@@ -51,8 +69,8 @@ class JasperReportController extends Controller
         unlink($path);
 
         return response($file, 200)
-            ->header('Content-Type', 'application/'.$fileExtension)
-            ->header('Content-Disposition', 'inline; filename=' . $fileName . '.'.$fileExtension);
+            ->header('Content-Type', 'application/' . $fileExtension)
+            ->header('Content-Disposition', 'inline; filename=' . $fileName . '.' . $fileExtension);
 
         // JasperPHP::process(
         //     base_path() . '/public/report/employees.jasper',
@@ -75,4 +93,39 @@ class JasperReportController extends Controller
             // 'jdbc_driver' => base_path() .'/vendor/cossou/jasperphp/src/JasperStarter/jdbc/mysql-connector-java-5.1.44-bin.jar',
         ];
     }
+    public function validateFileExtension($fileExtension)
+    {
+
+        $availableExtensions = ["doc", "xls", "pdf"];
+        $errorFlag           = false;
+
+        if (isset($fileExtension)) {
+
+            if (in_array($fileExtension, $availableExtensions)) {
+
+                $errorFlag = false;
+
+            } else {
+
+                $errorFlag = true;
+            }
+
+        } else {
+            $errorFlag = true;
+        }
+
+        return $errorFlag;
+
+    }
+
+    //  public function employeesWithHourlyRate($fileExtension)
+    // {
+    //     if ($this->validateFileExtension($fileExtension)) {
+    //         $errosMessage = "Please select option from drop down list";
+    //         return back()->withErrors($errosMessage);
+    //     }
+
+    //     return $this->processJasperReport('employees_with_hourly_rate', $fileExtension);
+
+    // }
 }

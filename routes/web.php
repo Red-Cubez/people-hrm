@@ -119,5 +119,5 @@ Route::post('/company/projects/report/export', 'ReportsController@export');
 
 //Route::get('pdfview',array('as'=>'pdfview','uses'=>'ItemController@pdfview'));
 //jasper reports
-Route::get('/company-reports', 'JasperReportController@index');
-Route::get('/company-reports/employees-with-hourly-rate/{fileExtension}', 'JasperReportController@employeesWithHourlyRate');
+Route::get('/company-reports', 'JasperReportController@index')->name("company-reports.index");
+Route::post('/company-reports/internal-projects/generate-report', 'JasperReportController@internalProjectsReport')->name("company-reports.internal-projects-report");

@@ -7,7 +7,7 @@
 @if(count($monthlyTimelines) > 0)
     <div class="container">
         <div class="row">
-            <div class="col-sm-8">
+            <div class="col-sm-4">
                     <?php
                     $data=null;
                     $data=serialize($monthlyTimelines); 
@@ -27,15 +27,30 @@
                     </form>
 
             </div>
-            <div class="col-sm-8">
-          <form action="{{url('/company/projects/report/export')}}" enctype="multipart/form-data" method="post">
-             {{ csrf_field() }}
-            <input type="hidden" name="projectsTimelines" value="{{$data}}">
-            <button class="btn btn-primary" type="submit">Export to Ms Excel</button>
-          </form>
+            <div class="col-sm-4">
+                <form action="{{url('/company/projects/report/export')}}" enctype="multipart/form-data" method="post">
+                   {{ csrf_field() }}
+                   <input type="hidden" name="projectsTimelines" value="{{$data}}">
+                   <button class="btn btn-primary" type="submit">Export to Ms Excel</button>
+                </form>
 
-    </div> 
-        </div>
+            </div> 
+            <div class="col-sm-4">
+                <form action="{{route('company-reports.internal-projects-report')}}" enctype="multipart/form-data" method="post">
+                      {{ csrf_field() }}
+                      <input type="hidden" name="companyId" value="{{$companyId}}" />
+                        <select name="fileExtension" >
+                              <option></option>
+                              <option value="pdf">Pdf</option>
+                              <option value="xls">Excel</option>
+                              <option value="doc">Word</option>
+                              
+                        </select>
+                      <button class="btn btn-primary" type="submit">Generate Japser Report</button>
+                </form>
+
+            </div> 
+       </div>
         <div class="row">
             <div class="col-sm-8">
                 @include('reports/revenueGraph')

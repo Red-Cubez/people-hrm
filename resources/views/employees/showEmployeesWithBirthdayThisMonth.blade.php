@@ -6,41 +6,22 @@
     </div>
     <div class="panel-body">
         @if (count($employeesWithBirthday) >0)
-
-            <table class="table table-striped task-table">
-                <!-- Table Headings -->
+            <div class="scroll-panel-table table-responsive">
+            <table class="table table-bordered table-hover table-striped">
                 <thead>
-                <th>
-                    Employee First Name
-                </th>
-                <th>
-                    Employee Last Name
-                </th>
-                <th>
-                    Date of Birth
-                </th>
+                <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>DoB</th>
+                </tr>
                 </thead>
-                <!-- Table Body -->
                 <tbody>
 
                 @foreach ($employeesWithBirthday as $employee)
                     <tr>
-                        <!--  Name -->
-                        <td class="table-text">
-                            <div>
-                                {{ $employee->firstName }}
-                            </div>
-                        </td>
-                        <td class="table-text">
-                            <div>
-                                {{ $employee->lastName}}
-                            </div>
-                        </td>
-                        <td class="table-text">
-                            <div>
-                                {{ date("d-M",strtotime(($employee->birthDate))) }}
-                            </div>
-                        </td>
+                        <td>{{ $employee->firstName }}</td>
+                        <td >{{ $employee->lastName}}</td>
+                        <td>{{ date("d-M",strtotime(($employee->birthDate))) }}</td>
                     </tr>
                 @endforeach
                 </tbody>
@@ -49,4 +30,5 @@
             No Record Found
         @endif
     </div>
+</div>
 </div>

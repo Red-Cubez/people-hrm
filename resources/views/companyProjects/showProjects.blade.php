@@ -1,90 +1,62 @@
 <section class="currentInternalProjectsView">
-
-</section>
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3>
             Current Internal Projects
         </h3>
     </div>
-
+    <div class="panel-body ">
         @if (count($companyProfileModel->companyProjects) > 0)
-        <table class="table table-fixed table-condensed">
+            <div class="scroll-panel-table table-responsive">
+        <table class="table table-bordered table-hover table-striped">
             <thead>
             <tr>
-                <th class="col-xs-2">Name</th>
-                <th class="col-xs-1">Expected Start Date</th>
-                <th class="col-xs-1">Expected End Date</th>
-                <th class="col-xs-1">Actual Start Date</th>
-                <th class="col-xs-1">Actual End Date</th>
-                <th class="col-xs-1">Budget</th>
-                <th class="col-xs-1">Cost</th>
+                <th>Name</th>
+                <th>Expected Start Date</th>
+                <th>Expected End Date</th>
+                <th>Actual Start Date</th>
+                <th>Actual End Date</th>
+                <th>Budget</th>
+                <th>Cost</th>
                  @permission([StandardPermissions::deleteCompanyProject,StandardPermissions::viewCompanyProject])
-                <th class="col-xs-4">Operations</th>
+                <th></th>
                 @endpermission
             </tr>
             </thead>
             <tbody>
                 @foreach ($companyProfileModel->companyProjects as $project)
                 <tr>
-                    <td class="col-xs-2 ">
-                        <div class="padTop30">
-                            {{ $project->projectName }}
-                        </div>
-                    </td>
-                    <td class="col-xs-1 ">
-                        <div class="padTop30">
-                            {{ $project->expectedStartDate }}
-                        </div>
-                    </td>
-                    <td class="col-xs-1 ">
-                        <div class="padTop30">
-                            {{ $project->expectedEndDate }}
-                        </div>
-                    </td>
-                    <td class="col-xs-1 ">
-                        <div class="padTop30">
-                            {{ $project->actualStartDate }}
-                        </div>
-                    </td>
-                    <td class="col-xs-1">
-                        <div class="padTop30">
-                            {{ $project->actualEndDate }}
-                        </div>
-                    </td>
-                    <td class="col-xs-1 ">
-                        <div class="padTop30">
-                            {{ $project->budget}}
-                        </div>
-                    </td>
-                    <td class="col-xs-1 ">
-                        <div class="padTop30">
-                            {{ $project->cost }}
-                        </div>
-                    </td>
-                    <td class="col-xs-4">
-                        {{--<ul class="list-inline">--}}
-                            {{--<li class="list-inline-item">--}}
-                            @permission(StandardPermissions::viewCompanyProject)
+                    <td>{{ $project->projectName }}</td>
+                    <td >{{ $project->expectedStartDate }}</td>
+                    <td>{{ $project->expectedEndDate }}</td>
+                    <td>{{ $project->actualStartDate }}</td>
+                    <td>{{ $project->actualEndDate }}</td>
+                    <td >{{ $project->budget}}</td>
+                    <td >{{ $project->cost }}</td>
+                    <td>
+                        <form action="{{ url('companyprojects/'.$project->projectId) }}" method="POST">
+                        <div class="aParent">
+                                <span>
+                                    @permission(StandardPermissions::viewCompanyProject)
                             <a href="/companyprojects/{{$project->projectId}}">
-                                <button class="button20">
-                                    <i class="fa fa-eye fa-2x" aria-hidden="true"></i>
-                                </button></a>
+                                 <button class="button20">
+                                  <i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>
+                                 </button>
+                            </a>
+                                </span>
                             @endpermission
-                            {{--</li>--}}
-                            {{--<li class="list-inline-item">--}}
-                                @permission(StandardPermissions::deleteCompanyProject)
-                                <form action="{{ url('companyprojects/'.$project->projectId) }}" method="POST">
-                                    {{ csrf_field() }}
-                                    {{ method_field('DELETE') }}
-                                    {{--<input name="_method" type="hidden" value="DELETE">--}}
+                            @permission(StandardPermissions::deleteCompanyProject)
+                            {{ csrf_field() }}
+                            {{ method_field('DELETE') }}
+                            <span >
+                                    <input name="_method" type="hidden" value="DELETE">
                                     <button class="button20" data-toggle="confirmation" data-singleton="true" type="submit">
                                         <i class="fa fa-trash fa-2x"></i>
                                     </button>
-                                </form>
-                                @endpermission
-                            {{--</li>--}}
-                        {{--</ul>--}}
+                                 </span>
+                            @endpermission
+                        </div>
+                        </form>
                     </td>
                 </tr>
                 @endforeach
@@ -93,16 +65,20 @@
                 @endif
             </tbody>
         </table>
-
+            </div>
     @permission(StandardPermissions::createEditCompanyProject)
-        <div class="panel-body">
-    <a href="/companies/{{$companyProfileModel->companyId}}/companyprojects">
-        <button class="button button40 pull-right"> Add New Projects
+    <div class="padTop20">
+        <a href="/companies/{{$companyProfileModel->companyId}}/companyprojects" class="button button40 pull-right">
+         Add New Projects
 
-        </button></a>
+        </a> 
+    </div>
+   
     @endpermission
         </div>
 </div>
+</section>
+
 <script type="text/javascript">
 $('[data-toggle=confirmation]').confirmation({
   rootSelector: '[data-toggle=confirmation]',

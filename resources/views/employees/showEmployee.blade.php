@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <main>
+    <main class="mainShowEmployeeSection">
         <div class="container">
             <div class="row">
                 @include('common.errors')
@@ -106,7 +106,7 @@
                                   <li class="list-group-item">
                                       @permission(StandardPermissions::createEditEmployee)
 
-                                      <a href="/employees/{{$employeeModel->employeeProfile->employeeId}}/edit" class="pull-right padTop20">
+                                      <a href="/employees/{{$employeeModel->employeeProfile->employeeId}}/edit" class="pull-right">
                                           <button class="button20">
                                               <i class="fa fa-pencil-square-o fa-2x"></i>
                                           </button>
@@ -125,79 +125,52 @@
                                   </li>
                               </ul>
                           </div>
-                        <div class="col-sm-5">
-
-                            @include('employees/showCompanyHolidays')
-
-                        </div>
-                        <div class="col-sm-4">
-
-                            @include('employees/showEmployeesWithBirthdayThisMonth')
-
-                        </div>
-                        </div>
-                    </div>
-
-                </div>
-                  @permission(StandardPermissions::createEditTimesheet)
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <a href="/employeetimesheet/{{$employeeModel->employeeProfile->employeeId}}/create">
-                                <button class="btn btn-primary"> Add Timesheet
-
-                                </button></a>
 
                         </div>
                     </div>
-                    @endpermission
-                    <br/>
-                    @permission(StandardPermissions::approveTimesheets)
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <a href="/employeestimesheets/">
-                        
-                                <button class="btn btn-primary"> Approve Timesheets
-
-                                </button></a>
-
-                      </div>
-                      </div>
-                    @endrole
-                    <br/>
-                    @permission(StandardPermissions::createEditTimeoff)
-                       <div class="row">
-                        <div class="col-sm-12">
-                            <a href="/employeetimeoff/{{$employeeModel->employeeProfile->employeeId}}/create">
-                          {{--   <a href="/employeetimeoff/create"> --}}
-                                <button class="btn btn-primary"> Add Time Off
-
-                                </button></a>
-
-                        </div>
-                            </div>
-                     @endpermission
-                        <br/>
-                    @permission(StandardPermissions::approveTimeoffs)
-                        <div class="row">
-                        <div class="col-sm-12">
-             
-                            <a href="/employeestimeoffs/">
-                                <button class="btn btn-primary"> Approve Time Offs
-
-                                </button></a>
-
-                      </div>
-                      </div>
-                       @endpermission
-
-                
-                    @include('employees/showEmployeeClientProjects')
-                    @include('employees/showEmployeeCompanyProjects')
-
-                </div>
-
             </div>
-        </div>
+                @permission(StandardPermissions::createEditTimesheet)
+                    <div class="row padTop5">
+                        <div class="col-sm-12 col-md-11 col-md-offset-1">
+                            <a href="/employeetimesheet/{{$employeeModel->employeeProfile->employeeId}}/create">
+                                <button class="button button50"> Add Timesheet</button>
+                            </a>
+                            @endpermission
+            @permission(StandardPermissions::approveTimesheets)
+            <a href="/employeestimesheets/">
+                <button class="button button50"> Approve Timesheets</button>
+            </a>
+            @endrole
+            @permission(StandardPermissions::createEditTimeoff)
+            <a href="/employeetimeoff/{{$employeeModel->employeeProfile->employeeId}}/create">
+                <button class="button button50"> Add Time Off</button>
+            </a>
+            @endpermission
+            @permission(StandardPermissions::approveTimeoffs)
+            <a href="/employeestimeoffs/">
+                <button class="button button50"> Approve Time Offs</button>
+            </a>
+            @endpermission
+                        </div>
+                    </div>
+            <div class="row row-content100">
+                <div class="col-sm-5">
+                    @include('employees/showCompanyHolidays')
+                </div>
+                <div class="col-sm-7">
+                    @include('employees/showEmployeeClientProjects')
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-5">
+                    @include('employees/showEmployeesWithBirthdayThisMonth')
+                </div>
+                <div class="col-sm-7">
+                    @include('employees/showEmployeeCompanyProjects')
+                </div>
+            </div>
+            </div>
+
     </main>
     <script type="text/javascript">
 $('[data-toggle=confirmation]').confirmation({

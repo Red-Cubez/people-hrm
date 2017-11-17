@@ -5,7 +5,7 @@
 @permission(StandardPermissions::viewCompany)
 <div class="container-fluid">
     <div class="row">
-        <div class="col-sm-3">
+        <div class="col-sm-3 nopadding">
             @include('companies/showCompanyProfile')
         </div>
         <div class="col-sm-9">
@@ -15,11 +15,11 @@
 
     <div class="row">
 
-        <div class="col-sm-3">
+        <div class="col-sm-3 col-md-3 nopadding">
             @include('companies/showCompanyJobTitles')
         </div>
         @permission(StandardPermissions::showCompanyProjects)
-        <div class="col-sm-9">
+        <div class="col-sm-9 col-md-9">
             @include('companyProjects/showProjects')
         </div>
         @endpermission
@@ -33,7 +33,7 @@
            StandardPermissions::showClientProjectsReport,
            StandardPermissions::showInternalProjectsReport,
            ])
-        <div class="col-sm-3">
+        <div class="col-sm-3 nopadding">
             @include('companies/companyReports')
         </div>
         @endpermission
@@ -43,13 +43,13 @@
         </div>
         @endpermission
     </div>
-
     <div class="row">
-        <div class="col-sm-3">
+        <div class="col-sm-3 nopadding">
             @include('companyDepartments/showDepartments')
         </div>
         <div class="col-sm-9">
-            @include('employees/showEmployeesWithBirthdayThisMonth')
+        @include('companies/showCompanyCurrentEmployees')
+           
         </div>
 
     </div>
@@ -61,11 +61,11 @@
         StandardPermissions::viewOwnProfile,
         StandardPermissions::showEmployees
        ])
-        <div class="col-sm-6">
-            @include('companies/showCompanyCurrentEmployees')
+        <div class="col-sm-3 nopadding">
+             @include('employees/showEmployeesWithBirthdayThisMonth')
         </div>
        @endpermission 
-        <div class="col-sm-6">
+        <div class="col-sm-9">
             @include('companies/showCompanyCurrentClients')
         </div>
     </div>

@@ -67,6 +67,7 @@
 
        
         @permission(StandardPermissions::editUpdateCompany)
+        <div class="padTop20">
            <div class="pull-right padTop5">
         <a href="/companies/{{$companyProfileModel->companyId}}/edit">
             <button class="button button50"> Edit Company
@@ -86,6 +87,7 @@
 
             </button>
          </a>
+        </div>
         </div>
          </div>
          @endpermission  

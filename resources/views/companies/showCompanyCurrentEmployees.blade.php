@@ -5,44 +5,33 @@
         </h3>
     </div>
     @if (count($companyProfileModel->companyEmployees) > 0)
-            <table class="table table-fixed table-condensed">
+        <div class="panel-body">
+            <div class="scroll-panel-table table-responsive">
+            <table class="table table-bordered table-hover table-striped ">
                 <thead>
                 <tr>
-                <th class="col-xs-3">First Name</th>
-                <th class="col-xs-3">Last Name</th>
-                <th class="col-xs-2">Hire Date</th>
+                <th  >First Name</th>
+                <th  >Last Name</th>
+                <th  >Hire Date</th>
                 @permission([
                     StandardPermissions::createEditEmployee,
                     StandardPermissions::viewOthersProfile
                     ])
-                <th class="col-xs-4">Operation</th>
+                <th >Operation</th>
                 @endpermission
                 </tr>
                 </thead>
                 <tbody>
                 @foreach ($companyProfileModel->companyEmployees as $employee)
                     <tr>
-                        <td class="col-xs-3 ">
-                            <div>
-                                {{ $employee->firstName }}
-                            </div>
-                        </td>
-                        <td class="col-xs-3 ">
-                            <div>
-                                {{ $employee->lastName}}
-                            </div>
-                        </td>
-                        <td class="col-xs-2 ">
-                            <div>
-                                {{ $employee->hireDate}}
-                            </div>
-                        </td>
-                        <td class="col-xs-4 ">
-
-                          @permission(StandardPermissions::viewOthersProfile)
+                        <td  >{{ $employee->firstName }}</td>
+                        <td >{{ $employee->lastName}}</td>
+                        <td >{{ $employee->hireDate}}</td>
+                        <td >
+                            @permission(StandardPermissions::viewOthersProfile)
                             <a href="/employees/{{$employee->employeeId}}">
                                 <button  class="button20">
-                                    <i class="fa fa-eye fa-2x" aria-hidden="true"></i>
+                                   <i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>
                                 </button></a>
                          @endpermission
                         </td>
@@ -50,15 +39,13 @@
                 @endforeach
                 </tbody>
             </table>
+            </div>
         @else
             No Record Found
         @endif
-
-    @permission(StandardPermissions::createEditEmployee)
-    <div class="panel-body">
-    <a href="/employees/showemployeeform/{{$companyProfileModel->companyId}}">
+            @permission(StandardPermissions::createEditEmployee)
+            <a href="/employees/showemployeeform/{{$companyProfileModel->companyId}}">
         <button class="button button40 pull-right"> Add New Employee
-
         </button></a>
     </div>
   @endpermission

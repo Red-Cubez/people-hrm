@@ -5,56 +5,36 @@
         </h3>
     </div>
     <div class="panel-body">
-
-        <table class="table table-striped task-table">
-            <!-- Table Headings -->
+        <div class="scroll-panel-table table-responsive">
+        <table class="table table-bordered table-hover table-striped">
             <thead>
-            <th>
-                Holiday Name
-            </th>
-            <th>
-                Start Date
-            </th>
-            <th>
-                End Date
-            </th>
-            <th>
-                Total Holidays
-            </th>
+            <tr>
+            <th>Name</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th># of Days</th>
             </thead>
-            <!-- Table Body -->
             <tbody id="holidayTableBody">
             @if (count($companyHolidays) > 0)
                 @foreach ($companyHolidays as $companyHoliday)
                     <tr >
-                        <!--  Name -->
-                        <td id="holidayName_{{$companyHoliday->holidayId}}" class="table-text">
-                            <div>
-                                {{ $companyHoliday->name }}
-                            </div>
+                        <td id="holidayName_{{$companyHoliday->holidayId}}" >
+                            {{ $companyHoliday->name }}
                         </td>
-                        <td id="startDate_{{$companyHoliday->holidayId}}" class="table-text">
-                            <div>
-                                {{ $companyHoliday->startDate }}
-                            </div>
+                        <td id="startDate_{{$companyHoliday->holidayId}}">
+                            {{ $companyHoliday->startDate }}
                         </td>
-                        <td id="endDate_{{$companyHoliday->holidayId}}" class="table-text">
-                            <div>
-                                {{ $companyHoliday->endDate }}
-                            </div>
+                        <td id="endDate_{{$companyHoliday->holidayId}}" >
+                            {{ $companyHoliday->endDate }}
                         </td>
-                        <td id="countHolidays_{{$companyHoliday->holidayId}}" class="table-text">
-                            <div>
+                        <td id="countHolidays_{{$companyHoliday->holidayId}}" >
+
                                 {{ $companyHoliday->holidays }}
-                            </div>
                         </td>
-
-
                 @endforeach
-
             @endif
             </tbody>
         </table>
+        </div>
     </div>
-
 </div>

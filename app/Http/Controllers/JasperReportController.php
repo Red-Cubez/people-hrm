@@ -51,7 +51,7 @@ class JasperReportController extends Controller
             public_path() . '/report/' . $fileName . '.jasper',
             $output,
             array($fileExtension),
-            null,
+            $this->getParameters(),
             $this->getDatabaseConfig()
 
         )->execute();
@@ -79,6 +79,14 @@ class JasperReportController extends Controller
         //     array("php_version" => phpversion())
         // )->execute();
         // dd(base_path() . '/vendor/cossou/jasperphp/examples/hello_world.jrxml');
+    }
+    public function getParameters()
+    {
+        return [
+            'companyId'   => 1,
+            'startDate'     => "2017-01-01,
+            
+        ];
     }
 
     public function getDatabaseConfig()

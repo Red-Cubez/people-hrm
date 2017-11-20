@@ -84,7 +84,7 @@ class JasperReportController extends Controller
     {
         return [
             'companyId'   => 1,
-            'startDate'     => "2017-01-01,
+            'startDate'     => "2017-01-01",
             
         ];
     }

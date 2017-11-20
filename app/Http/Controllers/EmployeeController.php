@@ -243,13 +243,14 @@ class EmployeeController extends Controller
         // $isAdmin     = $this->UserAuthenticationService->isAdmin();
 
         //if ($isAdmin || $isManager || $isHrManager) {
+        $loggedInUser = $this->UserAuthenticationService->getCurrrentLogedInUserDetails();
+        if ($loggedInUser->employee->id != $employee->id) {
+            $this->EmployeeService->deleteEmployee($employee);
+            return redirect('/companies/' . $employee->company_id);
 
-        $this->EmployeeService->deleteEmployee($employee);
-
-        return redirect('/companies/' . $employee->company_id);
-        // } else {
-        //     return $this->UserAuthenticationService->redirectToErrorMessageView(null);
-        // }
+        } else {
+            return $this->UserAuthenticationService->redirectToErrorMessageView(null);
+        }
 
     }
 }

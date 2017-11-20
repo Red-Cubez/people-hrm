@@ -88,11 +88,14 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
+        //dd($request);
         //     $isManager = $this->UserAuthenticationService->isManager();
         //     $isAdmin   = $this->UserAuthenticationService->isAdmin();
         //     if ($isManager || $isAdmin) {
         $this->validate($request, array(
-            'name' => 'required|max:255',
+            'name'               => 'required|max:255',
+            'normalHoursPerWeek' => 'numeric',
+            'applyOverTimeRule'=> 'boolean'
         ));
         $this->CompanyService->createCompany($request);
 

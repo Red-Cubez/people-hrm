@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.4.3.final using JasperReports Library version 6.4.3  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="40e69223-3125-4ec3-9486-3a8d56585c18">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="633"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="353"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="346"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="642"/>
+	<parameter name="companyId" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+	</parameter>
+	<parameter name="startDate" class="java.sql.Date">
+		<defaultValueExpression><![CDATA[new SimpleDateFormat(" YYYY,mm dd,").format($P{startDate})]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT people.companies.name,
+	people.company_projects.name,
+	people.company_projects.`expectedStartDate`
+FROM people.company_projects
+	INNER JOIN people.companies ON 
+	 people.company_projects.company_id = people.companies.id 
+WHERE 
+	 people.companies.id = '$P!{companyId}' 
+	 AND people.company_projects.company_id = '$P!{companyId}' 
+	 AND people.company_projects.`expectedStartDate` >= '$P!{startDate}']]>
+	</queryString>
+	<field name="name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companies"/>
+	</field>
+	<field name="COLUMN_2" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="company_projects"/>
+	</field>
+	<field name="expectedStartDate" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.label" value="expectedStartDate"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="company_projects"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="63" splitType="Stretch">
+			<textField>
+				<reportElement x="140" y="33" width="240" height="30" uuid="0d8b27c3-a08f-4cf9-86bf-ab78df1446c1"/>
+				<textElement textAlignment="Center">
+					<font size="18" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Project Report"]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement x="300" y="0" width="100" height="30" uuid="5554ab2c-48f2-40ca-8228-df3b24ebb1e4">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="da8857b5-8131-4f9c-b818-8341e120a7dc"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[expectedEndDate]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="400" y="0" width="100" height="30" uuid="f34ab1a7-785a-4055-873d-02a0d680b4e6">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="37e62023-1bbc-4f82-8ad0-d5057b0ddf74"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[actualStartDate]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="500" y="0" width="100" height="30" uuid="251dc205-b66f-45d2-9b3f-e75cc2ae0428">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="72058bd3-cdf2-48ae-9c76-e97d5e8c8aad"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[actualEndDate]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="30" uuid="31324104-b202-43f8-a5ee-49386bda7be5">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ff407a40-0a41-4185-b104-687f29334d56"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Comopany Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="0" width="100" height="30" uuid="a72d430a-03f3-4a5e-91be-ae887c039912">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="789d4fcc-855b-4136-b5e6-09f393f20c2e"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Project Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="0" width="100" height="30" uuid="a2bb9bd7-406e-4032-b6bc-729903cc04c8">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0aed87f0-b880-4420-b1f8-ea0f46f166a0"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[expectedStartDate]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="140" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="30" uuid="99370aca-3be0-4b95-838e-89b132960a9b">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ff407a40-0a41-4185-b104-687f29334d56"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="60" y="20" width="100" height="30" uuid="3f9b5d9a-24a5-422c-bde2-e6a138e16534">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6f71d7c6-8a85-4e6e-98af-4af021aab010"/>
+				</reportElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="0" width="100" height="30" uuid="7de5eb5f-c16f-45f5-98cc-4b5d24448110">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="789d4fcc-855b-4136-b5e6-09f393f20c2e"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{COLUMN_2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="0" width="100" height="30" uuid="14591541-aa07-4271-a22d-39e0962fc64c">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0aed87f0-b880-4420-b1f8-ea0f46f166a0"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{expectedStartDate}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="50" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

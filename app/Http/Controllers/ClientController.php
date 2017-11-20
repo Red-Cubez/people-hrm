@@ -3,10 +3,11 @@
 namespace People\Http\Controllers;
 
 use Illuminate\Http\Request;
-use People\Services\StandardPermissions;
 use People\Models\Client;
 use People\Services\Interfaces\IClientService;
 use People\Services\Interfaces\IUserAuthenticationService;
+use People\Services\Interfaces\IValidationService;
+use People\Services\StandardPermissions;
 
 class ClientController extends Controller
 {
@@ -16,9 +17,11 @@ class ClientController extends Controller
      * @return \Illuminate\Http\Response
      */
     public $ClientService;
+    public $ValidationService;
+    public $UserAuthenticationService;
 
-    public function __construct(IClientService $clientService, IUserAuthenticationService $userAuthenticationService)
-    {
+    public function __construct(IClientService $clientService, IUserAuthenticationService $userAuthenticationService,
+        IValidationService $validationService) {
 
         $this->middleware('auth');
         $this->middleware('permission:' . StandardPermissions::createEditClient, ['only' => ['showClientForm', 'store', 'edit', 'update']]);
@@ -29,6 +32,7 @@ class ClientController extends Controller
 
         $this->ClientService             = $clientService;
         $this->UserAuthenticationService = $userAuthenticationService;
+        $this->ValidationService         = $validationService;
     }
     public function showClientForm($companyId)
     {
@@ -89,9 +93,9 @@ class ClientController extends Controller
         $isRequestedCompanyBelongsToEmployee = $this->UserAuthenticationService->isRequestedCompanyBelongsToEmployee($request->companyId);
 
         if ($isRequestedCompanyBelongsToEmployee) {
-            $this->validate($request, array(
-                'name' => 'required|max:255',
-            ));
+           
+            $this->ValidationService->validateClientForm($request);
+
             $clientId = $this->ClientService->createClient($request);
 
             return redirect('/clients/' . $clientId);
@@ -179,9 +183,8 @@ class ClientController extends Controller
         // $isAdmin         = $this->UserAuthenticationService->isAdmin();
 
         //if ($isAdmin || $isManager || $isClientManager) {
-        $this->validate($request, array(
-            'name' => 'required|max:255',
-        ));
+        $this->ValidationService->validateClientForm($request);
+
         $this->ClientService->updateClient($request, $client);
 
         return redirect('/clients/' . $client->id);

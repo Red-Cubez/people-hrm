@@ -3,7 +3,7 @@
 <div  class="form-group">
     <label for="role Name" >Currency Name</label>
     <div class="col-sm-6">
-           <input type="text" name="currencyName" @if(isset($companySetting)) value="{{$companySetting->currencyName}}" @endif  required/> 
+           <input type="text" name="currencyName"  @if(isset($companySetting)) value="{{$companySetting->currencyName}}" @endif  required/> 
     </div>
 </div>
 </div>
@@ -13,7 +13,7 @@
 <div  class="form-group">
     <label for="role Name" >Currency Symbol</label>
     <div class="col-sm-6">
-           <input type="text" name="currencySymbol" @if(isset($companySetting->currencySymbol)) value="{{$companySetting->currencySymbol}}" @endif  required/> 
+           <input type="text" name="currencySymbol"  @if(isset($companySetting->currencySymbol)) value="{{$companySetting->currencySymbol}}" @endif  required/> 
     </div>
 </div>
 </div>

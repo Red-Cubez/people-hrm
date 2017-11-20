@@ -70,8 +70,8 @@ class CompanySettingController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, array(
-            'currencyName'   => 'required|max:255',
-            'currencySymbol' => 'required|max:255',
+            'currencyName'   => 'required|max:10',
+            'currencySymbol' => 'required|max:5',
         ));
         $this->CompanySettingService->saveCompanySettings($request);
 
@@ -146,7 +146,7 @@ class CompanySettingController extends Controller
     {
         $this->validate($request, array(
             'currencyName'   => 'required|max:255',
-            'currencySymbol' => 'required|max:255',
+            'currencySymbol' => 'required|max:5',
         ));
         $companySetting = $this->CompanySettingService->updateCompanySettings($request, $settingId);
 

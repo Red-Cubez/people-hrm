@@ -247,3 +247,19 @@ img {
 .showCompanyCurrentClientSection a{
 text-decoration: none;
 }
+.display-flex{
+    display: flex;
+    flex-direction: row;
+}
+.display-flex .item-1{
+    width: 30%;
+}
+.display-flex .item-2{
+    width: 70%;
+}
+.nopaddingrightleft{
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}

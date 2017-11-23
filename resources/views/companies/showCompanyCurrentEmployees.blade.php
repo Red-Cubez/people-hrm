@@ -1,11 +1,12 @@
+<section>
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3>
             Current Employees
         </h3>
     </div>
-    @if (count($companyProfileModel->companyEmployees) > 0)
-        <div class="panel-body">
+    <div class="panel-body">
+        @if (count($companyProfileModel->companyEmployees) > 0)
             <div class="scroll-panel-table table-responsive">
             <table class="table table-bordered table-hover table-striped ">
                 <thead>
@@ -44,9 +45,13 @@
             No Record Found
         @endif
             @permission(StandardPermissions::createEditEmployee)
-            <a href="/employees/showemployeeform/{{$companyProfileModel->companyId}}">
-        <button class="button button40 pull-right"> Add New Employee
-        </button></a>
+                <div class="padTop20">
+                    <a href="/employees/showemployeeform/{{$companyProfileModel->companyId}}" class="button button40 pull-right">
+                    Add New Employee
+                    </a>
+                </div>
+            @endpermission
     </div>
-  @endpermission
 </div>
+
+</section>

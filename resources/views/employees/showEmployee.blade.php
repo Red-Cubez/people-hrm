@@ -1,5 +1,4 @@
 @extends('layouts.app')
-
 @section('content')
     <main class="mainShowEmployeeSection">
         <div class="container">

@@ -1,4 +1,3 @@
-
 <div>
     @include('employees/showEmployee')
 </div>

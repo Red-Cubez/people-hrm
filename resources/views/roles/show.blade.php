@@ -1,6 +1,4 @@
-
 @if (count($roles) > 0)
-
     <article class="show-role">
         <h3>Roles</h3>
         <div class="table-responsive">

@@ -1,10 +1,10 @@
 @extends('layouts.app')
 @section('content')
- <article class="main-heading">
+    <article class="main-heading">
         <div class="container">
             <div class="row-content100">
                 <div class="col-xs-12">
-                    <h1 class="text-center">Employee</h1>
+                    <h1 class="text-center">Client</h1>
                 </div>
             </div>
         </div>
@@ -15,19 +15,16 @@
                 <div class="col-xs-12">
                     <div class="row row-content">
                         <div class="col-xs-12 col-md-9 col-md-offset-3">
-        <!-- Display Validation Errors -->
-    @include('common.errors')
-    <!-- New client Form -->
-        <form action="{{url('clients') }}" method="POST" class="form-horizontal">
-        {{ csrf_field() }}
-        <input type="hidden" name="companyId" value="{{$companyId}}">
-        <!-- client Name -->
-            @include('clients/clientForm')
-        </form>
+                            @include('common.errors')
+                            <form action="{{url('clients') }}" method="POST" class="form-horizontal">
+                                {{ csrf_field() }}
+                                <input type="hidden" name="companyId" value="{{$companyId}}">
+                                @include('clients/clientForm')
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        </div>
-        </div>
-        </div>
-        </div>
-        </section>
+    </section>
 @endsection

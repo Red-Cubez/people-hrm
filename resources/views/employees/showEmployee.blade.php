@@ -113,6 +113,7 @@
                                       </a>
                                       @endpermission
                                       @permission(StandardPermissions::deleteEmployee)
+                                      @if(Auth::user()->employee->id!=$employeeModel->employeeProfile->employeeId)
                                       <form action="{{ url('employees/'.$employeeModel->employeeProfile->employeeId) }}"
                                             method="POST">
                                           {{ csrf_field() }}
@@ -121,6 +122,7 @@
                                               <i class="fa fa-trash fa-2x"></i>
                                           </button>
                                       </form>
+                                      @endif
                                       @endpermission
                                   </li>
                               </ul>

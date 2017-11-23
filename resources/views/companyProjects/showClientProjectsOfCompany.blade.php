@@ -19,7 +19,7 @@
                 <th  >Budget</th>
                 <th  >Cost</th>
                @permission([ StandardPermissions::viewClientProject,StandardPermissions::deleteClientProject])
-                <th  ></th>
+                <th >Operations</th>
                 @endpermission
             <tr>
             </thead>
@@ -36,20 +36,20 @@
                     <td>
                         <div class="aParent">
                             @permission(StandardPermissions::viewClientProject)
-                                 <a href="{{route('clientprojects.show', $project->projectId)}}" class="button20">
-                            <i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>
-                         </a>
+                                <a href="{{route('clientprojects.show', $project->projectId)}}" class="button20">
+                                    <i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>
+                                </a>
                             @endpermission
                             @permission(StandardPermissions::deleteClientProject)
-                        <form action="{{ url('clientprojects/'.$project->projectId) }}" method="POST">
-                            {{ csrf_field() }}
-                                {{ method_field('DELETE') }}
+                                <form action="{{ url('clientprojects/'.$project->projectId) }}" method="POST">
+                                     {{ csrf_field() }}
+                                     {{ method_field('DELETE') }}
                             {{--<input name="_method" type="hidden" value="DELETE">--}}
-                                <button class="button20" data-toggle="confirmation" data-singleton="true"  type="submit">
-                                    <i class="fa fa-trash fa-2x"></i>
-                                </button>
+                                         <button class="button20" data-toggle="confirmation" data-singleton="true"  type="submit">
+                                           <i class="fa fa-trash fa-2x"></i>
+                                         </button>
                             {{--</input>--}}
-                        </form>
+                                </form>
                             @endpermission
                         </div>
                     </td>

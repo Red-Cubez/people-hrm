@@ -86,6 +86,9 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(
             'People\Services\Interfaces\IPermissionService', 'People\Services\PermissionService');
+
+        $this->app->bind(
+            'People\Services\Interfaces\IValidationService', 'People\Services\ValidationService');
     }
 
 }

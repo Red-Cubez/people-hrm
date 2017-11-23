@@ -10,6 +10,7 @@ use People\Services\Interfaces\IDepartmentService;
 use People\Services\Interfaces\IEmployeeService;
 use People\Services\Interfaces\IJobTitleService;
 use People\Services\Interfaces\IUserAuthenticationService;
+use People\Services\Interfaces\IValidationService;
 use People\Services\StandardPermissions;
 
 class CompanyController extends Controller
@@ -21,11 +22,12 @@ class CompanyController extends Controller
     public $CompanyHolidayService;
     public $DepartmentService;
     public $UserAuthenticationService;
+    public $ValidationService;
 
     public function __construct(ICompanyService $companyService, IJobTitleService $jobTitleService,
 
         IEmployeeService $employeeService, ICompanyHolidayService $companyHolidayService, IUserAuthenticationService $userAuthenticationService,
-        IDepartmentService $departmentService) {
+        IDepartmentService $departmentService, IValidationService $validationService) {
 
         $this->middleware('auth');
         $this->middleware('permission:' . StandardPermissions::createDeleteCompanies, ['only' => ['create', 'destroy', 'store']]);
@@ -39,6 +41,7 @@ class CompanyController extends Controller
         $this->CompanyHolidayService     = $companyHolidayService;
         $this->DepartmentService         = $departmentService;
         $this->UserAuthenticationService = $userAuthenticationService;
+        $this->ValidationService         = $validationService;
     }
 
     /**
@@ -88,12 +91,12 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
+        //dd($request);
         //     $isManager = $this->UserAuthenticationService->isManager();
         //     $isAdmin   = $this->UserAuthenticationService->isAdmin();
         //     if ($isManager || $isAdmin) {
-        $this->validate($request, array(
-            'name' => 'required|max:255',
-        ));
+        $this->ValidationService->validateCompanyForm($request);
+        
         $this->CompanyService->createCompany($request);
 
         return redirect('/companies');
@@ -182,9 +185,8 @@ class CompanyController extends Controller
         // $isManager = $this->UserAuthenticationService->isManager();
         // $isAdmin   = $this->UserAuthenticationService->isAdmin();
         // if ($isManager || $isAdmin) {
-        $this->validate($request, array(
-            'name' => 'required|max:255',
-        ));
+        $this->ValidationService->validateCompanyForm($request);
+
         $this->CompanyService->updateCompany($request, $company);
 
         return redirect('/companies/' . $company->id);

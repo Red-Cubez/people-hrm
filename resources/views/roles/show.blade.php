@@ -1,4 +1,6 @@
+
 @if (count($roles) > 0)
+
     <article class="show-role">
         <h3>Roles</h3>
         <div class="table-responsive">
@@ -34,7 +36,7 @@
                             <form action="{{ route('roles.destroy',$role->id) }}" method="POST">
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
-                                <button type="submit" class="pull-right button button10" >
+                                <button type="submit" class="pull-right button button10" data-toggle="confirmation" data-singleton="true">
                                     <i class="fa fa-trash"> Delete</i>
                                 </button>
                             </form>
@@ -46,5 +48,11 @@
         </div>
     </article>
 
-
+ 
 @endif
+<script type="text/javascript">
+$('[data-toggle=confirmation]').confirmation({
+  rootSelector: '[data-toggle=confirmation]',
+  
+});
+</script>

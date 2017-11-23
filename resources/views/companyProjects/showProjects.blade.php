@@ -39,9 +39,8 @@
                                 <span>
                                     @permission(StandardPermissions::viewCompanyProject)
                             <a href="/companyprojects/{{$project->projectId}}">
-                                 <button class="button20">
-                                  <i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>
-                                 </button>
+                              <i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>
+                               
                             </a>
                                 </span>
                             @endpermission

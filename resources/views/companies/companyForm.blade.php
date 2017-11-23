@@ -4,7 +4,7 @@
         <div class="col-xs-12  col-sm-7">
             <div class="form-group">
                 <label for="name">Name</label>
-                <input type="text" name="name" id="name" class="form-control" @if(isset($company))
+                <input type="text" name="name" id="name" class="form-control" maxlength="255"  @if(isset($company))
         value="{{ $company->name }}" @else placeholder="Enter Name" @endif required />
             </div>
         </div>

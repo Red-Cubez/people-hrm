@@ -2,80 +2,101 @@
 
 @section('content')
 @permission(StandardPermissions::viewClient)
-    <div class="panel-body">
-        @include('common.errors')
-        <div>
-            <label class="control-label" for="name">
-                Name :
-            </label>
-            {{$client->name}}
-        </div>
-        <div>
-            <label class="control-label" for="contactPerson">
-                Contact Person :
-            </label>
-            {{$client->contactPerson}}
-        </div>
-        <div>
-            <label class="control-label" for="contactNumber">
-                Contact Number :
-            </label>
-            {{$client->contactNumber}}
-        </div>
-        <div>
-            <label class="control-label" for="contactEmail">
-                Contact Email :
-            </label>
-            {{$client->contactEmail}}
-        </div>
-        <div>
-            <label class="control-label" for="contactPerson">
-                Street Line 1 :
-            </label>
-            @if(isset($client->address->streetLine1))
-            {{$client->address->streetLine1 }}
-            @endif
-        </div>
-        <div>
-            <label class="control-label" for="contactPerson">
-                Street Line 2 :
-            </label>
-            @if(isset($client->address->streetLine2))
-            {{$client->address->streetLine2 }}
-            @endif
-        </div>
-        <div>
-            <label class="control-label" for="contactPerson">
-                City
-            </label>
-             @if(isset($client->address->city))
-            {{$client->address->city }}
-            @endif
-        </div>
-        <div>
-            <label class="control-label" for="contactPerson">
-                State / Province :
-            </label>
-              @if(isset($client->address->province))
-            {{$client->address->stateProvince }}
-            @endif
-        </div>
-        <div>
-            <label class="control-label" for="contactPerson">
-                Country:
-            </label>
-              @if(isset($client->address->country))
-            {{$client->address->country }}
-            @endif
-        </div>
-        @permission(StandardPermissions::createEditClient)
-        <div>
-        <a href="/clients/{{$client->id}}/edit">
-            <button class="btn btn-primary"> Edit
+<main class="showClientSection">
+     <div class="container">
+         <div class="row">
+             <div class="col-xs-12">
+                 <div class="panel-body">
+                     <div class="col-md-6 col-md-offset-3">
+                         <ul class="list-group">
+                             <li class="list-group-item">
+                                  <label class="control-label" for="name">
+                                  Name :
+                                  </label>
+                                  {{$client->name}}
+                             </li>
+                             <li class="list-group-item">
+                                 <label class="control-label" for="contactPerson">
+                                 Contact Person :
+                                 </label>
+                                  {{$client->contactPerson}} 
+                             </li>
+                             <li class="list-group-item">
+                                  <label class="control-label" for="contactNumber">
+                                  Contact Number :
+                                 </label>
+                                  {{$client->contactNumber}}
+                             </li>
+                             <li class="list-group-item">
+                                    <label class="control-label" for="contactEmail">
+                                    Contact Email :
+                                    </label>
+                                    {{$client->contactEmail}}
+                             </li>
+                             <li class="list-group-item">
+                                <label class="control-label" for="contactPerson">
+                                 Street Line 1 :
+                               </label>
+                               @if(isset($client->address->streetLine1))
+                               {{$client->address->streetLine1 }}
+                               @endif  
+                             </li>
+                             <li class="list-group-item">
+                                 <label class="control-label" for="contactPerson">
+                                 Street Line 2 :
+                                </label>
+                               @if(isset($client->address->streetLine2))
+                                {{$client->address->streetLine2 }}
+                               @endif
+                             </li>
+                             <li class="list-group-item">
+                             <label class="control-label" for="contactPerson">
+                               City
+                             </label>
+                              @if(isset($client->address->city))
+                              {{$client->address->city }}
+                              @endif
+                                 <label class="control-label" for="contactPerson">
+                                City
+                              </label>
+                              @if(isset($client->address->city))
+                               {{$client->address->city }}
+                               @endif
+                             </li>
+                             <li class="list-group-item">
+                                 <label class="control-label" for="contactPerson">
+                                  State / Province :
+                                 </label>
+                                 @if(isset($client->address->province))
+                                 {{$client->address->stateProvince }}
+                                  @endif
+                             </li>
+                             <li class="list-group-item">
+                                 <label class="control-label" for="contactPerson">
+                                 Country:
+                                </label>
+                                @if(isset($client->address->country))
+                                {{$client->address->country }}
+                               @endif
+                             </li>
+                             <li class="list-group-item">
+                                  @permission(StandardPermissions::createEditClient)
+                                  <a href="/clients/{{$client->id}}/edit">
+                                  <button class="btn btn-primary"> Edit
 
-            </button></a>
-        </div>
+                                  </button></a>
+        
         @endpermission
+                             </li>
+                         </ul>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+        @include('common.errors')
+       
+       
         @permission(StandardPermissions::deleteClient)
         <div>
         <form action="{{ url('clients/'.$client->id) }}" method="POST">
@@ -97,7 +118,8 @@
             </button></a>
         @endpermission
     </div>
-    @include('clientProjects/showProjects')
+</main>
+@include('clientProjects/showProjects')
 <script type="text/javascript">
 $('[data-toggle=confirmation]').confirmation({
   rootSelector: '[data-toggle=confirmation]',

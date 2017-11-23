@@ -1,4 +1,5 @@
-@permission(StandardPermissions::showClients)
+<section class="showCompanyCurrentClientSection">
+    @permission(StandardPermissions::showClients)
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3>
@@ -46,3 +47,4 @@
 </div>
 </div>
 @endpermission
+</section>

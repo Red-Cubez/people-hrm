@@ -243,6 +243,7 @@ img {
 
 }
 .currentInternalProjectsView a,
-.mainShowEmployeeSection a{
+.mainShowEmployeeSection a,
+.showCompanyCurrentClientSection a{
 text-decoration: none;
 }

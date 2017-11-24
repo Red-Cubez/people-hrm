@@ -1,5 +1,6 @@
+<section class="clientProjectformSection">
 <div class="row ">
-    <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+    <div class="col-xs-12 col-sm-7  ">
         <div id="name" class="form-group">
             <label for="clientProject">Name</label>
             <input type="text" name="name" id="name" class="form-control" @if(isset($clientProject))
@@ -8,7 +9,7 @@
     </div>
 </div>
 <div class="row ">
-    <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+    <div class="col-xs-12 col-sm-7  ">
         <div class="form-group">
             <label for="clientProject">Expected Start Date</label>
             <input type="date" name="expectedStartDate" id="expectedStartDate" class="form-control"
@@ -18,7 +19,7 @@
     </div>
 </div>
 <div class="row ">
-    <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+    <div class="col-xs-12 col-sm-7   ">
         <div class="form-group">
             <label for="clientProject">Expected End Date</label>
             <input type="date" name="expectedEndDate" id="expectedEndDate" class="form-control"
@@ -28,7 +29,7 @@
     </div>
 </div>
 <div class="row ">
-    <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+    <div class="col-xs-12 col-sm-7  ">
         <div class="form-group">
             <label for="clientProject">Actual Start Date</label>
             <input type="date" name="actualStartDate" id="actualStartDate" class="form-control"
@@ -38,7 +39,7 @@
     </div>
 </div>
 <div class="row ">
-    <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+    <div class="col-xs-12 col-sm-7   ">
         <div class="form-group">
             <label for="clientProject">Actual End Date</label>
             <input type="date" name="actualEndDate" id="actualEndDate" class="form-control" @if(isset($clientProject))
@@ -47,7 +48,7 @@
     </div>
 </div>
 <div class="row ">
-    <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+    <div class="col-xs-12 col-sm-7  ">
         <div class="form-group">
             <label for="clientProject">Budget</label>
             <input type="number" name="budget" id="budget" class="form-control" @if(isset($clientProject))
@@ -56,7 +57,7 @@
     </div>
 </div>
 <div class="row ">
-    <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+    <div class="col-xs-12 col-sm-7  ">
         <div class="form-group">
             <label for="clientProject">Cost</label>
             <input type="number" name="cost" id="cost" class="form-control" @if(isset($clientProject))
@@ -65,12 +66,13 @@
     </div>
 </div>
 <div class="row ">
-    <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+    <div class="col-xs-12 col-sm-7   ">
         <div class="form-group">
             <button type="submit" class="btn btn-default">{{isset($clientProject)? "Update": "Add"}} Project</button>
         </div>
     </div>
 </div>
+</section>
 <script type="text/javascript">
     $(document).ready(function () {
         var projectForm = $('#projectForm');

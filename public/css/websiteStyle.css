@@ -263,3 +263,7 @@ text-decoration: none;
     margin-left: 0 !important;
     margin-right: 0 !important;
 }
+.company-setting-flex{
+    display: flex;
+    flex-direction: row-reverse;
+}

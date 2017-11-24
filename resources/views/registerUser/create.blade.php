@@ -1,16 +1,23 @@
 @extends('layouts.app')
 @section('content')
+<article class="main-heading">
+        <div class="container">
+            <div class="row-content100">
+                <div class="col-xs-12">
+                    <h1 class="text-center">Register</h1>
+                </div>
+            </div>
+        </div>
+    </article>
+    <section>
     <div class="container">
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Register</div>
-                    @if(count($nonRegisteredEmployees)>0)
-                        <div class="panel-body">
-                            <form class="form-horizontal" role="form" method="POST" action="{{url('register-user') }}">
+        <div class="row row-content">
+            <div class="col-xs-12 col-md-9 col-md-offset-3">
+                @if(count($nonRegisteredEmployees)>0)
+                      <form class="form-horizontal" role="form" method="POST" action="{{url('register-user') }}">
                                 {{ csrf_field() }}
                                 <div class="row ">
-                                    <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+                                    <div class="col-xs-12 col-sm-7   ">
                                         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                                             <label for="name">Name</label>
                                             <input id="name" type="text" class="form-control" name="name"
@@ -24,7 +31,7 @@
                                     </div>
                                 </div>
                                 <div class="row ">
-                                    <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+                                    <div class="col-xs-12 col-sm-7   ">
                                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                                             <label for="email">E-Mail Address</label>
                                             <input id="email" type="email" class="form-control" name="email"
@@ -38,7 +45,7 @@
                                     </div>
                                 </div>
                                 <div class="row ">
-                                    <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+                                    <div class="col-xs-12 col-sm-7  ">
                                         <div class="form-group{{ $errors->has('employee') ? ' has-error' : '' }}">
                                             <label for="employee">Select Employee</label>
                                             <select class="form-control" id="employee" name="employee" required>
@@ -58,7 +65,7 @@
                                     </div>
                                 </div>
                                 <div class="row ">
-                                    <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+                                    <div class="col-xs-12 col-sm-7   ">
                                         <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
                                             <label for="password">Password</label>
                                             <input id="password" type="password" class="form-control" name="password"
@@ -72,7 +79,7 @@
                                     </div>
                                 </div>
                                 <div class="row ">
-                                    <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+                                    <div class="col-xs-12 col-sm-7">
                                         <div class="form-group">
                                             <label for="password-confirm">Confirm Password</label>
                                             <input id="password-confirm" type="password" class="form-control"
@@ -81,21 +88,22 @@
                                     </div>
                                 </div>
                                 <div class="row ">
-                                    <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
-                                        <div class="form-group">
-                                            <button type="submit" class="btn btn-primary">Register</button>
+                                    <div class="col-xs-12 col-sm-7  ">
+                                        <div  class="padTop20">
+                                            <button type="submit" class="button button40 pull-right">Register</button>
                                         </div>
                                     </div>
                                 </div>
                             </form>
-                        </div>
+                        
                     @else
-                        <div class="panel-body">
+                         <div> 
                             No Employees To Show
                         </div>
                     @endif
-                </div>
+               
             </div>
         </div>
     </div>
+    </section>
 @endsection

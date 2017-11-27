@@ -1,5 +1,5 @@
 <div class="row ">
-    <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+    <div class="col-xs-12 col-sm-7  ">
         <div id="main" class="form-group">
             <label for="title">Title</label>
             <input type="text" name="title" id="title" class="form-control" @if(isset($projectresources->title))
@@ -8,7 +8,7 @@
     </div>
 </div>
 <div class="row ">
-    <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+    <div class="col-xs-12 col-sm-7  ">
         <div class="form-group">
             <label for="expectedStartDate">Expected Start date</label>
             <input type="date" name="expectedStartDate" id="expectedStartDate" class="form-control" class="form-control"
@@ -17,7 +17,7 @@
     </div>
 </div>
 <div class="row ">
-    <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+    <div class="col-xs-12 col-sm-7  ">
         <div class="form-group">
             <label for="expectedEndDate">Expected End date</label>
             <input type="date" name="expectedEndDate" id="expectedEndDate" class="form-control" class="form-control"
@@ -26,7 +26,7 @@
     </div>
 </div>
 <div class="row ">
-    <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+    <div class="col-xs-12 col-sm-7  ">
         <div class="form-group">
             <label for="actualStartDate">Actual Start date</label>
             <input type="date" name="actualStartDate" id="actualStartDate" class="form-control" class="form-control"
@@ -35,7 +35,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+    <div class="col-xs-12 col-sm-7 ">
         <div class="form-group">
             <label for="actualEndDate">Actual End date</label>
             <input type="date" name="actualEndDate" id="actualEndDate" class="form-control"
@@ -44,7 +44,7 @@
     </div>
 </div>
 <div class="row ">
-    <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+    <div class="col-xs-12 col-sm-7  ">
         <div class="form-group">
             <label for="hourlyBillingRate">Hourly billing Rate</label>
             <input type="Number" name="hourlyBillingRate" id="hourlyBillingRate" class="form-control"
@@ -54,7 +54,7 @@
     </div>
 </div>
 <div class="row ">
-    <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+    <div class="col-xs-12 col-sm-7  ">
         <div class="form-group">
             <label for="hoursPerWeek">Hours Per week</label>
             <input type="Number" name="hoursPerWeek" id="hoursPerWeek" class="form-control" class="form-control"
@@ -63,9 +63,9 @@
     </div>
 </div>
 <div class="row ">
-    <div class="col-xs-12 col-sm-7 col-md-6 col-md-offset-3 ">
+    <div class="col-xs-12 col-sm-7 col-sm-offset-5 ">
         <div class="form-group">
-            <button type="submit" class="btn btn-danger">
+            <button type="submit" class="button button40">
                 {{--<input type="hidden" name="formSubmitted" value="true">--}}
                 @if(isset($projectresources))
                     <i class="fa fa-trash"> Update </i>
@@ -76,7 +76,7 @@
                     <input type="hidden" name="clientProjectid"
                            value="{{ $projectresources->client_project_id}}">
                 @else
-                    <i class="fa fa-trash"> Add</i>
+                     Add
             </button>
             @endif
         </div>

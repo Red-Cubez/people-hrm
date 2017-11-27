@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    <div class="panel-body">
+
         <form name="resourceForm" id="resourceForm" class="form-horizontal">
             {{ csrf_field() }}
             @if(isset($clientProjectid))
@@ -17,6 +17,7 @@
                 @endif
             @endif
             <div>
+
                 <input type="radio" name="resource" value="employee" id="resource"> <label
                         for="choice-animals-dogs">Employee Resource</label>
                 <div id="error"></div>
@@ -29,6 +30,6 @@
                 </div>
             </div>
         </form>
-    </div>
+
     @include('projectResources/showCurrentResources')
 @endsection

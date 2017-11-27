@@ -35,8 +35,7 @@
             <div class="col-xs-12 col-sm-3 col-sm-offset-4">
                 <div class="form-group">
                     <button type="submit" class="button button40">
-
-                        <i class="fa fa-plus"></i> {{isset($company)? "Update": "Add"}} Company
+                        {{isset($company)? "Update": "Add"}} Company
                     </button>
                 </div>
             </div>

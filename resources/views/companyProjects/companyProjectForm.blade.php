@@ -68,7 +68,6 @@
             </div>
         </div>
     </div>
-    <!-- Add companyproject Button -->
     <div class="row">
         <div class="row-content100">
             <div class="col-xs-12 col-sm-3 col-sm-offset-4">

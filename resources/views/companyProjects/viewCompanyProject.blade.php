@@ -1,28 +1,38 @@
 @extends('layouts.app')
 @section('content')
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-4">
+    <div class="container-fluid">
+        <div class=" display-flex">
+            <div class="companyProject-item-1">
                 @include('viewProject/viewProject')
                 @permission(StandardPermissions::createEditCompanyProject)
+                <span class="group ">
                 <a href="/companyprojects/{{$project->projectId}}/edit">
-                    <button class="btn btn-primary"> Edit</button>
+                    <i class="fa fa-pencil-square-o fa-2x"></i>
                 </a>
+                </span>
                 @endpermission
             </div>
-            <div class="col-sm-8">
+            <div class="companyProject-item-2">
                 @include('showGraph/showProjectGraph')
             </div>
         </div>
+    </div>
         @permission(StandardPermissions::createEditCompanyProjectResource)
-        <div class="row">
-            <div class="col-sm-11">
+        <section>
+            <div class="container">
+                <div class="row row-content100">
+            <div class="col-sm-12 text-center">
                 <a href="{{route('companyprojectresources.show', $project->projectId)}}">
-                    <button class="btn btn-primary"> Add Resource</button>
+                    <button class="button button40 "> Add Resource</button>
                 </a>
-                @include('CompanyProjectResources/viewCompanyProjectResources')
             </div>
         </div>
+                <div class="row row-content">
+                    <div class="col-xs-12">
+                    @include('CompanyProjectResources/viewCompanyProjectResources')
+                    </div>
+                </div>
         @endpermission
-    </div>
+            </div>
+        </section>
 @endsection

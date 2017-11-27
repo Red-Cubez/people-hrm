@@ -1,5 +1,14 @@
 @extends('layouts.app')
 @section('content')
+    <article class="main-heading">
+        <div class="container">
+            <div class="row-content100">
+                <div class="col-xs-12">
+                    <h1 class="text-center">Employee Update</h1>
+                </div>
+            </div>
+        </div>
+    </article>
     <section class="editEmployeeSection">
         <div class="container">
             <div class="row row-content">

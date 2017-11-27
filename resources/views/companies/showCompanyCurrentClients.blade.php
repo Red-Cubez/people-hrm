@@ -21,7 +21,6 @@
                     <tbody>
                     @foreach ($companyProfileModel->companyClients as $client)
                         <tr>
-
                             <td  >{{ $client->clientName }}</td>
                             <td>{{ $client->contactPerson}}</td>
                             <td >{{ $client->contactNumber}}</td>

@@ -4,7 +4,7 @@
             <div class="form-group">
                 <label for="clientProject">Name</label>
                 <input type="text" name="name" id="name" class="form-control" @if(isset($clientProject))
-                value="cleient" @elseif(isset($companyproject)) value="{{$companyproject->name}}"
+                @elseif(isset($companyproject)) value="{{$companyproject->name}}"
                        @else placeholder="Enter Name" @endif required>
             </div>
         </div>

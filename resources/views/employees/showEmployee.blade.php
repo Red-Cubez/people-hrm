@@ -1,8 +1,16 @@
 @extends('layouts.app')
-
 @section('content')
-    <main class="mainShowEmployeeSection">
+    <article class="main-heading">
         <div class="container">
+            <div class="row-content100">
+                <div class="col-xs-12">
+                    <h1 class="text-center">Employee </h1>
+                </div>
+            </div>
+        </div>
+    </article>
+    <section class="mainShowEmployeeSection">
+        <div class="container-fluid">
             <div class="row">
                 @include('common.errors')
                     <div class="col-xs-12">
@@ -105,12 +113,13 @@
                                   </li>
                                   <li class="list-group-item">
                                       @permission(StandardPermissions::createEditEmployee)
-
+                                      <div class="group">
                                       <a href="/employees/{{$employeeModel->employeeProfile->employeeId}}/edit" class="pull-right">
                                           <button class="button20">
                                               <i class="fa fa-pencil-square-o fa-2x"></i>
                                           </button>
                                       </a>
+                                      </div>
                                       @endpermission
                                       @permission(StandardPermissions::deleteEmployee)
                                       @if(Auth::user()->employee->id!=$employeeModel->employeeProfile->employeeId)
@@ -118,9 +127,11 @@
                                             method="POST">
                                           {{ csrf_field() }}
                                           {{ method_field('DELETE') }}
-                                          <button class="button20 col-xs-offset-9"  data-toggle="confirmation" data-singleton="true" type="submit">
+                                          <div class="group">
+                                          <button class="button20"  data-toggle="confirmation" data-singleton="true" type="submit">
                                               <i class="fa fa-trash fa-2x"></i>
                                           </button>
+                                          </div>
                                       </form>
                                       @endif
                                       @endpermission
@@ -131,8 +142,9 @@
                         </div>
                     </div>
             </div>
+            <div class="row row-content">
                 @permission(StandardPermissions::createEditTimesheet)
-                    <div class="row padTop5">
+                    <div class="row row-content100 padTop5">
                         <div class="col-sm-12 col-md-11 col-md-offset-1">
                             <a href="/employeetimesheet/{{$employeeModel->employeeProfile->employeeId}}/create">
                                 <button class="button button50"> Add Timesheet</button>
@@ -155,7 +167,7 @@
             @endpermission
                         </div>
                     </div>
-            <div class="row row-content100">
+            <div class="row ">
                 <div class="col-sm-5">
                     @include('employees/showCompanyHolidays')
                 </div>
@@ -172,8 +184,8 @@
                 </div>
             </div>
             </div>
-
-    </main>
+        </div>
+    </section>
     <script type="text/javascript">
 $('[data-toggle=confirmation]').confirmation({
   rootSelector: '[data-toggle=confirmation]',

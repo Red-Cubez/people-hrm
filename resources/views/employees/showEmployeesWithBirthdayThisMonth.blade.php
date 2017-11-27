@@ -1,3 +1,4 @@
+<section class="showEmployeeDobSection">
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3>
@@ -26,9 +27,10 @@
                 @endforeach
                 </tbody>
             </table>
-        @else
+       </div>
+     @else
             No Record Found
-        @endif
-    </div>
+    @endif
 </div>
 </div>
+</section>

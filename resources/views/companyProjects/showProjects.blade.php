@@ -59,21 +59,20 @@
                     </td>
                 </tr>
                 @endforeach
-                @else
-                No Record Found
-                @endif
+                
             </tbody>
         </table>
             </div>
+            @else
+            No Record Found
+        @endif
     @permission(StandardPermissions::createEditCompanyProject)
     <div class="padTop20">
         <a href="/companies/{{$companyProfileModel->companyId}}/companyprojects" class="button button40 pull-right">
          Add New Projects
-
-        </a> 
+        </a>
     </div>
-   
-    @endpermission
+            @endpermission
         </div>
 </div>
 </section>

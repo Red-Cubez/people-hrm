@@ -53,7 +53,6 @@ body {
 .row-content{
     margin: 0 auto;
     padding: 50px 0px 50px 0px;
-    border-bottom: 1px solid #656665;
     min-height: 400px;
 }
 .row-content200{
@@ -227,13 +226,23 @@ img {
     overflow-y: auto;
     width: 100%;
 }
-.aParent {
+.aParent ,.display-flex{
     display: flex;
     flex-direction: row;
 }
 .test-flex{
    display: flex;
     align-items: flex-start;
+}
+.display-flex .item-1,.display-flex .companyProject-item-1{
+    width: 30%;
+}
+.display-flex .item-2,.display-flex .companyProject-item-2{
+    width: 70%;
+}
+.company-setting-flex{
+    display: flex;
+    flex-direction: row-reverse;
 }
 .table-border-grey{
     border: 1px solid #d3e0e9;
@@ -243,6 +252,35 @@ img {
 
 }
 .currentInternalProjectsView a,
-.mainShowEmployeeSection a{
+.mainShowEmployeeSection a,
+.showCompanyCurrentClientSection a{
 text-decoration: none;
+}
+
+.nopaddingrightleft{
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+.edit-company{
+    float: right;
+}
+.clearBoth{
+    clear: both;
+}
+.group:before,
+.group:after{
+    content: "";
+    display: table;
+}
+.group:after{
+    clear: both;
+}
+.group{
+    zoom:1;
+}
+.group a,group i{
+    float: right;
 }

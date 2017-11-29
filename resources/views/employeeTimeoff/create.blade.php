@@ -15,27 +15,35 @@
     </div>
     @endif
     <div class="panel-heading" id="timeoffDateDiv">
-        <h3>
-            Time Off
-        </h3>
-        Select Start Date:
-        <input  class="" id="startDate" name="startDate"  required <?php if(isset($timeoff)){ ?> value="{{$timeoff->start_date}}" <?php } ?>  type="date"  />
-        <br/>
-        Select End Date  :
-        <input class="" id="endDate" name="endDate" required="" type="date" <?php if(isset($timeoff)){ ?> value="{{$timeoff->end_date}}" <?php } ?> />
-
+        <h3> Time Off </h3>
     </div>
-    <input id="employeeId" name="employeeId" type="hidden" value="{{$employeeId}}">
-        <button class="btn btn-primary" id="addTimeoffButton" name="addTimeoffButton" type="button">
-            <i class="fa fa-trash">
+     <div class="panel-body">
+     <div class="row">
+         <div class="col-md-3">
+             <div class="form-group">
+                  <label for="startDate">Select Start Date: </label> 
+        <input  class="form-control" id="startDate" name="startDate"  required <?php if(isset($timeoff)){ ?> value="{{$timeoff->start_date}}" <?php } ?>  type="date"  /> 
+             </div>
+         </div>  
+         <div class="col-md-3 col-md-offset-1">
+             <div class="form-group">
+                 <label class="endDate">Select End Date: </label>
+        <input class="form-control" id="endDate" name="endDate" required="" type="date" <?php if(isset($timeoff)){ ?> value="{{$timeoff->end_date}}" <?php } ?> />
+             </div>
+        </div>
+        </div>
+       <input id="employeeId" name="employeeId" type="hidden" value="{{$employeeId}}">
+        <button class="button button40 pull-right" id="addTimeoffButton" name="addTimeoffButton" type="button">
+            
             @if(isset($timeoff))
                 Update Time Off
                 @else
                  Add Time Off
             @endif
-            </i>
+            
         </button>
     </input>
+    </div>
 </div>
 <script type="text/javascript">
     $(document).ready(function () {

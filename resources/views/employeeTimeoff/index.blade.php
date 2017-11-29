@@ -3,9 +3,9 @@
     <main>
         <div class="container">
             <div class="row">
+            <div class="col-sm-12">
                 <input type="hidden" name="employeeId" id="employeeId" value="{{$employeeId}}">
-                <div class="col-sm-12">
-                    <form name="employeeTimeoffForm" name="employeeTimeoffForm" class="table table-striped task-table"
+                 <form name="employeeTimeoffForm" name="employeeTimeoffForm" class="table table-striped task-table"
                           action="{{ url('employeetimeoff') }}" method="POST">
                         {{ csrf_field() }}
                         {{ method_field('POST') }}

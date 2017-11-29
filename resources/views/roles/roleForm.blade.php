@@ -54,7 +54,7 @@
             </div>
         </div>
     @endif
-    <button type="submit" class="button button40">
+    <button type="submit" class="button button40 ">
         <i class=""></i> {{isset($role)? "Update": "Add"}} Role
     </button>
 

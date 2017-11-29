@@ -1,4 +1,4 @@
-<section class="viewCompanyPResourceSection">
+<section class="viewCompanyPResourceSection" >
 <div class="panel panel-default">
     @include('common.errors')
     @if (count($projectResources)>0 )
@@ -11,7 +11,7 @@
                     <thead>
                     <tr>
                     <th>Project</th>
-                    <th>Operations</th>
+                    <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -29,7 +29,7 @@
                                     {{ method_field('DELETE') }}
                                     <input type="hidden" name="companyProjectId"
                                            value="{{$projectResource->projectId}}">
-                                        <i  data-toggle="confirmation" data-singleton="true" class="fa fa-trash fa-2x pull-right"></i>
+                                    <i data-toggle="confirmation" data-singleton="true" class="fa fa-trash fa-2x"></i>
                                     </form>
                                 </div>
                             </td>

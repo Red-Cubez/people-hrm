@@ -10,8 +10,8 @@
         <table id="jobTitleTable" class="table table-bordered table-hover table-striped">
             <thead>
             <tr>
-                <th  >Job Title Name</th>
-                <th  ></th>
+                <th>Job Title Name</th>
+                <th></th>
             </tr>
             </thead>
             <tbody id="jobTitleTableBody">

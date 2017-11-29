@@ -65,10 +65,10 @@
         </div>
     </div>
 </div>
-<div class="row ">
-    <div class="col-xs-12 col-sm-7   ">
+<div class="row row-content100">
+    <div class="col-xs-12 col-sm-7  col-sm-offset-4 ">
         <div class="form-group">
-            <button type="submit" class="btn btn-default">{{isset($clientProject)? "Update": "Add"}} Project</button>
+            <button type="submit" class="button button40">{{isset($clientProject)? "Update": "Add"}} Project</button>
         </div>
     </div>
 </div>

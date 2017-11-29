@@ -12,7 +12,7 @@
                         @include('employeeTimesheet.editForm')
                     </form>
                 </div>
-            </input>
+            
         </div>
         @elseif($timesheet->isApproved==1 || isset($showReadOnly)) 
         <div class="row">

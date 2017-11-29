@@ -147,6 +147,7 @@ class ClientProjectController extends Controller
                         'projectTotalCost' => $projectTotalCost,
                         'currencyName'     => $currencyName,
                         'currencySymbol'   => $currencySymbol,
+                        'isClientProject'   => true,
 
                     ]);
             } else {

@@ -1,102 +1,55 @@
 @extends('layouts.app')
-
 @section('content')
-<div class="row">
+<section class="showNonAppSetion">
+    <div class="container">
+    <div class="row">
     <div class="col-sm-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3>
-                    All UnApproved Timesheets
-                </h3>
+                <h3>All UnApproved Timesheets</h3>
             </div>
             <div class="panel-body">
-
-             @if(count($employeesTimesheets)>0)
-                 <form class="" action="{{ url('/employeestimesheets/approve/') }}" method="POST">
+            @if(count($employeesTimesheets)>0)
+            <form class="" action="{{ url('/employeestimesheets/approve/') }}" method="POST">
                         {{ csrf_field() }}
-                      
- 
-                     <table class="table table-striped task-table">
-              
-                     <thead>
-                        <th>
-                           Employee Name
-                        </th>
-                        <th>
-                            Year And Week No
-                        </th>
-                        <th>
-                            Week Start Date
-                        </th>
-                        <th>
-                            Week End Date
-                        </th>
-                         <th>
-                            Billabale Hours
-                        </th>
-                        <th>
-                            Non Billabale Hours
-                        </th>
-                         <th>
-                            Approve
-                        </th>
-                        <th>
-                            Operations
-                        </th>
+                         <div class="scroll-panel-table table-responsive">
+                      <table class="table table-bordered table-hover table-striped">
+                      <thead>
+                      <tr>
+                        <th>Employee Name</th>
+                        <th>Year And Week No</th>
+                        <th>Week Start Date</th>
+                        <th>Week End Date</th>
+                         <th>Billabale Hours</th>
+                        <th> Non Billabale Hours</th>
+                         <th>Approve</th>
+                        <th></th>
+                        </tr>
                      </thead>
-                    
-                     <tbody>
+                      <tbody>
                             @foreach($employeesTimesheets as $timesheet)
                                  <tr>
-                                 <td class="table-text">
-                                   <div>
-                                     <a href="/employees/{{$timesheet->employeeId}}" >
+                                 <td>
+                                   <a href="/employees/{{$timesheet->employeeId}}" >
                                         {{$timesheet->employeeName}}
                                   </a>
-                                   </div>
                                  </td>
-                                 <td class="table-text">
-                                   <div>
-                                    
-                                        {{$timesheet->weekNoAndYear}}
-                                    
-                                   </div>
+                                 <td > {{$timesheet->weekNoAndYear}}</td>
+                                 <td > {{$timesheet->weekStartDate}} </td>
+                                 <td > {{$timesheet->weekEndDate}} </td>
+                                 <td > {{$timesheet->billableWeeklyHours}}  </td>
+                                 <td >  {{$timesheet->nonBillableWeeklyHours}}  </td>
+                                 <td >   
+                                <input type="checkbox" name="areApproved[]" value="{{$timesheet->id}}" />
                                  </td>
-                                 <td class="table-text">
-                                     <div>
-                                         {{$timesheet->weekStartDate}}
-                                     </div>
-                                 </td>
-                                 <td class="table-text">
-                                    <div>
-                                         {{$timesheet->weekEndDate}}
-                                    </div>
-                                 </td>
-                                 <td class="table-text">
-                                    <div>
-                                        {{$timesheet->billableWeeklyHours}}
-                                    </div>
-                                 </td>
-                                 <td class="table-text">
-                                    <div>
-                                        {{$timesheet->nonBillableWeeklyHours}}
-                                    </div>
-                                 </td>
-                                 <td class="table-text">
-                                    <div>
-                                    <input type="checkbox" name="areApproved[]" value="{{$timesheet->id}}" />
-                                    </div>
-                                 </td>
-                               
-                                <td>
-                                
-                                <a href="/employeetimesheet/{{$timesheet->id}}">
+                                  <td>
+                                 <a href="/employeetimesheet/{{$timesheet->id}}">
                         
-                                    <button type="button" class="btn btn-primary"> View </button>
+                                    <i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>
                                 </a>
                                
                                 <a href="/employeetimesheet/{{$timesheet->id}}/edit">
-                                    <button type="button" class="btn btn-primary"> Edit </button>
+                                   <i class="fa fa-pencil-square-o fa-2x"></i>
                                 </a>
 
                               </td>
@@ -106,8 +59,9 @@
                     </tbody>
 
                 </table>
-               
-         <button type="submit" > Submit </button>
+                 <button type="submit" class="button button40 pull-right" > Submit </button>
+               </div>
+        
          </form>
             @else
             No Record Found
@@ -116,5 +70,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> 
+ </div>
+</section>
 @endsection

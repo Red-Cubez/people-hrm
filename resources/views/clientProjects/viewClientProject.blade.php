@@ -1,21 +1,20 @@
 @extends('layouts.app')
-
 @section('content')
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-4">
+    <div class="container-fluid">
+         <div class=" display-flex">
+            <div class="companyProject-item-1">
+
                 @include('viewProject/viewProject')
                 
-                @permission(StandardPermissions::createEditClientProject)
+               {{--  @permission(StandardPermissions::createEditClientProject)
                 <a href="/clientprojects/{{$project->projectId}}/edit">
                     <button class="btn btn-primary"> Edit</button></a>
-                @endpermission
+                @endpermission --}}
             </div>
-            <div class="col-sm-8">
+            <div class="companyProject-item-2">
                 @include('showGraph/showProjectGraph')
 
             </div>
         </div>
     </div>
-
 @endsection

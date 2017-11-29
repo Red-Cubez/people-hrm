@@ -113,13 +113,13 @@
                                   </li>
                                   <li class="list-group-item">
                                       @permission(StandardPermissions::createEditEmployee)
-                                      <div class="group">
-                                      <a href="/employees/{{$employeeModel->employeeProfile->employeeId}}/edit" class="pull-right">
+                                      <div class="aParent ">
+                                      <a href="/employees/{{$employeeModel->employeeProfile->employeeId}}/edit" >
                                           <button class="button20">
                                               <i class="fa fa-pencil-square-o fa-2x"></i>
                                           </button>
                                       </a>
-                                      </div>
+                                     
                                       @endpermission
                                       @permission(StandardPermissions::deleteEmployee)
                                       @if(Auth::user()->employee->id!=$employeeModel->employeeProfile->employeeId)
@@ -135,6 +135,7 @@
                                       </form>
                                       @endif
                                       @endpermission
+                                       </div>
                                   </li>
                               </ul>
                           </div>

@@ -4,122 +4,108 @@
             <div class="form-group ">
                 <div class="alert alert-error">
                     <ul>
-                    @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
+                        @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}
+                                    </li>
+                        @endforeach
+                    </ul>
                 </div>
             </div>
         </div>
     @endif
     <div class="panel-heading" id="timeSheetDateDiv">
-        <h3>
-            TimeSheet
-        </h3>
-        Select Date
-        <input class="" id="timesheetDate" name="timesheetDate" required="" type="week">
-
-        </input>
+        <div class="row-content50">
+            <h3>TimeSheet</h3>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="timesheetDate" >Select Date
+                    </label>
+                    <input  id="timesheetDate" class="form-control" name="timesheetDate" required="" type="week" />  
+                </div>
+            </div>
+        </div>
     </div>
+    <div class="panel-body">
     <input name="employeeId" type="hidden" value="{{$employeeId}}">
-        <table class="table table-bordered">
+      <div class="scroll-panel-table table-responsive">
+        <table class="table table-bordered table-hover table-striped">
             <thead>
                 <tr>
-                    <th>
-                        #
-                    </th>
-                    <th id="monDiv">
-                        Mon
-                    </th>
-                    <th id="tueDiv">
-                        Tue
-                    </th>
-                    <th id="wedDiv">
-                        Wed
-                    </th>
-                    <th id="thurDiv">
-                        Thur
-                    </th>
-                    <th id="friDiv">
-                        Friday
-                    </th>
-                    <th id="satDiv">
-                        Sat
-                    </th>
-                    <th id="sunDiv">
-                        Sun
-                    </th>
-                    <th id="sumDiv">
-                        Total
-                    </th>
+                    <th>#</th>
+                    <th id="monDiv">Mon</th>
+                    <th id="tueDiv">Tue</th>
+                    <th id="wedDiv">Wed</th>
+                    <th id="thurDiv">Thur</th>
+                    <th id="friDiv">Fri</th>
+                    <th id="satDiv">Sat</th>
+                    <th id="sunDiv">Sun</th>
+                    <th id="sumDiv">Total</th>
                 </tr>
             </thead>
             <tbody>
                 <tr id="billable">
-                    <th scope="row">
-                        Billable
-                    </th>
+                    <th scope="row">Billable</th>
                     <td>
-                        <input class="form-control input-sm " id="mondayBillable" min="0" name="mondayBillable" required="" type="number"/>
+                        <input class="form-control  " id="mondayBillable" min="0" name="mondayBillable" required="" type="number"/>
                     </td>
                     <td>
-                        <input class="form-control input-sm " id="tuesdayBillable" min="0" name="tuesdayBillable" required="" type="number"/>
+                        <input class="form-control   " id="tuesdayBillable" min="0" name="tuesdayBillable" required="" type="number"/>
                     </td>
                     <td>
-                        <input class="form-control input-sm " id="wednesdayBillable" min="0" name="wednesdayBillable" required="" type="number"/>
+                        <input class="form-control  " id="wednesdayBillable" min="0" name="wednesdayBillable" required="" type="number"/>
                     </td>
                     <td>
-                        <input class="form-control input-sm " id="thursdayBillable" min="0" name="thursdayBillable" required="" type="number"/>
+                        <input class="form-control   " id="thursdayBillable" min="0" name="thursdayBillable" required="" type="number"/>
                     </td>
                     <td>
-                        <input class="form-control input-sm " id="fridayBillable" min="0" name="fridayBillable" required="" type="number"/>
+                        <input class="form-control   " id="fridayBillable" min="0" name="fridayBillable" required="" type="number"/>
                     </td>
                     <td>
-                        <input class="form-control input-sm " id="saturdayBillable" min="0" name="saturdayBillable" type="number"/>
+                        <input class="form-control   " id="saturdayBillable" min="0" name="saturdayBillable" type="number"/>
                     </td>
                     <td>
-                        <input class="form-control input-sm " id="sundayBillable" min="0" name="sundayBillable" type="number"/>
+                        <input class="form-control  " id="sundayBillable" min="0" name="sundayBillable" type="number"/>
                     </td>
                     <td id="sumBillable">
                     </td>
                 </tr>
                 <tr id="nonbillable">
-                    <th scope="row">
-                        Non Billable
-                    </th>
+                    <th scope="row">Non Billable</th>
                     <td>
-                        <input class="form-control input-sm " id="mondayNonBillable" min="0" name="mondayNonBillable" type="number"/>
+                        <input class="form-control  " id="mondayNonBillable" min="0" name="mondayNonBillable" type="number"/>
                     </td>
                     <td>
-                        <input class="form-control input-sm " id="tuesdayNonBillable" min="0" name="tuesdayNonBillable" type="number"/>
+                        <input class="form-control  " id="tuesdayNonBillable" min="0" name="tuesdayNonBillable" type="number"/>
                     </td>
                     <td>
-                        <input class="form-control input-sm " id="wednesdayNonBillable" min="0" name="wednesdayNonBillable" type="number"/>
+                        <input class="form-control  " id="wednesdayNonBillable" min="0" name="wednesdayNonBillable" type="number"/>
                     </td>
                     <td>
-                        <input class="form-control input-sm " id="thursdayNonBillable" min="0" name="thursdayNonBillable" type="number"/>
+                        <input class="form-control   " id="thursdayNonBillable" min="0" name="thursdayNonBillable" type="number"/>
                     </td>
                     <td>
-                        <input class="form-control input-sm " id="fridayNonBillable" min="0" name="fridayNonBillable" type="number"/>
+                        <input class="form-control   " id="fridayNonBillable" min="0" name="fridayNonBillable" type="number"/>
                     </td>
                     <td>
-                        <input class="form-control input-sm " id="saturdayNonBillable" min="0" name="saturdayNonBillable" type="number"/>
+                        <input class="form-control   " id="saturdayNonBillable" min="0" name="saturdayNonBillable" type="number"/>
                     </td>
                     <td>
-                        <input class="form-control input-sm " id="sundayNonBillable" min="0" name="sundayNonBillable" type="number"/>
+                        <input class="form-control   " id="sundayNonBillable" min="0" name="sundayNonBillable" type="number"/>
                     </td>
                      <td id="sumNonBillable">
                     </td>
                 </tr>
             </tbody>
         </table>
-        <button class="btn btn-primary" type="submit">
-            <i class="fa fa-trash">
-                Add TimeSheet
-            </i>
-        </button>
-    </input>
-</div>
+        <button class="button button40 pull-right" type="submit">
+            Add TimeSheet
+      </button>
+        </div>
+        </div>
+        </div>
+
 <script type="text/javascript">
     $(document).ready(function () {
         $("#sumBillable").html(0);
@@ -160,7 +146,7 @@
                         $("#wedDiv").html(wedDiv);
                         var thurDiv = 'Thur (' + data.week.thursday + ')';
                         $("#thurDiv").html(thurDiv);
-                        var friDiv = 'Friday (' + data.week.friday + ')';
+                        var friDiv = 'Fri (' + data.week.friday + ')';
                         $("#friDiv").html(friDiv);
                         //var mon = 'Sat (' + data.week.saturday + ')';
                         var satDiv = 'Sat (' + data.week.saturday + ')';

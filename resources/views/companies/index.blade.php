@@ -63,19 +63,21 @@
                                 <td ></td>
                             @endif
                             <td>
+                            <div class="aParent">
                               @permission(StandardPermissions::createDeleteCompanies)
                                 <form action="{{url('companies/'.$company->id) }}" method="POST">
                                     {{ csrf_field() }}
                                     {{ method_field('DELETE') }}
-                                    {{--<button type="submit" class="btn btn-danger" >--}}
+                                    <button type="submit" class="button20" >
                                         <i class="fa fa-trash fa-2x " data-toggle="confirmation" data-singleton="true"></i>
-                                    {{--</button>--}}
+                                    </button>
                                 </form>
                                 @endpermission
                                 <a href="{{route('companies.show', $company->id)}}">
-                                    <button class="btn btn-primary"> View</button>
+                                    <button class="button20"> <i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>
+                                    </button>
                                 </a>
-
+                              </div>
                             </td>
 
                         </tr>

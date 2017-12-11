@@ -22,15 +22,16 @@
                         </input>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button class="btn btn-default" data-dismiss="modal" type="button">
+                <div class="modal-footer funcModalCompanyDept">
+                    {{-- <button class="btn btn-default" data-dismiss="modal" type="button">
                         Close
-                    </button>
-                    <span class="pull-right">
-                        <button class="btn btn-primary" id="addUpdateDepartmentButton"  onclick="addUpdateDepartment();"
+                    </button> --}}
+                     <div class="aParent">
+                     
+                        <button class="button button40 pull-right" id="addUpdateDepartmentButton"  onclick="addUpdateDepartment();"
                                 type="button">
                         </button>
-                    </span>
+                    </div>
                 </div>
             </div>
         </div>

@@ -23,9 +23,11 @@
                                 {{$companyJobTitle->jobTitle }}
                             </div>
                         </td>
-                        @permission(StandardPermissions::createEditDeleteJobTitle)
-                        <td >
+                       
+                        <td>
+                        
                             <div class="aParent">
+                             @permission(StandardPermissions::createEditDeleteJobTitle)
                                 <button class="button20"
                                             onclick="openJobTitleModal({{$companyJobTitle->jobTitleId}},null);"
                                             type="button">
@@ -38,9 +40,11 @@
                                             <i class="fa fa-trash fa-2x"></i>
                                         </button>
                                     </form>
+                             @endpermission
                             </div>
+                            
                         </td>
-                        @endpermission
+                       
                     </tr>
                 @endforeach
             @endif

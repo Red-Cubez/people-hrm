@@ -39,9 +39,11 @@
                     <label for="contactPerson" class="control-label">City</label>
                     {{$companyProfileModel->city }}
                 </div>
-                @permission(StandardPermissions::editUpdateCompany)
+               
                 <div class="padTop20">
+                  @permission(StandardPermissions::editUpdateCompany)
                     <div class="pull-right padTop5">
+
                         <a href="/companies/{{$companyProfileModel->companyId}}/edit">
                             <button class="button button50"> Edit Company
 
@@ -53,17 +55,21 @@
                             <button class="button button50"> Company Settings
                             </button>
                         </a>
+                        
                     </div>
-                    @endpermission
-                    @permission(StandardPermissions::registerUser)
-                    <div class="pull-right padTop5">
+                     @endpermission
+                   <div class="pull-right padTop5">
+                     @permission(StandardPermissions::registerUser)
                         <a href="/register-user/{{$companyProfileModel->companyId}}">
                             <button class="button button50"> Setup New User</button>
                         </a>
+                         @endpermission
                     </div>
+                  
                 </div>
+               
             </div>
-            @endpermission
+           
         </div>
     </article>
 @endif

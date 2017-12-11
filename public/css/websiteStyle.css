@@ -260,6 +260,12 @@ justify-content: flex-end;
 .showClientSection .aParent{
     justify-content: flex-end;
 }
+.funcModalJobTitle .aParent,
+.funcModalCompanyDept .aParent,
+.funcModalCompanyHoliday .aParent{
+    justify-content: flex-end;
+
+}
 .table-border-grey{
     border: 1px solid #d3e0e9;
 }

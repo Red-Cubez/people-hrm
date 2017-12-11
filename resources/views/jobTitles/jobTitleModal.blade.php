@@ -22,16 +22,14 @@
                     </input>
                 </div>
             </div>
-            <div class="modal-footer">
-            <div class="form-group">
-                <button class="button button40" data-dismiss="modal"  type="button">
+            <div class="modal-footer funcModalJobTitle">
+            <div class="aParent">
+                {{-- <button class="button button40 pull-right" data-dismiss="modal"  type="button">
                     Close
-                </button>
-                </div>
-                <span class="pull-right">
-                    <button class="button button40" id="addUpdateJobTitleButton" onclick="addUpdateJobTitle()" type="button">
+                </button> --}}
+                 <button class="button button40 pull-right" id="addUpdateJobTitleButton" onclick="addUpdateJobTitle()" type="button">
                     </button>
-               </span>
+               </div>
             </div>
         </div>
     </div>

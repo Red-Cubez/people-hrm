@@ -37,23 +37,26 @@
                         <form action="{{ url('companyprojects/'.$project->projectId) }}" method="POST">
                         <div class="aParent">
                                 <span>
-                                    @permission(StandardPermissions::viewCompanyProject)
+                           @permission(StandardPermissions::viewCompanyProject)
                             <a href="/companyprojects/{{$project->projectId}}">
                               <i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>
                                
                             </a>
-                                </span>
                             @endpermission
-                            @permission(StandardPermissions::deleteCompanyProject)
+                                </span>
+                            
+                            
                             {{ csrf_field() }}
                             {{ method_field('DELETE') }}
                             <span >
+                            @permission(StandardPermissions::deleteCompanyProject)
                                     <input name="_method" type="hidden" value="DELETE">
                                     <button class="button20" data-toggle="confirmation" data-singleton="true" type="submit">
                                         <i class="fa fa-trash fa-2x"></i>
                                     </button>
+                                    @endpermission
                                  </span>
-                            @endpermission
+                            
                         </div>
                         </form>
                     </td>
@@ -66,14 +69,15 @@
             @else
             No Record Found
         @endif
-    @permission(StandardPermissions::createEditCompanyProject)
+    
     <div class="padTop20">
+        @permission(StandardPermissions::createEditCompanyProject)
         <a href="/companies/{{$companyProfileModel->companyId}}/companyprojects" class="button button40 pull-right">
          Add New Projects
         </a>
+        @endpermission
     </div>
-            @endpermission
-        </div>
+    </div>
 </div>
 </section>
 

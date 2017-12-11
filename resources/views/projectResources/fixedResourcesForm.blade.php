@@ -63,12 +63,12 @@
     </div>
 </div>
 <div class="row ">
-    <div class="col-xs-12 col-sm-7 col-sm-offset-5 ">
+    <div class="col-xs-12 col-sm-6 col-sm-offset-5 ">
         <div class="form-group">
             <button type="submit" class="button button40">
                 {{--<input type="hidden" name="formSubmitted" value="true">--}}
                 @if(isset($projectresources))
-                    <i class="fa fa-trash"> Update </i>
+                     Update  
                     <input type="hidden" name="projectResourceId" value="{{ $projectresources->id}}"
                            class="form-control">
                     <input type="hidden" name="companyProjectId"

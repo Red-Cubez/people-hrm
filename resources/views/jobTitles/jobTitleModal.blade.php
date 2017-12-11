@@ -15,7 +15,7 @@
             <input type="hidden" id="toBeUpdatedJobTitle">
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="usr">
+                    <label for="jobTitleName">
                         Job Title Name:
                     </label>
                     <input class="form-control" id="jobTitleName" name="jobTitleName" type="text" required>
@@ -23,11 +23,13 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-default" data-dismiss="modal"  type="button">
+            <div class="form-group">
+                <button class="button button40" data-dismiss="modal"  type="button">
                     Close
                 </button>
+                </div>
                 <span class="pull-right">
-                    <button class="btn btn-primary" id="addUpdateJobTitleButton" onclick="addUpdateJobTitle()" type="button">
+                    <button class="button button40" id="addUpdateJobTitleButton" onclick="addUpdateJobTitle()" type="button">
                     </button>
                </span>
             </div>

@@ -257,7 +257,9 @@ justify-content: flex-end;
   justify-content:flex-end;
      justify-content:space-around;
 }
-
+.showClientSection .aParent{
+    justify-content: flex-end;
+}
 .table-border-grey{
     border: 1px solid #d3e0e9;
 }
@@ -298,4 +300,8 @@ text-decoration: none;
 }
 .group a,group i{
     float: right;
+}
+.btn-form-align{
+    margin-top: 25px;
+    margin-left: 10px;
 }

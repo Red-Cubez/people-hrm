@@ -1,7 +1,10 @@
 @extends('layouts.app')
 @section('content')
-
-        <form name="resourceForm" id="resourceForm" class="form-horizontal">
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-8 col-md-offset-4">
+             <form name="resourceForm" id="resourceForm" class="form-horizontal">
             {{ csrf_field() }}
             @if(isset($clientProjectid))
                 <input type="hidden" name="clientProjectid" value="{{ $clientProjectid }}">
@@ -32,4 +35,8 @@
         </form>
 
     @include('projectResources/showCurrentResources')
+        </div>
+    </div>
+</section>
+       
 @endsection

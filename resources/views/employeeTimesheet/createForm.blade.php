@@ -20,8 +20,7 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="timesheetDate" >Select Date
-                    </label>
+                    <label for="timesheetDate" >Select Date</label>
                     <input  id="timesheetDate" class="form-control" name="timesheetDate" required="" type="week" />  
                 </div>
             </div>

@@ -80,13 +80,26 @@
                                @endif
                              </li>
                              <li class="list-group-item">
+                                  
+                                  <div class="aParent ">
                                   @permission(StandardPermissions::createEditClient)
-                                  <a href="/clients/{{$client->id}}/edit">
-                                  <button class="btn btn-primary"> Edit
-
+                                  <a href="/clients/{{$client->id}}/edit"  >
+                                  <button class="button20 "  > 
+                                    <i class="fa fa-pencil-square-o fa-2x"></i>
                                   </button></a>
-        
-        @endpermission
+                                   @endpermission
+                                  @permission(StandardPermissions::deleteClient)
+                                   <form action="{{ url('clients/'.$client->id) }}" method="POST">
+                                      {{ csrf_field() }}
+                                      {{ method_field('DELETE') }}
+                                      <input name="_method" type="hidden" value="DELETE">
+                                      <button class="button20 " data-toggle="confirmation" data-singleton="true" type="submit">
+                                           <i class="fa fa-trash fa-2x"></i>
+                                      </button>
+                                      </input>
+                                  </form>
+                                  @endpermission
+                                  </div>
                              </li>
                          </ul>
                      </div>
@@ -95,27 +108,15 @@
          </div>
      </div>
         @include('common.errors')
-       
-       
-        @permission(StandardPermissions::deleteClient)
-        <div>
-        <form action="{{ url('clients/'.$client->id) }}" method="POST">
-            {{ csrf_field() }}
-            {{ method_field('DELETE') }}
-            <input name="_method" type="hidden" value="DELETE">
-            <button class="btn btn-danger " data-toggle="confirmation" data-singleton="true" type="submit">
-                    Delete
-            </button>
-            </input>
-        </form>
-        </div>
-         @endpermission
-         
-       @permission(StandardPermissions::createEditClientProject) 
+        @permission(StandardPermissions::createEditClientProject) 
+       <div class="row row-content100">
+       <div class="col-xs-12 col-md-7 col-md-offset-5">
         <a href="/clients/{{$client->id}}/createproject">
-            <button class="btn btn-primary"> Add New Project
+            <button class="button button40"> Add New Project
 
             </button></a>
+            </div>
+            </div>
         @endpermission
     </div>
 </main>

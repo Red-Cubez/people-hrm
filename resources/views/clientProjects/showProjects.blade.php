@@ -1,12 +1,19 @@
+<div class="row row-content">
+    <div class="col-xs-12">
+        
+    
+<section class="showClientProjectsSection">
 @permission(StandardPermissions::showClientProjects)
 @if (count($clientProjects) > 0)
-    <div class="panel panel-default">
+ <div class="panel panel-default">
         <div class="panel-heading">
             <h3>Current Projects</h3>
         </div>
         <div class="panel-body">
-            <table class="table table-striped task-table">
+        <div class="scroll-panel-table table-responsive">
+            <table class="table table-bordered table-hover table-striped">
                 <thead>
+                <tr>
                 <th>Names</th>
                 <th>Expected Start Date</th>
                 <th>Expected End Date</th>
@@ -14,43 +21,33 @@
                 <th>Actual End Date</th>
                 <th>Budget</th>
                 <th>Cost</th>
+
                 @permission([
                     StandardPermissions::viewClientProject,
                     StandardPermissions::deleteClientProject,
                     StandardPermissions::showClientProjects
                     ])
-                <th>Operations</th>
+                <th></th>
                 @endpermission
+                </tr>
                 </thead>
                 <tbody>
                 @foreach ($clientProjects as $clientProject)
                     <tr>
-                        <td class="table-text">
-                            <div>{{ $clientProject->name }}</div>
-                        </td>
-                        <td class="table-text">
-                            <div>{{ $clientProject->expectedStartDate }}</div>
-                        </td>
-                        <td class="table-text">
-                            <div>{{ $clientProject->expectedEndDate }}</div>
-                        </td>
-                        <td class="table-text">
-                            <div>{{ $clientProject->actualStartDate }}</div>
-                        </td>
-                        <td class="table-text">
-                            <div>{{ $clientProject->actualEndDate }}</div>
-                        </td>
-                        <td class="table-text">
-                            <div>{{ $clientProject->budget}}</div>
-                        </td>
-                        <td class="table-text">
-                            <div>{{ $clientProject->cost }}</div>
+                        <td>{{ $clientProject->name }} </td>
+                        <td>{{ $clientProject->expectedStartDate }} </td>
+                        <td>{{ $clientProject->expectedEndDate }} </td>
+                        <td>{{ $clientProject->actualStartDate }} </td>
+                        <td>{{ $clientProject->actualEndDate }} </td>
+                        <td>{{ $clientProject->budget}} </td>
+                        <td>{{ $clientProject->cost }} 
                         </td>
                         <td>
+                        <div class="aParent">
                             @permission(StandardPermissions::viewClientProject)
                             <a href="/clientprojects/{{$clientProject->id}}">
-                                <button class="btn btn-primary"> View
-
+                                <button class="button20">  
+                                  <i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>
                                 </button>
                             </a>
                             @endpermission
@@ -58,25 +55,30 @@
                             <form action="{{ url('clientprojects/'.$clientProject->id) }}" method="POST">
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
-                                <button type="submit" class="btn btn-danger" data-toggle="confirmation"
+                                <button type="submit" class="button20" data-toggle="confirmation"
                                         data-singleton="true">
-                                    <i class="fa fa-trash"> Delete </i>
+                                  <i class="fa fa-trash fa-2x"></i>
                                 </button>
                             </form>
                             @endpermission
                             @permission(StandardPermissions::createEditClientProjectResource)
                             <a href="/clientprojects/{{$clientProject->id}}/projectresources">
-                                <button class="btn btn-primary"> Manage Resources</button>
+                                <button class="button button40"> Manage Resources</button>
                             </a>
                             @endpermission
+                            </div>
                         </td>
                     </tr>
                 @endforeach
                 </tbody>
             </table>
+            </div>
         </div>
         @endif
         @endpermission
+        </section>
+        </div>
+</div>
         <script type="text/javascript">
             $('[data-toggle=confirmation]').confirmation({
                 rootSelector: '[data-toggle=confirmation]',

@@ -32,9 +32,10 @@
                         <td id="countHolidays_{{$companyHoliday->holidayId}}" >
                             {{ $companyHoliday->countHolidays }}
                         </td>
-            @permission(StandardPermissions::createEditDeleteHoliday)
+                   
                         <td >
                             <div class="aParent">
+                             @permission(StandardPermissions::createEditDeleteHoliday)
                                 <button class="button20"
                                     onclick="openHolidayModal({{$companyHoliday->holidayId}},null,null,null);"
                                     type="button">
@@ -46,25 +47,28 @@
                                     <button type="submit" class="button20 test-flex" data-toggle="confirmation" data-singleton="true">
                                          <i class="fa fa-trash fa-2x"></i>
                                     </button>
-                            </form>    
+                            </form> 
+                             @endpermission   
                             </div>
                         </td>
-            @endpermission
+           
                     </tr>
                 @endforeach
             @endif
             </tbody>
         </table>
         </div>
-    @permission(StandardPermissions::createEditDeleteHoliday)
+   
     <div class="padTop20">
+     @permission(StandardPermissions::createEditDeleteHoliday)
        <button class="button button40 pull-right " onclick="openHolidayModal(null,null,null,null);" type="button">
         Add Holiday
-    </button>   
+    </button> 
+    @endpermission  
     </div>
    </div>
      </div>
-@endpermission
+
 @permission(StandardPermissions::createEditDeleteHoliday)
     @include('companyHolidays/companyHolidayModal')
 @endpermission

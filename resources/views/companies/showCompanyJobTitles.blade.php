@@ -27,20 +27,23 @@
                         <td>
                         
                             <div class="aParent">
-                             @permission(StandardPermissions::createEditDeleteJobTitle)
+                             
                                 <button class="button20"
                                             onclick="openJobTitleModal({{$companyJobTitle->jobTitleId}},null);"
                                             type="button">
+                                            @permission(StandardPermissions::createEditDeleteJobTitle)
                                         <i class="fa fa-pencil-square-o fa-2x"></i>
                                     </button>
                                 <form action="{{url('jobtitle/'.$companyJobTitle->jobTitleId) }}" method="POST">
                                         {{ csrf_field() }}
                                         {{ method_field('DELETE') }}
                                         <button type="submit" class="button20 test-flex" data-toggle="confirmation" data-singleton="true">
+                                         @endpermission
                                             <i class="fa fa-trash fa-2x"></i>
                                         </button>
+
                                     </form>
-                             @endpermission
+                            
                             </div>
                             
                         </td>

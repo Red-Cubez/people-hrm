@@ -2,8 +2,9 @@
 @section('content')
    
     <div class="container-fluid">
+    @permission(StandardPermissions::viewCompany)
         <div class="row">
-         @permission(StandardPermissions::viewCompany)
+         
             <div class="col-sm-3 nopadding">
                 @include('companies/showCompanyProfile')
             </div>
@@ -62,8 +63,9 @@
               <div class="col-sm-9 col-md-9 ">
                   @include('companies/showCompanyCurrentClients')
               </div>
-               @endpermission
+               
         </div>
+        @endpermission
     </div>
    
 @endsection

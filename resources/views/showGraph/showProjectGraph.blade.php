@@ -13,9 +13,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
 
 @endsection
-
-@include('showGraph/lineChart')
+<section class="showProjectGraphSection">
+    <div class="container-fluid">
+        <div class="row row-content">
+            <div class="col-xs-12">
+              @include('showGraph/lineChart')
 
 @if(count($resourcesDetails)>0)
 @include('showGraph/pieChart')
-@endif
+@endif  
+            </div>
+        </div>
+    </div>
+</section>

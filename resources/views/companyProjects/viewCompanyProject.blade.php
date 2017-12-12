@@ -17,9 +17,10 @@
             </div>
         </div>
     </div>
-    @permission(StandardPermissions::createEditCompanyProjectResource)
+   
     <section>
         <div class="container">
+         @permission(StandardPermissions::createEditCompanyProjectResource)
             <div class="row row-content100">
                 <div class="col-sm-12 text-center">
                   <a href="{{route('companyprojectresources.show', $project->projectId)}}">
@@ -32,8 +33,9 @@
                     @include('CompanyProjectResources/viewCompanyProjectResources')
                 </div>
             </div>
+               @endpermission
         </div>
     </section>       
-    @endpermission
+ 
          
 @endsection

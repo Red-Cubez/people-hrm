@@ -81,12 +81,12 @@
 	Confirmation.VERSION  = '1.0.5'
 
 	Confirmation.DEFAULTS = $.extend({}, $.fn.popover.Constructor.DEFAULTS, {
-		placement 		: 'right',
+		placement 		: 'top',
 		title 			: 'Are you sure?',
-		btnOkClass 		: 'btn btn-sm btn-danger',
+		btnOkClass 		: 'btn btn-xs btn-danger',
 		btnOkLabel 		: 'Delete',
 		// btnOkIcon 		: 'glyphicon glyphicon-ok',
-		btnCancelClass 	: 'btn btn-sm btn-default',
+		btnCancelClass 	: 'btn btn-xs btn-default',
 		btnCancelLabel 	: 'Cancel',
 		// btnCancelIcon 	: 'glyphicon glyphicon-remove',
 		// href 			: '',

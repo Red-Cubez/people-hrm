@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('content')
 @if(count($monthlyTimelines) > 0)
+
 <section class="showIndivisualProjectGraphSection">
 <div class="container-fluid">
 <div class="row row-content100">

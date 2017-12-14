@@ -49,6 +49,7 @@ class ReportsController extends Controller
 
     public function showOptions($companyId)
     {
+
         // $isManager       = $this->UserAuthenticationService->isManager();
         // $isAdmin         = $this->UserAuthenticationService->isAdmin();
         // $isHrManager     = $this->UserAuthenticationService->isHrManager();
@@ -71,6 +72,7 @@ class ReportsController extends Controller
 
     public function showAllProjectsReport(Request $request, $companyId)
     {
+        
 
         list($startDate, $endDate) = $this->DateTimeService->getfirstAndLastDateOfGivenDate($request->startDate, $request->endDate);
 
@@ -127,6 +129,7 @@ class ReportsController extends Controller
 
     public function showInternalProjectsReport(Request $request, $companyId)
     {
+
         list($startDate, $endDate) = $this->DateTimeService->getfirstAndLastDateOfGivenDate($request->startDate, $request->endDate);
 
         $this->validate($request, [
@@ -170,6 +173,7 @@ class ReportsController extends Controller
 
     public function showClientProjectsReport(Request $request, $companyId)
     {
+
         list($startDate, $endDate) = $this->DateTimeService->getfirstAndLastDateOfGivenDate($request->startDate, $request->endDate);
 
         $this->validate($request, [

@@ -253,10 +253,13 @@ justify-content: flex-end;
     flex-direction: row-reverse;
 }
 .viewCompanyPResourceSection .aParent,
-.userRoleIndexSection  .aParent{
+.userRoleIndexSection  .aParent,
+.showIndivisualProjectGraphSection .aParent
+.showAllInternalClientProjectsGraphSection .aParent{
   justify-content:flex-end;
      justify-content:space-around;
 }
+
 .showClientSection .aParent{
     justify-content: flex-end;
 }

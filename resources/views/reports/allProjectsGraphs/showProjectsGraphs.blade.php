@@ -1,41 +1,39 @@
 @extends('layouts.app')
-
 @section('content')
 @if(isset($isAllProjectsGraphs) )
-<div class="container">
+<section class="showAllInternalClientProjectsGraphSection">
+  <div class="container-fluid">
     <div class="row">
         Internal Projects Graphs
            @if(count($internalProjectsmonthlyTimelines)>0)
 
-             <div class="row">
-            <div class="col-sm-8">
+             <div class="row row-content100">
+             <div class="col-sm-12 col-xs-12 col-md-12">
                     <?php
                     $data=null;
                     $data=serialize($internalProjectsmonthlyTimelines); 
                     //$encoded=htmlentities($data); 
                     ?>
-                    
-                  <form action="{{url('company/projects/report/generateReport')}}" class="form-horizontal" method="POST" role="form">
-                        {{ csrf_field() }}
-                    <input type="hidden" name="monthlyTimelines" value="{{$data}}">
-                    <input type="hidden" name="projectsType" value="internalProjects">
-                        <a href="/company/{{$companyId}}/all-projects/report">
-                            <button class="btn btn-primary">
-                                Generate Internal Projects Report
-                            </button>
-                        </a>
-                       
-                  </form>
-
+                    <div class="aParent">
+                            <form action="{{url('company/projects/report/generateReport')}}" class="form-horizontal" method="POST" role="form">
+                                  {{ csrf_field() }}
+                              <input type="hidden" name="monthlyTimelines" value="{{$data}}">
+                              <input type="hidden" name="projectsType" value="internalProjects">
+                                  <a href="/company/{{$companyId}}/all-projects/report">
+                                      <button class="button button40">
+                                          Generate Internal Projects Report
+                                      </button>
+                                  </a>
+                                 
+                            </form>
+                             <form action="{{url('/company/projects/report/export')}}" enctype="multipart/form-data" method="post">
+                       {{ csrf_field() }}
+                       <input type="hidden" name="projectsTimelines" value="{{$data}}">
+                      <button class="button button40" type="submit">Export Internal Projects Report to Ms Excel</button>
+                       </form>
+                 </div>
             </div>
-        <div class="col-md-2">
-          <form action="{{url('/company/projects/report/export')}}" enctype="multipart/form-data" method="post">
-             {{ csrf_field() }}
-            <input type="hidden" name="projectsTimelines" value="{{$data}}">
-            <button class="btn btn-primary" type="submit">Export Internal Projects Report to Ms Excel</button>
-          </form>
-
-        </div>   
+         
         </div>
         <div class="col-sm-8">
     
@@ -96,6 +94,7 @@
           @endif 
     </div>
 </div>
+</section>
 @else
 No Record Found    
 @endif

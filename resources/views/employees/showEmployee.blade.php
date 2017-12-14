@@ -112,15 +112,15 @@
                                       Working Over Time.
                                   </li>
                                   <li class="list-group-item">
+                                    <div class="aParent ">
                                       @permission(StandardPermissions::createEditEmployee)
-                                      <div class="aParent ">
                                       <a href="/employees/{{$employeeModel->employeeProfile->employeeId}}/edit" >
                                           <button class="button20">
                                               <i class="fa fa-pencil-square-o fa-2x"></i>
                                           </button>
                                       </a>
-                                     
                                       @endpermission
+                                    
                                       @permission(StandardPermissions::deleteEmployee)
                                       @if(Auth::user()->employee->id!=$employeeModel->employeeProfile->employeeId)
                                       <form action="{{ url('employees/'.$employeeModel->employeeProfile->employeeId) }}"
@@ -144,9 +144,10 @@
                     </div>
             </div>
             <div class="row row-content">
-                @permission(StandardPermissions::createEditTimesheet)
+               
                     <div class="row row-content100 padTop5">
                         <div class="col-sm-12 col-md-11 col-md-offset-1">
+                         @permission(StandardPermissions::createEditTimesheet)
                             <a href="/employeetimesheet/{{$employeeModel->employeeProfile->employeeId}}/create">
                                 <button class="button button50"> Add Timesheet</button>
                             </a>

@@ -254,8 +254,8 @@ justify-content: flex-end;
 }
 .viewCompanyPResourceSection .aParent,
 .userRoleIndexSection  .aParent,
-.showIndivisualProjectGraphSection .aParent
-.showAllInternalClientProjectsGraphSection .aParent{
+.showIndivisualProjectGraphSection .aParent,
+.showAllProjectsGraphSection .aParent{
   justify-content:flex-end;
      justify-content:space-around;
 }

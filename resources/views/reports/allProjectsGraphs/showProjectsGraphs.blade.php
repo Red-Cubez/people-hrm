@@ -1,13 +1,20 @@
 @extends('layouts.app')
 @section('content')
 @if(isset($isAllProjectsGraphs) )
-<section class="showAllInternalClientProjectsGraphSection">
+<article class="main-heading">
+        <div class="container">
+            <div class="row-content100">
+                <div class="col-xs-12">
+                    <h1 class="text-center">Internal Projects Graphs</h1>
+                </div>
+            </div>
+        </div>
+</article>
+<section class="showAllProjectsGraphSection">
   <div class="container-fluid">
     <div class="row">
-        Internal Projects Graphs
-           @if(count($internalProjectsmonthlyTimelines)>0)
-
-             <div class="row row-content100">
+    @if(count($internalProjectsmonthlyTimelines)>0)
+     <div class="row row-content100">
              <div class="col-sm-12 col-xs-12 col-md-12">
                     <?php
                     $data=null;
@@ -33,12 +40,10 @@
                        </form>
                  </div>
             </div>
-         
         </div>
-        <div class="col-sm-8">
-    
-         
-            @include('reports/allProjectsGraphs/showInternalProjectsGraphs/showInternalProjectsGraphs',
+        <div class="row row-content100">
+        <div class="col-sm-12 col-xs-12 col-md-12">
+         @include('reports/allProjectsGraphs/showInternalProjectsGraphs/showInternalProjectsGraphs',
                 [
                     'internalProjectsmonthlyTimelines'        => $internalProjectsmonthlyTimelines,
                   
@@ -48,38 +53,48 @@
          @else
             No Record Found    
          @endif  
+         </div>
     </div>
-    <div class="row">
-        Client Projects Graphs
+    <article class="main-heading">
+        <div class="container">
+            <div class="row-content100">
+                <div class="col-xs-12">
+                    <h1 class="text-center">Client Projects Graphs</h1>
+                </div>
+            </div>
+        </div>
+</article>
+    <div class="row row-content100">
+      
          @if(count($clientProjectsmonthlyTimelines)>0)
-          <div class="col-sm-8">
+          <div class="col-sm-12 col-xs-12 col-md-12">
                     <?php
                     $data=null;
                     $data=serialize($clientProjectsmonthlyTimelines); 
                     //$encoded=htmlentities($data); 
                     ?>
-                    
+                    <div class="aParent">
                   <form action="{{url('company/projects/report/generateReport')}}" class="form-horizontal" method="POST" role="form">
                         {{ csrf_field() }}
                     <input type="hidden" name="monthlyTimelines" value="{{$data}}">
                     <input type="hidden" name="projectsType" value="clientProjects">
                         <a href="/company/{{$companyId}}/all-projects/report">
-                            <button class="btn btn-primary">
+                            <button class="button button40">
                                 Generate Client Projects Report 
                             </button>
                         </a>
                        
                   </form>
-
+                   <form action="{{url('/company/projects/report/export')}}" enctype="multipart/form-data" method="post">
+                   {{ csrf_field() }}
+                  <input type="hidden" name="projectsTimelines" value="{{$data}}">
+                  <button class="button button40" type="submit">Export Clinet Projects Report to Ms Excel</button>
+                </form>
+               </div>
             </div>
-      <div class="col-md-2">
-          <form action="{{url('/company/projects/report/export')}}" enctype="multipart/form-data" method="post">
-             {{ csrf_field() }}
-            <input type="hidden" name="projectsTimelines" value="{{$data}}">
-            <button class="btn btn-primary" type="submit">Export Clinet Projects Report to Ms Excel</button>
-          </form>
-      </div>2
-        <div class="col-sm-8">
+         </div>
+         <div class="row row-content100">
+        <div class="col-sm-12 col-xs-12 col-md-12">
 
              
               @include('reports/allProjectsGraphs/showClientProjectsGraphs/showClientProjectsGraphs',
@@ -88,7 +103,7 @@
             
                     ])
                       
-        </div>
+          </div>
           @else
                No Record Found    
           @endif 

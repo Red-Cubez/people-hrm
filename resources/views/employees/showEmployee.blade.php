@@ -111,32 +111,34 @@
                                       @endif
                                       Working Over Time.
                                   </li>
+                                  @permission([StandardPermissions::createEditEmployee,StandardPermissions::deleteEmployee])
                                   <li class="list-group-item">
                                     <div class="aParent ">
-                                      @permission(StandardPermissions::createEditEmployee)
-                                      <a href="/employees/{{$employeeModel->employeeProfile->employeeId}}/edit" >
-                                          <button class="button20">
-                                              <i class="fa fa-pencil-square-o fa-2x"></i>
-                                          </button>
-                                      </a>
-                                      @endpermission
-                                    
-                                      @permission(StandardPermissions::deleteEmployee)
+                                     @permission(StandardPermissions::createEditEmployee)
+                                    <a href="/employees/{{$employeeModel->employeeProfile->employeeId}}/edit" >
+                                    <button class="button20">
+                                    <i class="fa fa-pencil-square-o fa-2x"></i>
+                                    </button>
+                                     </a>
+                                     @endpermission
                                       @if(Auth::user()->employee->id!=$employeeModel->employeeProfile->employeeId)
+                                      @permission(StandardPermissions::deleteEmployee)
                                       <form action="{{ url('employees/'.$employeeModel->employeeProfile->employeeId) }}"
                                             method="POST">
                                           {{ csrf_field() }}
                                           {{ method_field('DELETE') }}
                                           <div class="group">
                                           <button class="button20"  data-toggle="confirmation" data-singleton="true" type="submit">
-                                              <i class="fa fa-trash fa-2x"></i>
+                                          <i class="fa fa-trash fa-2x"></i>
                                           </button>
-                                          </div>
+                                          </div>     
                                       </form>
+                                       @endpermission
                                       @endif
-                                      @endpermission
+                                     
                                        </div>
                                   </li>
+                                 @endpermission 
                               </ul>
                           </div>
 
@@ -144,8 +146,7 @@
                     </div>
             </div>
             <div class="row row-content">
-               
-                    <div class="row row-content100 padTop5">
+             <div class="row row-content100 padTop5">
                         <div class="col-sm-12 col-md-11 col-md-offset-1">
                          @permission(StandardPermissions::createEditTimesheet)
                             <a href="/employeetimesheet/{{$employeeModel->employeeProfile->employeeId}}/create">

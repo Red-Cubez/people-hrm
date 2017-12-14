@@ -1,9 +1,11 @@
-<div class="row row-content">
-    <div class="col-xs-12">
+
         
     
-<section class="showClientProjectsSection">
+
 @permission(StandardPermissions::showClientProjects)
+<div class="row row-content">
+    <div class="col-xs-12">
+<section class="showClientProjectsSection">
 @if (count($clientProjects) > 0)
  <div class="panel panel-default">
         <div class="panel-heading">
@@ -75,10 +77,11 @@
             </div>
         </div>
         @endif
-        @endpermission
+       
         </section>
         </div>
 </div>
+ @endpermission
         <script type="text/javascript">
             $('[data-toggle=confirmation]').confirmation({
                 rootSelector: '[data-toggle=confirmation]',

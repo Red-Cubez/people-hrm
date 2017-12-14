@@ -12,8 +12,10 @@
               <th> Holiday Name</th>
                 <th >Start Date</th>
                 <th >End Date</th>
-               <th > Total Holidays</th>  @permission(StandardPermissions::createEditDeleteHoliday)
-              <th ></th>  @endpermission
+                <th > Total Holidays</th>  
+                @permission(StandardPermissions::createEditDeleteHoliday)
+                <th ></th>  
+                @endpermission
             </tr>
           </thead>
         <tbody id="holidayTableBody">
@@ -32,25 +34,26 @@
                         <td id="countHolidays_{{$companyHoliday->holidayId}}" >
                             {{ $companyHoliday->countHolidays }}
                         </td>
-                   
-                        <td >
-                            <div class="aParent">
-                             @permission(StandardPermissions::createEditDeleteHoliday)
-                                <button class="button20"
-                                    onclick="openHolidayModal({{$companyHoliday->holidayId}},null,null,null);"
-                                    type="button">
-                                <i class="fa fa-pencil-square-o fa-2x"></i>
-                            </button>    
-                                <form  action="{{url('companyholidays/'.$companyHoliday->holidayId) }}" method="POST" >
-                                    {{ csrf_field() }}
-                                    {{ method_field('DELETE') }}
-                                    <button type="submit" class="button20 test-flex" data-toggle="confirmation" data-singleton="true">
-                                         <i class="fa fa-trash fa-2x"></i>
-                                    </button>
-                            </form> 
-                             @endpermission   
-                            </div>
-                        </td>
+                         @permission(StandardPermissions::createEditDeleteHoliday)    
+                            <td >
+                                <div class="aParent">
+                                
+                                    <button class="button20"
+                                        onclick="openHolidayModal({{$companyHoliday->holidayId}},null,null,null);"
+                                        type="button">
+                                    <i class="fa fa-pencil-square-o fa-2x"></i>
+                                </button>    
+                                    <form  action="{{url('companyholidays/'.$companyHoliday->holidayId) }}" method="POST" >
+                                        {{ csrf_field() }}
+                                        {{ method_field('DELETE') }}
+                                        <button type="submit" class="button20 test-flex" data-toggle="confirmation" data-singleton="true">
+                                             <i class="fa fa-trash fa-2x"></i>
+                                        </button>
+                                </form> 
+                                  
+                                </div>
+                            </td>
+                         @endpermission 
            
                     </tr>
                 @endforeach

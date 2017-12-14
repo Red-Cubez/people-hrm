@@ -18,8 +18,8 @@
             </div>
           
             <div class="col-sm-9 col-md-9">
-              @permission(StandardPermissions::showCompanyProjects)
-                @include('companyProjects/showProjects')
+                @permission(StandardPermissions::showCompanyProjects)
+                 @include('companyProjects/showProjects')
                 @endpermission
             </div>
             

@@ -38,7 +38,7 @@
 @include('address/addressForm')
 <div class="row">
     <div class="row-content100">
-        <div class="col-xs-12 col-sm-3 col-sm-offset-4">
+        <div class="col-xs-12 col-sm-5 col-sm-offset-4">
             <div class="form-group">
                 <button type="submit" class="button button40">
                     {{isset($client)? "Update": "Add"}} client

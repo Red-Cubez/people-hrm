@@ -11,7 +11,9 @@
             <thead>
             <tr>
                 <th>Job Title Name</th>
-                <th></th>
+                  @permission(StandardPermissions::createEditDeleteJobTitle)
+                  <th></th>
+                  @endpermission
             </tr>
             </thead>
             <tbody id="jobTitleTableBody">
@@ -23,30 +25,31 @@
                                 {{$companyJobTitle->jobTitle }}
                             </div>
                         </td>
-                       
+                        @permission(StandardPermissions::createEditDeleteJobTitle)
                         <td>
                         
                             <div class="aParent">
-                             
-                                <button class="button20"
-                                            onclick="openJobTitleModal({{$companyJobTitle->jobTitleId}},null);"
-                                            type="button">
-                                            @permission(StandardPermissions::createEditDeleteJobTitle)
-                                        <i class="fa fa-pencil-square-o fa-2x"></i>
+                                
+                                    <button class="button20"
+                                                onclick="openJobTitleModal({{$companyJobTitle->jobTitleId}},null);"
+                                                type="button">
+                                                
+                                            <i class="fa fa-pencil-square-o fa-2x"></i>
                                     </button>
-                                <form action="{{url('jobtitle/'.$companyJobTitle->jobTitleId) }}" method="POST">
-                                        {{ csrf_field() }}
-                                        {{ method_field('DELETE') }}
-                                        <button type="submit" class="button20 test-flex" data-toggle="confirmation" data-singleton="true">
-                                         @endpermission
-                                            <i class="fa fa-trash fa-2x"></i>
-                                        </button>
+                                    <form action="{{url('jobtitle/'.$companyJobTitle->jobTitleId) }}" method="POST">
+                                            {{ csrf_field() }}
+                                            {{ method_field('DELETE') }}
+                                            <button type="submit" class="button20 test-flex" data-toggle="confirmation" data-singleton="true">
+                                           
+                                                <i class="fa fa-trash fa-2x"></i>
+                                            </button>
 
                                     </form>
-                            
+                                
                             </div>
                             
                         </td>
+                        @endpermission
                        
                     </tr>
                 @endforeach
@@ -63,10 +66,10 @@
             </div>
         @endpermission
 
-        @permission(StandardPermissions::createEditDeleteJobTitle)
+       
     </div>
-
-    @include('jobTitles/jobTitleModal')
+    @permission(StandardPermissions::createEditDeleteJobTitle)
+        @include('jobTitles/jobTitleModal')
     @endpermission
 </section>
 

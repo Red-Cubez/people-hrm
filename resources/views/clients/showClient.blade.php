@@ -79,28 +79,31 @@
                                 {{$client->address->country }}
                                @endif
                              </li>
+                             @permission([StandardPermissions::createEditClient,StandardPermissions::deleteClient])
                              <li class="list-group-item">
                                   
                                   <div class="aParent ">
-                                  @permission(StandardPermissions::createEditClient)
-                                  <a href="/clients/{{$client->id}}/edit"  >
-                                  <button class="button20 "  > 
-                                    <i class="fa fa-pencil-square-o fa-2x"></i>
-                                  </button></a>
-                                   @endpermission
-                                  @permission(StandardPermissions::deleteClient)
-                                   <form action="{{ url('clients/'.$client->id) }}" method="POST">
-                                      {{ csrf_field() }}
-                                      {{ method_field('DELETE') }}
-                                      <input name="_method" type="hidden" value="DELETE">
-                                      <button class="button20 " data-toggle="confirmation" data-singleton="true" type="submit">
-                                           <i class="fa fa-trash fa-2x"></i>
-                                      </button>
-                                      </input>
-                                  </form>
-                                  @endpermission
+                                      @permission(StandardPermissions::createEditClient)
+                                          <a href="/clients/{{$client->id}}/edit"  >
+                                            <button class="button20 "  > 
+                                              <i class="fa fa-pencil-square-o fa-2x"></i>
+                                            </button>
+                                          </a>
+                                      @endpermission
+                                      @permission(StandardPermissions::deleteClient)
+                                          <form action="{{ url('clients/'.$client->id) }}" method="POST">
+                                              {{ csrf_field() }}
+                                              {{ method_field('DELETE') }}
+                                              <input name="_method" type="hidden" value="DELETE">
+                                              <button class="button20 " data-toggle="confirmation" data-singleton="true" type="submit">
+                                                   <i class="fa fa-trash fa-2x"></i>
+                                              </button>
+                                              </input>
+                                          </form>
+                                      @endpermission
                                   </div>
                              </li>
+                            @endpermission
                          </ul>
                      </div>
                  </div>

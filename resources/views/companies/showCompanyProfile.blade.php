@@ -41,29 +41,33 @@
                 </div>
                
                 <div class="padTop20">
-                  @permission(StandardPermissions::editUpdateCompany)
+                  
                     <div class="pull-right padTop5">
+                        @permission(StandardPermissions::editUpdateCompany)
+                            <a href="/companies/{{$companyProfileModel->companyId}}/edit">
+                                <button class="button button50"> Edit Company
 
-                        <a href="/companies/{{$companyProfileModel->companyId}}/edit">
-                            <button class="button button50"> Edit Company
-
-                            </button>
-                        </a>
+                                </button>
+                            </a>
+                        @endpermission
                     </div>
+                  
+                    
                     <div class="pull-right padTop5">
+                    @permission(StandardPermissions::createShowEditDeleteCompanySettings)
                         <a href="/company-settings/{{$companyProfileModel->companyId}}">
                             <button class="button button50"> Company Settings
                             </button>
                         </a>
-                        
+                    @endpermission
                     </div>
-                     @endpermission
+                    
                    <div class="pull-right padTop5">
-                     @permission(StandardPermissions::registerUser)
-                        <a href="/register-user/{{$companyProfileModel->companyId}}">
-                            <button class="button button50"> Setup New User</button>
-                        </a>
-                         @endpermission
+                    @permission(StandardPermissions::registerUser)
+                            <a href="/register-user/{{$companyProfileModel->companyId}}">
+                                <button class="button button50"> Setup New User</button>
+                            </a>
+                    @endpermission
                     </div>
                   
                 </div>

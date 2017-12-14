@@ -33,33 +33,35 @@
                     <td>{{ $project->actualEndDate }}</td>
                     <td >{{ $project->budget}}</td>
                     <td >{{ $project->cost }}</td>
-                    <td>
-                        <form action="{{ url('companyprojects/'.$project->projectId) }}" method="POST">
-                        <div class="aParent">
-                                <span>
-                           @permission(StandardPermissions::viewCompanyProject)
-                            <a href="/companyprojects/{{$project->projectId}}">
-                              <i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>
-                               
-                            </a>
-                            @endpermission
-                                </span>
-                            
-                            
-                            {{ csrf_field() }}
-                            {{ method_field('DELETE') }}
-                            <span >
-                            @permission(StandardPermissions::deleteCompanyProject)
-                                    <input name="_method" type="hidden" value="DELETE">
-                                    <button class="button20" data-toggle="confirmation" data-singleton="true" type="submit">
-                                        <i class="fa fa-trash fa-2x"></i>
-                                    </button>
-                                    @endpermission
-                                 </span>
-                            
-                        </div>
-                        </form>
-                    </td>
+                    @permission([StandardPermissions::viewCompanyProject,StandardPermissions::deleteCompanyProject])
+                        <td>
+                            <form action="{{ url('companyprojects/'.$project->projectId) }}" method="POST">
+                            <div class="aParent">
+                                    <span>
+                               @permission(StandardPermissions::viewCompanyProject)
+                                <a href="/companyprojects/{{$project->projectId}}">
+                                  <i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>
+                                   
+                                </a>
+                                @endpermission
+                                    </span>
+                                
+                                
+                                {{ csrf_field() }}
+                                {{ method_field('DELETE') }}
+                                <span >
+                                @permission(StandardPermissions::deleteCompanyProject)
+                                        <input name="_method" type="hidden" value="DELETE">
+                                        <button class="button20" data-toggle="confirmation" data-singleton="true" type="submit">
+                                            <i class="fa fa-trash fa-2x"></i>
+                                        </button>
+                                        @endpermission
+                                     </span>
+                                
+                            </div>
+                            </form>
+                        </td>
+                    @endpermission    
                 </tr>
                 @endforeach
                 

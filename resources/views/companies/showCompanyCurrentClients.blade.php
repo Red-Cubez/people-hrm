@@ -15,7 +15,7 @@
                     <th  >Client Name</th>
                     <th  >Contact Person</th>
                     <th  >Contact Number</th>
-                    <th  >Operation</th>
+                    <th  ></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -38,13 +38,15 @@
         @else
             No Record Found
         @endif
-                @permission(StandardPermissions::createEditClient)
+               
                     <div class="padTop20">
+                     @permission(StandardPermissions::createEditClient)
                      <a href="/clients/showclientform/{{$companyProfileModel->companyId}}" class="button button40 pull-right">
                         Add New Client  
                      </a>
+                      @endpermission  
                    </div>
-                @endpermission  
+               
 </div>
 </div>
 @endpermission

@@ -68,34 +68,37 @@ tr:nth-child(even){background-color: #f2f2f2}
                                   <td>{{$projectMonthlyTimeline->monthName}}</td>
                                   <td>{{$projectMonthlyTimeline->totalCost}}</td>
                                     <td>
-                                      @if(count($projectMonthlyTimeline->resourcesMonthlyDetails))
+                                        
+                                    @if(count($projectMonthlyTimeline->resourcesMonthlyDetails)>0 )
+
+
                                         @for($count=0; $count<=count($projectMonthlyTimeline->resourcesMonthlyDetails);$count++)
                                      
                                                
-                                        @endfor     
-
-                                              @foreach($projectMonthlyTimeline->resourcesMonthlyDetails as $resourceDetail)
-
-                                                 <table>
-                                                  
-                                                <tr>
-                                               
-                                                  <td style="border: none;">{{$resourceDetail->resourceName}}</td>   
-                                                                                                
-                                                </tr> 
-                                                  </table> 
-                                                  
-                                                @endforeach  
-                                                                                
-                                       @endif  
+                                        @endfor   
+                                    
+                                        @foreach($projectMonthlyTimeline->resourcesMonthlyDetails as $resourceDetail)
+                                                <table>
+                                                    
+                                                  <tr>
+                                                 
+                                                    <td style="border: none;">{{$resourceDetail->resourceName}}</td>   
+                                                                                                  
+                                                  </tr> 
+                                                </table> 
+                                                    
+                                        @endforeach  
+                                            
+                                                                                  
+                                    @endif  
                                     </td>   
                                     <td>
-                                      @if(count($projectMonthlyTimeline->resourcesMonthlyDetails))
+                                    @if(count($projectMonthlyTimeline->resourcesMonthlyDetails))
       
                                               @foreach($projectMonthlyTimeline->resourcesMonthlyDetails as $resourceDetail)
                                                <table >
                                               <tr >
-                                                                                                
+                                                                                                  
                                                  <td style="border: none;">{{$resourceDetail->resourceCost}}</td>
 
                                                 
@@ -103,7 +106,7 @@ tr:nth-child(even){background-color: #f2f2f2}
                                              </table> 
                                               @endforeach  
                                                                                    
-                                     @endif  
+                                    @endif  
                                   </td>
                                
                                

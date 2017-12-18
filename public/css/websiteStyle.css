@@ -279,7 +279,8 @@ justify-content: flex-end;
 .currentInternalProjectsView a,
 .mainShowEmployeeSection a,
 .showCompanyCurrentClientSection a,
-.showNonAppSetion a{
+.showNonAppSetion a,
+.showCompanyCurrentEmployeesSection a{
 text-decoration: none;
 }
 

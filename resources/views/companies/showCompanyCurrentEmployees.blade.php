@@ -1,8 +1,8 @@
-<section>
+<section class="showCompanyCurrentEmployeesSection">
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3>
-            Current Employees
+            Current Employees  
         </h3>
     </div>
     <div class="panel-body">
@@ -18,7 +18,7 @@
                     StandardPermissions::createEditEmployee,
                     StandardPermissions::viewOthersProfile
                     ])
-                <th >Operation</th>
+                <th ></th>
                 @endpermission
                 </tr>
                 </thead>
@@ -28,14 +28,15 @@
                         <td  >{{ $employee->firstName }}</td>
                         <td >{{ $employee->lastName}}</td>
                         <td >{{ $employee->hireDate}}</td>
-                        <td >
-                            @permission(StandardPermissions::viewOthersProfile)
-                            <a href="/employees/{{$employee->employeeId}}">
-                                <button  class="button20">
+                         @permission(StandardPermissions::viewOthersProfile)
+                        <td>
+                         <a href="/employees/{{$employee->employeeId}}">
+                         <button  class="button20">
                                    <i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>
-                                </button></a>
-                         @endpermission
-                        </td>
+                         </button>
+                         </a>
+                         </td>
+                        @endpermission
                     </tr>
                 @endforeach
                 </tbody>

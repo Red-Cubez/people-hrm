@@ -19,7 +19,7 @@
                             <th>Budget</th>
                             <th>Cost</th>
                             @permission([ StandardPermissions::viewClientProject,StandardPermissions::deleteClientProject])
-                            <th>Operations</th>
+                            <th></th>
                         @endpermission
                         <tr>
                         </thead>
@@ -33,6 +33,7 @@
                                 <td>{{ $project->actualEndDate }}</td>
                                 <td>{{ $project->budget}}</td>
                                 <td>{{ $project->cost }}</td>
+                                 @permission([StandardPermissions::viewClientProject, StandardPermissions::deleteClientProject])
                                 <td>
                                     <div class="aParent">
                                         @permission(StandardPermissions::viewClientProject)
@@ -55,6 +56,7 @@
                                         @endpermission
                                     </div>
                                 </td>
+                                @endpermission
                             </tr>
                         @endforeach
                         </tbody>

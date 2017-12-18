@@ -20,7 +20,7 @@
    
     <section>
         <div class="container">
-         @permission(StandardPermissions::createEditCompanyProjectResource)
+          @permission([StandardPermissions::createEditCompanyProjectResource,StandardPermissions::deleteCompanyProjectResource])
             <div class="row row-content100">
                 <div class="col-sm-12 text-center">
                   <a href="{{route('companyprojectresources.show', $project->projectId)}}">
